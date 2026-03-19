@@ -26,7 +26,7 @@ const cinzel = Cinzel({
 
 export const metadata: Metadata = {
   title: {
-    default: "Rehnoor Jewels — Gold Reimagined",
+    default: "Rehnoor Jewels | Gold Reimagined",
     template: "%s | Rehnoor Jewels",
   },
   description:
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     locale: "en_IN",
     url: "https://rehnoorrjewels.com",
     siteName: "Rehnoor Jewels",
-    title: "Rehnoor Jewels — Gold Reimagined",
+    title: "Rehnoor Jewels - Gold Reimagined",
     description: "India's premier destination for men's gold jewellery",
   },
   robots: { index: true, follow: true },

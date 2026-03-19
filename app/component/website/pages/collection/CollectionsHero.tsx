@@ -54,7 +54,6 @@ export default function CollectionsHero() {
         );
     }, sectionRef);
 
-    // Pre-set transform for hero-col-word/sub/cta
     gsap.set(".hero-col-word", { y: 60 });
     gsap.set(".hero-col-sub", { y: 30 });
     gsap.set(".hero-col-cta", { y: 20 });
@@ -142,7 +141,7 @@ export default function CollectionsHero() {
         </h1>
 
         <p className="hero-col-sub text-white/65 text-lg md:text-xl max-w-xl mb-10 font-light leading-relaxed">
-          Eight curated collections. Each BIS hallmarked, each handcrafted —
+          Eight curated collections. Each BIS hallmarked, each handcrafted and
           built for the man who understands that gold is never just an
           accessory.
         </p>
