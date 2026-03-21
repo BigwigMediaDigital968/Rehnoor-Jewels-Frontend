@@ -83,8 +83,14 @@ export function generateStaticParams() {
 }
 
 // ── SEO metadata per collection ───────────────────────────────────
-export function generateMetadata({ params }: { params: { slug: string } }) {
-  const meta = COLLECTION_MAP[params.slug];
+// Next.js 15: params is now a Promise
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const meta = COLLECTION_MAP[slug];
   if (!meta) return { title: "Collection | Rehnoor Jewels" };
   return {
     title: `${meta.label} Collection | Rehnoor Jewels`,
@@ -92,25 +98,23 @@ export function generateMetadata({ params }: { params: { slug: string } }) {
   };
 }
 
-// ── Page component — Next.js injects params automatically ─────────
-// This is a Server Component. params arrives from the URL segment.
-// No need to pass params as a prop — Next.js does it automatically
-// when this file is the route's page.tsx.
-export default function CollectionDetailPage({
+// ── Page component ────────────────────────────────────────────────
+// Next.js 15: params is now a Promise — must be awaited
+export default async function CollectionDetailPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
+  const { slug } = await params;
+
   // Fall back to "chains" if slug doesn't match any collection
-  const meta = COLLECTION_MAP[params.slug] ?? COLLECTION_MAP.chains;
+  const meta = COLLECTION_MAP[slug] ?? COLLECTION_MAP.chains;
 
   return (
-    <>
-      <main>
-        <CollectionHero meta={meta} />
-        <CollectionProductGrid />
-        <CollectionTestimonials />
-      </main>
-    </>
+    <main>
+      <CollectionHero meta={meta} />
+      <CollectionProductGrid />
+      <CollectionTestimonials />
+    </main>
   );
 }
