@@ -1,6 +1,4 @@
 import AnnouncementBar from "@/app/component/website/Announcementbar";
-import Navbar from "@/app/component/website/Navbar";
-import Footer from "@/app/component/website/Footer";
 import HeroSection from "@/app/component/website/Herosection";
 import CategoriesSection from "@/app/component/website/Categoriessection";
 import BestsellersSection from "@/app/component/website/Bestsellerssection";
@@ -13,7 +11,6 @@ export default function HomePage() {
   return (
     <>
       <AnnouncementBar />
-      <Navbar />
       <main>
         <HeroSection />
         <CategoriesSection />
@@ -23,7 +20,6 @@ export default function HomePage() {
         <TestimonialsSection />
         <InstagramSection />
       </main>
-      <Footer />
     </>
   );
 }

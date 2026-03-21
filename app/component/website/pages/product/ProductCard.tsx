@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -77,6 +77,14 @@ function QuickViewModal({
     setTimeout(() => setAddedToCart(false), 2000);
   };
 
+  useEffect(() => {
+    const h = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", h);
+    return () => window.removeEventListener("keydown", h);
+  }, [onClose]);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -133,12 +141,10 @@ function QuickViewModal({
               <div className="absolute top-4 left-4 z-10">
                 <span
                   className="font-cinzel text-[9px] font-bold tracking-widest px-2.5 py-1 rounded-full"
-                  style={
-                    TAG_STYLES[product.tag] || {
-                      bg: "var(--rj-gold)",
-                      color: "#000",
-                    }
-                  }
+                  style={{
+                    background: TAG_STYLES[product.tag]?.bg ?? "var(--rj-gold)",
+                    color: TAG_STYLES[product.tag]?.color ?? "#000",
+                  }}
                 >
                   {product.tag}
                 </span>
@@ -380,11 +386,11 @@ function QuickViewModal({
               >
                 {addedToCart ? (
                   <>
-                    <Check size={13} />
+                    <Check size={13} /> Added!
                   </>
                 ) : (
                   <>
-                    <ShoppingBag size={13} />
+                    <ShoppingBag size={13} /> Add to Cart
                   </>
                 )}
               </button>
@@ -399,7 +405,9 @@ function QuickViewModal({
                     ? "rgba(252,193,81,0.08)"
                     : "transparent",
                 }}
-                aria-label="Add to wishlist"
+                aria-label={
+                  wishlisted ? "Remove from wishlist" : "Add to wishlist"
+                }
               >
                 <Heart
                   size={14}

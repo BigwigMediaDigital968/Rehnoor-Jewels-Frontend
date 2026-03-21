@@ -4,14 +4,16 @@ import { useState, useMemo, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Search, X, SlidersHorizontal } from "lucide-react";
+import { ArrowRight, Search, X, SlidersHorizontal, Eye } from "lucide-react";
 
 // ─────────────────────────────────────────────────────────────────
-// DATA — in future, replace this with a fetch() / server component
+// DATA
+// IMPORTANT: collection `id` values MUST match the slug keys in
+// app/collections/[slug]/page.tsx → COLLECTION_MAP
 // ─────────────────────────────────────────────────────────────────
 const collections = [
   {
-    id: "nawabi-chain",
+    id: "chains", // ← matches COLLECTION_MAP key
     label: "Nawabi Chain",
     tagline: "Bold, layered, iconic",
     image:
@@ -22,7 +24,7 @@ const collections = [
     category: "Chains",
   },
   {
-    id: "royal-kada",
+    id: "kadas",
     label: "Royal Kada",
     tagline: "Power on your wrist",
     image:
@@ -33,7 +35,7 @@ const collections = [
     category: "Kadas",
   },
   {
-    id: "signet-ring",
+    id: "rings",
     label: "Signet Ring",
     tagline: "Wear your statement",
     image:
@@ -44,17 +46,18 @@ const collections = [
     category: "Rings",
   },
   {
-    id: "link-bracelet",
+    id: "bracelets",
     label: "Link Bracelet",
     tagline: "Layered perfection",
-    image: "https://images.unsplash.com/photo-1729290252735-ef9824782fcd",
+    image:
+      "https://images.unsplash.com/photo-1574169208507-84376144848b?w=700&q=80",
     price: "₹7,199",
     count: 15,
     tag: "Limited",
     category: "Bracelets",
   },
   {
-    id: "sol-pendant",
+    id: "pendants",
     label: "Sol Pendant",
     tagline: "Close to the heart",
     image:
@@ -65,7 +68,7 @@ const collections = [
     category: "Pendants",
   },
   {
-    id: "moghul-bangle",
+    id: "kadas", // Moghul Bangle also lives in /collections/kadas
     label: "Moghul Bangle",
     tagline: "Heritage, reimagined",
     image:
@@ -76,7 +79,7 @@ const collections = [
     category: "Kadas",
   },
   {
-    id: "cuban-chain",
+    id: "chains",
     label: "Cuban Chain",
     tagline: "Street meets heritage",
     image:
@@ -87,7 +90,7 @@ const collections = [
     category: "Chains",
   },
   {
-    id: "cord-bracelet",
+    id: "bracelets",
     label: "Cord Bracelet",
     tagline: "Minimal. Pure. Gold.",
     image:
@@ -126,7 +129,11 @@ function parsePrice(p: string) {
   return parseInt(p.replace(/[^0-9]/g, ""), 10);
 }
 
+// ─────────────────────────────────────────────────────────────────
+// COLLECTION CARD
+// ─────────────────────────────────────────────────────────────────
 function CollectionCard({ col, index }: { col: Collection; index: number }) {
+  const [hovered, setHovered] = useState(false);
   const tag = TAG_COLORS[col.tag] || TAG_COLORS.Bestseller;
 
   return (
@@ -141,11 +148,13 @@ function CollectionCard({ col, index }: { col: Collection; index: number }) {
         ease: [0.4, 0, 0.2, 1],
       }}
       className="h-full"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
     >
       <Link
         href={`/collections/${col.id}`}
-        className="group relative overflow-hidden flex h-full rounded-xl block"
-        style={{ background: "#111" }}
+        className="group relative overflow-hidden flex h-full rounded-xl"
+        style={{ background: "#111", display: "flex", cursor: "pointer" }}
       >
         {/* Image */}
         <Image
@@ -153,19 +162,26 @@ function CollectionCard({ col, index }: { col: Collection; index: number }) {
           alt={col.label}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          className="object-cover"
+          style={{
+            transform: hovered ? "scale(1.07)" : "scale(1)",
+            transition: "transform 0.7s cubic-bezier(0.4,0,0.2,1)",
+          }}
         />
 
-        {/* Persistent gradient */}
+        {/* Base gradient — always visible */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/92 via-black/30 to-black/5" />
 
-        {/* Hover emerald wash */}
+        {/* Emerald wash on hover */}
         <div
-          className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-500"
-          style={{ background: "var(--rj-emerald)" }}
+          className="absolute inset-0 transition-opacity duration-500"
+          style={{
+            background: "var(--rj-emerald)",
+            opacity: hovered ? 0.22 : 0,
+          }}
         />
 
-        {/* Tag */}
+        {/* Tag badge — top left */}
         <div className="absolute top-3 left-3 z-10">
           <span
             className="font-cinzel text-[8px] tracking-widest font-bold px-2.5 py-1 rounded-full"
@@ -189,7 +205,37 @@ function CollectionCard({ col, index }: { col: Collection; index: number }) {
           </span>
         </div>
 
-        {/* Content */}
+        {/* ── Desktop hover: View Collection CTA ── */}
+        <AnimatePresence>
+          {hovered && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.18 }}
+              className="absolute inset-0 z-10 hidden md:flex items-center justify-center"
+            >
+              <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                transition={{ duration: 0.2, delay: 0.04 }}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-full font-cinzel text-[10px] tracking-widest uppercase font-bold"
+                style={{
+                  background: "rgba(255,255,255,0.97)",
+                  color: "var(--rj-emerald)",
+                  boxShadow: "0 6px 24px rgba(0,0,0,0.25)",
+                  cursor: "pointer",
+                }}
+              >
+                <Eye size={12} />
+                View Collection
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Bottom content */}
         <div className="absolute bottom-0 inset-x-0 p-4 z-10">
           <p
             className="label-accent mb-0.5"
@@ -214,23 +260,41 @@ function CollectionCard({ col, index }: { col: Collection; index: number }) {
                 className="font-cinzel font-bold"
                 style={{ color: "var(--rj-gold)", fontSize: "0.85rem" }}
               >
-                Starting from {col.price}
+                From {col.price}
               </p>
               <p className="text-white/35 text-[10px] mt-0.5">
                 {col.count} pieces
               </p>
             </div>
-            {/* Shop CTA — slides up on hover */}
-            <div className="overflow-hidden h-4 flex items-center">
+
+            {/* Mobile: always-visible CTA */}
+            <div
+              className="md:hidden flex items-center gap-1 font-cinzel text-[9px] tracking-wider uppercase px-3 py-1.5 rounded-full"
+              style={{
+                background: "rgba(252,193,81,0.15)",
+                color: "var(--rj-gold)",
+                border: "1px solid rgba(252,193,81,0.3)",
+              }}
+            >
+              View <ArrowRight size={9} />
+            </div>
+
+            {/* Desktop: slide-up CTA in bottom-right */}
+            <div className="hidden md:block overflow-hidden h-4 flex items-center">
               <span className="flex items-center gap-1 font-cinzel text-white/60 text-[10px] tracking-wider uppercase translate-y-5 group-hover:translate-y-0 transition-transform duration-300 ease-out">
-                Shop <ArrowRight size={9} />
+                Explore <ArrowRight size={9} />
               </span>
             </div>
           </div>
         </div>
 
         {/* Gold border on hover */}
-        <div className="absolute inset-0 rounded-xl pointer-events-none border border-transparent group-hover:border-[var(--rj-gold)]/35 transition-colors duration-500" />
+        <div
+          className="absolute inset-0 rounded-xl pointer-events-none transition-all duration-500"
+          style={{
+            border: `1px solid ${hovered ? "rgba(252,193,81,0.45)" : "transparent"}`,
+          }}
+        />
       </Link>
     </motion.div>
   );
@@ -239,7 +303,13 @@ function CollectionCard({ col, index }: { col: Collection; index: number }) {
 // ─────────────────────────────────────────────────────────────────
 // EMPTY STATE
 // ─────────────────────────────────────────────────────────────────
-function EmptyState({ query }: { query: string }) {
+function EmptyState({
+  query,
+  onClear,
+}: {
+  query: string;
+  onClear: () => void;
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
@@ -258,9 +328,21 @@ function EmptyState({ query }: { query: string }) {
       <p className="font-cormorant text-white/60 text-2xl font-light mb-2">
         No results for "{query}"
       </p>
-      <p className="font-cinzel text-white/30 text-[11px] tracking-widest uppercase">
+      <p className="font-cinzel text-white/30 text-[11px] tracking-widest uppercase mb-6">
         Try a different collection name or category
       </p>
+      <button
+        onClick={onClear}
+        className="font-cinzel text-[10px] tracking-widest uppercase px-6 py-2.5 rounded-full transition-all"
+        style={{
+          background: "rgba(252,193,81,0.12)",
+          color: "var(--rj-gold)",
+          border: "1px solid rgba(252,193,81,0.3)",
+          cursor: "pointer",
+        }}
+      >
+        Clear Filters
+      </button>
     </motion.div>
   );
 }
@@ -275,11 +357,9 @@ export default function CollectionsGrid() {
   const [showSort, setShowSort] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // ── Derived filtered + sorted list ──
   const results = useMemo(() => {
     let list = [...collections];
 
-    // Search by name or tagline
     if (query.trim()) {
       const q = query.toLowerCase();
       list = list.filter(
@@ -290,12 +370,9 @@ export default function CollectionsGrid() {
       );
     }
 
-    // Category filter
-    if (activeTag !== "All") {
+    if (activeTag !== "All")
       list = list.filter((c) => c.category === activeTag);
-    }
 
-    // Sort
     if (sortBy === "price-asc")
       list.sort((a, b) => parsePrice(a.price) - parsePrice(b.price));
     if (sortBy === "price-desc")
@@ -308,9 +385,10 @@ export default function CollectionsGrid() {
     return list;
   }, [query, activeTag, sortBy]);
 
-  const clearSearch = () => {
+  const clearAll = () => {
     setQuery("");
-    inputRef.current?.focus();
+    setActiveTag("All");
+    setSortBy("default");
   };
 
   return (
@@ -337,14 +415,16 @@ export default function CollectionsGrid() {
               <br />
               <em className="text-gold-shimmer font-normal pe-3">pure gold</em>
             </h2>
-            {/* Live result count */}
-            <p className="font-cinzel text-gold-shimmer text-md font-medium tracking-widest self-end pb-1">
+            <p
+              className="font-cinzel text-xs tracking-widest self-end pb-1"
+              style={{ color: "rgba(255,255,255,0.3)" }}
+            >
               {results.length} collection{results.length !== 1 ? "s" : ""}
             </p>
           </div>
         </motion.div>
 
-        {/* ── Controls row: Search + Category chips + Sort ── */}
+        {/* ── Controls ── */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -354,7 +434,7 @@ export default function CollectionsGrid() {
         >
           {/* Row 1: Search + Sort */}
           <div className="flex gap-3 items-center">
-            {/* Search box */}
+            {/* Search */}
             <div className="relative flex-1 max-w-sm">
               <Search
                 size={14}
@@ -380,8 +460,12 @@ export default function CollectionsGrid() {
               />
               {query && (
                 <button
-                  onClick={clearSearch}
+                  onClick={() => {
+                    setQuery("");
+                    inputRef.current?.focus();
+                  }}
                   className="absolute right-3 top-1/2 -translate-y-1/2 transition-opacity hover:opacity-70"
+                  style={{ cursor: "pointer" }}
                   aria-label="Clear search"
                 >
                   <X size={13} style={{ color: "rgba(255,255,255,0.4)" }} />
@@ -389,17 +473,18 @@ export default function CollectionsGrid() {
               )}
             </div>
 
-            {/* Sort dropdown */}
+            {/* Sort */}
             <div className="relative flex-shrink-0">
               <button
                 onClick={() => setShowSort((s) => !s)}
-                className="flex items-center gap-2 font-cinzel text-[10px] tracking-widest uppercase px-3.5 py-2.5 rounded-lg transition-all duration-300 cursor-pointer"
+                className="flex items-center gap-2 font-cinzel text-[10px] tracking-widest uppercase px-3.5 py-2.5 rounded-lg transition-all duration-300"
                 style={{
                   background: showSort
                     ? "rgba(252,193,81,0.12)"
                     : "rgba(255,255,255,0.05)",
                   border: `1px solid ${showSort ? "rgba(252,193,81,0.4)" : "rgba(255,255,255,0.1)"}`,
                   color: showSort ? "var(--rj-gold)" : "rgba(255,255,255,0.5)",
+                  cursor: "pointer",
                 }}
               >
                 <SlidersHorizontal size={12} />
@@ -415,7 +500,7 @@ export default function CollectionsGrid() {
                     initial={{ opacity: 0, y: 8, scale: 0.97 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 8, scale: 0.97 }}
-                    transition={{ duration: 0.2 }}
+                    transition={{ duration: 0.18 }}
                     className="absolute right-0 top-full mt-2 z-50 rounded-xl overflow-hidden"
                     style={{
                       background: "#1a1a1a",
@@ -441,6 +526,7 @@ export default function CollectionsGrid() {
                             sortBy === opt.value
                               ? "rgba(252,193,81,0.08)"
                               : "transparent",
+                          cursor: "pointer",
                         }}
                       >
                         {opt.label}
@@ -452,13 +538,13 @@ export default function CollectionsGrid() {
             </div>
           </div>
 
-          {/* Row 2: Category filter chips */}
+          {/* Row 2: Category chips */}
           <div className="flex flex-wrap gap-2">
             {CATEGORIES.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveTag(cat)}
-                className="font-cinzel text-[9px] tracking-widest uppercase px-3.5 py-1.5 rounded-full transition-all duration-300 cursor-pointer"
+                className="font-cinzel text-[9px] tracking-widest uppercase px-3.5 py-1.5 rounded-full transition-all duration-250"
                 style={{
                   background:
                     activeTag === cat
@@ -470,6 +556,7 @@ export default function CollectionsGrid() {
                       : "rgba(255,255,255,0.45)",
                   border: `1px solid ${activeTag === cat ? "transparent" : "rgba(255,255,255,0.08)"}`,
                   fontWeight: activeTag === cat ? 700 : 400,
+                  cursor: "pointer",
                 }}
               >
                 {cat}
@@ -478,9 +565,9 @@ export default function CollectionsGrid() {
           </div>
         </motion.div>
 
-        {/* ── Grid or empty state ── */}
+        {/* ── Grid ── */}
         {results.length === 0 ? (
-          <EmptyState query={query} />
+          <EmptyState query={query} onClear={clearAll} />
         ) : (
           <motion.div
             layout
@@ -489,35 +576,38 @@ export default function CollectionsGrid() {
           >
             <AnimatePresence mode="popLayout">
               {results.map((col, i) => (
-                <CollectionCard key={col.id} col={col} index={i} />
+                <CollectionCard
+                  key={`${col.id}-${col.label}`}
+                  col={col}
+                  index={i}
+                />
               ))}
             </AnimatePresence>
           </motion.div>
         )}
 
         {/* ── Active filter summary ── */}
-        {(query || activeTag !== "All") && results.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="flex items-center gap-3 mt-6"
-          >
-            <p className="font-cinzel text-white/30 text-[10px] tracking-widest uppercase">
-              Showing {results.length} of {collections.length}
-            </p>
-            <button
-              onClick={() => {
-                setQuery("");
-                setActiveTag("All");
-                setSortBy("default");
-              }}
-              className="flex items-center gap-1 font-cinzel text-[10px] tracking-widest uppercase transition-opacity hover:opacity-70"
-              style={{ color: "var(--rj-gold)" }}
+        <AnimatePresence>
+          {(query || activeTag !== "All") && results.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex items-center gap-3 mt-6"
             >
-              <X size={10} /> Clear filters
-            </button>
-          </motion.div>
-        )}
+              <p className="font-cinzel text-white/30 text-[10px] tracking-widest uppercase">
+                Showing {results.length} of {collections.length}
+              </p>
+              <button
+                onClick={clearAll}
+                className="flex items-center gap-1 font-cinzel text-[10px] tracking-widest uppercase transition-opacity hover:opacity-70"
+                style={{ color: "var(--rj-gold)", cursor: "pointer" }}
+              >
+                <X size={10} /> Clear filters
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   );
