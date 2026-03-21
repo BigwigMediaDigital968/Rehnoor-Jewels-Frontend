@@ -1,15 +1,11 @@
 // app/products/[slug]/page.tsx
-// ─────────────────────────────────────────────────────────────────
-// Product detail page — assembles all sections.
-// Replace PRODUCT_MAP with API fetch by slug when backend is ready.
-// ─────────────────────────────────────────────────────────────────
 import ProductDetailHero from "./component/ProductDetailhero";
 import ProductTabs from "./component/Producttabs";
 import ProductReviews from "./component/Productreviews";
 import RelatedProducts from "./component/Relatedproducts";
 import type { Product } from "../../types/Product.types";
+import type { Metadata } from "next";
 
-// ── Static product map ──────────────────────────────────────────
 const PRODUCT_MAP: Record<string, Product> = {
   "nawabi-chain-22kt": {
     id: "nawabi-chain-22kt",
@@ -112,12 +108,19 @@ const PRODUCT_MAP: Record<string, Product> = {
   },
 };
 
+// generateStaticParams has no params — unchanged
 export function generateStaticParams() {
   return Object.keys(PRODUCT_MAP).map((slug) => ({ slug }));
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }) {
-  const p = PRODUCT_MAP[params.slug];
+// ✅ Next.js 15 — async, params is Promise
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const p = PRODUCT_MAP[slug];
   if (!p) return { title: "Product | Rehnoor Jewels" };
   return {
     title: `${p.name} | Rehnoor Jewels`,
@@ -125,29 +128,22 @@ export function generateMetadata({ params }: { params: { slug: string } }) {
   };
 }
 
-export default function ProductDetailPage({
+// ✅ Next.js 15 — async, params is Promise
+export default async function ProductDetailPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const product = PRODUCT_MAP[params.slug] ?? PRODUCT_MAP["nawabi-chain-22kt"];
+  const { slug } = await params;
+  const product = PRODUCT_MAP[slug] ?? PRODUCT_MAP["nawabi-chain-22kt"];
   const collectionSlug = (product.category ?? "chains").toLowerCase();
 
   return (
-    <>
-      <main>
-        {/* 1 — Hero: gallery + add to cart + trust */}
-        <ProductDetailHero product={product} />
-
-        {/* 2 — Specs / Care / Shipping / Returns tabs */}
-        <ProductTabs />
-
-        {/* 3 — Reviews + Add Review modal */}
-        <ProductReviews />
-
-        {/* 4 — Related products from same collection */}
-        <RelatedProducts collectionSlug={collectionSlug} />
-      </main>
-    </>
+    <main>
+      <ProductDetailHero product={product} />
+      <ProductTabs />
+      <ProductReviews />
+      <RelatedProducts collectionSlug={collectionSlug} />
+    </main>
   );
 }
