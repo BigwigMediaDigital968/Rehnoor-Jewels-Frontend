@@ -13,6 +13,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { useState } from "react";
+import Image from "next/image";
 
 const footerLinks = {
   collections: [
@@ -59,6 +60,15 @@ const certifications = [
   { label: "ISO Certified", icon: "✓" },
   { label: "GIA Partner", icon: "◈" },
   { label: "SSL Secured", icon: "🔒" },
+];
+
+const payments = [
+  { payProfile: "/upi.png", name: "UPI" },
+  { payProfile: "/google-pay.png", name: "Google Pay" },
+  { payProfile: "/master-card.png", name: "MasterCard" },
+  { payProfile: "/net-banking.png", name: "Net Banking" },
+  { payProfile: "/visa-card.png", name: "Visa" },
+  { payProfile: "/card.png", name: "Credit Card" },
 ];
 
 export default function Footer() {
@@ -257,12 +267,18 @@ export default function Footer() {
               ))}
             </div>
             <div className="flex items-center gap-2">
-              {["VISA", "MC", "UPI", "RazorPay"].map((pay) => (
+              {payments.map((pay) => (
                 <span
-                  key={pay}
-                  className="px-2 py-1 border border-white/10 text-white/30 text-[9px] font-mono tracking-wider"
+                  key={pay.name}
+                  className="px-2 py-1 text-[9px] font-mono tracking-wider flex items-center justify-center"
                 >
-                  {pay}
+                  <Image
+                    src={pay.payProfile}
+                    alt={pay.name}
+                    width={32}
+                    height={20}
+                    className="object-contain"
+                  />
                 </span>
               ))}
             </div>
