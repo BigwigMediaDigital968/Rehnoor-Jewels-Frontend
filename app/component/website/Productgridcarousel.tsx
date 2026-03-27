@@ -335,14 +335,6 @@ export default function ProductGridCarousel() {
     [goTo],
   );
 
-  // ── Track translate ────────────────────────────────────────────
-  // FIX: Use pixel-based translation instead of % so the GAP is
-  // correctly accounted for. We translate by (cardWidth + gap) * index.
-  // cardWidth = (containerWidth - gap*(cardsVisible-1)) / cardsVisible
-  // We can't know containerWidth at render time, so we use CSS calc().
-  //
-  // Formula as CSS:  translateX( -index * (100%/cardsVisible + gap) )
-  // But we compute the pixel offset in JS using a ref to the container.
   const [trackOffset, setTrackOffset] = useState(0);
 
   useEffect(() => {

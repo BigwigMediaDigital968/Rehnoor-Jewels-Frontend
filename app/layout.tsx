@@ -4,6 +4,9 @@ import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import Navbar from "./component/website/Navbar";
 import Footer from "./component/website/Footer";
+import DiscountPopup, {
+  FloatingOfferBadge,
+} from "./component/shared/DiscountPopup";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -74,6 +77,8 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="antialiased">
+        <DiscountPopup offerKey="welcome" />
+        <FloatingOfferBadge offerKey="welcome" />
         <Navbar />
         {children}
         <Footer />

@@ -225,18 +225,18 @@ function PlatformCard({
 
       {/* Bottom: follower count + CTA */}
       <div className="relative z-10 flex flex-col items-center gap-2 w-full">
-        <p
+        {/* <p
           className="font-cormorant font-semibold"
           style={{ fontSize: "1.75rem", color: platform.accent }}
         >
           {platform.followers}
-        </p>
-        <p
+        </p> */}
+        {/* <p
           className="font-cinzel text-[8px] tracking-[0.25em] uppercase"
           style={{ color: "var(--rj-ash)" }}
         >
           {platform.followerLabel}
-        </p>
+        </p> */}
 
         {/* Follow pill */}
         <div
@@ -300,9 +300,9 @@ function InstagramGrid({ inView }: { inView: boolean }) {
             style={{ background: "rgba(225,48,108,0.85)" }}
           >
             <Heart size={18} style={{ fill: "#fff", color: "#fff" }} />
-            <span className="font-cinzel text-[10px] font-bold text-white">
+            {/* <span className="font-cinzel text-[10px] font-bold text-white">
               {post.likes}
-            </span>
+            </span> */}
           </div>
           {/* Bottom gradient tag */}
           <div

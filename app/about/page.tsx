@@ -14,7 +14,7 @@ export default function AboutPage() {
       <WhyTrustUs />
       <Features />
       <OurPartners />
-      <OurTeam />
+      {/* <OurTeam /> */}
       <SocialFeed />
     </main>
   );

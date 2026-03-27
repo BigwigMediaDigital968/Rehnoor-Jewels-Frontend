@@ -30,7 +30,7 @@ const footerLinks = {
     { label: "Franchise", href: "/franchise" },
     { label: "Careers", href: "/careers" },
     { label: "Press", href: "/press" },
-    { label: "Blog", href: "/blog" },
+    { label: "Blogs", href: "/blogs" },
   ],
   support: [
     { label: "Contact Us", href: "/contact" },

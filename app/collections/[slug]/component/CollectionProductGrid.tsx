@@ -12,8 +12,8 @@ import {
   Heart,
   Star,
   Check,
-  ArrowRight,
   Eye,
+  Info,
 } from "lucide-react";
 import type { Product } from "../../../types/Product.types";
 
@@ -380,7 +380,7 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
 
         {/* Tag */}
         {tag && product.tag && (
-          <div className="absolute top-2.5 left-2.5 z-10 pointer-events-none">
+          <div className="absolute top-2.5 left-2.5 z-20 pointer-events-none">
             <span
               className="font-cinzel text-[8px] font-bold tracking-widest px-2 py-0.5 rounded-full"
               style={{ background: tag.bg, color: tag.color }}
@@ -393,7 +393,7 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
         {/* Wishlist — stopPropagation so card onClick doesn't fire */}
         <button
           onClick={handleWishlist}
-          className="absolute top-2.5 right-2.5 z-10 w-7 h-7 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
+          className="absolute top-2.5 right-2.5 z-20 w-7 h-7 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
           style={{
             background: "rgba(255,255,255,0.93)",
             cursor: "pointer",
@@ -410,6 +410,49 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
             }}
           />
         </button>
+
+        {/* Info / Comment Hover */}
+        <div
+          className="absolute top-3 right-14 z-20 group"
+          style={{ position: "absolute" }}
+        >
+          {/* Button */}
+          <button
+            className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-115"
+            style={{
+              background: "rgba(255,255,255,0.95)",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
+              cursor: "pointer",
+            }}
+          >
+            <Info
+              size={13}
+              style={{
+                color: "var(--rj-ash)",
+                transition: "all 0.25s",
+              }}
+            />
+          </button>
+
+          {/* Hover Comment Box */}
+          <div
+            className="absolute top-5 right-0 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all duration-300"
+            style={{
+              minWidth: 180,
+              background: "rgba(0,0,0,0.85)",
+              color: "#fff",
+              fontSize: 12,
+              padding: "10px 12px",
+              borderRadius: 8,
+              boxShadow: "0 4px 16px rgba(0,0,0,0.2)",
+              transform: "translateY(6px)",
+              backdropFilter: "blur(8px)",
+            }}
+          >
+            This product is trending 🔥 <br />
+            Limited stock available.
+          </div>
+        </div>
 
         {/* Desktop hover overlay — buttons only, no nested <a> */}
         <AnimatePresence>
