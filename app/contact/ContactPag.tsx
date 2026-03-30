@@ -482,7 +482,7 @@ function ContactForm() {
     return e;
   };
 
-  // ── Submit → POST /api/leads/add ──────────────────────────────
+  // Submit → POST /api/leads/add
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const errs = validate();
