@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -19,7 +19,12 @@ import {
   RefreshCw,
   Shield,
   Ruler,
+  X,
+  AlertTriangle,
+  Loader2,
 } from "lucide-react";
+
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 // ─────────────────────────────────────────────────────────────────
 // DATA
@@ -66,13 +71,13 @@ const STORE_HOURS = [
   { day: "Public Holidays", time: "Closed" },
 ];
 
+// ── Aligned with the Mongoose enum in LeadModel ──
 const SUBJECT_OPTIONS = [
-  "Order enquiry",
-  "Product customisation",
-  "Sizing help",
-  "BIS hallmark certificate",
-  "Return / exchange",
-  "Wholesale enquiry",
+  "General Inquiry",
+  "Order Support",
+  "Custom Jewellery",
+  "Returns & Refunds",
+  "Wholesale",
   "Other",
 ];
 
@@ -123,6 +128,254 @@ const HELP_TOPICS = [
   { label: "Size guide", href: "/size-guide", icon: <Ruler size={13} /> },
   { label: "BIS hallmark info", href: "/hallmark", icon: <Shield size={13} /> },
 ];
+
+// ─────────────────────────────────────────────────────────────────
+// TYPES
+// ─────────────────────────────────────────────────────────────────
+type ModalState =
+  | { type: "idle" }
+  | { type: "success"; email: string; name: string }
+  | { type: "error"; message: string };
+
+// ─────────────────────────────────────────────────────────────────
+// FEEDBACK MODAL — success & error, themed to rj design system
+// ─────────────────────────────────────────────────────────────────
+function FeedbackModal({
+  state,
+  onClose,
+  onRetry,
+}: {
+  state: ModalState;
+  onClose: () => void;
+  onRetry: () => void;
+}) {
+  const isSuccess = state.type === "success";
+  const isError = state.type === "error";
+
+  // Close on Escape key
+  useEffect(() => {
+    if (state.type === "idle") return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [state.type, onClose]);
+
+  if (state.type === "idle") return null;
+
+  return (
+    <AnimatePresence>
+      {/* Backdrop */}
+      <motion.div
+        key="backdrop"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.25 }}
+        onClick={onClose}
+        className="fixed inset-0 z-50 flex items-center justify-center p-4"
+        style={{
+          background: "rgba(15,20,15,0.72)",
+          backdropFilter: "blur(6px)",
+        }}
+      >
+        {/* Modal card — stop propagation so clicking inside doesn't close */}
+        <motion.div
+          key="modal"
+          initial={{ opacity: 0, scale: 0.88, y: 24 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.92, y: 12 }}
+          transition={{
+            type: "spring",
+            stiffness: 320,
+            damping: 26,
+            delay: 0.05,
+          }}
+          onClick={(e) => e.stopPropagation()}
+          className="relative w-full max-w-md rounded-2xl overflow-hidden"
+          style={{
+            background: "#fff",
+            boxShadow:
+              "0 32px 80px rgba(0,0,0,0.28), 0 2px 8px rgba(0,0,0,0.1)",
+          }}
+        >
+          {/* Top accent bar */}
+          <div
+            className="h-1 w-full"
+            style={{
+              background: isSuccess
+                ? "var(--gradient-gold, linear-gradient(90deg,#fcc151,#e8a020))"
+                : "linear-gradient(90deg,#ef4444,#dc2626)",
+            }}
+          />
+
+          {/* Close button */}
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center transition-all hover:opacity-60"
+            style={{ background: "var(--rj-bone, #f0ebe0)", cursor: "pointer" }}
+            aria-label="Close"
+          >
+            <X size={14} style={{ color: "var(--rj-charcoal, #1a1a1a)" }} />
+          </button>
+
+          <div className="px-8 py-10 flex flex-col items-center text-center">
+            {/* Icon */}
+            <motion.div
+              initial={{ scale: 0, rotate: -15 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{
+                type: "spring",
+                stiffness: 400,
+                damping: 18,
+                delay: 0.18,
+              }}
+              className="w-20 h-20 rounded-full flex items-center justify-center mb-6"
+              style={{
+                background: isSuccess
+                  ? "var(--gradient-gold, linear-gradient(135deg,#fcc151,#e8a020))"
+                  : "rgba(239,68,68,0.1)",
+                boxShadow: isSuccess
+                  ? "0 8px 32px rgba(252,193,81,0.35)"
+                  : "0 8px 32px rgba(239,68,68,0.15)",
+              }}
+            >
+              {isSuccess ? (
+                <Check
+                  size={32}
+                  style={{ color: "var(--rj-emerald, #003720)" }}
+                  strokeWidth={2.5}
+                />
+              ) : (
+                <AlertTriangle
+                  size={30}
+                  style={{ color: "#ef4444" }}
+                  strokeWidth={2}
+                />
+              )}
+            </motion.div>
+
+            {/* Heading */}
+            <motion.h3
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, delay: 0.28 }}
+              className="font-cormorant font-light mb-1"
+              style={{
+                fontSize: "1.85rem",
+                color: "var(--rj-charcoal, #1a1a1a)",
+                lineHeight: 1.2,
+              }}
+            >
+              {isSuccess ? "Message received!" : "Something went wrong"}
+            </motion.h3>
+
+            {/* Sub-label */}
+            <motion.p
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, delay: 0.34 }}
+              className="font-cinzel text-[10px] tracking-widest uppercase mb-4"
+              style={{ color: "var(--rj-ash, #8a7f70)" }}
+            >
+              {isSuccess ? "✦ We'll be in touch soon" : "✦ Please try again"}
+            </motion.p>
+
+            {/* Body copy */}
+            <motion.p
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, delay: 0.4 }}
+              className="text-sm leading-relaxed mb-8"
+              style={{
+                color: "var(--rj-ash, #8a7f70)",
+                fontFamily: "var(--font-body,'DM Sans'),sans-serif",
+                maxWidth: 300,
+              }}
+            >
+              {isSuccess && state.type === "success"
+                ? `Your enquiry has been sent. We'll reply to ${state.email} within 24 hours. For urgent matters, WhatsApp us directly.`
+                : isError && state.type === "error"
+                  ? state.message
+                  : ""}
+            </motion.p>
+
+            {/* Divider */}
+            <div
+              className="w-full mb-8"
+              style={{ height: 1, background: "var(--rj-bone, #f0ebe0)" }}
+            />
+
+            {/* CTAs */}
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, delay: 0.46 }}
+              className="flex flex-col sm:flex-row gap-3 w-full"
+            >
+              {isSuccess ? (
+                <>
+                  <a
+                    href="https://wa.me/919876543210"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 flex items-center justify-center gap-2 py-3 rounded-full font-cinzel text-[10px] tracking-widest uppercase font-bold transition-all hover:opacity-90"
+                    style={{
+                      background: "#25D366",
+                      color: "#fff",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <MessageCircle size={12} /> WhatsApp Us
+                  </a>
+                  <button
+                    onClick={onClose}
+                    className="flex-1 flex items-center justify-center gap-2 py-3 rounded-full font-cinzel text-[10px] tracking-widest uppercase font-bold transition-all hover:opacity-70"
+                    style={{
+                      border: "1px solid var(--rj-bone, #f0ebe0)",
+                      color: "var(--rj-ash, #8a7f70)",
+                      cursor: "pointer",
+                      background: "transparent",
+                    }}
+                  >
+                    Done
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={onRetry}
+                    className="flex-1 flex items-center justify-center gap-2 py-3 rounded-full font-cinzel text-[10px] tracking-widest uppercase font-bold transition-all hover:opacity-90"
+                    style={{
+                      background:
+                        "var(--gradient-gold, linear-gradient(90deg,#fcc151,#e8a020))",
+                      color: "var(--rj-emerald, #003720)",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <RefreshCw size={12} /> Try Again
+                  </button>
+                  <a
+                    href="mailto:hello@rehnoorjewels.com"
+                    className="flex-1 flex items-center justify-center gap-2 py-3 rounded-full font-cinzel text-[10px] tracking-widest uppercase font-bold transition-all hover:opacity-70"
+                    style={{
+                      border: "1px solid var(--rj-bone, #f0ebe0)",
+                      color: "var(--rj-ash, #8a7f70)",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <Mail size={12} /> Email Us
+                  </a>
+                </>
+              )}
+            </motion.div>
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
 
 // ─────────────────────────────────────────────────────────────────
 // FAQ ACCORDION ITEM
@@ -204,36 +457,24 @@ function FaqItem({ faq, index }: { faq: (typeof FAQS)[0]; index: number }) {
 }
 
 // ─────────────────────────────────────────────────────────────────
-// CONTACT FORM
+// CONTACT FORM  — wired to POST /api/leads/add
 // ─────────────────────────────────────────────────────────────────
 function ContactForm() {
   const [form, setForm] = useState({
-    name: "",
+    fullName: "",
     email: "",
     phone: "",
     subject: "",
     message: "",
   });
-  const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [modal, setModal] = useState<ModalState>({ type: "idle" });
 
-  const inputBase: React.CSSProperties = {
-    background: "#fff",
-    border: "1px solid var(--rj-bone)",
-    borderRadius: "10px",
-    color: "var(--rj-charcoal)",
-    fontFamily: "var(--font-body,'DM Sans'),sans-serif",
-    fontSize: "0.9rem",
-    outline: "none",
-    width: "100%",
-    padding: "0.75rem 1rem",
-    transition: "border-color 0.2s, box-shadow 0.2s",
-  };
-
+  // ── Inline validation ──────────────────────────────────────────
   const validate = () => {
     const e: Record<string, string> = {};
-    if (!form.name.trim()) e.name = "Name is required";
+    if (!form.fullName.trim()) e.fullName = "Name is required";
     if (!form.email.trim()) e.email = "Email is required";
     else if (!/\S+@\S+\.\S+/.test(form.email)) e.email = "Enter a valid email";
     if (!form.subject) e.subject = "Please select a subject";
@@ -241,6 +482,7 @@ function ContactForm() {
     return e;
   };
 
+  // ── Submit → POST /api/leads/add ──────────────────────────────
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const errs = validate();
@@ -248,11 +490,48 @@ function ContactForm() {
       setErrors(errs);
       return;
     }
+
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 1400)); // simulate API call
-    setLoading(false);
-    setSubmitted(true);
+    try {
+      const res = await fetch(`${API_BASE}/api/leads/add`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: form.fullName,
+          email: form.email,
+          phone: form.phone || undefined, // omit empty string → model default null
+          subject: form.subject,
+          message: form.message,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        // Use server validation message if available, else generic
+        const serverMsg =
+          data?.message || "Unable to send your message. Please try again.";
+        setModal({ type: "error", message: serverMsg });
+        return;
+      }
+
+      // Success — reset form, show success modal
+      setModal({ type: "success", email: form.email, name: form.fullName });
+      setForm({ fullName: "", email: "", phone: "", subject: "", message: "" });
+      setErrors({});
+    } catch {
+      setModal({
+        type: "error",
+        message:
+          "We couldn't reach our servers. Please check your connection and try again, or contact us via WhatsApp.",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const handleCloseModal = () => setModal({ type: "idle" });
+  const handleRetry = () => setModal({ type: "idle" });
 
   const set =
     (key: string) =>
@@ -270,301 +549,255 @@ function ContactForm() {
         });
     };
 
+  const inputBase: React.CSSProperties = {
+    background: "#fff",
+    border: "1px solid var(--rj-bone)",
+    borderRadius: "10px",
+    color: "var(--rj-charcoal)",
+    fontFamily: "var(--font-body,'DM Sans'),sans-serif",
+    fontSize: "0.9rem",
+    outline: "none",
+    width: "100%",
+    padding: "0.75rem 1rem",
+    transition: "border-color 0.2s, box-shadow 0.2s",
+  };
+
   const focusStyle = (key: string): React.CSSProperties => ({
     ...inputBase,
     borderColor: errors[key] ? "#fca5a5" : "var(--rj-bone)",
   });
 
-  if (submitted) {
-    return (
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.4 }}
-        className="flex flex-col items-center justify-center py-16 text-center"
-      >
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{
-            type: "spring",
-            stiffness: 280,
-            damping: 20,
-            delay: 0.15,
-          }}
-          className="w-16 h-16 rounded-full flex items-center justify-center mb-6"
-          style={{ background: "var(--gradient-gold)" }}
-        >
-          <Check size={28} style={{ color: "var(--rj-emerald)" }} />
-        </motion.div>
-        <h3
-          className="font-cormorant text-2xl font-light mb-2"
-          style={{ color: "var(--rj-charcoal)" }}
-        >
-          Message received!
-        </h3>
-        <p
-          className="font-cinzel text-xs tracking-widest uppercase mb-2"
-          style={{ color: "var(--rj-ash)" }}
-        >
-          We'll reply to {form.email} within 24 hours
-        </p>
-        <p
-          className="text-sm"
-          style={{
-            color: "var(--rj-ash)",
-            fontFamily: "var(--font-body,'DM Sans'),sans-serif",
-          }}
-        >
-          For urgent help, WhatsApp us at +91 98765 43210
-        </p>
-        <button
-          onClick={() => {
-            setSubmitted(false);
-            setForm({
-              name: "",
-              email: "",
-              phone: "",
-              subject: "",
-              message: "",
-            });
-          }}
-          className="mt-8 font-cinzel text-[10px] tracking-widest uppercase transition-opacity hover:opacity-60"
-          style={{ color: "var(--rj-emerald)", cursor: "pointer" }}
-        >
-          Send another message
-        </button>
-      </motion.div>
-    );
-  }
-
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
-      {/* Name + Email */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label
-            className="font-cinzel text-[10px] tracking-widest uppercase font-bold mb-1.5 block"
-            style={{ color: "var(--rj-charcoal)" }}
-          >
-            Full Name <span style={{ color: "#ef4444" }}>*</span>
-          </label>
-          <input
-            type="text"
-            placeholder="Arjun Mehta"
-            value={form.name}
-            onChange={set("name")}
-            style={focusStyle("name")}
-            onFocus={(e) => (
-              (e.target.style.borderColor = "var(--rj-emerald)"),
-              (e.target.style.boxShadow = "0 0 0 3px rgba(0,55,32,0.06)")
-            )}
-            onBlur={(e) => (
-              (e.target.style.borderColor = errors.name
-                ? "#fca5a5"
-                : "var(--rj-bone)"),
-              (e.target.style.boxShadow = "none")
-            )}
-          />
-          {errors.name && (
-            <p
-              className="font-cinzel text-[9px] mt-1"
-              style={{ color: "#ef4444" }}
-            >
-              {errors.name}
-            </p>
-          )}
-        </div>
-        <div>
-          <label
-            className="font-cinzel text-[10px] tracking-widest uppercase font-bold mb-1.5 block"
-            style={{ color: "var(--rj-charcoal)" }}
-          >
-            Email <span style={{ color: "#ef4444" }}>*</span>
-          </label>
-          <input
-            type="email"
-            placeholder="arjun@email.com"
-            value={form.email}
-            onChange={set("email")}
-            style={focusStyle("email")}
-            onFocus={(e) => (
-              (e.target.style.borderColor = "var(--rj-emerald)"),
-              (e.target.style.boxShadow = "0 0 0 3px rgba(0,55,32,0.06)")
-            )}
-            onBlur={(e) => (
-              (e.target.style.borderColor = errors.email
-                ? "#fca5a5"
-                : "var(--rj-bone)"),
-              (e.target.style.boxShadow = "none")
-            )}
-          />
-          {errors.email && (
-            <p
-              className="font-cinzel text-[9px] mt-1"
-              style={{ color: "#ef4444" }}
-            >
-              {errors.email}
-            </p>
-          )}
-        </div>
-      </div>
+    <>
+      {/* ── Modal (rendered outside the form flow) ── */}
+      <FeedbackModal
+        state={modal}
+        onClose={handleCloseModal}
+        onRetry={handleRetry}
+      />
 
-      {/* Phone + Subject */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label
-            className="font-cinzel text-[10px] tracking-widest uppercase font-bold mb-1.5 block"
-            style={{ color: "var(--rj-charcoal)" }}
-          >
-            Phone (optional)
-          </label>
-          <input
-            type="tel"
-            placeholder="+91 98765 43210"
-            value={form.phone}
-            onChange={set("phone")}
-            style={inputBase}
-            onFocus={(e) => (
-              (e.target.style.borderColor = "var(--rj-emerald)"),
-              (e.target.style.boxShadow = "0 0 0 3px rgba(0,55,32,0.06)")
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
+        {/* Name + Email */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label
+              className="font-cinzel text-[10px] tracking-widest uppercase font-bold mb-1.5 block"
+              style={{ color: "var(--rj-charcoal)" }}
+            >
+              Full Name <span style={{ color: "#ef4444" }}>*</span>
+            </label>
+            <input
+              type="text"
+              placeholder="Arjun Mehta"
+              value={form.fullName}
+              onChange={set("fullName")}
+              style={focusStyle("fullName")}
+              onFocus={(e) => {
+                e.target.style.borderColor = "var(--rj-emerald)";
+                e.target.style.boxShadow = "0 0 0 3px rgba(0,55,32,0.06)";
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = errors.fullName
+                  ? "#fca5a5"
+                  : "var(--rj-bone)";
+                e.target.style.boxShadow = "none";
+              }}
+            />
+            {errors.fullName && (
+              <p
+                className="font-cinzel text-[9px] mt-1"
+                style={{ color: "#ef4444" }}
+              >
+                {errors.fullName}
+              </p>
             )}
-            onBlur={(e) => (
-              (e.target.style.borderColor = "var(--rj-bone)"),
-              (e.target.style.boxShadow = "none")
+          </div>
+          <div>
+            <label
+              className="font-cinzel text-[10px] tracking-widest uppercase font-bold mb-1.5 block"
+              style={{ color: "var(--rj-charcoal)" }}
+            >
+              Email <span style={{ color: "#ef4444" }}>*</span>
+            </label>
+            <input
+              type="email"
+              placeholder="arjun@email.com"
+              value={form.email}
+              onChange={set("email")}
+              style={focusStyle("email")}
+              onFocus={(e) => {
+                e.target.style.borderColor = "var(--rj-emerald)";
+                e.target.style.boxShadow = "0 0 0 3px rgba(0,55,32,0.06)";
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = errors.email
+                  ? "#fca5a5"
+                  : "var(--rj-bone)";
+                e.target.style.boxShadow = "none";
+              }}
+            />
+            {errors.email && (
+              <p
+                className="font-cinzel text-[9px] mt-1"
+                style={{ color: "#ef4444" }}
+              >
+                {errors.email}
+              </p>
             )}
-          />
+          </div>
         </div>
+
+        {/* Phone + Subject */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label
+              className="font-cinzel text-[10px] tracking-widest uppercase font-bold mb-1.5 block"
+              style={{ color: "var(--rj-charcoal)" }}
+            >
+              Phone (optional)
+            </label>
+            <input
+              type="tel"
+              placeholder="+91 98765 43210"
+              value={form.phone}
+              onChange={set("phone")}
+              style={inputBase}
+              onFocus={(e) => {
+                e.target.style.borderColor = "var(--rj-emerald)";
+                e.target.style.boxShadow = "0 0 0 3px rgba(0,55,32,0.06)";
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = "var(--rj-bone)";
+                e.target.style.boxShadow = "none";
+              }}
+            />
+          </div>
+          <div>
+            <label
+              className="font-cinzel text-[10px] tracking-widest uppercase font-bold mb-1.5 block"
+              style={{ color: "var(--rj-charcoal)" }}
+            >
+              Subject <span style={{ color: "#ef4444" }}>*</span>
+            </label>
+            <select
+              value={form.subject}
+              onChange={set("subject")}
+              style={{
+                ...focusStyle("subject"),
+                cursor: "pointer",
+                appearance: "none",
+              }}
+              onFocus={(e) => {
+                e.target.style.borderColor = "var(--rj-emerald)";
+                e.target.style.boxShadow = "0 0 0 3px rgba(0,55,32,0.06)";
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = errors.subject
+                  ? "#fca5a5"
+                  : "var(--rj-bone)";
+                e.target.style.boxShadow = "none";
+              }}
+            >
+              <option value="">Select a subject…</option>
+              {SUBJECT_OPTIONS.map((s) => (
+                <option key={s} value={s}>
+                  {s}
+                </option>
+              ))}
+            </select>
+            {errors.subject && (
+              <p
+                className="font-cinzel text-[9px] mt-1"
+                style={{ color: "#ef4444" }}
+              >
+                {errors.subject}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Message */}
         <div>
           <label
             className="font-cinzel text-[10px] tracking-widest uppercase font-bold mb-1.5 block"
             style={{ color: "var(--rj-charcoal)" }}
           >
-            Subject <span style={{ color: "#ef4444" }}>*</span>
+            Message <span style={{ color: "#ef4444" }}>*</span>
           </label>
-          <select
-            value={form.subject}
-            onChange={set("subject")}
+          <textarea
+            rows={5}
+            placeholder="Tell us how we can help…"
+            value={form.message}
+            onChange={set("message")}
             style={{
-              ...focusStyle("subject"),
-              cursor: "pointer",
-              appearance: "none",
+              ...focusStyle("message"),
+              resize: "vertical",
+              minHeight: 120,
             }}
-            onFocus={(e) => (
-              (e.target.style.borderColor = "var(--rj-emerald)"),
-              (e.target.style.boxShadow = "0 0 0 3px rgba(0,55,32,0.06)")
-            )}
-            onBlur={(e) => (
-              (e.target.style.borderColor = errors.subject
+            onFocus={(e) => {
+              e.target.style.borderColor = "var(--rj-emerald)";
+              e.target.style.boxShadow = "0 0 0 3px rgba(0,55,32,0.06)";
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = errors.message
                 ? "#fca5a5"
-                : "var(--rj-bone)"),
-              (e.target.style.boxShadow = "none")
-            )}
-          >
-            <option value="">Select a subject…</option>
-            {SUBJECT_OPTIONS.map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
-            ))}
-          </select>
-          {errors.subject && (
+                : "var(--rj-bone)";
+              e.target.style.boxShadow = "none";
+            }}
+          />
+          {errors.message && (
             <p
               className="font-cinzel text-[9px] mt-1"
               style={{ color: "#ef4444" }}
             >
-              {errors.subject}
+              {errors.message}
             </p>
           )}
-        </div>
-      </div>
-
-      {/* Message */}
-      <div>
-        <label
-          className="font-cinzel text-[10px] tracking-widest uppercase font-bold mb-1.5 block"
-          style={{ color: "var(--rj-charcoal)" }}
-        >
-          Message <span style={{ color: "#ef4444" }}>*</span>
-        </label>
-        <textarea
-          rows={5}
-          placeholder="Tell us how we can help…"
-          value={form.message}
-          onChange={set("message")}
-          style={{
-            ...focusStyle("message"),
-            resize: "vertical",
-            minHeight: 120,
-          }}
-          onFocus={(e) => (
-            (e.target.style.borderColor = "var(--rj-emerald)"),
-            (e.target.style.boxShadow = "0 0 0 3px rgba(0,55,32,0.06)")
-          )}
-          onBlur={(e) => (
-            (e.target.style.borderColor = errors.message
-              ? "#fca5a5"
-              : "var(--rj-bone)"),
-            (e.target.style.boxShadow = "none")
-          )}
-        />
-        {errors.message && (
           <p
-            className="font-cinzel text-[9px] mt-1"
-            style={{ color: "#ef4444" }}
+            className="font-cinzel text-[9px] mt-1 text-right"
+            style={{
+              color: form.message.length > 950 ? "#ef4444" : "var(--rj-ash)",
+            }}
           >
-            {errors.message}
+            {form.message.length} / 1000
           </p>
-        )}
+        </div>
+
+        {/* Submit */}
+        <motion.button
+          type="submit"
+          disabled={loading}
+          whileTap={{ scale: 0.97 }}
+          className="flex items-center justify-center gap-2 py-3.5 rounded-full font-cinzel text-[11px] tracking-widest uppercase font-bold transition-all duration-300 disabled:opacity-60"
+          style={{
+            background: "var(--gradient-gold)",
+            color: "var(--rj-emerald)",
+            cursor: loading ? "wait" : "pointer",
+            boxShadow: "0 4px 20px rgba(252,193,81,0.3)",
+          }}
+        >
+          {loading ? (
+            <Loader2 size={14} className="animate-spin" />
+          ) : (
+            <Send size={13} />
+          )}
+          {loading ? "Sending…" : "Send Message"}
+        </motion.button>
+
         <p
-          className="font-cinzel text-[9px] mt-1 text-right"
+          className="font-cinzel text-[9px] tracking-wider text-center"
           style={{ color: "var(--rj-ash)" }}
         >
-          {form.message.length} / 1000
+          We respect your privacy. Your details are never shared with third
+          parties.
         </p>
-      </div>
-
-      {/* Submit */}
-      <motion.button
-        type="submit"
-        disabled={loading}
-        whileTap={{ scale: 0.97 }}
-        className="flex items-center justify-center gap-2 py-3.5 rounded-full font-cinzel text-[11px] tracking-widest uppercase font-bold transition-all duration-300 disabled:opacity-60"
-        style={{
-          background: "var(--gradient-gold)",
-          color: "var(--rj-emerald)",
-          cursor: loading ? "wait" : "pointer",
-          boxShadow: "0 4px 20px rgba(252,193,81,0.3)",
-        }}
-      >
-        {loading ? (
-          <motion.span
-            animate={{ rotate: 360 }}
-            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-          >
-            ◌
-          </motion.span>
-        ) : (
-          <Send size={13} />
-        )}
-        {loading ? "Sending…" : "Send Message"}
-      </motion.button>
-
-      <p
-        className="font-cinzel text-[9px] tracking-wider text-center"
-        style={{ color: "var(--rj-ash)" }}
-      >
-        We respect your privacy. Your details are never shared with third
-        parties.
-      </p>
-    </form>
+      </form>
+    </>
   );
 }
 
 // ─────────────────────────────────────────────────────────────────
 // EMBEDDED MAP PLACEHOLDER
-// Replace the iframe src with your actual Google Maps embed URL
-// from: maps.google.com → Share → Embed a map → copy src
 // ─────────────────────────────────────────────────────────────────
 function StoreMap() {
   return (
@@ -586,7 +819,6 @@ function StoreMap() {
         loading="lazy"
         referrerPolicy="no-referrer-when-downgrade"
       />
-      {/* Map overlay — store name pill */}
       <div className="absolute top-3 left-3 z-10 pointer-events-none">
         <div
           className="flex items-center gap-2 px-3 py-1.5 rounded-full"
@@ -604,7 +836,6 @@ function StoreMap() {
           </span>
         </div>
       </div>
-      {/* Directions CTA */}
       <a
         href="https://maps.google.com/?q=Rehnoor+Jewels+Connaught+Place+New+Delhi"
         target="_blank"
@@ -693,7 +924,6 @@ export default function ContactPage() {
               </p>
             </div>
 
-            {/* Response time pills */}
             <div className="flex flex-wrap gap-2 lg:flex-shrink-0">
               {[
                 { label: "~2 hr", sub: "Email reply" },
@@ -943,7 +1173,6 @@ export default function ContactPage() {
       <div style={{ background: "var(--rj-ivory-dark)" }}>
         <div className="container-rj py-20">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
-            {/* Map — takes 3 cols */}
             <motion.div
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -966,7 +1195,6 @@ export default function ContactPage() {
               <StoreMap />
             </motion.div>
 
-            {/* Address + what to expect — 2 cols */}
             <motion.div
               initial={{ opacity: 0, x: 24 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -974,7 +1202,6 @@ export default function ContactPage() {
               transition={{ duration: 0.6, delay: 0.15 }}
               className="lg:col-span-2 flex flex-col gap-5"
             >
-              {/* Address card */}
               <div
                 className="p-5 rounded-2xl md:mt-20"
                 style={{
@@ -1023,7 +1250,6 @@ export default function ContactPage() {
                 </a>
               </div>
 
-              {/* What to expect */}
               <div
                 className="p-5 rounded-2xl"
                 style={{
@@ -1079,7 +1305,6 @@ export default function ContactPage() {
       ══════════════════════════════════════ */}
       <div className="container-rj section-padding py-16 md:py-28">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 xl:gap-16 items-start">
-          {/* FAQ heading — sticky on desktop */}
           <div className="lg:sticky lg:top-28">
             <p
               className="label-accent mb-3"
@@ -1120,7 +1345,6 @@ export default function ContactPage() {
             </a>
           </div>
 
-          {/* FAQ accordion — 2 cols */}
           <div className="lg:col-span-2 flex flex-col gap-3">
             {FAQS.map((faq, i) => (
               <FaqItem key={faq.q} faq={faq} index={i} />
