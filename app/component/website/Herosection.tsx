@@ -177,8 +177,8 @@ export default function HeroSection() {
           </div>
 
           <p className="hero-sub text-white/70 text-lg md:text-xl leading-relaxed mb-10 max-w-xl font-light">
-            Where ancient craftsmanship meets bold modern design. Every Rehnoor
-            piece is BIS hallmarked, built to last and made to be noticed.
+            Where timeless craftsmanship meets bold modern design. Every Rehnoor
+            piece is made to endure and created to make a statement.
           </p>
 
           <div className="flex flex-wrap gap-4 mb-12">
@@ -219,7 +219,7 @@ export default function HeroSection() {
 
           <div className="hero-sub grid grid-cols-3 gap-6 pt-8 border-t border-white/10 max-w-md">
             {[
-              { value: "22kt", label: "Pure Gold" },
+              { value: "100%", label: "Certified Jewellery" },
               { value: "500+", label: "Designs" },
               { value: "50K+", label: "Happy Customers" },
             ].map((stat) => (

@@ -15,8 +15,8 @@ if (typeof window !== "undefined") {
 const values = [
   {
     icon: "⚜",
-    title: "BIS Hallmarked",
-    desc: "Every piece certified by Bureau of Indian Standards for guaranteed purity.",
+    title: "Premium Craftsmanship",
+    desc: "Expertly crafted with attention to detail, ensuring timeless quality and elegance.",
   },
   {
     icon: "✦",
@@ -26,12 +26,12 @@ const values = [
   {
     icon: "♾",
     title: "Lifetime Buyback",
-    desc: "Sell it back at fair value — because gold is always an investment.",
+    desc: "Sell it back at fair value - because jewellery is always an investment.",
   },
   {
     icon: "◈",
-    title: "Free Customization",
-    desc: "Size adjustments and engravings on every piece at no extra cost.",
+    title: "Timeless Design",
+    desc: "Blending classic artistry with modern aesthetics to create pieces that never go out of style.",
   },
 ];
 

@@ -1093,7 +1093,7 @@ export default function BestsellersSection() {
             The Gold Standard
           </h2>
           <p className="text-[var(--rj-ash)] max-w-md mx-auto">
-            Our most-loved pieces — loved by thousands, crafted for the bold.
+            Our most-loved pieces loved by thousands, crafted for the bold.
           </p>
           <div className="divider-gold-center mt-6" />
 

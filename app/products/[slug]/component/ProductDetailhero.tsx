@@ -34,9 +34,15 @@ const TRUST = [
 // ─────────────────────────────────────────────────────────────────
 // PROPS
 // ─────────────────────name───────────────────────────────────────────
+// interface Props {
+//   product: Product;
+//   onAddToCart?: () => void;
+// }
+
 interface Props {
   product: Product;
-  onAddToCart?: () => void;
+  onAddToCart?: (size: string, qty: number) => void;
+  onBuyNow?: (size: string, qty: number) => void;
 }
 
 // ─────────────────────────────────────────────────────────────────
@@ -90,7 +96,11 @@ function ZoomModal({
 // ─────────────────────────────────────────────────────────────────
 // MAIN COMPONENT
 // ─────────────────────────────────────────────────────────────────
-export default function ProductDetailHero({ product, onAddToCart }: Props) {
+export default function ProductDetailHero({
+  product,
+  onAddToCart,
+  onBuyNow,
+}: Props) {
   const [imgIdx, setImgIdx] = useState(0);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [qty, setQty] = useState(1);
@@ -111,6 +121,17 @@ export default function ProductDetailHero({ product, onAddToCart }: Props) {
     [images.length],
   );
 
+  // const handleAddToCart = () => {
+  //   if (product.sizes && product.sizes.length > 0 && !selectedSize) {
+  //     setSizeError(true);
+  //     setTimeout(() => setSizeError(false), 2000);
+  //     return;
+  //   }
+  //   setAddedToCart(true);
+  //   onAddToCart?.();
+  //   setTimeout(() => setAddedToCart(false), 2500);
+  // };
+
   const handleAddToCart = () => {
     if (product.sizes && product.sizes.length > 0 && !selectedSize) {
       setSizeError(true);
@@ -118,8 +139,17 @@ export default function ProductDetailHero({ product, onAddToCart }: Props) {
       return;
     }
     setAddedToCart(true);
-    onAddToCart?.();
+    onAddToCart?.(selectedSize ?? "", qty); // ← pass size + qty up
     setTimeout(() => setAddedToCart(false), 2500);
+  };
+
+  const handleBuyNow = () => {
+    if (product.sizes && product.sizes.length > 0 && !selectedSize) {
+      setSizeError(true);
+      setTimeout(() => setSizeError(false), 2000);
+      return;
+    }
+    onBuyNow?.(selectedSize ?? "", qty); // ← pass size + qty up
   };
 
   const handleShare = async () => {
@@ -624,6 +654,7 @@ export default function ProductDetailHero({ product, onAddToCart }: Props) {
 
               {/* Buy Now */}
               <button
+                onClick={handleBuyNow}
                 className="w-full py-3 font-cinzel text-[11px] tracking-widest uppercase font-bold rounded-full transition-all duration-300 hover:opacity-90 active:scale-95 mb-6"
                 style={{
                   background: "var(--rj-charcoal)",
