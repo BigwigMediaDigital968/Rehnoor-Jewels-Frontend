@@ -52,11 +52,11 @@ export default function BrandStorySection() {
     if (!sectionRef.current) return;
 
     const ctx = gsap.context(() => {
-      gsap.set(".value-item", { opacity: 0, y: 40 });
+      gsap.set(".value-item", { opacity: 0.5, y: 40 });
       gsap.to(".value-item", {
         y: 0,
         opacity: 1,
-        duration: 0.8,
+        duration: 0.2,
         stagger: 0.15,
         ease: "power3.out",
         scrollTrigger: {
@@ -105,10 +105,10 @@ export default function BrandStorySection() {
                 className="label-accent mb-1"
                 style={{ color: "var(--rj-gold)" }}
               >
-                Est. 1983
+                Est. 2020
               </p>
               <p className="font-cormorant text-white text-2xl leading-tight">
-                40+ Years of Gold
+                With Purity & Precision
               </p>
             </motion.div>
 
@@ -164,7 +164,7 @@ export default function BrandStorySection() {
             {/* Stats */}
             <div className="stats-row grid grid-cols-3 gap-6 mt-12 pt-8 border-t border-white/10">
               {[
-                { value: "40+", label: "Years" },
+                { value: "20+", label: "Partners" },
                 { value: "50K+", label: "Customers" },
                 { value: "500+", label: "Designs" },
               ].map((stat) => (

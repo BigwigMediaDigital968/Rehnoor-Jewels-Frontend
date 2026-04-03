@@ -94,7 +94,7 @@ function NavButtons({
         <Tooltip content="Go back to previous step">
           <button
             onClick={onBack}
-            className="flex items-center gap-1.5 font-cinzel text-[10px] tracking-widest uppercase px-5 py-3 rounded-full transition-all hover:opacity-70"
+            className="flex items-center gap-1.5 font-cinzel text-[10px] tracking-widest uppercase px-5 py-3 transition-all hover:opacity-70 hover:border-amber-600 hover:border-2"
             style={{
               border: "1.5px solid var(--rj-bone)",
               color: "var(--rj-ash)",
@@ -111,12 +111,11 @@ function NavButtons({
         <button
           onClick={onNext}
           disabled={disabled || loading}
-          className="flex-1 flex items-center px-5 justify-center gap-2 py-3.5 rounded-full font-cinzel text-[11px] tracking-widest uppercase font-bold transition-all duration-300 active:scale-95 disabled:opacity-40"
+          className="btn-primary inline-flex group"
           style={{
+            display: "inline-flex",
             background: "var(--gradient-gold)",
             color: "var(--rj-emerald)",
-            cursor: disabled || loading ? "not-allowed" : "pointer",
-            boxShadow: "0 4px 20px rgba(252,193,81,0.3)",
           }}
         >
           {loading ? (

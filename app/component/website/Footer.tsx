@@ -41,10 +41,12 @@ const footerLinks = {
     { label: "Shipping Info", href: "/shipping" },
   ],
   policies: [
-    { label: "Privacy Policy", href: "/privacy" },
+    { label: "Privacy Policy", href: "/policies/privacy" },
     { label: "Terms of Service", href: "/terms" },
-    { label: "Gold Buyback Policy", href: "/buyback" },
-    { label: "Hallmarking Info", href: "/hallmarking" },
+    { label: "Shipping", href: "/policies/shipping" },
+    { label: "Return & Refund", href: "/policies/returns" },
+    { label: "Cookies", href: "/policies/cookies" },
+    { label: "Cancellation", href: "/policies/cancellation" },
   ],
 };
 
@@ -108,7 +110,7 @@ export default function Footer() {
               {
                 icon: "⚜",
                 title: "Quality Assured",
-                sub: "Premium craftsmanship, BIS hallmarked",
+                sub: "Crafted to meet the excellence",
               },
             ].map((item) => (
               <div key={item.title} className="flex items-center gap-4">
@@ -141,9 +143,9 @@ export default function Footer() {
             </Link>
 
             <p className="text-white/60 text-sm leading-relaxed mb-6 max-w-sm">
-              Rehnoor Jewels redefines men&apos;s gold jewellery - where
-              heritage craftsmanship meets bold modern design. Every piece is
-              BIS hallmarked and crafted to last a lifetime.
+              Rehnoor Jewels redefines men’s gold jewellery - a fusion of
+              heritage artistry and contemporary boldness. Every creation
+              reflects enduring quality and refined craftsmanship.
             </p>
 
             {/* Newsletter */}

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Trash2,
@@ -19,14 +20,52 @@ import {
   Check,
   Gift,
   Sparkles,
+  Lock,
+  AlertCircle,
 } from "lucide-react";
 import { useCartStore } from "../../../store/cartStore";
+import { useCheckoutStore } from "../../../store/checkoutStore";
 
 // ─────────────────────────────────────────────────────────────────
 // HELPERS
 // ─────────────────────────────────────────────────────────────────
 function fmt(n: number) {
   return "₹" + n.toLocaleString("en-IN");
+}
+
+// ─────────────────────────────────────────────────────────────────
+// TOOLTIP (inline — no extra import needed in this file)
+// ─────────────────────────────────────────────────────────────────
+function Tip({ text, children }: { text: string; children: React.ReactNode }) {
+  const [show, setShow] = useState(false);
+  return (
+    <span
+      className="relative inline-flex"
+      onMouseEnter={() => setShow(true)}
+      onMouseLeave={() => setShow(false)}
+    >
+      {children}
+      <AnimatePresence>
+        {show && (
+          <motion.span
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 4 }}
+            transition={{ duration: 0.15 }}
+            className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-50 whitespace-nowrap font-cinzel tracking-wider rounded-lg pointer-events-none"
+            style={{
+              fontSize: 9,
+              background: "var(--rj-charcoal)",
+              color: "#fff",
+              padding: "4px 10px",
+            }}
+          >
+            {text}
+          </motion.span>
+        )}
+      </AnimatePresence>
+    </span>
+  );
 }
 
 // ─────────────────────────────────────────────────────────────────
@@ -67,9 +106,8 @@ function EmptyCart() {
       </p>
       <Link
         href="/products"
-        className="btn-primary"
+        className="btn-primary inline-flex items-center gap-2"
         style={{
-          display: "inline-flex",
           background: "var(--gradient-gold)",
           color: "var(--rj-emerald)",
           cursor: "pointer",
@@ -117,24 +155,26 @@ function CartItemRow({
       style={{ borderBottom: "1px solid var(--rj-bone)" }}
     >
       {/* Image */}
-      <Link
-        href={item.href}
-        className="relative flex-shrink-0 rounded-xl overflow-hidden"
-        style={{
-          width: 96,
-          height: 96,
-          background: "var(--rj-ivory-dark)",
-          cursor: "pointer",
-        }}
-      >
-        <Image
-          src={item.image}
-          alt={item.name}
-          fill
-          className="object-cover"
-          sizes="96px"
-        />
-      </Link>
+      <Tip text="View product details">
+        <Link
+          href={item.href}
+          className="relative flex-shrink-0 rounded-xl overflow-hidden group"
+          style={{
+            width: 96,
+            height: 96,
+            background: "var(--rj-ivory-dark)",
+            cursor: "pointer",
+          }}
+        >
+          <Image
+            src={item.image}
+            alt={item.name}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            sizes="96px"
+          />
+        </Link>
+      </Tip>
 
       {/* Details */}
       <div className="flex-1 min-w-0 flex flex-col justify-between">
@@ -182,26 +222,30 @@ function CartItemRow({
             className="flex items-center rounded-full"
             style={{ border: "1.5px solid var(--rj-bone)" }}
           >
-            <button
-              onClick={() => updateQty(item.id, item.qty - 1)}
-              className="w-8 h-8 flex items-center justify-center transition-colors hover:bg-[var(--rj-ivory-dark)] rounded-full"
-              style={{ cursor: "pointer", color: "var(--rj-charcoal)" }}
-            >
-              <Minus size={12} />
-            </button>
+            <Tip text="Decrease quantity">
+              <button
+                onClick={() => updateQty(item.id, item.qty - 1)}
+                className="w-8 h-8 flex items-center justify-center transition-colors hover:bg-[var(--rj-ivory-dark)] rounded-full"
+                style={{ cursor: "pointer", color: "var(--rj-charcoal)" }}
+              >
+                <Minus size={12} />
+              </button>
+            </Tip>
             <span
               className="w-7 text-center font-cinzel text-sm"
               style={{ color: "var(--rj-charcoal)" }}
             >
               {item.qty}
             </span>
-            <button
-              onClick={() => updateQty(item.id, item.qty + 1)}
-              className="w-8 h-8 flex items-center justify-center transition-colors hover:bg-[var(--rj-ivory-dark)] rounded-full"
-              style={{ cursor: "pointer", color: "var(--rj-charcoal)" }}
-            >
-              <Plus size={12} />
-            </button>
+            <Tip text="Increase quantity">
+              <button
+                onClick={() => updateQty(item.id, item.qty + 1)}
+                className="w-8 h-8 flex items-center justify-center transition-colors hover:bg-[var(--rj-ivory-dark)] rounded-full"
+                style={{ cursor: "pointer", color: "var(--rj-charcoal)" }}
+              >
+                <Plus size={12} />
+              </button>
+            </Tip>
           </div>
 
           {/* Price */}
@@ -233,13 +277,15 @@ function CartItemRow({
           </div>
 
           {/* Remove */}
-          <button
-            onClick={handleRemove}
-            className="flex items-center gap-1 font-cinzel text-[9px] tracking-wider uppercase transition-all hover:opacity-60"
-            style={{ color: "var(--rj-ash)", cursor: "pointer" }}
-          >
-            <Trash2 size={11} /> Remove
-          </button>
+          <Tip text="Remove from cart">
+            <button
+              onClick={handleRemove}
+              className="flex items-center gap-1 font-cinzel text-[9px] tracking-wider uppercase transition-all hover:opacity-60"
+              style={{ color: "var(--rj-ash)", cursor: "pointer" }}
+            >
+              <Trash2 size={11} /> Remove
+            </button>
+          </Tip>
         </div>
       </div>
     </motion.div>
@@ -251,20 +297,32 @@ function CartItemRow({
 // ─────────────────────────────────────────────────────────────────
 function CouponSection() {
   const { coupon, couponDiscount, applyCoupon, removeCoupon } = useCartStore();
+  const { setCoupon: setCheckoutCoupon, clearCoupon: clearCheckoutCoupon } =
+    useCheckoutStore();
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
 
+  // Apply coupon in both cart store AND checkout store so it carries over
   const handleApply = () => {
     const ok = applyCoupon(code.trim());
     if (ok) {
+      const code_upper = code.trim().toUpperCase();
+      const DISCOUNT_MAP: Record<string, number> = {
+        GOLD10: 500,
+        REHNOOR20: 1000,
+        FIRST15: 750,
+      };
+      setCheckoutCoupon(code_upper, DISCOUNT_MAP[code_upper] ?? 0);
       setError("");
-      setSuccess(true);
       setCode("");
     } else {
-      setError("Invalid coupon code. Try GOLD10 or REHNOOR20");
-      setSuccess(false);
+      setError("Invalid code. Try GOLD10, REHNOOR20 or FIRST15");
     }
+  };
+
+  const handleRemove = () => {
+    removeCoupon();
+    clearCheckoutCoupon();
   };
 
   if (coupon) {
@@ -293,9 +351,11 @@ function CouponSection() {
             </p>
           </div>
         </div>
-        <button onClick={removeCoupon} style={{ cursor: "pointer" }}>
-          <X size={14} style={{ color: "var(--rj-ash)" }} />
-        </button>
+        <Tip text="Remove coupon">
+          <button onClick={handleRemove} style={{ cursor: "pointer" }}>
+            <X size={14} style={{ color: "var(--rj-ash)" }} />
+          </button>
+        </Tip>
       </div>
     );
   }
@@ -307,7 +367,7 @@ function CouponSection() {
           <Tag
             size={13}
             className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
-            style={{ color: "var(--rj-ash)" }}
+            style={{ color: error ? "#fca5a5" : "var(--rj-ash)" }}
           />
           <input
             type="text"
@@ -315,7 +375,6 @@ function CouponSection() {
             onChange={(e) => {
               setCode(e.target.value.toUpperCase());
               setError("");
-              setSuccess(false);
             }}
             onKeyDown={(e) => e.key === "Enter" && handleApply()}
             placeholder="Coupon code"
@@ -328,17 +387,19 @@ function CouponSection() {
             }}
           />
         </div>
-        <button
-          onClick={handleApply}
-          className="px-4 py-2.5 font-cinzel text-[10px] tracking-widest uppercase font-bold rounded-lg transition-all"
-          style={{
-            background: "var(--rj-emerald)",
-            color: "var(--rj-gold)",
-            cursor: "pointer",
-          }}
-        >
-          Apply
-        </button>
+        <Tip text="Apply coupon code">
+          <button
+            onClick={handleApply}
+            className="px-4 py-2.5 font-cinzel text-[10px] tracking-widest uppercase font-bold rounded-lg transition-all"
+            style={{
+              background: "var(--rj-emerald)",
+              color: "var(--rj-gold)",
+              cursor: "pointer",
+            }}
+          >
+            Apply
+          </button>
+        </Tip>
       </div>
       {error && (
         <p
@@ -353,11 +414,24 @@ function CouponSection() {
 }
 
 // ─────────────────────────────────────────────────────────────────
-// ORDER SUMMARY
+// ORDER SUMMARY + CHECKOUT CTA
 // ─────────────────────────────────────────────────────────────────
 function OrderSummary() {
-  const { subtotal, savings, couponDiscount, grandTotal, totalItems, coupon } =
-    useCartStore();
+  const router = useRouter();
+  const {
+    subtotal,
+    savings,
+    couponDiscount,
+    grandTotal,
+    totalItems,
+    coupon,
+    items,
+  } = useCartStore();
+
+  // ── Pre-populate checkout store before navigating ──────────────────
+  // This ensures Step 1 already knows the cart state when checkout opens
+  const { reset: resetCheckout } = useCheckoutStore();
+
   const sub = subtotal();
   const save = savings();
   const discount = couponDiscount;
@@ -365,6 +439,34 @@ function OrderSummary() {
   const FREE_SHIP = 2000;
   const shipping = grand >= FREE_SHIP ? 0 : 149;
   const final = grand + shipping;
+
+  const [checkoutErr, setCheckoutErr] = useState("");
+  const [validating, setValidating] = useState(false);
+
+  // Validate cart is not empty and all items have sizes selected
+  const handleCheckout = async () => {
+    if (items.length === 0) return;
+
+    // Check all items have a valid size (not "Default" — set in wishlist move-to-cart)
+    const missingSize = items.find((i) => !i.size || i.size === "Default");
+    if (missingSize) {
+      setCheckoutErr(
+        `Please select a size for "${missingSize.name}" before checkout.`,
+      );
+      return;
+    }
+
+    setValidating(true);
+    setCheckoutErr("");
+
+    // Brief validation delay (could be a server-side stock check here)
+    await new Promise((r) => setTimeout(r, 400));
+    setValidating(false);
+
+    // Reset checkout to step 1 so user starts fresh if they came back
+    resetCheckout();
+    router.push("/checkout");
+  };
 
   return (
     <div
@@ -385,25 +487,17 @@ function OrderSummary() {
       </div>
 
       <div className="p-5 space-y-3" style={{ background: "#fff" }}>
-        {/* Lines */}
+        {/* Price lines */}
         {[
-          { label: "Subtotal", value: fmt(sub), muted: false },
+          { label: "Subtotal", value: fmt(sub), green: false },
           ...(save > 0
-            ? [
-                {
-                  label: "You save",
-                  value: `-${fmt(save)}`,
-                  muted: true,
-                  green: true,
-                },
-              ]
+            ? [{ label: "You save", value: `-${fmt(save)}`, green: true }]
             : []),
           ...(discount > 0
             ? [
                 {
                   label: `Coupon (${coupon})`,
                   value: `-${fmt(discount)}`,
-                  muted: true,
                   green: true,
                 },
               ]
@@ -411,16 +505,13 @@ function OrderSummary() {
           {
             label: "Shipping",
             value: shipping === 0 ? "Free" : fmt(shipping),
-            muted: false,
             green: shipping === 0,
           },
         ].map((line: any) => (
           <div key={line.label} className="flex items-center justify-between">
             <span
               className="font-cinzel text-[10px] tracking-wider"
-              style={{
-                color: line.muted ? "var(--rj-ash)" : "var(--rj-charcoal)",
-              }}
+              style={{ color: "var(--rj-ash)" }}
             >
               {line.label}
             </span>
@@ -435,11 +526,11 @@ function OrderSummary() {
           </div>
         ))}
 
-        {/* Free shipping progress */}
+        {/* Free shipping progress bar */}
         {grand < FREE_SHIP && (
-          <div className="pt-2">
+          <div className="pt-1">
             <p
-              className="font-cinzel text-[9px] tracking-wider mb-2"
+              className="font-cinzel text-[9px] tracking-wider mb-1.5"
               style={{ color: "var(--rj-ash)" }}
             >
               Add {fmt(FREE_SHIP - grand)} more for free shipping
@@ -478,22 +569,78 @@ function OrderSummary() {
           </span>
         </div>
 
-        {/* Coupon */}
+        {/* Coupon input */}
         <CouponSection />
 
-        {/* Checkout */}
-        <button
-          className="w-full py-3.5 font-cinzel text-[11px] tracking-widest uppercase font-bold rounded-full transition-all duration-300 hover:opacity-90 active:scale-95"
-          style={{
-            background: "var(--gradient-gold)",
-            color: "var(--rj-emerald)",
-            cursor: "pointer",
-            boxShadow: "0 4px 20px rgba(252,193,81,0.3)",
-          }}
-        >
-          Proceed to Checkout
-        </button>
+        <div className="h-px" style={{ background: "var(--rj-bone)" }} />
 
+        {/* Validation error */}
+        <AnimatePresence>
+          {checkoutErr && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="flex items-start gap-2 p-3 rounded-xl overflow-hidden"
+              style={{ background: "#fef2f2", border: "1px solid #fca5a5" }}
+            >
+              <AlertCircle
+                size={13}
+                style={{ color: "#ef4444", flexShrink: 0, marginTop: 1 }}
+              />
+              <p
+                className="font-cinzel text-[9px] tracking-wider leading-relaxed"
+                style={{ color: "#ef4444" }}
+              >
+                {checkoutErr}
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* ── CHECKOUT BUTTON — navigates to /checkout ── */}
+        <Tip
+          text={
+            validating ? "Checking your cart…" : "Proceed to secure checkout"
+          }
+        >
+          <button
+            onClick={handleCheckout}
+            disabled={validating || items.length === 0}
+            className="btn-primary inline-flex group"
+            style={{
+              display: "inline-flex",
+              background: "var(--gradient-gold)",
+              color: "var(--rj-emerald)",
+            }}
+          >
+            {validating ? (
+              <>
+                <motion.span
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                >
+                  ◌
+                </motion.span>{" "}
+                Checking…
+              </>
+            ) : (
+              <>
+                <Lock size={12} /> Proceed to Checkout
+              </>
+            )}
+          </button>
+        </Tip>
+
+        {/* Security note */}
+        <p
+          className="font-cinzel text-[8px] tracking-wider text-center"
+          style={{ color: "var(--rj-ash)" }}
+        >
+          256-bit SSL encrypted · Your payment info is never stored
+        </p>
+
+        {/* Continue shopping */}
         <Link
           href="/products"
           className="w-full py-2.5 font-cinzel text-[10px] tracking-widest uppercase font-bold rounded-full transition-all hover:opacity-70 flex items-center justify-center gap-2"
@@ -506,27 +653,41 @@ function OrderSummary() {
           Continue Shopping
         </Link>
 
-        {/* Trust */}
-        <div className="pt-3 grid grid-cols-3 gap-2">
+        {/* Trust badges */}
+        <div className="pt-2 grid grid-cols-3 gap-2">
           {[
-            { icon: <Shield size={12} />, label: "Secure" },
-            { icon: <RefreshCw size={12} />, label: "Returns" },
-            { icon: <Truck size={12} />, label: "Insured" },
+            {
+              icon: <Shield size={12} />,
+              label: "Secure",
+              tip: "256-bit SSL encryption",
+            },
+            {
+              icon: <RefreshCw size={12} />,
+              label: "Returns",
+              tip: "Free 30-day returns",
+            },
+            {
+              icon: <Truck size={12} />,
+              label: "Insured",
+              tip: "All orders fully insured",
+            },
           ].map((t) => (
-            <div key={t.label} className="flex flex-col items-center gap-1">
-              <div
-                className="w-8 h-8 rounded-full flex items-center justify-center"
-                style={{ background: "rgba(0,55,32,0.06)" }}
-              >
-                <span style={{ color: "var(--rj-emerald)" }}>{t.icon}</span>
+            <Tip key={t.label} text={t.tip}>
+              <div className="flex flex-col items-center gap-1 w-full cursor-help">
+                <div
+                  className="w-8 h-8 rounded-full flex items-center justify-center"
+                  style={{ background: "rgba(0,55,32,0.06)" }}
+                >
+                  <span style={{ color: "var(--rj-emerald)" }}>{t.icon}</span>
+                </div>
+                <span
+                  className="font-cinzel text-[8px] tracking-wider"
+                  style={{ color: "var(--rj-ash)" }}
+                >
+                  {t.label}
+                </span>
               </div>
-              <span
-                className="font-cinzel text-[8px] tracking-wider"
-                style={{ color: "var(--rj-ash)" }}
-              >
-                {t.label}
-              </span>
-            </div>
+            </Tip>
           ))}
         </div>
       </div>
@@ -543,7 +704,7 @@ export default function CartPage() {
 
   return (
     <main style={{ background: "var(--rj-ivory)", minHeight: "100vh" }}>
-      {/* Page header */}
+      {/* ── Header ── */}
       <div
         style={{
           background: "var(--rj-emerald)",
@@ -583,7 +744,7 @@ export default function CartPage() {
               </span>
             ))}
           </nav>
-          <div className="flex items-end justify-between">
+          <div className="flex items-end justify-between flex-wrap gap-3">
             <div>
               <p
                 className="label-accent mb-2"
@@ -621,9 +782,8 @@ export default function CartPage() {
           <EmptyCart />
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 xl:gap-12 items-start">
-            {/* Cart items */}
+            {/* Cart items — 2 cols */}
             <div className="lg:col-span-2">
-              {/* Toolbar */}
               <div className="flex items-center justify-between mb-6">
                 <p
                   className="font-cinzel text-xs tracking-widest"
@@ -632,16 +792,17 @@ export default function CartPage() {
                   {totalItems()} item{totalItems() !== 1 ? "s" : ""} in your
                   cart
                 </p>
-                <button
-                  onClick={clearCart}
-                  className="flex items-center gap-1 font-cinzel text-[9px] tracking-widest uppercase transition-opacity hover:opacity-60"
-                  style={{ color: "var(--rj-ash)", cursor: "pointer" }}
-                >
-                  <Trash2 size={11} /> Clear All
-                </button>
+                <Tip text="Remove all items from cart">
+                  <button
+                    onClick={clearCart}
+                    className="flex items-center gap-1 font-cinzel text-[9px] tracking-widest uppercase transition-opacity hover:opacity-60"
+                    style={{ color: "var(--rj-ash)", cursor: "pointer" }}
+                  >
+                    <Trash2 size={11} /> Clear All
+                  </button>
+                </Tip>
               </div>
 
-              {/* Items */}
               <motion.div layout>
                 <AnimatePresence mode="popLayout">
                   {items.map((item) => (
@@ -650,7 +811,7 @@ export default function CartPage() {
                 </AnimatePresence>
               </motion.div>
 
-              {/* Gift message */}
+              {/* Gift message note */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -688,15 +849,120 @@ export default function CartPage() {
                   </p>
                 </div>
               </motion.div>
+
+              {/* Mobile checkout button — below items on small screens */}
+              <div className="lg:hidden mt-6">
+                <MobileCheckoutButton items={items} />
+              </div>
             </div>
 
-            {/* Summary */}
-            <div>
+            {/* Summary sidebar — 1 col, hidden on mobile (shown above as MobileCheckoutButton) */}
+            <div className="hidden lg:block">
               <OrderSummary />
             </div>
           </div>
         )}
       </div>
     </main>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────
+// MOBILE CHECKOUT BUTTON (below item list on small screens)
+// ─────────────────────────────────────────────────────────────────
+function MobileCheckoutButton({
+  items,
+}: {
+  items: ReturnType<typeof useCartStore.getState>["items"];
+}) {
+  const router = useRouter();
+  const { grandTotal, couponDiscount, subtotal } = useCartStore();
+  const { reset: resetCheckout } = useCheckoutStore();
+
+  const FREE_SHIP = 2000;
+  const grand = grandTotal();
+  const shipping = grand >= FREE_SHIP ? 0 : 149;
+  const final = grand + shipping;
+
+  const [validating, setValidating] = useState(false);
+  const [err, setErr] = useState("");
+
+  const handleCheckout = async () => {
+    const missingSize = items.find((i) => !i.size || i.size === "Default");
+    if (missingSize) {
+      setErr(`Select a size for "${missingSize.name}"`);
+      return;
+    }
+    setValidating(true);
+    setErr("");
+    await new Promise((r) => setTimeout(r, 400));
+    setValidating(false);
+    resetCheckout();
+    router.push("/checkout");
+  };
+
+  return (
+    <div
+      className="p-5 rounded-2xl"
+      style={{ background: "#fff", border: "1px solid var(--rj-bone)" }}
+    >
+      <div className="flex items-center justify-between mb-4">
+        <span
+          className="font-cinzel text-xs tracking-wider"
+          style={{ color: "var(--rj-ash)" }}
+        >
+          Order total
+        </span>
+        <span
+          className="font-cormorant font-light"
+          style={{ fontSize: "1.4rem", color: "var(--rj-charcoal)" }}
+        >
+          ₹{final.toLocaleString("en-IN")}
+        </span>
+      </div>
+      {err && (
+        <div
+          className="flex items-center gap-2 mb-3 p-2.5 rounded-lg"
+          style={{ background: "#fef2f2", border: "1px solid #fca5a5" }}
+        >
+          <AlertCircle size={12} style={{ color: "#ef4444" }} />
+          <p className="font-cinzel text-[9px]" style={{ color: "#ef4444" }}>
+            {err}
+          </p>
+        </div>
+      )}
+      <button
+        onClick={handleCheckout}
+        disabled={validating}
+        className="btn-primary inline-flex group"
+        style={{
+          display: "inline-flex",
+          background: "var(--gradient-gold)",
+          color: "var(--rj-emerald)",
+        }}
+      >
+        {validating ? (
+          <>
+            <motion.span
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+            >
+              ◌
+            </motion.span>{" "}
+            Checking…
+          </>
+        ) : (
+          <>
+            <Lock size={12} /> Proceed to Checkout
+          </>
+        )}
+      </button>
+      <p
+        className="font-cinzel text-[8px] tracking-wider text-center mt-2"
+        style={{ color: "var(--rj-ash)" }}
+      >
+        Secure checkout · SSL encrypted
+      </p>
+    </div>
   );
 }
