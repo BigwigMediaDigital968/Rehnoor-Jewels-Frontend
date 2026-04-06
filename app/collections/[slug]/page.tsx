@@ -118,3 +118,91 @@ export default async function CollectionDetailPage({
     </main>
   );
 }
+
+// API Integrated
+
+// import { notFound } from "next/navigation";
+// import CollectionHero from "./component/CollectionHero";
+// import CollectionProductGrid from "./component/CollectionProductGrid";
+// import CollectionTestimonials from "./component/Collectiontestimonials";
+
+// import type { CollectionMeta } from "./component/CollectionHero";
+// import {
+//   fetchCollectionBySlug,
+//   fetchPublicCollections,
+// } from "@/app/lib/api/collections";
+
+// // ── Map ApiCollection → CollectionMeta (what the hero component expects) ──
+// function toMeta(
+//   col: Awaited<ReturnType<typeof fetchCollectionBySlug>>["data"],
+// ): CollectionMeta {
+//   if (!col) throw new Error("No collection data");
+//   return {
+//     id: col.slug,
+//     label: col.label || col.name,
+//     tagline: col.tagline,
+//     description: col.description,
+//     heroImage: col.heroImage,
+//     accentColor: col.accentColor || "rgba(0,36,16,0.88)",
+//     productCount: col.productCount,
+//     purity: "22kt",
+//     tag: col.tag || undefined,
+//     breadcrumb: ["Home", "Collections", col.label || col.name],
+//   };
+// }
+
+// // ── Pre-render known slugs from the API at build time ────────────
+// export async function generateStaticParams() {
+//   try {
+//     const res = await fetchPublicCollections({ limit: 100 });
+//     if (res.success) {
+//       return res.data.map((c) => ({ slug: c.slug }));
+//     }
+//   } catch {
+//     // If API is down during build, fall back to empty — pages will be rendered on demand
+//   }
+//   return [];
+// }
+
+// // ── SEO metadata ─────────────────────────────────────────────────
+// export async function generateMetadata({
+//   params,
+// }: {
+//   params: { slug: string };
+// }) {
+//   try {
+//     const res = await fetchCollectionBySlug(params.slug);
+//     if (res.success && res.data) {
+//       return {
+//         title: `${res.data.seoTitle || res.data.label} | Rehnoor Jewels`,
+//         description: res.data.seoDescription || res.data.description,
+//       };
+//     }
+//   } catch {}
+//   return { title: "Collection | Rehnoor Jewels" };
+// }
+
+// // ── Page component ────────────────────────────────────────────────
+// export default async function CollectionDetailPage({
+//   params,
+// }: {
+//   params: { slug: string };
+// }) {
+//   let meta: CollectionMeta;
+
+//   try {
+//     const res = await fetchCollectionBySlug(params.slug);
+//     if (!res.success || !res.data) return notFound();
+//     meta = toMeta(res.data);
+//   } catch {
+//     return notFound();
+//   }
+
+//   return (
+//     <main>
+//       <CollectionHero meta={meta} />
+//       <CollectionProductGrid />
+//       <CollectionTestimonials />
+//     </main>
+//   );
+// }

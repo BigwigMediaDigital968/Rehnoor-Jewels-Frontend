@@ -77,7 +77,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="antialiased">
-        <DiscountPopup offerKey="welcome" />
+        {/* <DiscountPopup offerKey="welcome" /> */}
         <FloatingOfferBadge offerKey="welcome" />
         <Navbar />
         {children}

@@ -11,43 +11,43 @@ if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger);
 const trustPoints = [
   {
     icon: "⚜",
-    title: "BIS Hallmarked",
-    desc: "Every piece carries the Bureau of Indian Standards certification — guaranteed 22kt purity, no exceptions.",
+    title: "Premium Craftsmanship",
+    desc: "Every piece is meticulously handcrafted with exceptional attention to detail, ensuring a flawless finish and lasting quality.",
     stat: "100%",
-    statLabel: "Certified Gold",
+    statLabel: "Quality Assured",
   },
   {
     icon: "✦",
     title: "Master Artisans",
-    desc: "Our craftsmen have honed their skills across 3 generations. Each piece takes 12–48 hours of meticulous handwork.",
+    desc: "Our craftsmen bring decades of experience, shaping each piece with precision and expertise.",
     stat: "40+",
     statLabel: "Years of Craft",
   },
   {
     icon: "♾",
     title: "Lifetime Buyback",
-    desc: "Gold is an investment. We buy back any Rehnoor piece at fair market value — no questions, no depreciation.",
+    desc: "We offer fair value buyback on every piece, ensuring long-term trust and flexibility.",
     stat: "Fair",
     statLabel: "Market Rate",
   },
   {
-    icon: "◈",
-    title: "Free Customization",
-    desc: "Size adjustments, name engravings, and design modifications — all complimentary on every order.",
-    stat: "Free",
-    statLabel: "Forever",
+    icon: "✧",
+    title: "Exclusive Designs",
+    desc: "Thoughtfully designed collections that stand apart and reflect individuality.",
+    stat: "500+",
+    statLabel: "Unique Styles",
   },
   {
     icon: "⟳",
-    title: "30-Day Returns",
-    desc: "Changed your mind? Return or exchange within 30 days. Zero questions. Full refund or store credit.",
-    stat: "30",
+    title: "07-Day Returns",
+    desc: "Enjoy a hassle-free return or exchange within 07 days.",
+    stat: "07",
     statLabel: "Day Window",
   },
   {
     icon: "◉",
     title: "Secure Packaging",
-    desc: "Every order ships in our signature velvet-lined box with tamper-evident sealing and insured delivery.",
+    desc: "Delivered in signature packaging with tamper-proof sealing and insured shipping.",
     stat: "100%",
     statLabel: "Insured",
   },
@@ -59,7 +59,7 @@ export default function TrustSection() {
   useEffect(() => {
     if (!sectionRef.current) return;
     const ctx = gsap.context(() => {
-      gsap.set(".trust-card", { opacity: 0, y: 40 });
+      gsap.set(".trust-card", { opacity: 0, y: 80 });
       gsap.to(".trust-card", {
         opacity: 1,
         y: 0,
@@ -82,7 +82,7 @@ export default function TrustSection() {
         {/* Heading */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-end mb-16">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
@@ -114,7 +114,7 @@ export default function TrustSection() {
               trust is worth more than the gold itself.
             </p>
             <div className="flex flex-wrap gap-3">
-              {["BIS Certified", "Free Shipping", "Secure Packaging"].map(
+              {["Secure Checkout", "Free Shipping", "Premium Packaging"].map(
                 (t) => (
                   <div key={t} className="flex items-center gap-1.5">
                     <div
@@ -228,8 +228,8 @@ export default function TrustSection() {
           style={{ borderColor: "rgba(255,255,255,0.08)" }}
         >
           {[
-            ["40+", "Years in Business"],
-            ["22kt", "Gold Standard"],
+            ["06+", "Years in Business"],
+            ["100%", "Quality Assured"],
             ["50K+", "Happy Customers"],
             ["500+", "Unique Designs"],
           ].map(([v, l]) => (

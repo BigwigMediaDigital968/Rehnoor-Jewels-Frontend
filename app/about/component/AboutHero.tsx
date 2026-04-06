@@ -174,7 +174,7 @@ export default function AboutHero() {
           className="font-cinzel text-[9px] tracking-widest uppercase"
           style={{ color: "rgba(252,193,81,0.45)" }}
         >
-          Est. 2018
+          Est. 2020
         </span>
         <div
           className="w-px flex-1 min-h-[80px]"
@@ -271,9 +271,8 @@ export default function AboutHero() {
 
           {/* Subheading */}
           <p className="about-sub text-white/70 text-lg md:text-xl leading-relaxed mb-10 max-w-xl font-light">
-            Rehnoor Jewels was born from one belief — that every person deserves
-            to feel like royalty. Whether you wear 22kt gold or 1-gram patra,
-            real luxury is how it makes you feel.
+            Rehnoor Jewels was born from one belief - everyone deserves to feel
+            like royalty. Because true luxury is a feeling, not just a piece.
           </p>
 
           {/* CTAs — same pattern as HeroSection */}
@@ -320,7 +319,7 @@ export default function AboutHero() {
           >
             {[
               { value: "50K+", label: "Happy Customers" },
-              { value: "1200+", label: "Unique Designs" },
+              { value: "500+", label: "Unique Designs" },
               { value: "6+", label: "Years of Craft" },
               { value: "4.9★", label: "Avg. Rating" },
             ].map((stat) => (
@@ -356,13 +355,13 @@ export default function AboutHero() {
         className="absolute bottom-20 right-8 lg:right-16 z-10 glass-dark rounded-xl p-4 hidden md:block"
       >
         <p className="label-accent text-[var(--rj-gold)] text-[9px] mb-1">
-          Est. 2018
+          Est. 2020
         </p>
         <p className="font-cormorant text-white text-lg font-medium">
           Rehnoor Jewels
         </p>
         <p className="text-white/50 text-xs mt-0.5">
-          BIS Hallmarked · 50K+ customers
+          Premium Designs · 50K+ customers
         </p>
         <a
           href="#story"

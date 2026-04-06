@@ -11,6 +11,7 @@ import {
   Phone,
   Mail,
   ArrowRight,
+  Linkedin,
 } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
@@ -51,14 +52,23 @@ const footerLinks = {
 };
 
 const socials = [
-  { icon: Instagram, label: "Instagram", href: "https://instagram.com" },
+  {
+    icon: Instagram,
+    label: "Instagram",
+    href: "https://www.instagram.com/rehnoorjewels",
+  },
   { icon: Youtube, label: "YouTube", href: "https://youtube.com" },
   { icon: Facebook, label: "Facebook", href: "https://facebook.com" },
   { icon: Twitter, label: "Twitter / X", href: "https://x.com" },
+  {
+    icon: Linkedin,
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/company/rehnoor-jewels/",
+  },
 ];
 
 const certifications = [
-  { label: "BIS Hallmarked", icon: "⚜" },
+  // { label: "Certified ", icon: "⚜" },
   { label: "ISO Certified", icon: "✓" },
   { label: "GIA Partner", icon: "◈" },
   { label: "SSL Secured", icon: "🔒" },
@@ -234,10 +244,10 @@ export default function Footer() {
           {[
             {
               icon: MapPin,
-              text: "123, Jewellers Lane, Jaipur, Rajasthan - 302001",
+              text: "10722, 4th Floor, Street 13, Pratap Nagar, Near SBI Bank Pratap Nagar, Delhi 110007",
             },
-            { icon: Phone, text: "+91 98765 43210" },
-            { icon: Mail, text: "care@rehnoorrjewels.com" },
+            { icon: Phone, text: "+91 84485 81529" },
+            { icon: Mail, text: "hello@rehnoorjewels.com" },
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-3">
               <item.icon

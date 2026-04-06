@@ -9,10 +9,42 @@ export default function NewsletterSection() {
   const [submitted, setSubmitted] = useState(false);
   const [focused, setFocused] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // ADD THESE STATES
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  // UPDATE HANDLE SUBMIT
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!email.includes("@")) return;
-    setSubmitted(true);
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/newsletter/subscribe`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        },
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.message);
+
+      setSubmitted(true);
+      setEmail(""); // reset input
+    } catch (err: any) {
+      setError(err.message || "Subscription failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -123,14 +155,17 @@ export default function NewsletterSection() {
                 </div>
                 <button
                   type="submit"
+                  disabled={loading}
                   className="btn-primary flex-shrink-0"
                   style={{
                     display: "inline-flex",
                     background: "var(--gradient-gold)",
                     color: "var(--rj-emerald)",
+                    opacity: loading ? 0.7 : 1,
+                    cursor: loading ? "not-allowed" : "pointer",
                   }}
                 >
-                  Subscribe
+                  {loading ? "Subscribing..." : "Subscribe"}
                 </button>
               </motion.form>
             ) : (
@@ -164,6 +199,10 @@ export default function NewsletterSection() {
               </motion.div>
             )}
           </AnimatePresence>
+
+          {error && (
+            <p className="text-red-400 text-sm mt-3 text-center">{error}</p>
+          )}
 
           {/* Fine print */}
           <p

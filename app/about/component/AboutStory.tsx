@@ -22,24 +22,24 @@ export default function OurStory() {
 
   const milestones = [
     {
-      year: "2018",
+      year: "2020",
       title: "The First Spark",
-      desc: "Founded in a small workshop in Jaipur with one craftsman, one kiln, and an obsession with making gold accessible to all.",
+      desc: "Founded in a small workshop in Delhi with one craftsman, one kiln, and an obsession with making gold accessible to all.",
     },
     {
-      year: "2020",
+      year: "2021",
       title: "Patra Reimagined",
-      desc: "We launched our 1-gram gold line — bringing luxury looks at a fraction of the price. The internet noticed.",
+      desc: "We launched our 1-gram gold line, bringing luxury looks at a fraction of the price. The internet noticed.",
     },
     {
       year: "2022",
-      title: "10,000 Smiles",
-      desc: "Crossed 10,000 orders. Our DMs flooded with wedding photos, graduation selfies, and first-gold stories.",
+      title: "10,000+ Smiles",
+      desc: "Crossed 10,000+ orders. Our DMs flooded with wedding photos, graduation selfies, and first-gold stories.",
     },
     {
-      year: "2024",
-      title: "The Gold Standard",
-      desc: "Expanded to 22kt BIS hallmarked pieces. Now offering both patra elegance and solid gold — for every budget, every occasion.",
+      year: "2025",
+      title: "Beyond Just Jewelry",
+      desc: "Became a statement brand where every piece reflects identity, confidence, and modern luxury.",
     },
   ];
 
@@ -78,7 +78,7 @@ export default function OurStory() {
                   className="font-cinzel text-[9px] tracking-widest uppercase px-3 py-1 rounded-full"
                   style={{ background: "var(--rj-gold)", color: "#000" }}
                 >
-                  BIS Hallmarked
+                  Quality by Trusted
                 </span>
               </div>
             </div>
@@ -149,9 +149,7 @@ export default function OurStory() {
             >
               Gold for the Bold.
               <br />
-              <span style={{ color: "var(--rj-emerald)" }}>
-                Style for the Smart.
-              </span>
+              <span className="text-gold-shimmer">Style for the Smart.</span>
             </motion.h2>
 
             <motion.p
@@ -166,9 +164,13 @@ export default function OurStory() {
               }}
             >
               Rehnoor Jewels started with a simple but powerful question:
-              <em> why should looking like gold cost like gold?</em> We believed
-              — and still believe — that confidence, beauty, and luxury
-              shouldn't have a price tag attached.
+              <br />
+              <em className="text-gold-shimmer pe-2">
+                {" "}
+                why should looking like gold cost like gold?{" "}
+              </em>
+              <br /> We believed and still believe that confidence, beauty, and
+              luxury shouldn't have a price tag attached.
             </motion.p>
 
             <motion.p
@@ -183,9 +185,9 @@ export default function OurStory() {
               }}
             >
               From our 1-gram patra pieces that pass the gold test from 3 feet
-              away, to our solid 22kt BIS hallmarked chains — every piece is
-              crafted for the woman who knows exactly what she wants and refuses
-              to pay a rupee more than she should.
+              away, to our solid gold chains. Every piece is crafted for those
+              who know exactly what they want and refuse to pay a rupee more
+              than they should.
             </motion.p>
 
             {/* Milestones */}

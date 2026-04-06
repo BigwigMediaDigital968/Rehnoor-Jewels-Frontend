@@ -38,8 +38,8 @@ export default function WhyTrustUs() {
   const trusts = [
     {
       icon: Shield,
-      title: "BIS Hallmarked Gold",
-      desc: "Every solid gold piece carries a BIS hallmark — certified, tested, and guaranteed for purity. No guessing.",
+      title: "500+ Exclusive Designs",
+      desc: "Thoughtfully designed collections that stand apart and reflect individuality.",
     },
     {
       icon: Award,
@@ -53,8 +53,8 @@ export default function WhyTrustUs() {
     },
     {
       icon: RefreshCw,
-      title: "30-Day Easy Returns",
-      desc: "Not happy? No 20 questions. Just return within 30 days for a full refund or exchange.",
+      title: "07-Day Easy Returns",
+      desc: "Not happy? No 20 questions. Just return within 07 days for a full refund or exchange.",
     },
     {
       icon: Star,

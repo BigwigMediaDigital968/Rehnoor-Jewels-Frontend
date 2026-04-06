@@ -18,7 +18,7 @@ export default function CollectionsHero() {
     target: sectionRef,
     offset: ["start start", "end start"],
   });
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "70%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
   useEffect(() => {
@@ -65,7 +65,7 @@ export default function CollectionsHero() {
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-[70vh] md:min-h-screen overflow-hidden flex items-center"
+      className="relative min-h-[70vh] md:h-[100vh] overflow-hidden flex items-center"
       style={{ background: "var(--rj-emerald-dark)" }}
     >
       {/* Parallax BG */}
@@ -121,7 +121,7 @@ export default function CollectionsHero() {
 
         {/* Heading */}
         <h1
-          className="heading-xl text-white mb-6 leading-none"
+          className="heading-lg text-white mb-6 leading-none"
           aria-label="Every Piece. Pure Gold."
         >
           {["Every", " ", "Piece."].map((w, i) => (
@@ -141,9 +141,8 @@ export default function CollectionsHero() {
         </h1>
 
         <p className="hero-col-sub text-white/65 text-lg md:text-xl max-w-xl mb-10 font-light leading-relaxed">
-          Eight curated collections. Each BIS hallmarked, each handcrafted and
-          built for the man who understands that gold is never just an
-          accessory.
+          Signature collections. Meticulously handcrafted for those who
+          understand that true style is defined by the details you choose.
         </p>
 
         <div className="flex flex-wrap gap-4">
@@ -179,7 +178,7 @@ export default function CollectionsHero() {
         <div className="hero-col-sub flex flex-wrap gap-8 mt-14 pt-8 border-t border-white/10">
           {[
             ["500+", "Designs"],
-            ["22kt", "Pure Gold"],
+            ["Precision Crafted", "Timeless Style"],
             ["50K+", "Orders Delivered"],
           ].map(([v, l]) => (
             <div key={l}>

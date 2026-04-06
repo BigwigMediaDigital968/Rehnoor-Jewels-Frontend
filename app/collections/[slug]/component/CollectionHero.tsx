@@ -154,7 +154,7 @@ export default function CollectionHero({
       </div>
 
       {/* Content */}
-      <div className="relative z-10 container-rj pb-12 pt-32 w-full">
+      <div className="relative z-10 container-rj pb-12 w-full">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-1.5 mb-6" aria-label="Breadcrumb">
           {(meta.breadcrumb ?? ["Home", "Collections", meta.label]).map(
@@ -238,8 +238,8 @@ export default function CollectionHero({
         <div className="flex flex-wrap gap-8 pt-6 border-t border-white/10">
           {[
             { v: `${meta.productCount}`, l: "Pieces" },
-            { v: meta.purity, l: "Purity" },
-            { v: "BIS", l: "Hallmarked" },
+            { v: "Timeless", l: "Designs" },
+            { v: "Premium", l: "Finish" },
             { v: "Free", l: "Size Adjust" },
           ].map((s) => (
             <div key={s.l} className="ch-stat">
