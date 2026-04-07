@@ -10,7 +10,7 @@ import GoldPriceScroll from "./component/shared/GoldPriceScroll";
 export default function HomePage() {
   return (
     <>
-      <GoldPriceScroll />
+      {/* <GoldPriceScroll /> */}
       <main>
         <HeroSection />
         <CategoriesSection />

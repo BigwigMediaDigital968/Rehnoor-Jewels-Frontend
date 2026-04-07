@@ -33,9 +33,9 @@ const CONTACT_DETAILS = [
   {
     icon: <Phone size={18} />,
     label: "Call Us",
-    value: "+91 98765 43210",
+    value: "+91 84485 81529",
     sub: "Mon–Sat, 10 AM – 7 PM IST",
-    action: "tel:+919876543210",
+    action: "tel:+918448581529",
     color: "var(--rj-emerald)",
   },
   {
@@ -49,9 +49,9 @@ const CONTACT_DETAILS = [
   {
     icon: <MessageCircle size={18} />,
     label: "WhatsApp",
-    value: "+91 98765 43210",
+    value: "+91 85958 14465",
     sub: "Instant reply, 9 AM – 9 PM",
-    action: "https://wa.me/919876543210",
+    action: "https://wa.me/918595814465",
     color: "#25D366",
   },
   {
@@ -87,14 +87,14 @@ const FAQS = [
     a: "Standard delivery takes 5–7 business days across India. Express (2–3 days) and same-day delivery (select metros, order before 12 PM) are also available. All orders are fully insured and arrive in our signature gift box.",
     icon: <Package size={14} />,
   },
-  {
-    q: "Is your gold BIS hallmarked?",
-    a: "Yes, every piece we sell is BIS hallmarked as per Bureau of Indian Standards norms. Your order includes a physical hallmark certificate. You can verify the hallmark number on the BIS official website.",
-    icon: <Shield size={14} />,
-  },
+  // {
+  //   q: "Is your gold BIS hallmarked?",
+  //   a: "Yes, every piece we sell is BIS hallmarked as per Bureau of Indian Standards norms. Your order includes a physical hallmark certificate. You can verify the hallmark number on the BIS official website.",
+  //   icon: <Shield size={14} />,
+  // },
   {
     q: "Can I return or exchange my order?",
-    a: "Absolutely. We offer a 30-day no-questions-asked return and free exchange policy. Simply contact us within 30 days of delivery, and we will arrange a free doorstep pickup. Refunds process within 5–7 business days.",
+    a: "Absolutely. We offer a 07-day no-questions-asked return and free exchange policy. Simply contact us within 07 days of delivery, and we will arrange a free doorstep pickup. Refunds process within 5–7 business days.",
     icon: <RefreshCw size={14} />,
   },
   {
@@ -117,16 +117,16 @@ const FAQS = [
 const HELP_TOPICS = [
   {
     label: "Track my order",
-    href: "/account/orders",
+    href: "/track-order",
     icon: <Package size={13} />,
   },
-  {
-    label: "Start a return",
-    href: "/account/returns",
-    icon: <RefreshCw size={13} />,
-  },
+  // {
+  //   label: "Start a return",
+  //   href: "/account/returns",
+  //   icon: <RefreshCw size={13} />,
+  // },
   { label: "Size guide", href: "/size-guide", icon: <Ruler size={13} /> },
-  { label: "BIS hallmark info", href: "/hallmark", icon: <Shield size={13} /> },
+  { label: "Policies", href: "/policies", icon: <Shield size={13} /> },
 ];
 
 // ─────────────────────────────────────────────────────────────────
@@ -456,9 +456,7 @@ function FaqItem({ faq, index }: { faq: (typeof FAQS)[0]; index: number }) {
   );
 }
 
-// ─────────────────────────────────────────────────────────────────
-// CONTACT FORM  — wired to POST /api/leads/add
-// ─────────────────────────────────────────────────────────────────
+// CONTACT FORM
 function ContactForm() {
   const [form, setForm] = useState({
     fullName: "",
@@ -482,7 +480,6 @@ function ContactForm() {
     return e;
   };
 
-  // Submit → POST /api/leads/add
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const errs = validate();
@@ -499,7 +496,7 @@ function ContactForm() {
         body: JSON.stringify({
           fullName: form.fullName,
           email: form.email,
-          phone: form.phone || undefined, // omit empty string → model default null
+          phone: form.phone || undefined,
           subject: form.subject,
           message: form.message,
         }),
@@ -811,7 +808,7 @@ function StoreMap() {
     >
       <iframe
         title="Rehnoor Jewels store location"
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.345!2d77.209!3d28.6139!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjjCsDM2JzUwLjAiTiA3N8KwMTInMzIuNCJF!5e0!3m2!1sen!2sin!4v1234567890"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3500.680993630868!2d77.19266907529052!3d28.669268975644645!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d027f8653c3d9%3A0xe76be3718d5d70fa!2sSBI%20Branch%20Pratap%20Nagar!5e0!3m2!1sen!2sin!4v1775539942724!5m2!1sen!2sin"
         width="100%"
         height="100%"
         style={{ border: 0, position: "absolute", inset: 0 }}
@@ -1106,7 +1103,7 @@ export default function ContactPage() {
                     className="font-cinzel text-sm font-bold"
                     style={{ color: "var(--rj-charcoal)" }}
                   >
-                    Connaught Place, Delhi
+                    Near SBI Bank Pratap Nagar, Delhi 110007
                   </p>
                 </div>
               </div>
@@ -1233,14 +1230,14 @@ export default function ContactPage() {
                     fontFamily: "var(--font-body,'DM Sans'),sans-serif",
                   }}
                 >
-                  Shop 14, Block F, Connaught Place
+                  10722, 4th Floor, Street 13,
                   <br />
-                  New Delhi – 110001
+                  Near SBI Bank Pratap Nagar,
                   <br />
-                  Near Rajiv Chowk Metro Station
+                  Delhi 110007
                 </p>
                 <a
-                  href="https://maps.google.com/?q=Connaught+Place+New+Delhi"
+                  href="https://www.google.com/maps/place/SBI+Branch+Pratap+Nagar/@28.6741624,77.1823546,15z/data=!4m10!1m2!2m1!1s10722,+4th+Floor,+Street+13,+Pratap+Nagar,+Near+SBI+Bank+Pratap+Nagar,+Delhi+110007!3m6!1s0x390d027f8653c3d9:0xe76be3718d5d70fa!8m2!3d28.669269!4d77.195244!15sClMxMDcyMiwgNHRoIEZsb29yLCBTdHJlZXQgMTMsIFByYXRhcCBOYWdhciwgTmVhciBTQkkgQmFuayBQcmF0YXAgTmFnYXIsIERlbGhpIDExMDAwNyIDiAEBWlAiTjEwNzIyIDR0aCBmbG9vciBzdHJlZXQgMTMgcHJhdGFwIG5hZ2FyIG5lYXIgc2JpIGJhbmsgcHJhdGFwIG5hZ2FyIGRlbGhpIDExMDAwN5IBBGJhbmuaASNDaFpEU1VoTk1HOW5TMFZKUTBGblNVTm9PR0ppVmxWM0VBReABAPoBBAgAEBY!16s%2Fg%2F124yhk1jh?entry=ttu&g_ep=EgoyMDI2MDQwMS4wIKXMDSoASAFQAw%3D%3D"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-1.5 font-cinzel text-[10px] tracking-widest uppercase transition-opacity hover:opacity-60"
@@ -1266,7 +1263,7 @@ export default function ContactPage() {
                 {[
                   "Try on the full collection",
                   "Complimentary gold consultation",
-                  "On-the-spot BIS verification",
+                  "On-the-spot Product verification",
                   "Same-day engraving available",
                   "Complimentary chai & water",
                 ].map((item, i) => (
@@ -1318,7 +1315,7 @@ export default function ContactPage() {
             >
               Frequently
               <br />
-              <em className="text-gold-shimmer font-normal">asked</em>
+              <em className="text-gold-shimmer font-normal pe-2">asked</em>
             </h2>
             <p
               className="text-sm leading-relaxed mb-6"
@@ -1331,12 +1328,12 @@ export default function ContactPage() {
               form above or WhatsApp us directly.
             </p>
             <a
-              href="https://wa.me/919876543210"
+              href="https://wa.me/918595814465"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-5 py-3 rounded-full font-cinzel text-[10px] tracking-widest uppercase font-bold transition-all hover:opacity-90"
               style={{
-                background: "#25D366",
+                background: "#eb9710",
                 color: "#fff",
                 cursor: "pointer",
               }}
@@ -1375,7 +1372,7 @@ export default function ContactPage() {
             </div>
             <div className="flex flex-wrap gap-3">
               <a
-                href="tel:+919876543210"
+                href="tel:+918595814465"
                 className="flex items-center gap-2 px-5 py-3 rounded-full font-cinzel text-[10px] tracking-widest uppercase font-bold transition-all hover:opacity-90"
                 style={{
                   background: "var(--gradient-gold)",

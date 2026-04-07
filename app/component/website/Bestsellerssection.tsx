@@ -1,3 +1,1163 @@
+// "use client";
+
+// import { useState, useEffect } from "react";
+// import Link from "next/link";
+// import Image from "next/image";
+// import { createPortal } from "react-dom";
+// import { motion, AnimatePresence } from "framer-motion";
+// import {
+//   Heart,
+//   ShoppingBag,
+//   Eye,
+//   ArrowRight,
+//   Star,
+//   X,
+//   Check,
+//   ChevronLeft,
+//   ChevronRight,
+//   Minus,
+//   Plus,
+// } from "lucide-react";
+// import { useCartStore, useWishlistStore } from "../../store/cartStore";
+
+// // ─────────────────────────────────────────────────────────────────
+// // TYPES & DATA
+// // ─────────────────────────────────────────────────────────────────
+// const filters = ["All", "Chains", "Kadas", "Rings", "Bracelets", "Pendants"];
+
+// const products = [
+//   {
+//     id: "p1",
+//     name: "Nawabi Gold Chain",
+//     category: "Chains",
+//     price: 12999,
+//     originalPrice: 16999,
+//     weight: "10.2g",
+//     images: [
+//       "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&q=85",
+//       "https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?w=600&q=85",
+//     ],
+//     rating: 4.9,
+//     reviews: 234,
+//     badge: "Bestseller",
+//     karat: "22kt",
+//     href: "/products/nawabi-chain-22kt",
+//     sizes: ['16"', '18"', '20"', '22"'],
+//     description:
+//       "A bold, hand-crafted Nawabi chain in BIS hallmarked 22kt gold. Each link individually set and polished for a mirror finish.",
+//   },
+//   {
+//     id: "p2",
+//     name: "Jaguar Rhodium Kada",
+//     category: "Kadas",
+//     price: 8999,
+//     originalPrice: 11999,
+//     weight: "22g",
+//     images: [
+//       "https://images.unsplash.com/photo-1602173574767-37ac01994b2a?w=600&q=85",
+//       "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&q=85",
+//     ],
+//     rating: 4.8,
+//     reviews: 189,
+//     badge: "New",
+//     karat: "Gold Plated",
+//     href: "/products/royal-kada-heavy",
+//     sizes: ["S", "M", "L"],
+//     description:
+//       "Solid, heavy, commanding. Cast in premium gold-plated brass with a rhodium finish that resists tarnish.",
+//   },
+//   {
+//     id: "p3",
+//     name: "Signet Band Ring",
+//     category: "Rings",
+//     price: 4999,
+//     originalPrice: 6499,
+//     weight: "6.1g",
+//     images: [
+//       "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&q=85",
+//       "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=600&q=85",
+//     ],
+//     rating: 4.7,
+//     reviews: 145,
+//     badge: null,
+//     karat: "18kt",
+//     href: "/products/signet-ring-gold",
+//     sizes: ["18", "20", "22", "24"],
+//     description:
+//       "A flat-top signet ring in solid 18kt gold. Free custom engraving on every order.",
+//   },
+//   {
+//     id: "p4",
+//     name: "Link Gold Bracelet",
+//     category: "Bracelets",
+//     price: 9499,
+//     originalPrice: 12999,
+//     weight: "15.5g",
+//     images: [
+//       "https://images.unsplash.com/photo-1574169208507-84376144848b?w=600&q=85",
+//       "https://images.unsplash.com/photo-1602173574767-37ac01994b2a?w=600&q=85",
+//     ],
+//     rating: 4.9,
+//     reviews: 98,
+//     badge: "Trending",
+//     karat: "22kt",
+//     href: "/products/link-bracelet-gold",
+//     sizes: ['7"', '8"', '9"'],
+//     description:
+//       "Rectangular flat links in 22kt gold — a modern statement piece for the man who leads.",
+//   },
+//   {
+//     id: "p5",
+//     name: "Rope Chain Necklace",
+//     category: "Chains",
+//     price: 7499,
+//     originalPrice: 9999,
+//     weight: "8.4g",
+//     images: [
+//       "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=600&q=85",
+//       "https://images.unsplash.com/photo-1574169208507-84376144848b?w=600&q=85",
+//     ],
+//     rating: 4.6,
+//     reviews: 167,
+//     badge: null,
+//     karat: "22kt",
+//     href: "/products/rope-chain-gold",
+//     sizes: ['18"', '20"', '22"'],
+//     description:
+//       "A timeless twisted rope chain in 22kt BIS hallmarked gold. Classic meets contemporary.",
+//   },
+//   {
+//     id: "p6",
+//     name: "Om Gold Pendant",
+//     category: "Pendants",
+//     price: 3999,
+//     originalPrice: 4999,
+//     weight: "4.2g",
+//     images: [
+//       "https://images.unsplash.com/photo-1613053341085-db794820ce43?w=600&q=85",
+//       "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&q=85",
+//     ],
+//     rating: 4.8,
+//     reviews: 212,
+//     badge: "Bestseller",
+//     karat: "22kt",
+//     href: "/products/om-pendant-22kt",
+//     sizes: ["Free"],
+//     description:
+//       "Sacred geometry meets fine craftsmanship. Hand-engraved Om pendant in 22kt gold.",
+//   },
+//   {
+//     id: "p7",
+//     name: "Biscuit Gold Ring",
+//     category: "Rings",
+//     price: 5999,
+//     originalPrice: 7499,
+//     weight: "7.8g",
+//     images: [
+//       "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&q=85",
+//       "https://images.unsplash.com/photo-1574169208507-84376144848b?w=600&q=85",
+//     ],
+//     rating: 4.5,
+//     reviews: 88,
+//     badge: "New",
+//     karat: "22kt",
+//     href: "/products/band-ring-plain",
+//     sizes: ["18", "20", "22", "24"],
+//     description:
+//       "Clean, minimal, unmistakable. A solid 22kt biscuit-cut band ring with a brushed finish.",
+//   },
+//   {
+//     id: "p8",
+//     name: "Franco Chain",
+//     category: "Chains",
+//     price: 15999,
+//     originalPrice: 19999,
+//     weight: "18.7g",
+//     images: [
+//       "https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?w=600&q=85",
+//       "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&q=85",
+//     ],
+//     rating: 5.0,
+//     reviews: 43,
+//     badge: "Premium",
+//     karat: "22kt",
+//     href: "/products/cuban-link-chain",
+//     sizes: ['18"', '20"', '22"', '24"'],
+//     description:
+//       "Our heaviest chain. The Franco is 22kt solid gold, forged for presence. Not for the shy.",
+//   },
+// ];
+
+// type Product = (typeof products)[number];
+
+// function fmt(n: number) {
+//   return "₹" + n.toLocaleString("en-IN");
+// }
+
+// // ─────────────────────────────────────────────────────────────────
+// // QUICK VIEW MODAL  — rendered via createPortal to escape overflow
+// // ─────────────────────────────────────────────────────────────────
+// function QuickViewModal({
+//   product,
+//   onClose,
+// }: {
+//   product: Product;
+//   onClose: () => void;
+// }) {
+//   const [imgIdx, setImgIdx] = useState(0);
+//   const [selectedSize, setSelectedSize] = useState<string | null>(
+//     product.sizes.length === 1 ? product.sizes[0] : null,
+//   );
+//   const [qty, setQty] = useState(1);
+//   const [sizeError, setSizeError] = useState(false);
+//   const [addedToCart, setAddedToCart] = useState(false);
+
+//   const { addItem: addToCart } = useCartStore();
+//   const { toggleItem, isWishlisted } = useWishlistStore();
+
+//   const [mounted, setMounted] = useState(false);
+
+//   const discount = Math.round(
+//     ((product.originalPrice - product.price) / product.originalPrice) * 100,
+//   );
+
+//   // Lock body scroll while open
+//   useEffect(() => {
+//     setMounted(true);
+
+//     const prev = document.body.style.overflow;
+//     document.body.style.overflow = "hidden";
+//     return () => {
+//       document.body.style.overflow = prev;
+//     };
+//   }, []);
+
+//   const wishlisted = mounted && isWishlisted(product.id);
+
+//   // Escape key
+//   useEffect(() => {
+//     const h = (e: KeyboardEvent) => {
+//       if (e.key === "Escape") onClose();
+//     };
+//     window.addEventListener("keydown", h);
+//     return () => window.removeEventListener("keydown", h);
+//   }, [onClose]);
+
+//   const handleAddToCart = () => {
+//     const needsSize =
+//       product.sizes.length > 1 ||
+//       (product.sizes.length === 1 && product.sizes[0] !== "Free");
+//     if (needsSize && !selectedSize) {
+//       setSizeError(true);
+//       setTimeout(() => setSizeError(false), 2000);
+//       return;
+//     }
+//     addToCart({
+//       productId: product.id,
+//       name: product.name,
+//       subtitle: `${product.karat} · ${product.weight}`,
+//       image: product.images[0],
+//       price: fmt(product.price),
+//       priceNum: product.price,
+//       originalPrice: fmt(product.originalPrice),
+//       size: selectedSize || product.sizes[0],
+//       qty,
+//       href: product.href,
+//       tag: product.badge ?? undefined,
+//     });
+//     setAddedToCart(true);
+//     setTimeout(() => setAddedToCart(false), 2500);
+//   };
+
+//   const handleToggleWishlist = () => {
+//     toggleItem({
+//       id: product.id,
+//       productId: product.id,
+//       name: product.name,
+//       subtitle: `${product.karat} · ${product.weight}`,
+//       image: product.images[0],
+//       price: fmt(product.price),
+//       priceNum: product.price,
+//       originalPrice: fmt(product.originalPrice),
+//       href: product.href,
+//       category: product.category,
+//       tag: product.badge ?? undefined,
+//     });
+//   };
+
+//   const modal = (
+//     <AnimatePresence>
+//       <motion.div
+//         key="qv-backdrop"
+//         initial={{ opacity: 0 }}
+//         animate={{ opacity: 1 }}
+//         exit={{ opacity: 0 }}
+//         transition={{ duration: 0.22 }}
+//         className="fixed inset-0 flex items-end sm:items-center justify-center"
+//         style={{
+//           zIndex: 9999,
+//           background: "rgba(0,0,0,0.72)",
+//           backdropFilter: "blur(8px)",
+//           cursor: "pointer",
+//         }}
+//         onClick={onClose}
+//         role="dialog"
+//         aria-modal="true"
+//         aria-label={`Quick view: ${product.name}`}
+//       >
+//         <motion.div
+//           key="qv-panel"
+//           initial={{ opacity: 0, y: 60 }}
+//           animate={{ opacity: 1, y: 0 }}
+//           exit={{ opacity: 0, y: 60 }}
+//           transition={{ duration: 0.32, ease: [0.4, 0, 0.2, 1] }}
+//           onClick={(e) => e.stopPropagation()}
+//           data-qv="panel"
+//           style={{
+//             background: "#fff",
+//             cursor: "default",
+//             width: "100%",
+//             maxWidth: "860px",
+//             borderRadius: "20px 20px 0 0",
+//             maxHeight: "92vh",
+//             overflowY: "auto",
+//             position: "relative",
+//           }}
+//         >
+//           {/* Desktop: fully rounded */}
+//           <style>{`
+//             @media (min-width: 640px) {
+//               [data-qv="panel"]    { border-radius: 20px !important; margin: 1rem; max-height: 88vh; }
+//               [data-qv="img-col"]  { height: 100% !important; min-height: 440px !important; border-radius: 20px 0 0 20px !important; }
+//             }
+//           `}</style>
+
+//           {/* Mobile drag handle */}
+//           <div className="sm:hidden flex justify-center pt-3 pb-1">
+//             <div
+//               className="w-10 h-1 rounded-full"
+//               style={{ background: "var(--rj-bone)" }}
+//             />
+//           </div>
+
+//           {/* Close button */}
+//           <button
+//             onClick={onClose}
+//             className="absolute top-4 right-4 z-30 w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 hover:rotate-90"
+//             style={{
+//               background: "var(--rj-charcoal)",
+//               color: "#fff",
+//               cursor: "pointer",
+//             }}
+//             aria-label="Close"
+//           >
+//             <X size={14} />
+//           </button>
+
+//           <div className="flex flex-col sm:grid sm:grid-cols-2">
+//             {/* ── Image column ── */}
+//             <div
+//               data-qv="img-col"
+//               className="relative flex-shrink-0 overflow-hidden"
+//               style={{
+//                 height: "min(56vw, 320px)",
+//                 minHeight: 220,
+//                 background: "var(--rj-ivory-dark)",
+//                 borderRadius: "20px 20px 0 0",
+//               }}
+//             >
+//               {/* Sliding image */}
+//               <AnimatePresence mode="wait">
+//                 <motion.div
+//                   key={imgIdx}
+//                   initial={{ opacity: 0, x: 16 }}
+//                   animate={{ opacity: 1, x: 0 }}
+//                   exit={{ opacity: 0, x: -16 }}
+//                   transition={{ duration: 0.26 }}
+//                   className="absolute inset-0"
+//                 >
+//                   <Image
+//                     src={product.images[imgIdx]}
+//                     alt={product.name}
+//                     fill
+//                     className="object-cover object-center"
+//                     sizes="(max-width: 640px) 100vw, 50vw"
+//                     priority
+//                   />
+//                 </motion.div>
+//               </AnimatePresence>
+
+//               {/* Badge */}
+//               {product.badge && (
+//                 <div className="absolute top-3 left-3 z-10 pointer-events-none">
+//                   <span
+//                     className="font-cinzel text-[9px] font-bold tracking-widest px-2.5 py-1 rounded-full shadow-sm"
+//                     style={{ background: "var(--rj-gold)", color: "#000" }}
+//                   >
+//                     {product.badge}
+//                   </span>
+//                 </div>
+//               )}
+
+//               {/* Arrows */}
+//               {product.images.length > 1 && (
+//                 <>
+//                   <button
+//                     onClick={() =>
+//                       setImgIdx(
+//                         (i) =>
+//                           (i - 1 + product.images.length) %
+//                           product.images.length,
+//                       )
+//                     }
+//                     className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-105 active:scale-95"
+//                     style={{
+//                       background: "rgba(255,255,255,0.92)",
+//                       color: "var(--rj-charcoal)",
+//                       boxShadow: "0 2px 12px rgba(0,0,0,0.15)",
+//                       cursor: "pointer",
+//                     }}
+//                     aria-label="Previous image"
+//                   >
+//                     <ChevronLeft size={15} />
+//                   </button>
+//                   <button
+//                     onClick={() =>
+//                       setImgIdx((i) => (i + 1) % product.images.length)
+//                     }
+//                     className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-105 active:scale-95"
+//                     style={{
+//                       background: "rgba(255,255,255,0.92)",
+//                       color: "var(--rj-charcoal)",
+//                       boxShadow: "0 2px 12px rgba(0,0,0,0.15)",
+//                       cursor: "pointer",
+//                     }}
+//                     aria-label="Next image"
+//                   >
+//                     <ChevronRight size={15} />
+//                   </button>
+//                 </>
+//               )}
+
+//               {/* Thumbnail row */}
+//               {product.images.length > 1 && (
+//                 <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-2 z-10 px-4">
+//                   {product.images.map((img, i) => (
+//                     <button
+//                       key={i}
+//                       onClick={() => setImgIdx(i)}
+//                       className="relative rounded-lg overflow-hidden transition-all duration-200 flex-shrink-0"
+//                       style={{
+//                         width: 44,
+//                         height: 44,
+//                         border: `2px solid ${i === imgIdx ? "var(--rj-emerald)" : "rgba(255,255,255,0.4)"}`,
+//                         opacity: i === imgIdx ? 1 : 0.65,
+//                         cursor: "pointer",
+//                         background: "var(--rj-ivory-dark)",
+//                       }}
+//                     >
+//                       <Image
+//                         src={img}
+//                         alt={`View ${i + 1}`}
+//                         fill
+//                         className="object-cover"
+//                         sizes="44px"
+//                       />
+//                     </button>
+//                   ))}
+//                 </div>
+//               )}
+//             </div>
+
+//             {/* ── Details column ── */}
+//             <div
+//               className="flex flex-col p-5 sm:p-7"
+//               style={{ maxHeight: "88vh", overflowY: "auto" }}
+//             >
+//               {/* Stars */}
+//               <div className="flex items-center gap-2 mb-3">
+//                 <div className="flex gap-0.5">
+//                   {Array.from({ length: 5 }).map((_, m) => (
+//                     <Star
+//                       key={m}
+//                       size={12}
+//                       style={{
+//                         fill:
+//                           m < Math.floor(product.rating)
+//                             ? "var(--rj-gold)"
+//                             : "transparent",
+//                         color:
+//                           m < Math.floor(product.rating)
+//                             ? "var(--rj-gold)"
+//                             : "var(--rj-bone)",
+//                       }}
+//                     />
+//                   ))}
+//                 </div>
+//                 <span
+//                   className="font-cinzel text-[10px]"
+//                   style={{ color: "var(--rj-ash)" }}
+//                 >
+//                   {product.rating} · {product.reviews} reviews
+//                 </span>
+//               </div>
+
+//               {/* Name */}
+//               <h2
+//                 className="font-cormorant font-light leading-tight mb-1"
+//                 style={{
+//                   fontSize: "clamp(1.35rem, 2.5vw, 1.9rem)",
+//                   color: "var(--rj-charcoal)",
+//                   letterSpacing: "-0.01em",
+//                 }}
+//               >
+//                 {product.name}
+//               </h2>
+
+//               {/* Meta */}
+//               <p
+//                 className="text-sm mb-2"
+//                 style={{
+//                   color: "var(--rj-ash)",
+//                   fontFamily: "var(--font-body,'DM Sans'),sans-serif",
+//                 }}
+//               >
+//                 {product.karat} · {product.weight}
+//               </p>
+
+//               {/* Category pill */}
+//               <span
+//                 className="inline-block font-cinzel text-[9px] tracking-widest uppercase px-2.5 py-0.5 rounded-full mb-4 w-fit"
+//                 style={{
+//                   background: "rgba(0,55,32,0.07)",
+//                   color: "var(--rj-emerald)",
+//                 }}
+//               >
+//                 {product.category}
+//               </span>
+
+//               {/* Description */}
+//               <p
+//                 className="text-sm leading-relaxed mb-4 pt-3"
+//                 style={{
+//                   color: "var(--rj-ash)",
+//                   borderTop: "1px solid var(--rj-bone)",
+//                   fontFamily: "var(--font-body,'DM Sans'),sans-serif",
+//                 }}
+//               >
+//                 {product.description}
+//               </p>
+
+//               {/* Price */}
+//               <div className="flex items-baseline gap-3 flex-wrap mb-5">
+//                 <span
+//                   className="font-cinzel font-bold"
+//                   style={{ fontSize: "1.45rem", color: "var(--rj-charcoal)" }}
+//                 >
+//                   {fmt(product.price)}
+//                 </span>
+//                 <span
+//                   className="text-sm line-through"
+//                   style={{ color: "var(--rj-ash)" }}
+//                 >
+//                   {fmt(product.originalPrice)}
+//                 </span>
+//                 {discount > 0 && (
+//                   <span
+//                     className="font-cinzel text-[9px] font-bold px-2 py-0.5 rounded-full"
+//                     style={{ background: "#fef2f2", color: "#ef4444" }}
+//                   >
+//                     {discount}% OFF
+//                   </span>
+//                 )}
+//               </div>
+
+//               {/* Size picker */}
+//               {!(product.sizes.length === 1 && product.sizes[0] === "Free") && (
+//                 <div className="mb-5">
+//                   <p
+//                     className="font-cinzel text-[10px] tracking-widest uppercase font-bold mb-2.5"
+//                     style={{
+//                       color: sizeError ? "#ef4444" : "var(--rj-charcoal)",
+//                     }}
+//                   >
+//                     Size:{" "}
+//                     <span
+//                       style={{
+//                         color: selectedSize
+//                           ? "var(--rj-emerald)"
+//                           : sizeError
+//                             ? "#ef4444"
+//                             : "var(--rj-ash)",
+//                       }}
+//                     >
+//                       {selectedSize || (sizeError ? "Required!" : "Select")}
+//                     </span>
+//                   </p>
+//                   <div className="flex flex-wrap gap-2">
+//                     {product.sizes.map((s) => (
+//                       <button
+//                         key={s}
+//                         onClick={() => {
+//                           setSelectedSize(s);
+//                           setSizeError(false);
+//                         }}
+//                         className="relative font-cinzel text-xs transition-all duration-200"
+//                         style={{
+//                           width: "2.75rem",
+//                           height: "2.75rem",
+//                           borderRadius: "50%",
+//                           border: `1.5px solid ${selectedSize === s ? "var(--rj-emerald)" : sizeError ? "#fca5a5" : "var(--rj-bone)"}`,
+//                           background:
+//                             selectedSize === s
+//                               ? "var(--rj-emerald)"
+//                               : "transparent",
+//                           color:
+//                             selectedSize === s ? "#fff" : "var(--rj-charcoal)",
+//                           cursor: "pointer",
+//                           transform:
+//                             selectedSize === s ? "scale(1.08)" : "scale(1)",
+//                         }}
+//                       >
+//                         {s}
+//                       </button>
+//                     ))}
+//                   </div>
+//                 </div>
+//               )}
+
+//               {/* Qty + Add to Cart + Wishlist */}
+//               <div className="flex items-center gap-2.5 mb-3">
+//                 {/* Qty stepper */}
+//                 <div
+//                   className="flex items-center rounded-full flex-shrink-0"
+//                   style={{ border: "1.5px solid var(--rj-bone)" }}
+//                 >
+//                   <button
+//                     onClick={() => setQty((q) => Math.max(1, q - 1))}
+//                     className="w-10 h-10 flex items-center justify-center transition-colors hover:bg-[var(--rj-ivory-dark)] rounded-full"
+//                     style={{ color: "var(--rj-charcoal)", cursor: "pointer" }}
+//                   >
+//                     <Minus size={13} />
+//                   </button>
+//                   <span
+//                     className="w-8 text-center font-cinzel text-sm"
+//                     style={{ color: "var(--rj-charcoal)" }}
+//                   >
+//                     {qty}
+//                   </span>
+//                   <button
+//                     onClick={() => setQty((q) => q + 1)}
+//                     className="w-10 h-10 flex items-center justify-center transition-colors hover:bg-[var(--rj-ivory-dark)] rounded-full"
+//                     style={{ color: "var(--rj-charcoal)", cursor: "pointer" }}
+//                   >
+//                     <Plus size={13} />
+//                   </button>
+//                 </div>
+
+//                 {/* Add to Cart */}
+//                 <button
+//                   onClick={handleAddToCart}
+//                   className="flex-1 flex items-center justify-center gap-2 py-3 font-cinzel text-[10px] tracking-widest uppercase font-bold rounded-full transition-all duration-300 active:scale-95"
+//                   style={{
+//                     background: addedToCart
+//                       ? "var(--rj-emerald)"
+//                       : "var(--gradient-gold)",
+//                     color: addedToCart ? "#fff" : "var(--rj-emerald)",
+//                     boxShadow: addedToCart
+//                       ? "0 4px 20px rgba(0,55,32,0.25)"
+//                       : "0 4px 20px rgba(252,193,81,0.3)",
+//                     cursor: "pointer",
+//                   }}
+//                 >
+//                   {addedToCart ? (
+//                     <>
+//                       <Check size={13} /> Added to Cart!
+//                     </>
+//                   ) : (
+//                     <>
+//                       <ShoppingBag size={13} /> Add to Cart
+//                     </>
+//                   )}
+//                 </button>
+
+//                 {/* Wishlist toggle */}
+//                 <button
+//                   onClick={handleToggleWishlist}
+//                   className="w-11 h-11 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 flex-shrink-0"
+//                   style={{
+//                     border: `1.5px solid ${wishlisted ? "var(--rj-gold)" : "var(--rj-bone)"}`,
+//                     background: wishlisted
+//                       ? "rgba(252,193,81,0.08)"
+//                       : "transparent",
+//                     cursor: "pointer",
+//                   }}
+//                   aria-label={
+//                     wishlisted ? "Remove from wishlist" : "Add to wishlist"
+//                   }
+//                 >
+//                   <Heart
+//                     size={15}
+//                     style={{
+//                       fill: wishlisted ? "var(--rj-gold)" : "transparent",
+//                       color: wishlisted ? "var(--rj-gold)" : "var(--rj-ash)",
+//                       transition: "all 0.25s",
+//                     }}
+//                   />
+//                 </button>
+//               </div>
+
+//               {/* View Full Details — links to product page */}
+//               <Link
+//                 href={product.href}
+//                 onClick={onClose}
+//                 className="flex items-center justify-center gap-2 py-3 font-cinzel text-[10px] tracking-widest uppercase font-bold rounded-full transition-all duration-300 hover:opacity-90 active:scale-95 mb-4"
+//                 style={{
+//                   background: "var(--rj-charcoal)",
+//                   color: "#fff",
+//                   cursor: "pointer",
+//                 }}
+//               >
+//                 View Full Details <ArrowRight size={13} />
+//               </Link>
+
+//               {/* Trust strip */}
+//               <div
+//                 className="flex flex-wrap items-center justify-center gap-3 pt-4"
+//                 style={{ borderTop: "1px solid var(--rj-bone)" }}
+//               >
+//                 {["⚜ BIS Hallmarked", "✂ Free Sizing", "↩ 30-Day Returns"].map(
+//                   (t) => (
+//                     <span
+//                       key={t}
+//                       className="font-cinzel text-[9px] tracking-wider"
+//                       style={{ color: "var(--rj-ash)" }}
+//                     >
+//                       {t}
+//                     </span>
+//                   ),
+//                 )}
+//               </div>
+//             </div>
+//           </div>
+//         </motion.div>
+//       </motion.div>
+//     </AnimatePresence>
+//   );
+
+//   // Portal — escapes any parent overflow:hidden
+//   return typeof document !== "undefined"
+//     ? createPortal(modal, document.body)
+//     : null;
+// }
+
+// // ─────────────────────────────────────────────────────────────────
+// // PRODUCT CARD
+// // ─────────────────────────────────────────────────────────────────
+// function ProductCard({ product }: { product: Product }) {
+//   const [hovered, setHovered] = useState(false);
+//   const [quickView, setQuickView] = useState(false);
+//   const [addedToCart, setAddedToCart] = useState(false);
+//   const [mounted, setMounted] = useState(false);
+
+//   // Zustand stores — persist to cart/wishlist pages
+//   const { addItem: addToCart } = useCartStore();
+//   const { toggleItem, isWishlisted } = useWishlistStore();
+//   const wishlisted = isWishlisted(product.id);
+
+//   useEffect(() => {
+//     setMounted(true);
+//   }, []);
+
+//   const discount = Math.round(
+//     ((product.originalPrice - product.price) / product.originalPrice) * 100,
+//   );
+
+//   const handleAddToCart = (e: React.MouseEvent) => {
+//     e.preventDefault();
+//     e.stopPropagation();
+//     addToCart({
+//       productId: product.id,
+//       name: product.name,
+//       subtitle: `${product.karat} · ${product.weight}`,
+//       image: product.images[0],
+//       price: fmt(product.price),
+//       priceNum: product.price,
+//       originalPrice: fmt(product.originalPrice),
+//       size: product.sizes[0], // default to first size; user can change in cart
+//       qty: 1,
+//       href: product.href,
+//       tag: product.badge ?? undefined,
+//     });
+//     setAddedToCart(true);
+//     setTimeout(() => setAddedToCart(false), 2000);
+//   };
+
+//   const handleWishlist = (e: React.MouseEvent) => {
+//     e.preventDefault();
+//     e.stopPropagation();
+//     toggleItem({
+//       id: product.id,
+//       productId: product.id,
+//       name: product.name,
+//       subtitle: `${product.karat} · ${product.weight}`,
+//       image: product.images[0],
+//       price: fmt(product.price),
+//       priceNum: product.price,
+//       originalPrice: fmt(product.originalPrice),
+//       href: product.href,
+//       category: product.category,
+//       tag: product.badge ?? undefined,
+//     });
+//   };
+
+//   return (
+//     <>
+//       <motion.div
+//         initial={{ opacity: 0, y: 30 }}
+//         whileInView={{ opacity: 1, y: 0 }}
+//         viewport={{ once: true, margin: "-50px" }}
+//         transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+//         className="card-product group"
+//         onMouseEnter={() => setHovered(true)}
+//         onMouseLeave={() => setHovered(false)}
+//       >
+//         {/* ── Image ── */}
+//         <div className="card-product-image">
+//           {/* Crossfade between default and hover image */}
+//           <AnimatePresence mode="wait">
+//             <motion.div
+//               key={hovered ? "hover" : "default"}
+//               initial={{ opacity: 0 }}
+//               animate={{ opacity: 1 }}
+//               exit={{ opacity: 0 }}
+//               transition={{ duration: 0.35 }}
+//               className="absolute inset-0"
+//             >
+//               <Image
+//                 src={
+//                   hovered && product.images[1]
+//                     ? product.images[1]
+//                     : product.images[0]
+//                 }
+//                 alt={product.name}
+//                 fill
+//                 sizes="(max-width:768px) 50vw, 25vw"
+//                 className="object-cover"
+//               />
+//             </motion.div>
+//           </AnimatePresence>
+
+//           {/* Badges */}
+//           <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10 pointer-events-none">
+//             {product.badge && (
+//               <span className="badge-gold">{product.badge}</span>
+//             )}
+//             {discount > 0 && (
+//               <span className="badge-emerald">-{discount}%</span>
+//             )}
+//           </div>
+
+//           {/* Wishlist — gold fill when wishlisted (driven by Zustand) */}
+//           <button
+//             onClick={handleWishlist}
+//             className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center transition-all duration-300 hover:scale-110"
+//             aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
+//             style={{ cursor: "pointer" }}
+//           >
+//             <Heart
+//               size={14}
+//               style={{
+//                 fill: wishlisted ? "var(--rj-gold)" : "transparent",
+//                 color: wishlisted ? "var(--rj-gold)" : "var(--rj-ash)",
+//                 transition: "all 0.25s",
+//               }}
+//             />
+//           </button>
+
+//           {/* Hover actions — slide up from bottom */}
+//           <div className="absolute bottom-3 left-3 right-3 flex gap-2 translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 z-10">
+//             {/* Add to Cart */}
+//             <button
+//               onClick={handleAddToCart}
+//               className="flex-1 flex items-center justify-center gap-1.5 py-2 text-[10px] font-cinzel tracking-wider uppercase transition-all duration-250 active:scale-95"
+//               style={{
+//                 background: addedToCart
+//                   ? "var(--rj-gold)"
+//                   : "var(--rj-emerald)",
+//                 color: addedToCart ? "var(--rj-emerald)" : "var(--rj-gold)",
+//                 cursor: "pointer",
+//               }}
+//             >
+//               {addedToCart ? (
+//                 <>
+//                   <Check size={11} /> Added
+//                 </>
+//               ) : (
+//                 <>
+//                   <ShoppingBag size={12} /> Add to Cart
+//                 </>
+//               )}
+//             </button>
+
+//             {/* Quick View */}
+//             <button
+//               onClick={(e) => {
+//                 e.preventDefault();
+//                 e.stopPropagation();
+//                 setQuickView(true);
+//               }}
+//               className="w-9 flex items-center justify-center transition-colors hover:bg-[var(--rj-gold)] hover:text-[var(--rj-emerald)]"
+//               style={{
+//                 background: "white",
+//                 color: "var(--rj-charcoal)",
+//                 cursor: "pointer",
+//               }}
+//               aria-label="Quick view"
+//             >
+//               <Eye size={14} />
+//             </button>
+//           </div>
+//         </div>
+
+//         {/* ── Info — click navigates to product detail page ── */}
+//         <Link
+//           href={product.href}
+//           className="block p-4"
+//           style={{ cursor: "pointer" }}
+//         >
+//           <p className="label-accent text-[var(--rj-ash)] text-[9px] mb-1">
+//             {product.karat} · {product.weight}
+//           </p>
+//           <h3 className="font-cormorant text-[var(--rj-charcoal)] text-lg leading-tight mb-2 group-hover:text-[var(--rj-emerald)] transition-colors duration-300">
+//             {product.name}
+//           </h3>
+//           <div className="flex items-center gap-1.5 mb-3">
+//             <div className="flex gap-0.5">
+//               {Array.from({ length: 5 }).map((_, i) => (
+//                 <Star
+//                   key={i}
+//                   size={10}
+//                   style={{
+//                     fill:
+//                       i < Math.floor(product.rating)
+//                         ? "var(--rj-gold)"
+//                         : "transparent",
+//                     color:
+//                       i < Math.floor(product.rating)
+//                         ? "var(--rj-gold)"
+//                         : "var(--rj-bone)",
+//                   }}
+//                 />
+//               ))}
+//             </div>
+//             <span className="text-[var(--rj-ash)] text-[10px]">
+//               ({product.reviews})
+//             </span>
+//           </div>
+//           <div className="flex items-baseline gap-2">
+//             <span className="price-tag text-[var(--rj-emerald)]">
+//               {fmt(product.price)}
+//             </span>
+//             <span className="price-original">{fmt(product.originalPrice)}</span>
+//             {discount > 0 && (
+//               <span
+//                 className="font-cinzel text-[8px] font-bold px-1.5 py-0.5 rounded-full"
+//                 style={{ background: "#fef2f2", color: "#ef4444" }}
+//               >
+//                 {discount}%
+//               </span>
+//             )}
+//           </div>
+//         </Link>
+//       </motion.div>
+
+//       {/* Quick View Modal — portal renders outside any overflow:hidden */}
+//       {quickView && (
+//         <QuickViewModal product={product} onClose={() => setQuickView(false)} />
+//       )}
+//     </>
+//   );
+// }
+
+// // ─────────────────────────────────────────────────────────────────
+// // MINI CART + WISHLIST FLOATING INDICATORS
+// // Shows live counts; clicking navigates to respective pages
+// // ─────────────────────────────────────────────────────────────────
+// function FloatingIndicators() {
+//   const cartCount = useCartStore((s) => s.totalItems());
+//   const wishlistCount = useWishlistStore((s) => s.items.length);
+//   const [mounted, setMounted] = useState(false);
+
+//   useEffect(() => {
+//     setMounted(true);
+//   }, []);
+
+//   if (!mounted || (cartCount === 0 && wishlistCount === 0)) return null;
+
+//   return (
+//     <div className="flex items-center justify-center gap-3 mt-6">
+//       <AnimatePresence>
+//         {cartCount > 0 && (
+//           <motion.div
+//             initial={{ opacity: 0, scale: 0.85, y: 8 }}
+//             animate={{ opacity: 1, scale: 1, y: 0 }}
+//             exit={{ opacity: 0, scale: 0.85 }}
+//             transition={{ type: "spring", stiffness: 300, damping: 24 }}
+//           >
+//             <Link
+//               href="/cart"
+//               className="flex items-center gap-2 px-4 py-2 rounded-full font-cinzel text-[10px] tracking-widest uppercase transition-all hover:opacity-80"
+//               style={{
+//                 background: "rgba(0,55,32,0.08)",
+//                 border: "1px solid rgba(0,55,32,0.15)",
+//                 color: "var(--rj-emerald)",
+//                 cursor: "pointer",
+//               }}
+//             >
+//               <ShoppingBag size={12} />
+//               Cart
+//               <span
+//                 className="w-5 h-5 rounded-full flex items-center justify-center font-bold text-[9px]"
+//                 style={{ background: "var(--rj-emerald)", color: "#fff" }}
+//               >
+//                 {cartCount}
+//               </span>
+//             </Link>
+//           </motion.div>
+//         )}
+//         {wishlistCount > 0 && (
+//           <motion.div
+//             initial={{ opacity: 0, scale: 0.85, y: 8 }}
+//             animate={{ opacity: 1, scale: 1, y: 0 }}
+//             exit={{ opacity: 0, scale: 0.85 }}
+//             transition={{
+//               type: "spring",
+//               stiffness: 300,
+//               damping: 24,
+//               delay: 0.05,
+//             }}
+//           >
+//             <Link
+//               href="/wishlist"
+//               className="flex items-center gap-2 px-4 py-2 rounded-full font-cinzel text-[10px] tracking-widest uppercase transition-all hover:opacity-80"
+//               style={{
+//                 background: "rgba(252,193,81,0.1)",
+//                 border: "1px solid rgba(252,193,81,0.3)",
+//                 color: "#a07800",
+//                 cursor: "pointer",
+//               }}
+//             >
+//               <Heart
+//                 size={12}
+//                 style={{ fill: "var(--rj-gold)", color: "var(--rj-gold)" }}
+//               />
+//               Saved
+//               <span
+//                 className="w-5 h-5 rounded-full flex items-center justify-center font-bold text-[9px]"
+//                 style={{
+//                   background: "var(--rj-gold)",
+//                   color: "var(--rj-emerald)",
+//                 }}
+//               >
+//                 {wishlistCount}
+//               </span>
+//             </Link>
+//           </motion.div>
+//         )}
+//       </AnimatePresence>
+//     </div>
+//   );
+// }
+
+// // ─────────────────────────────────────────────────────────────────
+// // MAIN SECTION
+// // ─────────────────────────────────────────────────────────────────
+// export default function BestsellersSection() {
+//   const [activeFilter, setActiveFilter] = useState("All");
+
+//   const filtered =
+//     activeFilter === "All"
+//       ? products
+//       : products.filter((p) => p.category === activeFilter);
+
+//   return (
+//     <section className="section-padding bg-white">
+//       <div className="container-rj">
+//         {/* Heading */}
+//         <div className="text-center mb-12">
+//           <p className="label-accent text-[var(--rj-emerald)] mb-3">
+//             ✦ Bestsellers
+//           </p>
+//           <h2 className="heading-lg text-[var(--rj-charcoal)] mb-4">
+//             The Gold Standard
+//           </h2>
+//           <p className="text-[var(--rj-ash)] max-w-md mx-auto">
+//             Our most-loved pieces loved by thousands, crafted for the bold.
+//           </p>
+//           <div className="divider-gold-center mt-6" />
+
+//           {/* Live cart / wishlist indicators */}
+//           <FloatingIndicators />
+//         </div>
+
+//         {/* Category filters */}
+//         <div className="flex flex-wrap justify-center gap-2 mb-10">
+//           {filters.map((f) => (
+//             <button
+//               key={f}
+//               onClick={() => setActiveFilter(f)}
+//               className={`px-5 py-2 font-cinzel font-semibold text-[12px] tracking-[0.2em] uppercase transition-all duration-300 ${
+//                 activeFilter === f
+//                   ? "bg-[var(--rj-emerald)] text-[var(--rj-gold)] shadow-lg"
+//                   : "bg-transparent border border-[var(--rj-bone)] text-[var(--rj-ash)] hover:border-[var(--rj-emerald)] hover:text-[var(--rj-emerald)]"
+//               }`}
+//               style={{ cursor: "pointer" }}
+//             >
+//               {f}
+//             </button>
+//           ))}
+//         </div>
+
+//         {/* Product grid */}
+//         <AnimatePresence mode="wait">
+//           <motion.div
+//             key={activeFilter}
+//             initial={{ opacity: 0 }}
+//             animate={{ opacity: 1 }}
+//             exit={{ opacity: 0 }}
+//             transition={{ duration: 0.3 }}
+//             className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6"
+//           >
+//             {filtered.map((product) => (
+//               <ProductCard key={product.id} product={product} />
+//             ))}
+//           </motion.div>
+//         </AnimatePresence>
+
+//         {/* View All */}
+//         <div className="text-center mt-12">
+//           <Link
+//             href="/products"
+//             className="btn-primary inline-flex group"
+//             style={{
+//               display: "inline-flex",
+//               background: "var(--gradient-gold)",
+//               color: "var(--rj-emerald)",
+//             }}
+//           >
+//             View All Products
+//             <ArrowRight
+//               size={16}
+//               className="transition-transform duration-300 group-hover:translate-x-1"
+//             />
+//           </Link>
+//         </div>
+//       </div>
+//     </section>
+//   );
+// }
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -17,214 +1177,78 @@ import {
   ChevronRight,
   Minus,
   Plus,
+  RefreshCw,
 } from "lucide-react";
 import { useCartStore, useWishlistStore } from "../../store/cartStore";
+import { useProducts } from "../../lib/hooks/useProducts";
+import { fmt, calcDiscount, type ApiProduct } from "../../lib/api/productLive";
 
 // ─────────────────────────────────────────────────────────────────
-// TYPES & DATA
+// SKELETON CARD
 // ─────────────────────────────────────────────────────────────────
-const filters = ["All", "Chains", "Kadas", "Rings", "Bracelets", "Pendants"];
-
-const products = [
-  {
-    id: "p1",
-    name: "Nawabi Gold Chain",
-    category: "Chains",
-    price: 12999,
-    originalPrice: 16999,
-    weight: "10.2g",
-    images: [
-      "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&q=85",
-      "https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?w=600&q=85",
-    ],
-    rating: 4.9,
-    reviews: 234,
-    badge: "Bestseller",
-    karat: "22kt",
-    href: "/products/nawabi-chain-22kt",
-    sizes: ['16"', '18"', '20"', '22"'],
-    description:
-      "A bold, hand-crafted Nawabi chain in BIS hallmarked 22kt gold. Each link individually set and polished for a mirror finish.",
-  },
-  {
-    id: "p2",
-    name: "Jaguar Rhodium Kada",
-    category: "Kadas",
-    price: 8999,
-    originalPrice: 11999,
-    weight: "22g",
-    images: [
-      "https://images.unsplash.com/photo-1602173574767-37ac01994b2a?w=600&q=85",
-      "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&q=85",
-    ],
-    rating: 4.8,
-    reviews: 189,
-    badge: "New",
-    karat: "Gold Plated",
-    href: "/products/royal-kada-heavy",
-    sizes: ["S", "M", "L"],
-    description:
-      "Solid, heavy, commanding. Cast in premium gold-plated brass with a rhodium finish that resists tarnish.",
-  },
-  {
-    id: "p3",
-    name: "Signet Band Ring",
-    category: "Rings",
-    price: 4999,
-    originalPrice: 6499,
-    weight: "6.1g",
-    images: [
-      "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&q=85",
-      "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=600&q=85",
-    ],
-    rating: 4.7,
-    reviews: 145,
-    badge: null,
-    karat: "18kt",
-    href: "/products/signet-ring-gold",
-    sizes: ["18", "20", "22", "24"],
-    description:
-      "A flat-top signet ring in solid 18kt gold. Free custom engraving on every order.",
-  },
-  {
-    id: "p4",
-    name: "Link Gold Bracelet",
-    category: "Bracelets",
-    price: 9499,
-    originalPrice: 12999,
-    weight: "15.5g",
-    images: [
-      "https://images.unsplash.com/photo-1574169208507-84376144848b?w=600&q=85",
-      "https://images.unsplash.com/photo-1602173574767-37ac01994b2a?w=600&q=85",
-    ],
-    rating: 4.9,
-    reviews: 98,
-    badge: "Trending",
-    karat: "22kt",
-    href: "/products/link-bracelet-gold",
-    sizes: ['7"', '8"', '9"'],
-    description:
-      "Rectangular flat links in 22kt gold — a modern statement piece for the man who leads.",
-  },
-  {
-    id: "p5",
-    name: "Rope Chain Necklace",
-    category: "Chains",
-    price: 7499,
-    originalPrice: 9999,
-    weight: "8.4g",
-    images: [
-      "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=600&q=85",
-      "https://images.unsplash.com/photo-1574169208507-84376144848b?w=600&q=85",
-    ],
-    rating: 4.6,
-    reviews: 167,
-    badge: null,
-    karat: "22kt",
-    href: "/products/rope-chain-gold",
-    sizes: ['18"', '20"', '22"'],
-    description:
-      "A timeless twisted rope chain in 22kt BIS hallmarked gold. Classic meets contemporary.",
-  },
-  {
-    id: "p6",
-    name: "Om Gold Pendant",
-    category: "Pendants",
-    price: 3999,
-    originalPrice: 4999,
-    weight: "4.2g",
-    images: [
-      "https://images.unsplash.com/photo-1613053341085-db794820ce43?w=600&q=85",
-      "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&q=85",
-    ],
-    rating: 4.8,
-    reviews: 212,
-    badge: "Bestseller",
-    karat: "22kt",
-    href: "/products/om-pendant-22kt",
-    sizes: ["Free"],
-    description:
-      "Sacred geometry meets fine craftsmanship. Hand-engraved Om pendant in 22kt gold.",
-  },
-  {
-    id: "p7",
-    name: "Biscuit Gold Ring",
-    category: "Rings",
-    price: 5999,
-    originalPrice: 7499,
-    weight: "7.8g",
-    images: [
-      "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&q=85",
-      "https://images.unsplash.com/photo-1574169208507-84376144848b?w=600&q=85",
-    ],
-    rating: 4.5,
-    reviews: 88,
-    badge: "New",
-    karat: "22kt",
-    href: "/products/band-ring-plain",
-    sizes: ["18", "20", "22", "24"],
-    description:
-      "Clean, minimal, unmistakable. A solid 22kt biscuit-cut band ring with a brushed finish.",
-  },
-  {
-    id: "p8",
-    name: "Franco Chain",
-    category: "Chains",
-    price: 15999,
-    originalPrice: 19999,
-    weight: "18.7g",
-    images: [
-      "https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?w=600&q=85",
-      "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&q=85",
-    ],
-    rating: 5.0,
-    reviews: 43,
-    badge: "Premium",
-    karat: "22kt",
-    href: "/products/cuban-link-chain",
-    sizes: ['18"', '20"', '22"', '24"'],
-    description:
-      "Our heaviest chain. The Franco is 22kt solid gold, forged for presence. Not for the shy.",
-  },
-];
-
-type Product = (typeof products)[number];
-
-function fmt(n: number) {
-  return "₹" + n.toLocaleString("en-IN");
+function SkeletonCard() {
+  return (
+    <div
+      className="rounded-xl overflow-hidden animate-pulse"
+      style={{ background: "#fff", border: "1px solid var(--rj-bone)" }}
+    >
+      <div
+        className="w-full"
+        style={{ aspectRatio: "1/1", background: "var(--rj-ivory-dark)" }}
+      />
+      <div className="p-4 space-y-2.5">
+        <div
+          className="h-2 w-1/3 rounded-full"
+          style={{ background: "var(--rj-bone)" }}
+        />
+        <div
+          className="h-4 w-2/3 rounded-full"
+          style={{ background: "var(--rj-bone)" }}
+        />
+        <div className="flex gap-1 mt-1">
+          {[...Array(5)].map((_, i) => (
+            <div
+              key={i}
+              className="w-2.5 h-2.5 rounded-full"
+              style={{ background: "var(--rj-bone)" }}
+            />
+          ))}
+        </div>
+        <div
+          className="h-3 w-1/2 rounded-full"
+          style={{ background: "var(--rj-bone)" }}
+        />
+      </div>
+    </div>
+  );
 }
 
 // ─────────────────────────────────────────────────────────────────
-// QUICK VIEW MODAL  — rendered via createPortal to escape overflow
+// QUICK VIEW MODAL
 // ─────────────────────────────────────────────────────────────────
 function QuickViewModal({
   product,
   onClose,
 }: {
-  product: Product;
+  product: ApiProduct;
   onClose: () => void;
 }) {
   const [imgIdx, setImgIdx] = useState(0);
   const [selectedSize, setSelectedSize] = useState<string | null>(
-    product.sizes.length === 1 ? product.sizes[0] : null,
+    product.sizes.length === 1 ? product.sizes[0].label : null,
   );
   const [qty, setQty] = useState(1);
   const [sizeError, setSizeError] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   const { addItem: addToCart } = useCartStore();
   const { toggleItem, isWishlisted } = useWishlistStore();
 
-  const [mounted, setMounted] = useState(false);
+  const discount = calcDiscount(product.price, product.originalPrice);
 
-  const discount = Math.round(
-    ((product.originalPrice - product.price) / product.originalPrice) * 100,
-  );
-
-  // Lock body scroll while open
   useEffect(() => {
     setMounted(true);
-
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
@@ -232,9 +1256,6 @@ function QuickViewModal({
     };
   }, []);
 
-  const wishlisted = mounted && isWishlisted(product.id);
-
-  // Escape key
   useEffect(() => {
     const h = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -243,27 +1264,31 @@ function QuickViewModal({
     return () => window.removeEventListener("keydown", h);
   }, [onClose]);
 
+  const wishlisted = mounted && isWishlisted(product._id);
+
   const handleAddToCart = () => {
     const needsSize =
       product.sizes.length > 1 ||
-      (product.sizes.length === 1 && product.sizes[0] !== "Free");
+      (product.sizes.length === 1 && product.sizes[0].label !== "Free");
     if (needsSize && !selectedSize) {
       setSizeError(true);
       setTimeout(() => setSizeError(false), 2000);
       return;
     }
     addToCart({
-      productId: product.id,
+      productId: product._id,
       name: product.name,
-      subtitle: `${product.karat} · ${product.weight}`,
-      image: product.images[0],
+      subtitle: product.subtitle,
+      image: product.images[0]?.src ?? "",
       price: fmt(product.price),
       priceNum: product.price,
-      originalPrice: fmt(product.originalPrice),
-      size: selectedSize || product.sizes[0],
+      originalPrice: product.originalPrice
+        ? fmt(product.originalPrice)
+        : undefined,
+      size: selectedSize ?? product.sizes[0]?.label ?? "Free",
       qty,
-      href: product.href,
-      tag: product.badge ?? undefined,
+      href: `/products/${product.slug}`,
+      tag: product.tag ?? product.badge,
     });
     setAddedToCart(true);
     setTimeout(() => setAddedToCart(false), 2500);
@@ -271,17 +1296,19 @@ function QuickViewModal({
 
   const handleToggleWishlist = () => {
     toggleItem({
-      id: product.id,
-      productId: product.id,
+      id: product._id,
+      productId: product._id,
       name: product.name,
-      subtitle: `${product.karat} · ${product.weight}`,
-      image: product.images[0],
+      subtitle: product.subtitle,
+      image: product.images[0]?.src ?? "",
       price: fmt(product.price),
       priceNum: product.price,
-      originalPrice: fmt(product.originalPrice),
-      href: product.href,
+      originalPrice: product.originalPrice
+        ? fmt(product.originalPrice)
+        : undefined,
+      href: `/products/${product.slug}`,
       category: product.category,
-      tag: product.badge ?? undefined,
+      tag: product.tag ?? product.badge,
     });
   };
 
@@ -324,11 +1351,10 @@ function QuickViewModal({
             position: "relative",
           }}
         >
-          {/* Desktop: fully rounded */}
           <style>{`
             @media (min-width: 640px) {
-              [data-qv="panel"]    { border-radius: 20px !important; margin: 1rem; max-height: 88vh; }
-              [data-qv="img-col"]  { height: 100% !important; min-height: 440px !important; border-radius: 20px 0 0 20px !important; }
+              [data-qv="panel"]   { border-radius: 20px !important; margin: 1rem; max-height: 88vh; }
+              [data-qv="img-col"] { height: 100% !important; min-height: 440px !important; border-radius: 20px 0 0 20px !important; }
             }
           `}</style>
 
@@ -340,7 +1366,7 @@ function QuickViewModal({
             />
           </div>
 
-          {/* Close button */}
+          {/* Close */}
           <button
             onClick={onClose}
             className="absolute top-4 right-4 z-30 w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 hover:rotate-90"
@@ -355,7 +1381,7 @@ function QuickViewModal({
           </button>
 
           <div className="flex flex-col sm:grid sm:grid-cols-2">
-            {/* ── Image column ── */}
+            {/* Image column */}
             <div
               data-qv="img-col"
               className="relative flex-shrink-0 overflow-hidden"
@@ -366,7 +1392,6 @@ function QuickViewModal({
                 borderRadius: "20px 20px 0 0",
               }}
             >
-              {/* Sliding image */}
               <AnimatePresence mode="wait">
                 <motion.div
                   key={imgIdx}
@@ -377,8 +1402,8 @@ function QuickViewModal({
                   className="absolute inset-0"
                 >
                   <Image
-                    src={product.images[imgIdx]}
-                    alt={product.name}
+                    src={product.images[imgIdx]?.src ?? ""}
+                    alt={product.images[imgIdx]?.alt ?? product.name}
                     fill
                     className="object-cover object-center"
                     sizes="(max-width: 640px) 100vw, 50vw"
@@ -387,19 +1412,17 @@ function QuickViewModal({
                 </motion.div>
               </AnimatePresence>
 
-              {/* Badge */}
-              {product.badge && (
+              {(product.tag || product.badge) && (
                 <div className="absolute top-3 left-3 z-10 pointer-events-none">
                   <span
                     className="font-cinzel text-[9px] font-bold tracking-widest px-2.5 py-1 rounded-full shadow-sm"
                     style={{ background: "var(--rj-gold)", color: "#000" }}
                   >
-                    {product.badge}
+                    {product.tag ?? product.badge}
                   </span>
                 </div>
               )}
 
-              {/* Arrows */}
               {product.images.length > 1 && (
                 <>
                   <button
@@ -436,40 +1459,37 @@ function QuickViewModal({
                   >
                     <ChevronRight size={15} />
                   </button>
-                </>
-              )}
 
-              {/* Thumbnail row */}
-              {product.images.length > 1 && (
-                <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-2 z-10 px-4">
-                  {product.images.map((img, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setImgIdx(i)}
-                      className="relative rounded-lg overflow-hidden transition-all duration-200 flex-shrink-0"
-                      style={{
-                        width: 44,
-                        height: 44,
-                        border: `2px solid ${i === imgIdx ? "var(--rj-emerald)" : "rgba(255,255,255,0.4)"}`,
-                        opacity: i === imgIdx ? 1 : 0.65,
-                        cursor: "pointer",
-                        background: "var(--rj-ivory-dark)",
-                      }}
-                    >
-                      <Image
-                        src={img}
-                        alt={`View ${i + 1}`}
-                        fill
-                        className="object-cover"
-                        sizes="44px"
-                      />
-                    </button>
-                  ))}
-                </div>
+                  <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-2 z-10 px-4">
+                    {product.images.map((img, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setImgIdx(i)}
+                        className="relative rounded-lg overflow-hidden transition-all duration-200 flex-shrink-0"
+                        style={{
+                          width: 44,
+                          height: 44,
+                          border: `2px solid ${i === imgIdx ? "var(--rj-emerald)" : "rgba(255,255,255,0.4)"}`,
+                          opacity: i === imgIdx ? 1 : 0.65,
+                          cursor: "pointer",
+                          background: "var(--rj-ivory-dark)",
+                        }}
+                      >
+                        <Image
+                          src={img.src}
+                          alt={`View ${i + 1}`}
+                          fill
+                          className="object-cover"
+                          sizes="44px"
+                        />
+                      </button>
+                    ))}
+                  </div>
+                </>
               )}
             </div>
 
-            {/* ── Details column ── */}
+            {/* Details column */}
             <div
               className="flex flex-col p-5 sm:p-7"
               style={{ maxHeight: "88vh", overflowY: "auto" }}
@@ -483,11 +1503,11 @@ function QuickViewModal({
                       size={12}
                       style={{
                         fill:
-                          m < Math.floor(product.rating)
+                          m < Math.floor(product.rating ?? 0)
                             ? "var(--rj-gold)"
                             : "transparent",
                         color:
-                          m < Math.floor(product.rating)
+                          m < Math.floor(product.rating ?? 0)
                             ? "var(--rj-gold)"
                             : "var(--rj-bone)",
                       }}
@@ -498,11 +1518,10 @@ function QuickViewModal({
                   className="font-cinzel text-[10px]"
                   style={{ color: "var(--rj-ash)" }}
                 >
-                  {product.rating} · {product.reviews} reviews
+                  {product.rating} · {product.reviewCount} reviews
                 </span>
               </div>
 
-              {/* Name */}
               <h2
                 className="font-cormorant font-light leading-tight mb-1"
                 style={{
@@ -514,7 +1533,6 @@ function QuickViewModal({
                 {product.name}
               </h2>
 
-              {/* Meta */}
               <p
                 className="text-sm mb-2"
                 style={{
@@ -525,7 +1543,6 @@ function QuickViewModal({
                 {product.karat} · {product.weight}
               </p>
 
-              {/* Category pill */}
               <span
                 className="inline-block font-cinzel text-[9px] tracking-widest uppercase px-2.5 py-0.5 rounded-full mb-4 w-fit"
                 style={{
@@ -536,7 +1553,6 @@ function QuickViewModal({
                 {product.category}
               </span>
 
-              {/* Description */}
               <p
                 className="text-sm leading-relaxed mb-4 pt-3"
                 style={{
@@ -556,12 +1572,14 @@ function QuickViewModal({
                 >
                   {fmt(product.price)}
                 </span>
-                <span
-                  className="text-sm line-through"
-                  style={{ color: "var(--rj-ash)" }}
-                >
-                  {fmt(product.originalPrice)}
-                </span>
+                {product.originalPrice && (
+                  <span
+                    className="text-sm line-through"
+                    style={{ color: "var(--rj-ash)" }}
+                  >
+                    {fmt(product.originalPrice)}
+                  </span>
+                )}
                 {discount > 0 && (
                   <span
                     className="font-cinzel text-[9px] font-bold px-2 py-0.5 rounded-full"
@@ -573,7 +1591,9 @@ function QuickViewModal({
               </div>
 
               {/* Size picker */}
-              {!(product.sizes.length === 1 && product.sizes[0] === "Free") && (
+              {!(
+                product.sizes.length === 1 && product.sizes[0].label === "Free"
+              ) && (
                 <div className="mb-5">
                   <p
                     className="font-cinzel text-[10px] tracking-widest uppercase font-bold mb-2.5"
@@ -597,9 +1617,10 @@ function QuickViewModal({
                   <div className="flex flex-wrap gap-2">
                     {product.sizes.map((s) => (
                       <button
-                        key={s}
+                        key={s.label}
+                        disabled={!s.available}
                         onClick={() => {
-                          setSelectedSize(s);
+                          setSelectedSize(s.label);
                           setSizeError(false);
                         }}
                         className="relative font-cinzel text-xs transition-all duration-200"
@@ -607,28 +1628,34 @@ function QuickViewModal({
                           width: "2.75rem",
                           height: "2.75rem",
                           borderRadius: "50%",
-                          border: `1.5px solid ${selectedSize === s ? "var(--rj-emerald)" : sizeError ? "#fca5a5" : "var(--rj-bone)"}`,
+                          border: `1.5px solid ${selectedSize === s.label ? "var(--rj-emerald)" : sizeError ? "#fca5a5" : "var(--rj-bone)"}`,
                           background:
-                            selectedSize === s
+                            selectedSize === s.label
                               ? "var(--rj-emerald)"
                               : "transparent",
                           color:
-                            selectedSize === s ? "#fff" : "var(--rj-charcoal)",
-                          cursor: "pointer",
+                            selectedSize === s.label
+                              ? "#fff"
+                              : s.available
+                                ? "var(--rj-charcoal)"
+                                : "var(--rj-bone)",
+                          opacity: s.available ? 1 : 0.4,
+                          cursor: s.available ? "pointer" : "not-allowed",
                           transform:
-                            selectedSize === s ? "scale(1.08)" : "scale(1)",
+                            selectedSize === s.label
+                              ? "scale(1.08)"
+                              : "scale(1)",
                         }}
                       >
-                        {s}
+                        {s.label}
                       </button>
                     ))}
                   </div>
                 </div>
               )}
 
-              {/* Qty + Add to Cart + Wishlist */}
+              {/* Qty + Cart + Wishlist */}
               <div className="flex items-center gap-2.5 mb-3">
-                {/* Qty stepper */}
                 <div
                   className="flex items-center rounded-full flex-shrink-0"
                   style={{ border: "1.5px solid var(--rj-bone)" }}
@@ -655,7 +1682,6 @@ function QuickViewModal({
                   </button>
                 </div>
 
-                {/* Add to Cart */}
                 <button
                   onClick={handleAddToCart}
                   className="flex-1 flex items-center justify-center gap-2 py-3 font-cinzel text-[10px] tracking-widest uppercase font-bold rounded-full transition-all duration-300 active:scale-95"
@@ -672,7 +1698,7 @@ function QuickViewModal({
                 >
                   {addedToCart ? (
                     <>
-                      <Check size={13} /> Added to Cart!
+                      <Check size={13} /> Added!
                     </>
                   ) : (
                     <>
@@ -681,7 +1707,6 @@ function QuickViewModal({
                   )}
                 </button>
 
-                {/* Wishlist toggle */}
                 <button
                   onClick={handleToggleWishlist}
                   className="w-11 h-11 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 flex-shrink-0"
@@ -707,9 +1732,9 @@ function QuickViewModal({
                 </button>
               </div>
 
-              {/* View Full Details — links to product page */}
+              {/* View Full Details */}
               <Link
-                href={product.href}
+                href={`/products/${product.slug}`}
                 onClick={onClose}
                 className="flex items-center justify-center gap-2 py-3 font-cinzel text-[10px] tracking-widest uppercase font-bold rounded-full transition-all duration-300 hover:opacity-90 active:scale-95 mb-4"
                 style={{
@@ -745,7 +1770,6 @@ function QuickViewModal({
     </AnimatePresence>
   );
 
-  // Portal — escapes any parent overflow:hidden
   return typeof document !== "undefined"
     ? createPortal(modal, document.body)
     : null;
@@ -754,40 +1778,39 @@ function QuickViewModal({
 // ─────────────────────────────────────────────────────────────────
 // PRODUCT CARD
 // ─────────────────────────────────────────────────────────────────
-function ProductCard({ product }: { product: Product }) {
+function ProductCard({ product }: { product: ApiProduct }) {
   const [hovered, setHovered] = useState(false);
   const [quickView, setQuickView] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  // Zustand stores — persist to cart/wishlist pages
   const { addItem: addToCart } = useCartStore();
   const { toggleItem, isWishlisted } = useWishlistStore();
-  const wishlisted = isWishlisted(product.id);
+  const wishlisted = isWishlisted(product._id);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const discount = Math.round(
-    ((product.originalPrice - product.price) / product.originalPrice) * 100,
-  );
+  const discount = calcDiscount(product.price, product.originalPrice);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     addToCart({
-      productId: product.id,
+      productId: product._id,
       name: product.name,
-      subtitle: `${product.karat} · ${product.weight}`,
-      image: product.images[0],
+      subtitle: product.subtitle,
+      image: product.images[0]?.src ?? "",
       price: fmt(product.price),
       priceNum: product.price,
-      originalPrice: fmt(product.originalPrice),
-      size: product.sizes[0], // default to first size; user can change in cart
+      originalPrice: product.originalPrice
+        ? fmt(product.originalPrice)
+        : undefined,
+      size: product.sizes[0]?.label ?? "Free",
       qty: 1,
-      href: product.href,
-      tag: product.badge ?? undefined,
+      href: `/products/${product.slug}`,
+      tag: product.tag ?? product.badge,
     });
     setAddedToCart(true);
     setTimeout(() => setAddedToCart(false), 2000);
@@ -797,17 +1820,19 @@ function ProductCard({ product }: { product: Product }) {
     e.preventDefault();
     e.stopPropagation();
     toggleItem({
-      id: product.id,
-      productId: product.id,
+      id: product._id,
+      productId: product._id,
       name: product.name,
-      subtitle: `${product.karat} · ${product.weight}`,
-      image: product.images[0],
+      subtitle: product.subtitle,
+      image: product.images[0]?.src ?? "",
       price: fmt(product.price),
       priceNum: product.price,
-      originalPrice: fmt(product.originalPrice),
-      href: product.href,
+      originalPrice: product.originalPrice
+        ? fmt(product.originalPrice)
+        : undefined,
+      href: `/products/${product.slug}`,
       category: product.category,
-      tag: product.badge ?? undefined,
+      tag: product.tag ?? product.badge,
     });
   };
 
@@ -822,9 +1847,8 @@ function ProductCard({ product }: { product: Product }) {
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        {/* ── Image ── */}
+        {/* Image */}
         <div className="card-product-image">
-          {/* Crossfade between default and hover image */}
           <AnimatePresence mode="wait">
             <motion.div
               key={hovered ? "hover" : "default"}
@@ -837,8 +1861,8 @@ function ProductCard({ product }: { product: Product }) {
               <Image
                 src={
                   hovered && product.images[1]
-                    ? product.images[1]
-                    : product.images[0]
+                    ? product.images[1].src
+                    : (product.images[0]?.src ?? "")
                 }
                 alt={product.name}
                 fill
@@ -850,15 +1874,15 @@ function ProductCard({ product }: { product: Product }) {
 
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10 pointer-events-none">
-            {product.badge && (
-              <span className="badge-gold">{product.badge}</span>
+            {(product.tag || product.badge) && (
+              <span className="badge-gold">{product.tag ?? product.badge}</span>
             )}
             {discount > 0 && (
               <span className="badge-emerald">-{discount}%</span>
             )}
           </div>
 
-          {/* Wishlist — gold fill when wishlisted (driven by Zustand) */}
+          {/* Wishlist */}
           <button
             onClick={handleWishlist}
             className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center transition-all duration-300 hover:scale-110"
@@ -875,9 +1899,8 @@ function ProductCard({ product }: { product: Product }) {
             />
           </button>
 
-          {/* Hover actions — slide up from bottom */}
+          {/* Hover actions */}
           <div className="absolute bottom-3 left-3 right-3 flex gap-2 translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 z-10">
-            {/* Add to Cart */}
             <button
               onClick={handleAddToCart}
               className="flex-1 flex items-center justify-center gap-1.5 py-2 text-[10px] font-cinzel tracking-wider uppercase transition-all duration-250 active:scale-95"
@@ -899,8 +1922,6 @@ function ProductCard({ product }: { product: Product }) {
                 </>
               )}
             </button>
-
-            {/* Quick View */}
             <button
               onClick={(e) => {
                 e.preventDefault();
@@ -920,9 +1941,9 @@ function ProductCard({ product }: { product: Product }) {
           </div>
         </div>
 
-        {/* ── Info — click navigates to product detail page ── */}
+        {/* Info */}
         <Link
-          href={product.href}
+          href={`/products/${product.slug}`}
           className="block p-4"
           style={{ cursor: "pointer" }}
         >
@@ -940,11 +1961,11 @@ function ProductCard({ product }: { product: Product }) {
                   size={10}
                   style={{
                     fill:
-                      i < Math.floor(product.rating)
+                      i < Math.floor(product.rating ?? 0)
                         ? "var(--rj-gold)"
                         : "transparent",
                     color:
-                      i < Math.floor(product.rating)
+                      i < Math.floor(product.rating ?? 0)
                         ? "var(--rj-gold)"
                         : "var(--rj-bone)",
                   }}
@@ -952,14 +1973,18 @@ function ProductCard({ product }: { product: Product }) {
               ))}
             </div>
             <span className="text-[var(--rj-ash)] text-[10px]">
-              ({product.reviews})
+              ({product.reviewCount})
             </span>
           </div>
           <div className="flex items-baseline gap-2">
             <span className="price-tag text-[var(--rj-emerald)]">
               {fmt(product.price)}
             </span>
-            <span className="price-original">{fmt(product.originalPrice)}</span>
+            {product.originalPrice && (
+              <span className="price-original">
+                {fmt(product.originalPrice)}
+              </span>
+            )}
             {discount > 0 && (
               <span
                 className="font-cinzel text-[8px] font-bold px-1.5 py-0.5 rounded-full"
@@ -972,7 +1997,6 @@ function ProductCard({ product }: { product: Product }) {
         </Link>
       </motion.div>
 
-      {/* Quick View Modal — portal renders outside any overflow:hidden */}
       {quickView && (
         <QuickViewModal product={product} onClose={() => setQuickView(false)} />
       )}
@@ -981,8 +2005,7 @@ function ProductCard({ product }: { product: Product }) {
 }
 
 // ─────────────────────────────────────────────────────────────────
-// MINI CART + WISHLIST FLOATING INDICATORS
-// Shows live counts; clicking navigates to respective pages
+// FLOATING Cart INDICATORS
 // ─────────────────────────────────────────────────────────────────
 function FloatingIndicators() {
   const cartCount = useCartStore((s) => s.totalItems());
@@ -992,7 +2015,6 @@ function FloatingIndicators() {
   useEffect(() => {
     setMounted(true);
   }, []);
-
   if (!mounted || (cartCount === 0 && wishlistCount === 0)) return null;
 
   return (
@@ -1015,8 +2037,7 @@ function FloatingIndicators() {
                 cursor: "pointer",
               }}
             >
-              <ShoppingBag size={12} />
-              Cart
+              <ShoppingBag size={12} /> Cart
               <span
                 className="w-5 h-5 rounded-full flex items-center justify-center font-bold text-[9px]"
                 style={{ background: "var(--rj-emerald)", color: "#fff" }}
@@ -1051,7 +2072,7 @@ function FloatingIndicators() {
               <Heart
                 size={12}
                 style={{ fill: "var(--rj-gold)", color: "var(--rj-gold)" }}
-              />
+              />{" "}
               Saved
               <span
                 className="w-5 h-5 rounded-full flex items-center justify-center font-bold text-[9px]"
@@ -1073,13 +2094,18 @@ function FloatingIndicators() {
 // ─────────────────────────────────────────────────────────────────
 // MAIN SECTION
 // ─────────────────────────────────────────────────────────────────
-export default function BestsellersSection() {
-  const [activeFilter, setActiveFilter] = useState("All");
+export default function BestsellerSection() {
+  const {
+    filtered,
+    loading,
+    error,
+    reload,
+    categories,
+    activeFilter,
+    setActiveFilter,
+  } = useProducts({ bestseller: true, limit: 20 });
 
-  const filtered =
-    activeFilter === "All"
-      ? products
-      : products.filter((p) => p.category === activeFilter);
+  console.log(categories);
 
   return (
     <section className="section-padding bg-white">
@@ -1093,47 +2119,77 @@ export default function BestsellersSection() {
             The Gold Standard
           </h2>
           <p className="text-[var(--rj-ash)] max-w-md mx-auto">
-            Our most-loved pieces loved by thousands, crafted for the bold.
+            Our most-loved pieces — loved by thousands, crafted for the bold.
           </p>
           <div className="divider-gold-center mt-6" />
-
-          {/* Live cart / wishlist indicators */}
           <FloatingIndicators />
         </div>
 
-        {/* Category filters */}
-        <div className="flex flex-wrap justify-center gap-2 mb-10">
-          {filters.map((f) => (
+        {/* Error banner */}
+        {error && !loading && (
+          <div
+            className="flex items-center justify-between py-3 px-4 rounded-xl mb-8"
+            style={{ background: "#fef2f2", border: "1px solid #fecaca" }}
+          >
+            <p className="font-cinzel text-[10px] tracking-widest text-red-500">
+              {error}
+            </p>
             <button
-              key={f}
-              onClick={() => setActiveFilter(f)}
-              className={`px-5 py-2 font-cinzel font-semibold text-[12px] tracking-[0.2em] uppercase transition-all duration-300 ${
-                activeFilter === f
-                  ? "bg-[var(--rj-emerald)] text-[var(--rj-gold)] shadow-lg"
-                  : "bg-transparent border border-[var(--rj-bone)] text-[var(--rj-ash)] hover:border-[var(--rj-emerald)] hover:text-[var(--rj-emerald)]"
-              }`}
+              onClick={reload}
+              className="flex items-center gap-1.5 font-cinzel text-[9px] tracking-widest uppercase text-red-500"
               style={{ cursor: "pointer" }}
             >
-              {f}
+              <RefreshCw size={10} /> Retry
             </button>
-          ))}
-        </div>
+          </div>
+        )}
 
-        {/* Product grid */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeFilter}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6"
-          >
-            {filtered.map((product) => (
-              <ProductCard key={product.id} product={product} />
+        {/* Category filter pills — derived from live API data */}
+        {!loading && (
+          <div className="flex flex-wrap justify-center gap-2 mb-10">
+            {categories.map((f) => (
+              <button
+                key={f}
+                onClick={() => setActiveFilter(f)}
+                className={`px-5 py-2 font-cinzel font-semibold text-[12px] tracking-[0.2em] uppercase transition-all duration-300 ${
+                  activeFilter === f
+                    ? "bg-[var(--rj-emerald)] text-[var(--rj-gold)] shadow-lg"
+                    : "bg-transparent border border-[var(--rj-bone)] text-[var(--rj-ash)] hover:border-[var(--rj-emerald)] hover:text-[var(--rj-emerald)]"
+                }`}
+                style={{ cursor: "pointer" }}
+              >
+                {f}
+              </button>
             ))}
-          </motion.div>
-        </AnimatePresence>
+          </div>
+        )}
+
+        {/* Skeleton grid while loading */}
+        {loading && (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <SkeletonCard key={i} />
+            ))}
+          </div>
+        )}
+
+        {/* Live product grid */}
+        {!loading && (
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeFilter}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6"
+            >
+              {filtered.map((product) => (
+                <ProductCard key={product._id} product={product} />
+              ))}
+            </motion.div>
+          </AnimatePresence>
+        )}
 
         {/* View All */}
         <div className="text-center mt-12">

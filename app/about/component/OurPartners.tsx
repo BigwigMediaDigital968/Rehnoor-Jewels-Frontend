@@ -18,9 +18,9 @@ export default function OurPartners() {
   const inView = useInView(ref, { once: true, margin: "-60px" });
 
   const partners = [
-    { name: "BIS India", role: "Hallmarking Authority", initial: "BIS" },
+    { name: "AMAZON India", role: "E-commerce Store", initial: "AM" },
     { name: "Razorpay", role: "Secure Payments", initial: "RP" },
-    { name: "Delhivery", role: "Logistics Partner", initial: "DL" },
+    { name: "FLIPKART", role: "Logistics Partner", initial: "FK" },
     { name: "Shiprocket", role: "Fulfilment Network", initial: "SR" },
     { name: "Meta Business", role: "Brand & Commerce", initial: "MB" },
     { name: "Google Business", role: "Verified Seller", initial: "GB" },
