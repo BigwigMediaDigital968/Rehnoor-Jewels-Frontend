@@ -222,7 +222,7 @@ function Returns() {
     {
       num: "01",
       title: "Initiate Return",
-      desc: "Contact us within 30 days of delivery via WhatsApp or email.",
+      desc: "Contact us within 07 days of delivery via WhatsApp or email.",
     },
     {
       num: "02",
@@ -298,7 +298,7 @@ function Returns() {
           }}
         >
           We stand behind every piece we sell. If you're not 100% satisfied
-          within 30 days — for any reason — we'll make it right. No forms, no
+          within 07 days — for any reason — we'll make it right. No forms, no
           hassle, no questions asked.
         </p>
       </div>

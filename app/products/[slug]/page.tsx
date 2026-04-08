@@ -165,19 +165,26 @@ function toProduct(p: ApiProduct): Product {
     id: p._id,
     name: p.name,
     subtitle: p.subtitle,
-    price: `₹${p.price.toLocaleString("en-IN")}`,
-    originalPrice: p.originalPrice
-      ? `₹${p.originalPrice.toLocaleString("en-IN")}`
-      : undefined,
-    tag: (p.tag ?? p.badge) as any,
-    rating: p.rating,
-    reviewCount: p.reviewCount,
+
+    price: p.priceFormatted ?? `₹${p.price.toLocaleString("en-IN")}`,
+    originalPrice: p.originalPriceFormatted ?? undefined,
+
+    // tag: p.tag,
+    // rating: p.rating,
+    // reviewCount: p.reviewCount,
     category: p.category,
-    // purity: p.karat ?? "22kt",
-    description: p.description,
+
+    description: p.shortDescription || p.longDescription || "",
+
     href: `/products/${p.slug}`,
+
     images: p.images,
     sizes: p.sizes,
+
+    offerBannerImage: p.offerBannerImage,
+    sizeChartImage: p.sizeChartImage,
+
+    ourPromise: p.ourPromise,
   };
 }
 
@@ -203,7 +210,7 @@ export async function generateMetadata({
     if (res.success && res.data) {
       return {
         title: `${res.data.name} | Rehnoor Jewels`,
-        description: res.data.description,
+        description: res.data.seoDescription,
         openGraph: {
           images: res.data.images[0] ? [{ url: res.data.images[0].src }] : [],
         },
@@ -235,6 +242,8 @@ export default async function ProductDetailPage({
   } catch {
     return notFound();
   }
+
+  console.log(product);
 
   return (
     <main>

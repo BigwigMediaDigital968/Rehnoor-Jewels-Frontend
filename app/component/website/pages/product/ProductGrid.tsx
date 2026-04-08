@@ -679,6 +679,11 @@ const TAG_OPTIONS = [
 // API → UI ADAPTER
 // Maps ApiProduct (backend shape) → Product (card component shape)
 // ─────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────
+// PASTE THIS adaptProduct function into ProductGrid.tsx
+// replacing the existing adaptProduct function
+// ─────────────────────────────────────────────────────────────────
+
 function adaptProduct(p: ApiProduct): Product {
   return {
     id: p.slug || p._id,
@@ -708,8 +713,24 @@ function adaptProduct(p: ApiProduct): Product {
           ],
     sizes: p.sizes || [],
     purity: p.karat as Product["purity"],
+
+    // ── Pass through new API fields ──
+    sizeChartImage: (p as any).sizeChartImage || "",
+    offerBannerImage: (p as any).offerBannerImage || "",
+    ourPromise: (p as any).ourPromise || (p as any).shortDescription || "",
   };
 }
+
+// ─────────────────────────────────────────────────────────────────
+// Also add these fields to ApiProduct interface in lib/api/products.ts
+// ─────────────────────────────────────────────────────────────────
+//
+// export interface ApiProduct {
+//   ...existing fields...
+//   sizeChartImage?: string;
+//   offerBannerImage?: string;
+//   ourPromise?: string;
+// }
 
 // Parse price string/number to number for sorting
 function parsePrice(p: string): number {

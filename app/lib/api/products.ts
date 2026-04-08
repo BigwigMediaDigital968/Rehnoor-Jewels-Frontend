@@ -25,6 +25,8 @@ export interface ApiProduct {
   collection: string; // slug of the parent collection
   href: string; // "/products/<slug>"
   images: { src: string; alt: string }[];
+  sizeChartImage: { src: string; alt: string };
+  offerBannerImage: { src: string; alt: string };
   sizes: { label: string; available: boolean }[];
   isActive: boolean;
   createdAt: string;

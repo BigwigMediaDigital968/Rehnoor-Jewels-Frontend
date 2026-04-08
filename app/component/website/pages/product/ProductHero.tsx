@@ -11,9 +11,9 @@ if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger);
 
 // ── Trust pills shown in the hero ────────────────────────────────
 const TRUST_PILLS = [
-  { icon: <Shield size={10} />, label: "BIS Hallmarked" },
-  { icon: <Award size={10} />, label: "22kt Pure Gold" },
-  { icon: <RefreshCw size={10} />, label: "30-Day Returns" },
+  { icon: <Shield size={10} />, label: "Trusted" },
+  { icon: <Award size={10} />, label: "Rewarded" },
+  { icon: <RefreshCw size={10} />, label: "07-Day Returns" },
 ];
 
 export default function ProductsHero() {
@@ -199,9 +199,9 @@ export default function ProductsHero() {
           className="ph-sub text-white/65 font-light leading-relaxed mb-8 max-w-lg"
           style={{ fontSize: "clamp(0.95rem, 1.8vw, 1.2rem)" }}
         >
-          500+ handcrafted pieces. Every chain, kada, ring, bracelet and pendant
-          carries a BIS hallmark, a master artisan's touch, and a lifetime of
-          quality.
+          500+ handcrafted pieces. Every chain, kada, ring, bracelet, and
+          pendant reflects expert craftsmanship, timeless design, and a lifetime
+          of quality.
         </p>
 
         {/* Trust pills */}
@@ -237,8 +237,8 @@ export default function ProductsHero() {
           style={{ borderColor: "rgba(255,255,255,0.1)" }}
         >
           {[
-            { value: "500+", label: "Products" },
-            { value: "22kt", label: "Gold Standard" },
+            { value: "5000+", label: "Products" },
+            { value: "25+", label: "Value Partners" },
             { value: "50K+", label: "Orders Delivered" },
             { value: "Free", label: "Sizing & Engraving" },
           ].map((stat) => (

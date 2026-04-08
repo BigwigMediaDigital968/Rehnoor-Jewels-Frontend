@@ -1,13 +1,3 @@
-// ─────────────────────────────────────────────────────────────────
-// product.types.ts
-// Single source of truth for all product-related TypeScript types.
-// Import from here in ProductCard, ProductCardCarousel,
-// ProductGrid, ProductGridCarousel, and any future components.
-//
-// Usage:
-//   import type { Product, ProductImage, ProductSize } from "@/types/product.types";
-// ─────────────────────────────────────────────────────────────────
-
 // ── Individual product image ──────────────────────────────────────
 export interface ProductImage {
   /** Absolute URL or relative path to the image */
@@ -113,6 +103,10 @@ export interface Product {
    */
   images: ProductImage[];
 
+  sizeChartImage?: string;
+
+  /** Banner image URL displayed below the "Buy It Now" button */
+  offerBannerImage?: string;
   /**
    * Available sizes for the size picker in Quick View / product page.
    * Omit entirely for "one size fits all" products (pendant, free-size kadas).

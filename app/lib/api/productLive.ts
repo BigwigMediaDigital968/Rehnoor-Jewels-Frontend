@@ -7,29 +7,88 @@ const BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 // ─────────────────────────────────────────────────────────────────
 export interface ApiProduct {
   id: any;
-  href: string;
   _id: string;
   slug: string;
+
+  // ─── Identity ─────────────────────────────
   name: string;
-  subtitle: string; // e.g. "22kt · 18 inch"
-  price: number; // raw number — we format on the client
-  originalPrice?: number;
-  karat?: string; // "22kt" | "18kt" | "Gold Plated"
-  weight?: string; // "10.2g"
-  description: string;
-  category: string; // "Chains" | "Kadas" | "Rings" | "Bracelets" | "Pendants"
-  collection?: string; // collection slug
-  tag?: string; // "Bestseller" | "New" | "Trending" | …
-  badge?: string; // alias for tag used in some components
-  rating?: number;
-  reviewCount?: number;
-  images: { src: string; alt: string }[];
-  sizes: { label: string; available: boolean }[];
-  isBestseller?: boolean;
+  subtitle: string;
+  sku?: string;
+
+  // ─── Collection / Category ────────────────
+  collection?: string | null;
+  category: string;
+
+  // ─── Pricing ──────────────────────────────
+  price: number;
+  originalPrice?: number | null;
+  currency: string;
+
+  // ─── Classification ───────────────────────
+  tag?:
+    | "Bestseller"
+    | "New"
+    | "Popular"
+    | "Limited"
+    | "Exclusive"
+    | "Trending"
+    | "Sale"
+    | "";
+
+  purity?: string; // 22kt
+  metal?: string; // Yellow Gold
+  bisHallmark?: boolean;
+  countryOfOrigin?: string;
+
+  // ─── Content ──────────────────────────────
+  shortDescription?: string;
+  longDescription?: string;
+
+  ourPromise: string;
+
+  // ─── Media ────────────────────────────────
+  images: {
+    src: string;
+    alt: string;
+  }[];
+
+  offerBannerImage: string;
+  sizeChartImage: string;
+
+  // ─── Variants ─────────────────────────────
+  sizes: {
+    label: string;
+    available: boolean;
+  }[];
+
+  weightGrams?: string;
+
+  // ─── Specifications ───────────────────────
+  specifications?: {
+    key: string;
+    value: string;
+    icon?: string;
+  }[];
+
+  // ─── SEO ──────────────────────────────────
+  seoTitle?: string;
+  seoDescription?: string;
+  seoKeywords?: string[];
+
+  // ─── Admin ────────────────────────────────
   isActive: boolean;
+  isFeatured?: boolean;
+  stock?: number | null;
+  sortOrder?: number;
+
+  // ─── System ───────────────────────────────
   createdAt: string;
   updatedAt: string;
-  ourPromise: string;
+
+  // ─── Virtuals (IMPORTANT) ─────────────────
+  discountPct?: number;
+  priceFormatted?: string;
+  originalPriceFormatted?: string | null;
 }
 
 export interface ProductsResponse {
