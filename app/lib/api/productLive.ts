@@ -6,6 +6,8 @@ const BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 // TYPES
 // ─────────────────────────────────────────────────────────────────
 export interface ApiProduct {
+  id: any;
+  href: string;
   _id: string;
   slug: string;
   name: string;
@@ -27,6 +29,7 @@ export interface ApiProduct {
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
+  ourPromise: string;
 }
 
 export interface ProductsResponse {

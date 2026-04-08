@@ -2020,8 +2020,9 @@ function FloatingIndicators() {
   return (
     <div className="flex items-center justify-center gap-3 mt-6">
       <AnimatePresence>
-        {cartCount > 0 && (
+        {(cartCount ?? 0) > 0 && (
           <motion.div
+            key="cart-indicator"
             initial={{ opacity: 0, scale: 0.85, y: 8 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.85 }}

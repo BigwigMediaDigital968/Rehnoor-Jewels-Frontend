@@ -144,6 +144,7 @@ export interface Product {
    * Shown on product page for authenticity.
    */
   bisNumber?: string;
+  ourPromise?: string;
 }
 
 // ── Lightweight card-only variant ────────────────────────────────

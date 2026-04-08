@@ -4,6 +4,10 @@
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
 export interface ApiProduct {
+  weight: string;
+  badge: string | undefined;
+  karat: "22kt" | "18kt" | "14kt" | "24kt" | undefined;
+  description: string;
   originalPriceFormatted: string | undefined;
   priceFormatted: string;
   _id: string;
