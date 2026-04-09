@@ -599,11 +599,11 @@ function toCardProduct(p: ApiProduct): Product {
       ? "₹" + p.originalPrice.toLocaleString("en-IN")
       : undefined,
     // Cast to ProductTag — the API and the union share the same string values
-    tag: (p.tag ?? p.badge) as ProductTag | undefined,
-    rating: p.rating,
-    reviewCount: p.reviewCount,
+    tag: p.tag as ProductTag | undefined,
+    // rating: p.rating,
+    // reviewCount: p.reviewCount,
     category: p.category,
-    description: p.description,
+    description: p.shortDescription,
     href: `/products/${p.slug}`,
     images: p.images,
     sizes: p.sizes,
