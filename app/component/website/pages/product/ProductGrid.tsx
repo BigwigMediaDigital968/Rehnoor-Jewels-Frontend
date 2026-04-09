@@ -56,7 +56,7 @@ function adaptProduct(p: ApiProduct): Product {
   return {
     id: p.slug || p._id,
     name: p.name,
-    subtitle: p.subtitle || `${p.karat ?? "22kt"} · ${p.weight ?? ""}`.trim(),
+    subtitle: p.subtitle.trim(),
     price: typeof p.price === "number" ? fmt(p.price) : String(p.price),
     originalPrice:
       p.originalPrice && typeof p.originalPrice === "number"
@@ -64,12 +64,12 @@ function adaptProduct(p: ApiProduct): Product {
         : p.originalPrice
           ? String(p.originalPrice)
           : undefined,
-    tag: (p.tag || p.badge) as Product["tag"],
-    rating: p.rating,
-    reviewCount: p.reviewCount,
+    tag: p.tag as Product["tag"],
+    // rating: p.rating,
+    // reviewCount: p.reviewCount,
     category: p.category,
-    description: p.description,
-    href: p.href || `/products/${p.slug || p._id}`,
+    description: p.shortDescription,
+    href: (p as any).href || `/products/${p.slug || p._id}`,
     images:
       Array.isArray(p.images) && p.images.length > 0
         ? p.images
@@ -80,7 +80,7 @@ function adaptProduct(p: ApiProduct): Product {
             },
           ],
     sizes: p.sizes || [],
-    purity: p.karat as Product["purity"],
+    purity: p.purity as Product["purity"],
 
     // ── Pass through new API fields ──
     sizeChartImage: (p as any).sizeChartImage || "",
