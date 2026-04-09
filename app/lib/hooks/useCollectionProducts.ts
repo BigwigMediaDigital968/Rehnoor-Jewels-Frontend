@@ -49,25 +49,66 @@ export function useCollectionProducts({
 
   // ── Normalise ApiProduct → Product shape the grid expects ───────
   // This is a thin adapter so CollectionProductGrid keeps its Product type
+  // const products = useMemo(
+  //   () =>
+  //     data.map((p) => ({
+  //       id: p._id,
+  //       name: p.name,
+  //       subtitle: p.subtitle,
+
+  //       // ✅ FIX HERE
+  //       price: p.priceFormatted ?? `₹${p.price}`,
+  //       priceNum: p.price ?? 0,
+
+  //       originalPrice: p.originalPriceFormatted ?? p.originalPrice,
+  //       tag: p.tag,
+  //       rating: p.rating,
+  //       reviewCount: p.reviewCount,
+  //       category: p.category,
+  //       href: p.href ?? `/products/${p.slug}`,
+  //       images: p.images,
+  //       sizes: p.sizes,
+  //     })),
+  //   [data],
+  // );
+
   const products = useMemo(
     () =>
       data.map((p) => ({
         id: p._id,
         name: p.name,
-        subtitle: p.subtitle,
+        subtitle: p.subtitle?.trim() || "",
 
-        // ✅ FIX HERE
+        // ✅ Price handling
         price: p.priceFormatted ?? `₹${p.price}`,
         priceNum: p.price ?? 0,
 
-        originalPrice: p.originalPriceFormatted ?? p.originalPrice,
+        // ✅ Ensure string type
+        originalPrice:
+          p.originalPriceFormatted ??
+          (p.originalPrice != null ? `₹${p.originalPrice}` : undefined),
+
         tag: p.tag,
-        rating: p.rating,
-        reviewCount: p.reviewCount,
+
+        // ❌ REMOVE (not in backend)
+        // rating: p.rating,
+        // reviewCount: p.reviewCount,
+
         category: p.category,
-        href: p.href ?? `/products/${p.slug}`,
-        images: p.images,
-        sizes: p.sizes,
+
+        // ✅ FIXED
+        href: `/products/${p.slug}`,
+
+        images: p.images?.length
+          ? p.images
+          : [
+              {
+                src: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=800&q=80",
+                alt: p.name,
+              },
+            ],
+
+        sizes: p.sizes || [],
       })),
     [data],
   );
