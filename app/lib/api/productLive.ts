@@ -89,6 +89,10 @@ export interface ApiProduct {
   discountPct?: number;
   priceFormatted?: string;
   originalPriceFormatted?: string | null;
+
+  // Reviews and Rating
+  rating?: number;
+  reviewCount?: number;
 }
 
 export interface ProductsResponse {

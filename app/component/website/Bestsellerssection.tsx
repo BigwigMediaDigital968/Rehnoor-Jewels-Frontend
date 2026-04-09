@@ -18,6 +18,7 @@ import {
   Minus,
   Plus,
   RefreshCw,
+  Info,
 } from "lucide-react";
 import { useCartStore, useWishlistStore } from "../../store/cartStore";
 import { useProducts } from "../../lib/hooks/useProducts";
@@ -720,6 +721,36 @@ function ProductCard({ product }: { product: ApiProduct }) {
             )}
           </div>
 
+          {/* Info hover */}
+          {/* <div className="absolute top-3 right-14 z-20 group">
+            <button
+              className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-115"
+              style={{
+                background: "rgba(255,255,255,0.95)",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
+                cursor: "pointer",
+              }}
+            >
+              <Info size={13} style={{ color: "var(--rj-ash)" }} />
+            </button>
+            <div
+              className="absolute top-10 right-0 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all duration-300"
+              style={{
+                minWidth: 180,
+                background: "rgba(0,0,0,0.85)",
+                color: "#fff",
+                fontSize: 12,
+                padding: "10px 12px",
+                borderRadius: 8,
+                boxShadow: "0 4px 16px rgba(0,0,0,0.2)",
+                transform: "translateY(6px)",
+                backdropFilter: "blur(8px)",
+              }}
+            >
+              {product?.ourPromise}
+            </div>
+          </div> */}
+
           {/* Wishlist */}
           <button
             onClick={handleWishlist}
@@ -945,7 +976,7 @@ export default function BestsellerSection() {
     setActiveFilter,
   } = useProducts({ bestseller: true, limit: 20 });
 
-  console.log(categories);
+  // console.log(categories);
 
   return (
     <section className="section-padding bg-white">

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Shield, Award, RefreshCw, Package, Ruler, Info } from "lucide-react";
+import { Product } from "@/app/types/Product.types";
 
 const TABS = [
   { id: "specs", label: "Specifications", icon: <Ruler size={13} /> },
@@ -12,18 +13,65 @@ const TABS = [
 ];
 
 // ─── Content ─────────────────────────────────────────────────────
-function Specifications() {
-  const specs = [
-    { label: "Metal", value: "22kt Yellow Gold" },
-    { label: "Purity", value: "916 (91.6% Pure Gold)" },
-    { label: "BIS Hallmark", value: "Yes — Certificate Included" },
-    { label: "Finish", value: "Mirror Polish" },
-    { label: "Clasp Type", value: "Lobster Claw (Secure)" },
-    { label: "Availability", value: '16", 18", 20", 22"' },
-    { label: "Approx. Weight", value: "8–12 grams (size-dependent)" },
-    { label: "Country of Origin", value: "Jaipur, India" },
-    { label: "Warranty", value: "Lifetime craftsmanship" },
-  ];
+// function Specifications() {
+//   const specs = [
+//     { label: "Metal", value: "22kt Yellow Gold" },
+//     { label: "Purity", value: "916 (91.6% Pure Gold)" },
+//     { label: "BIS Hallmark", value: "Yes — Certificate Included" },
+//     { label: "Finish", value: "Mirror Polish" },
+//     { label: "Clasp Type", value: "Lobster Claw (Secure)" },
+//     { label: "Availability", value: '16", 18", 20", 22"' },
+//     { label: "Approx. Weight", value: "8–12 grams (size-dependent)" },
+//     { label: "Country of Origin", value: "Jaipur, India" },
+//     { label: "Warranty", value: "Lifetime craftsmanship" },
+//   ];
+//   return (
+//     <div
+//       className="overflow-hidden rounded-xl"
+//       style={{ border: "1px solid var(--rj-bone)" }}
+//     >
+//       {specs.map((s, i) => (
+//         <div
+//           key={s.label}
+//           className="flex items-start py-3 px-4"
+//           style={{
+//             background: i % 2 === 0 ? "#fff" : "var(--rj-ivory-dark)",
+//             borderBottom:
+//               i < specs.length - 1 ? "1px solid var(--rj-bone)" : "none",
+//           }}
+//         >
+//           <span
+//             className="font-cinzel text-[10px] tracking-widest uppercase w-40 flex-shrink-0 pt-0.5"
+//             style={{ color: "var(--rj-ash)" }}
+//           >
+//             {s.label}
+//           </span>
+//           <span
+//             className="text-sm"
+//             style={{
+//               color: "var(--rj-charcoal)",
+//               fontFamily: "var(--font-body,'DM Sans'),sans-serif",
+//             }}
+//           >
+//             {s.value}
+//           </span>
+//         </div>
+//       ))}
+//     </div>
+//   );
+// }
+
+function Specifications({ specs }: { specs?: Product["specifications"] }) {
+  const fallbackIcon = <Info size={14} />;
+
+  if (!specs || specs.length === 0) {
+    return (
+      <div className="text-sm text-gray-500 px-4 py-6">
+        No specifications available.
+      </div>
+    );
+  }
+
   return (
     <div
       className="overflow-hidden rounded-xl"
@@ -31,20 +79,26 @@ function Specifications() {
     >
       {specs.map((s, i) => (
         <div
-          key={s.label}
-          className="flex items-start py-3 px-4"
+          key={s.key}
+          className="flex items-center gap-3 py-3 px-4"
           style={{
             background: i % 2 === 0 ? "#fff" : "var(--rj-ivory-dark)",
             borderBottom:
               i < specs.length - 1 ? "1px solid var(--rj-bone)" : "none",
           }}
         >
+          {/* ICON */}
+          <span className="text-sm leading-none">{s.icon || "ℹ️"}</span>
+
+          {/* LABEL */}
           <span
-            className="font-cinzel text-[10px] tracking-widest uppercase w-40 flex-shrink-0 pt-0.5"
+            className="font-cinzel text-[10px] tracking-widest uppercase w-32 flex-shrink-0 pt-0.5"
             style={{ color: "var(--rj-ash)" }}
           >
-            {s.label}
+            {s.key}
           </span>
+
+          {/* VALUE */}
           <span
             className="text-sm"
             style={{
@@ -145,12 +199,12 @@ function Shipping() {
       price: "₹299",
       note: "Select metros only · Order before 12pm",
     },
-    {
-      name: "International",
-      time: "10–15 business days",
-      price: "₹999+",
-      note: "Customs duties may apply",
-    },
+    // {
+    //   name: "International",
+    //   time: "10–15 business days",
+    //   price: "₹999+",
+    //   note: "Customs duties may apply",
+    // },
   ];
   return (
     <div className="space-y-3">
@@ -208,8 +262,8 @@ function Shipping() {
             }}
           >
             All shipments are <strong>fully insured</strong> and arrive in our
-            signature velvet-lined gift box with a tamper-evident seal and BIS
-            hallmark certificate.
+            signature velvet-lined gift box with a tamper-evident seal and
+            Welcome Note from Rehnoor Jewels 💕.
           </p>
         </div>
       </div>
@@ -316,7 +370,7 @@ const TAB_CONTENT: Record<string, React.ReactNode> = {
 // ─────────────────────────────────────────────────────────────────
 // MAIN EXPORT
 // ─────────────────────────────────────────────────────────────────
-export default function ProductTabs() {
+export default function ProductTabs({ product }: { product: Product }) {
   const [activeTab, setActiveTab] = useState("specs");
 
   return (
@@ -378,7 +432,12 @@ export default function ProductTabs() {
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.25 }}
           >
-            {TAB_CONTENT[activeTab]}
+            {activeTab === "specs" && (
+              <Specifications specs={product.specifications} />
+            )}
+            {activeTab === "care" && <CareGuide />}
+            {activeTab === "shipping" && <Shipping />}
+            {activeTab === "returns" && <Returns />}
           </motion.div>
         </AnimatePresence>
       </div>

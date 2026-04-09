@@ -41,9 +41,9 @@ interface ExtendedProduct extends Product {
 // TRUST BADGES
 // ─────────────────────────────────────────────────────────────────
 const TRUST = [
-  { icon: <Shield size={14} />, label: "BIS Hallmarked" },
-  { icon: <Award size={14} />, label: "22kt Pure Gold" },
-  { icon: <RefreshCw size={14} />, label: "30-Day Returns" },
+  { icon: <Shield size={14} />, label: "Anti-Tarnish & Water Proof" },
+  { icon: <Heart size={14} />, label: "50K+ Satisfied Customers" },
+  { icon: <RefreshCw size={14} />, label: "07-Day Returns" },
   { icon: <Truck size={14} />, label: "Free Shipping" },
 ];
 
@@ -318,7 +318,7 @@ function ShortDescriptionBlock({ text }: { text: string }) {
           className="font-cinzel text-[9px] tracking-widest uppercase font-bold"
           style={{ color: "var(--rj-emerald)" }}
         >
-          About This Product
+          Our Promise
         </p>
       </div>
       <ul className="flex flex-col gap-2">
@@ -431,7 +431,7 @@ export default function ProductDetailHero({
       )
     : 0;
 
-  console.log(product);
+  // console.log(product);
 
   return (
     <>
@@ -772,18 +772,8 @@ export default function ProductDetailHero({
                 )}
               </div>
 
-              {/* Description */}
-              {product.description && (
-                <p
-                  className="text-sm leading-relaxed mb-6"
-                  style={{
-                    color: "var(--rj-ash)",
-                    fontFamily: "var(--font-body,'DM Sans'),sans-serif",
-                  }}
-                >
-                  {product.description}
-                </p>
-              )}
+              {/* ── Offer Banner (below Buy Now) ── */}
+              <OfferBanner imageUrl={product.offerBannerImage || ""} />
 
               {/* ── Size Picker ── */}
               {product.sizes && product.sizes.length > 0 && (
@@ -971,8 +961,18 @@ export default function ProductDetailHero({
                 Buy It Now
               </button>
 
-              {/* ── Offer Banner (below Buy Now) ── */}
-              <OfferBanner imageUrl={product.offerBannerImage || ""} />
+              {/* Description */}
+              {product.description && (
+                <p
+                  className="text-sm leading-relaxed mb-6"
+                  style={{
+                    color: "var(--rj-ash)",
+                    fontFamily: "var(--font-body,'DM Sans'),sans-serif",
+                  }}
+                >
+                  {product.description}
+                </p>
+              )}
 
               {/* ── Short Description / Our Promise (below offer banner) ── */}
               <ShortDescriptionBlock
@@ -990,7 +990,7 @@ export default function ProductDetailHero({
                     className="flex flex-col items-center gap-1.5 text-center"
                   >
                     <div
-                      className="w-9 h-9 rounded-full flex items-center justify-center"
+                      className="w-10 h-10 rounded-full flex items-center justify-center border border-[var(--rj-emerald)]"
                       style={{ background: "rgba(0,55,32,0.06)" }}
                     >
                       <span style={{ color: "var(--rj-emerald)" }}>

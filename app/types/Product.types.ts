@@ -139,6 +139,12 @@ export interface Product {
    */
   bisNumber?: string;
   ourPromise?: string;
+
+  specifications?: {
+    key: string;
+    value: string;
+    icon?: string;
+  }[];
 }
 
 // ── Lightweight card-only variant ────────────────────────────────
