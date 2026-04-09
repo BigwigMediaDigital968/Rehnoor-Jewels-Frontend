@@ -3,33 +3,119 @@
 
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
+// export interface ApiProduct {
+//   weight: string;
+//   badge: string | undefined;
+//   karat: "22kt" | "18kt" | "14kt" | "24kt" | undefined;
+//   description: string;
+//   originalPriceFormatted: string | undefined;
+//   priceFormatted: string;
+//   _id: string;
+//   id: string; // virtual or alias — add to your mongoose schema if needed
+//   name: string;
+//   subtitle: string;
+//   slug: string;
+//   price: number; // "₹8,999"  — formatted on the backend, or format here
+//   priceNum: number; // raw number for sorting/filtering
+//   originalPrice?: string;
+//   tag?: string;
+//   rating?: number;
+//   reviewCount?: number;
+//   category: string;
+//   collection: string; // slug of the parent collection
+//   href: string; // "/products/<slug>"
+//   images: { src: string; alt: string }[];
+//   sizeChartImage: { src: string; alt: string };
+//   offerBannerImage: { src: string; alt: string };
+//   sizes: { label: string; available: boolean }[];
+//   isActive: boolean;
+//   createdAt: string;
+// }
+
 export interface ApiProduct {
-  weight: string;
-  badge: string | undefined;
-  karat: "22kt" | "18kt" | "14kt" | "24kt" | undefined;
-  description: string;
-  originalPriceFormatted: string | undefined;
-  priceFormatted: string;
+  id: any;
   _id: string;
-  id: string; // virtual or alias — add to your mongoose schema if needed
+  slug: string;
+
+  // ─── Identity ─────────────────────────────
   name: string;
   subtitle: string;
-  slug: string;
-  price: string; // "₹8,999"  — formatted on the backend, or format here
-  priceNum: number; // raw number for sorting/filtering
-  originalPrice?: string;
-  tag?: string;
-  rating?: number;
-  reviewCount?: number;
+  sku?: string;
+
+  // ─── Collection / Category ────────────────
+  collection?: string | null;
   category: string;
-  collection: string; // slug of the parent collection
-  href: string; // "/products/<slug>"
-  images: { src: string; alt: string }[];
-  sizeChartImage: { src: string; alt: string };
-  offerBannerImage: { src: string; alt: string };
-  sizes: { label: string; available: boolean }[];
+
+  // ─── Pricing ──────────────────────────────
+  price: number;
+  originalPrice?: number | null;
+  currency: string;
+
+  // ─── Classification ───────────────────────
+  tag?:
+    | "Bestseller"
+    | "New"
+    | "Popular"
+    | "Limited"
+    | "Exclusive"
+    | "Trending"
+    | "Sale"
+    | "";
+
+  purity?: string; // 22kt
+  metal?: string; // Yellow Gold
+  bisHallmark?: boolean;
+  countryOfOrigin?: string;
+
+  // ─── Content ──────────────────────────────
+  shortDescription?: string;
+  longDescription?: string;
+
+  ourPromise: string;
+
+  // ─── Media ────────────────────────────────
+  images: {
+    src: string;
+    alt: string;
+  }[];
+
+  offerBannerImage: string;
+  sizeChartImage: string;
+
+  // ─── Variants ─────────────────────────────
+  sizes: {
+    label: string;
+    available: boolean;
+  }[];
+
+  weightGrams?: string;
+
+  // ─── Specifications ───────────────────────
+  specifications?: {
+    key: string;
+    value: string;
+    icon?: string;
+  }[];
+
+  // ─── SEO ──────────────────────────────────
+  seoTitle?: string;
+  seoDescription?: string;
+  seoKeywords?: string[];
+
+  // ─── Admin ────────────────────────────────
   isActive: boolean;
+  isFeatured?: boolean;
+  stock?: number | null;
+  sortOrder?: number;
+
+  // ─── System ───────────────────────────────
   createdAt: string;
+  updatedAt: string;
+
+  // ─── Virtuals (IMPORTANT) ─────────────────
+  discountPct?: number;
+  priceFormatted?: string;
+  originalPriceFormatted?: string | null;
 }
 
 export interface ProductsResponse {

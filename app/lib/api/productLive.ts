@@ -113,7 +113,10 @@ export function fmt(n: number): string {
   return "₹" + n.toLocaleString("en-IN");
 }
 
-export function calcDiscount(price: number, originalPrice?: number): number {
+export function calcDiscount(
+  price: number,
+  originalPrice?: number | null,
+): number {
   if (!originalPrice || originalPrice <= price) return 0;
   return Math.round(((originalPrice - price) / originalPrice) * 100);
 }
