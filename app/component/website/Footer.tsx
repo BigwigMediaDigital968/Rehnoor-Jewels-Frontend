@@ -115,7 +115,7 @@ export default function Footer() {
               {
                 icon: "↩",
                 title: "Easy Returns",
-                sub: "30-day hassle-free returns",
+                sub: "07-day hassle-free returns",
               },
               {
                 icon: "⚜",

@@ -6,6 +6,7 @@ import TestimonialsSection from "@/app/component/website/Testimonialssection";
 import InstagramSection from "@/app/component/website/Instagramsection";
 import ProductGridCarousel from "./component/website/Productgridcarousel";
 import GoldPriceScroll from "./component/shared/GoldPriceScroll";
+import HomeBlogSection from "./component/website/Homeblogsection";
 
 export default function HomePage() {
   return (
@@ -18,6 +19,7 @@ export default function HomePage() {
         <BrandStorySection />
         <ProductGridCarousel />
         <TestimonialsSection />
+        <HomeBlogSection />
         <InstagramSection />
       </main>
     </>
