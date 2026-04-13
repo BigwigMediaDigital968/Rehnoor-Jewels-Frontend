@@ -1,128 +1,3 @@
-// import CollectionHero from "./component/CollectionHero";
-// import CollectionProductGrid from "./component/CollectionProductGrid";
-// import CollectionTestimonials from "./component/Collectiontestimonials";
-// import type { CollectionMeta } from "./component/CollectionHero";
-
-// // ── Static collection map — swap for API fetch by slug later ─────
-// const COLLECTION_MAP: Record<string, CollectionMeta> = {
-//   chains: {
-//     id: "chains",
-//     label: "Chains",
-//     tagline: "Bold, layered, iconic",
-//     description:
-//       "Every Rehnoor chain is hand-forged in 22kt BIS hallmarked gold by master artisans in Jaipur. Wear one. Stack them. Either way, be noticed.",
-//     heroImage:
-//       "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=1600&q=85",
-//     accentColor: "rgba(0,36,16,0.88)",
-//     productCount: 24,
-//     purity: "22kt",
-//     tag: "Bestseller",
-//     breadcrumb: ["Home", "Collections", "Chains"],
-//   },
-//   kadas: {
-//     id: "kadas",
-//     label: "Kadas",
-//     tagline: "Power on your wrist",
-//     description:
-//       "Solid, heavy, commanding. Each Rehnoor Kada is cast in 22kt gold and polished by hand. A statement that needs no words.",
-//     heroImage:
-//       "https://images.unsplash.com/photo-1573408301185-9519f94806a4?w=1600&q=85",
-//     accentColor: "rgba(26,10,0,0.88)",
-//     productCount: 18,
-//     purity: "22kt",
-//     tag: "New",
-//     breadcrumb: ["Home", "Collections", "Kadas"],
-//   },
-//   rings: {
-//     id: "rings",
-//     label: "Rings",
-//     tagline: "Wear your statement",
-//     description:
-//       "From bold signet rings to minimal bands — each piece in 22kt gold with free custom engraving on every order.",
-//     heroImage:
-//       "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=1600&q=85",
-//     accentColor: "rgba(45,26,0,0.88)",
-//     productCount: 32,
-//     purity: "22kt",
-//     tag: "Popular",
-//     breadcrumb: ["Home", "Collections", "Rings"],
-//   },
-//   bracelets: {
-//     id: "bracelets",
-//     label: "Bracelets",
-//     tagline: "Layered perfection",
-//     description:
-//       "Link, cord, bangle — our bracelet collection spans every aesthetic. All in 22kt gold. All BIS hallmarked. All made to last.",
-//     heroImage:
-//       "https://images.unsplash.com/photo-1574169208507-84376144848b?w=1600&q=85",
-//     accentColor: "rgba(10,26,46,0.88)",
-//     productCount: 15,
-//     purity: "22kt",
-//     tag: "Limited",
-//     breadcrumb: ["Home", "Collections", "Bracelets"],
-//   },
-//   pendants: {
-//     id: "pendants",
-//     label: "Pendants",
-//     tagline: "Close to the heart",
-//     description:
-//       "Symbols of devotion, identity, and style. Each pendant is hand-carved in 22kt gold — wear what matters.",
-//     heroImage:
-//       "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=1600&q=85",
-//     accentColor: "rgba(26,10,46,0.88)",
-//     productCount: 28,
-//     purity: "22kt",
-//     tag: "New",
-//     breadcrumb: ["Home", "Collections", "Pendants"],
-//   },
-// };
-
-// // ── Static params for build-time pre-rendering ────────────────────
-// export function generateStaticParams() {
-//   return Object.keys(COLLECTION_MAP).map((slug) => ({ slug }));
-// }
-
-// // ── SEO metadata per collection ───────────────────────────────────
-// // Next.js 15: params is now a Promise
-// export async function generateMetadata({
-//   params,
-// }: {
-//   params: Promise<{ slug: string }>;
-// }) {
-//   const { slug } = await params;
-//   const meta = COLLECTION_MAP[slug];
-//   if (!meta) return { title: "Collection | Rehnoor Jewels" };
-//   return {
-//     title: `${meta.label} Collection | Rehnoor Jewels`,
-//     description: meta.description,
-//   };
-// }
-
-// // ── Page component ────────────────────────────────────────────────
-// // Next.js 15: params is now a Promise — must be awaited
-// export default async function CollectionDetailPage({
-//   params,
-// }: {
-//   params: Promise<{ slug: string }>;
-// }) {
-//   const { slug } = await params;
-
-//   // Fall back to "chains" if slug doesn't match any collection
-//   const meta = COLLECTION_MAP[slug] ?? COLLECTION_MAP.chains;
-
-//   return (
-//     <main>
-//       <CollectionHero meta={meta} />
-//       <CollectionProductGrid />
-//       <CollectionTestimonials />
-//     </main>
-//   );
-// }
-
-// API Integrated
-
-// app/collections/[slug]/page.tsx
-
 import { notFound } from "next/navigation";
 import CollectionHero from "./component/CollectionHero";
 import CollectionProductGrid from "./component/CollectionProductGrid";
@@ -132,6 +7,9 @@ import {
   fetchCollectionBySlug,
   fetchPublicCollections,
 } from "@/app/lib/api/collections";
+import { ApiProduct } from "@/app/lib/api/productLive";
+import { Product } from "@/app/types/Product.types";
+import CollectionIntroStrip from "./component/Collectionintrostrip";
 
 function toMeta(
   col: Awaited<ReturnType<typeof fetchCollectionBySlug>>["data"],
@@ -148,6 +26,7 @@ function toMeta(
     purity: "22kt",
     tag: col.tag || undefined,
     breadcrumb: ["Home", "Collections", col.label || col.name],
+    products: col.products,
   };
 }
 
@@ -179,13 +58,74 @@ export async function generateMetadata({
   return { title: "Collection | Rehnoor Jewels" };
 }
 
+// export default async function CollectionDetailPage({
+//   params,
+// }: {
+//   params: Promise<{ slug: string }>;
+// }) {
+//   const { slug } = await params;
+
+//   let meta: CollectionMeta;
+
+//   try {
+//     const res = await fetchCollectionBySlug(slug);
+//     if (!res.success || !res.data) return notFound();
+//     meta = toMeta(res.data);
+//   } catch {
+//     return notFound();
+//   }
+
+//   console.log(meta);
+
+//   // Fetch full product data if products are just IDs
+//   const products =
+//     typeof meta.products[0] === "string"
+//       ? [] // Replace with actual product fetching logic if needed
+//       : meta.products;
+
+//   return (
+//     <main>
+//       <CollectionHero meta={meta} />
+//       <CollectionProductGrid collectionSlug={slug} products={products} />
+//       <CollectionTestimonials />
+//     </main>
+//   );
+// }
+
+function normalizeProducts(raw: ApiProduct[]): Product[] {
+  return raw.map((p) => ({
+    id: p._id,
+    name: p.name,
+    subtitle: p.subtitle?.trim() ?? "",
+    price: p.priceFormatted ?? `₹${Number(p.price).toLocaleString("en-IN")}`,
+    originalPrice:
+      p.originalPriceFormatted ??
+      (p.originalPrice != null
+        ? `₹${Number(p.originalPrice).toLocaleString("en-IN")}`
+        : undefined),
+    tag: p.tag || undefined,
+    // rating: p.rating,
+    // reviewCount: p.reviewCount,
+    category: p.category,
+    href: `/products/${p.slug}`,
+    images: p.images?.length
+      ? p.images
+      : [
+          {
+            src: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=800&q=80",
+            alt: p.name,
+          },
+        ],
+    sizes: p.sizes ?? [],
+  }));
+}
+
 export default async function CollectionDetailPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-
   let meta: CollectionMeta;
 
   try {
@@ -196,10 +136,26 @@ export default async function CollectionDetailPage({
     return notFound();
   }
 
+  // col.products arrives as populated objects at runtime — cast away the
+  // incorrect string[] type that the generated type gives us
+  const products = normalizeProducts(
+    (meta.products as unknown as ApiProduct[]).filter(
+      (p): p is ApiProduct => !!p && typeof p === "object" && "_id" in p,
+    ),
+  );
+
   return (
     <main>
       <CollectionHero meta={meta} />
-      <CollectionProductGrid collectionSlug={slug} />
+
+      <CollectionProductGrid
+        collectionSlug={slug}
+        products={products}
+        loading={false}
+        error={null}
+      />
+      <CollectionIntroStrip meta={meta} />
+
       <CollectionTestimonials />
     </main>
   );

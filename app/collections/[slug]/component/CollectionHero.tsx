@@ -21,6 +21,7 @@ export interface CollectionMeta {
   purity: string;
   tag?: string;
   breadcrumb?: string[]; // e.g. ["Home","Collections","Chains"]
+  products: string[]; // ObjectId refs (public list)
 }
 
 // ── Default collection data — swap via props/API ──────────────────
@@ -37,6 +38,7 @@ const DEFAULT_META: CollectionMeta = {
   purity: "22kt",
   tag: "Bestseller",
   breadcrumb: ["Home", "Collections", "Chains"],
+  products: [],
 };
 
 export default function CollectionHero({
@@ -99,26 +101,31 @@ export default function CollectionHero({
     return () => ctx.revert();
   }, [meta.id]);
 
+  const heroImage =
+    meta?.heroImage && meta.heroImage.trim() !== "" ? meta.heroImage : null;
+
   return (
     <section
       ref={sectionRef}
       className="relative overflow-hidden flex items-end"
       style={{
-        minHeight: "clamp(420px, 65vh, 680px)",
+        minHeight: "clamp(420px, 80vh, 680px)",
         background: "var(--rj-emerald-dark)",
       }}
     >
       {/* Parallax BG */}
       <motion.div className="absolute inset-0" style={{ y }}>
         <div ref={bgRef} className="absolute inset-0">
-          <Image
-            src={meta.heroImage}
-            alt={meta.label}
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-center"
-          />
+          {heroImage && (
+            <Image
+              src={heroImage}
+              alt={meta?.label || "Collection"}
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover object-center"
+            />
+          )}
           <div
             className="absolute inset-0"
             style={{
@@ -225,7 +232,7 @@ export default function CollectionHero({
 
         {/* Tagline */}
         <p
-          className="ch-sub font-light leading-relaxed mb-8 max-w-lg"
+          className="ch-sub font-light leading-relaxed mb-8 max-w-xl"
           style={{
             color: "rgba(255,255,255,0.62)",
             fontSize: "clamp(0.95rem,1.8vw,1.15rem)",

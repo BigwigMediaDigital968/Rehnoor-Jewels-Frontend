@@ -109,103 +109,103 @@ export async function fetchCollectionBySlug(
 // ─────────────────────────────────────────────────────────────────
 // ADMIN ENDPOINTS (require JWT via Authorization: Bearer <token>)
 // ─────────────────────────────────────────────────────────────────
-function authHeaders(token: string) {
-  return {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`,
-  };
-}
+// function authHeaders(token: string) {
+//   return {
+//     "Content-Type": "application/json",
+//     Authorization: `Bearer ${token}`,
+//   };
+// }
 
 /** GET /api/collections/admin/all */
-export async function adminFetchAllCollections(
-  token: string,
-  params?: {
-    page?: number;
-    limit?: number;
-    search?: string;
-    isActive?: boolean;
-  },
-): Promise<CollectionsResponse> {
-  const qs = new URLSearchParams();
-  if (params?.page !== undefined) qs.set("page", String(params.page));
-  if (params?.limit !== undefined) qs.set("limit", String(params.limit));
-  if (params?.search) qs.set("search", params.search);
-  if (params?.isActive !== undefined)
-    qs.set("isActive", String(params.isActive));
-  const res = await fetch(`${BASE}/api/collections/admin/all?${qs}`, {
-    headers: authHeaders(token),
-  });
-  if (!res.ok) throw new Error(`Admin fetch failed (${res.status})`);
-  return res.json();
-}
+// export async function adminFetchAllCollections(
+//   token: string,
+//   params?: {
+//     page?: number;
+//     limit?: number;
+//     search?: string;
+//     isActive?: boolean;
+//   },
+// ): Promise<CollectionsResponse> {
+//   const qs = new URLSearchParams();
+//   if (params?.page !== undefined) qs.set("page", String(params.page));
+//   if (params?.limit !== undefined) qs.set("limit", String(params.limit));
+//   if (params?.search) qs.set("search", params.search);
+//   if (params?.isActive !== undefined)
+//     qs.set("isActive", String(params.isActive));
+//   const res = await fetch(`${BASE}/api/collections/admin/all?${qs}`, {
+//     headers: authHeaders(token),
+//   });
+//   if (!res.ok) throw new Error(`Admin fetch failed (${res.status})`);
+//   return res.json();
+// }
 
-/** POST /api/collections/admin/create */
-export async function adminCreateCollection(
-  token: string,
-  payload: Partial<ApiCollection>,
-): Promise<SingleCollectionResponse> {
-  const res = await fetch(`${BASE}/api/collections/admin/create`, {
-    method: "POST",
-    headers: authHeaders(token),
-    body: JSON.stringify(payload),
-  });
-  if (!res.ok) throw new Error(`Create failed (${res.status})`);
-  return res.json();
-}
+// /** POST /api/collections/admin/create */
+// export async function adminCreateCollection(
+//   token: string,
+//   payload: Partial<ApiCollection>,
+// ): Promise<SingleCollectionResponse> {
+//   const res = await fetch(`${BASE}/api/collections/admin/create`, {
+//     method: "POST",
+//     headers: authHeaders(token),
+//     body: JSON.stringify(payload),
+//   });
+//   if (!res.ok) throw new Error(`Create failed (${res.status})`);
+//   return res.json();
+// }
 
-/** PUT /api/collections/admin/:id */
-export async function adminUpdateCollection(
-  token: string,
-  id: string,
-  payload: Partial<ApiCollection>,
-): Promise<SingleCollectionResponse> {
-  const res = await fetch(`${BASE}/api/collections/admin/${id}`, {
-    method: "PUT",
-    headers: authHeaders(token),
-    body: JSON.stringify(payload),
-  });
-  if (!res.ok) throw new Error(`Update failed (${res.status})`);
-  return res.json();
-}
+// /** PUT /api/collections/admin/:id */
+// export async function adminUpdateCollection(
+//   token: string,
+//   id: string,
+//   payload: Partial<ApiCollection>,
+// ): Promise<SingleCollectionResponse> {
+//   const res = await fetch(`${BASE}/api/collections/admin/${id}`, {
+//     method: "PUT",
+//     headers: authHeaders(token),
+//     body: JSON.stringify(payload),
+//   });
+//   if (!res.ok) throw new Error(`Update failed (${res.status})`);
+//   return res.json();
+// }
 
-/** PATCH /api/collections/admin/:id/toggle */
-export async function adminToggleCollection(
-  token: string,
-  id: string,
-): Promise<SingleCollectionResponse> {
-  const res = await fetch(`${BASE}/api/collections/admin/${id}/toggle`, {
-    method: "PATCH",
-    headers: authHeaders(token),
-  });
-  if (!res.ok) throw new Error(`Toggle failed (${res.status})`);
-  return res.json();
-}
+// /** PATCH /api/collections/admin/:id/toggle */
+// export async function adminToggleCollection(
+//   token: string,
+//   id: string,
+// ): Promise<SingleCollectionResponse> {
+//   const res = await fetch(`${BASE}/api/collections/admin/${id}/toggle`, {
+//     method: "PATCH",
+//     headers: authHeaders(token),
+//   });
+//   if (!res.ok) throw new Error(`Toggle failed (${res.status})`);
+//   return res.json();
+// }
 
-/** PATCH /api/collections/admin/:id/products */
-export async function adminManageCollectionProducts(
-  token: string,
-  id: string,
-  action: "add" | "remove",
-  productIds: string[],
-): Promise<SingleCollectionResponse> {
-  const res = await fetch(`${BASE}/api/collections/admin/${id}/products`, {
-    method: "PATCH",
-    headers: authHeaders(token),
-    body: JSON.stringify({ action, productIds }),
-  });
-  if (!res.ok) throw new Error(`Products update failed (${res.status})`);
-  return res.json();
-}
+// /** PATCH /api/collections/admin/:id/products */
+// export async function adminManageCollectionProducts(
+//   token: string,
+//   id: string,
+//   action: "add" | "remove",
+//   productIds: string[],
+// ): Promise<SingleCollectionResponse> {
+//   const res = await fetch(`${BASE}/api/collections/admin/${id}/products`, {
+//     method: "PATCH",
+//     headers: authHeaders(token),
+//     body: JSON.stringify({ action, productIds }),
+//   });
+//   if (!res.ok) throw new Error(`Products update failed (${res.status})`);
+//   return res.json();
+// }
 
-/** DELETE /api/collections/admin/:id */
-export async function adminDeleteCollection(
-  token: string,
-  id: string,
-): Promise<{ success: boolean }> {
-  const res = await fetch(`${BASE}/api/collections/admin/${id}`, {
-    method: "DELETE",
-    headers: authHeaders(token),
-  });
-  if (!res.ok) throw new Error(`Delete failed (${res.status})`);
-  return res.json();
-}
+// /** DELETE /api/collections/admin/:id */
+// export async function adminDeleteCollection(
+//   token: string,
+//   id: string,
+// ): Promise<{ success: boolean }> {
+//   const res = await fetch(`${BASE}/api/collections/admin/${id}`, {
+//     method: "DELETE",
+//     headers: authHeaders(token),
+//   });
+//   if (!res.ok) throw new Error(`Delete failed (${res.status})`);
+//   return res.json();
+// }

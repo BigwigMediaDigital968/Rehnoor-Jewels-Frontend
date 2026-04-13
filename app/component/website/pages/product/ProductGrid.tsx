@@ -861,7 +861,7 @@ export default function ProductGrid({
 
                   <button
                     onClick={handleLoadMore}
-                    className="group inline-flex items-center gap-2.5 font-cinzel text-[11px] tracking-widest uppercase px-8 py-3.5 rounded-full transition-all duration-300"
+                    className="group inline-flex items-center gap-2.5 font-cinzel text-[11px] tracking-widest uppercase px-8 py-3.5 rounded-full transition-all duration-300 cursor-pointer"
                     style={{
                       background: "transparent",
                       border: "1.5px solid var(--rj-emerald)",
@@ -882,7 +882,7 @@ export default function ProductGrid({
                   >
                     <ArrowDown
                       size={13}
-                      className="transition-transform duration-300 group-hover:translate-y-0.5"
+                      className="transition-transform duration-300 group-hover:translate-y-0.5 cursor-pointer"
                     />
                     Load {remaining} More Product{remaining !== 1 ? "s" : ""}
                   </button>

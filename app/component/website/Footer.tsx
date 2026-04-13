@@ -142,7 +142,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           {/* Brand column */}
           <div className="lg:col-span-4">
-            <Link href="/" className="block mb-6">
+            {/* <Link href="/" className="block mb-6">
               <span className="font-cinzel font-black text-white text-2xl tracking-[0.3em]">
                 REHNOOR
               </span>
@@ -150,6 +150,21 @@ export default function Footer() {
               <span className="font-cinzel text-[var(--rj-gold)] text-[9px] tracking-[0.4em]">
                 JEWELS
               </span>
+            </Link> */}
+
+            <Link
+              href="/"
+              className="flex-shrink-0 flex items-center"
+              style={{ cursor: "pointer" }}
+            >
+              <Image
+                src="/rehnoor-logo.jpeg" // 👈 from public folder
+                alt="Rehnoor Jewels logo image"
+                width={140} // adjust based on your logo
+                height={40}
+                priority
+                className="object-contain"
+              />
             </Link>
 
             <p className="text-white/60 text-sm leading-relaxed mb-6 max-w-sm">

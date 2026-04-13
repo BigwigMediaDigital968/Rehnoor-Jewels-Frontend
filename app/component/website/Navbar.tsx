@@ -17,19 +17,6 @@ import {
 import { navItems, type NavItem, type NavCategory } from "@/app/nav-data";
 import { useCartStore, useWishlistStore } from "@/app/store/cartStore";
 
-// ─────────────────────────────────────────────────────────────────
-// ICON BUTTON WITH LIVE BADGE
-// ─────────────────────────────────────────────────────────────────
-// WHY mounted guard:
-//   Zustand `persist` reads localStorage only on the client.
-//   The server always renders count=0.
-//   If we render the badge during SSR it won't be in the server HTML,
-//   but it WILL be on the client → React throws a hydration mismatch.
-//   Solution: suppress the badge entirely until after first client
-//   paint (mounted=true). The badge then springs in smoothly.
-//   We also keep aria-label static ("Cart" not "Cart (1)") so the
-//   attribute is identical on server and client before mount.
-// ─────────────────────────────────────────────────────────────────
 function IconWithBadge({
   href,
   icon,
@@ -188,12 +175,16 @@ function MegaMenuPanel({
                 <p className="font-cormorant text-white text-lg leading-tight">
                   {item.categories.find((c) => c.featuredImage)?.featuredLabel}
                 </p>
-                <button
+                <Link
+                  href={
+                    item.categories.find((c) => c.featuredImage)
+                      ?.featuredhref || "#"
+                  }
                   onClick={onClose}
                   className="mt-3 btn-outline text-xs py-2 px-4"
                 >
                   Shop Now
-                </button>
+                </Link>
               </div>
             </div>
           )}
@@ -236,17 +227,25 @@ function MobileMenu({
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
-            className="fixed left-0 top-0 bottom-0 w-[85vw] max-w-sm bg-white z-[99] overflow-y-auto flex flex-col"
+            className="fixed left-0 top-0 bottom-0 w-[85vw] max-w-sm bg-white z-105 overflow-y-auto flex flex-col"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-5 border-b border-[var(--rj-bone)]">
               <div>
-                <p className="font-cinzel font-bold text-[var(--rj-emerald)] text-lg tracking-widest">
+                {/* <p className="font-cinzel font-bold text-[var(--rj-emerald)] text-lg tracking-widest">
                   REHNOOR
                 </p>
                 <p className="text-[var(--rj-gold)] font-cinzel text-[9px] tracking-[0.3em] uppercase mt-0.5">
                   Gold Reimagined
-                </p>
+                </p> */}
+                <Image
+                  src="/logo-transparent.png" // 👈 from public folder
+                  alt="Rehnoor Jewels logo image"
+                  width={70} // adjust based on your logo
+                  height={40}
+                  priority
+                  className="object-contain"
+                />
               </div>
               <button
                 onClick={onClose}
@@ -502,14 +501,14 @@ export default function Navbar() {
     <>
       <header
         ref={navRef}
-        className={`sticky top-0 z-[100] transition-all duration-500 ${
+        className={`sticky top-0 z-100 transition-all duration-500 ${
           scrolled
             ? "bg-white/95 backdrop-blur-md shadow-[0_2px_30px_rgba(0,0,0,0.08)]"
             : "bg-white"
         }`}
       >
         <nav className="container-rj">
-          <div className="flex items-center justify-between h-[72px] gap-4 sm:gap-6">
+          <div className="flex items-center justify-between h-[82px] gap-4 sm:gap-6">
             {/* Mobile hamburger */}
             <button
               onClick={() => setMobileOpen(true)}
@@ -521,7 +520,7 @@ export default function Navbar() {
             </button>
 
             {/* Logo */}
-            <Link
+            {/* <Link
               href="/"
               className="flex-shrink-0 flex flex-col items-start lg:items-center"
               style={{ cursor: "pointer" }}
@@ -535,6 +534,20 @@ export default function Navbar() {
               >
                 JEWELS
               </span>
+            </Link> */}
+            <Link
+              href="/"
+              className="flex-shrink-0 flex items-center"
+              style={{ cursor: "pointer" }}
+            >
+              <Image
+                src="/logo-transparent.png" // 👈 from public folder
+                alt="Rehnoor Jewels logo image"
+                width={70} // adjust based on your logo
+                height={40}
+                priority
+                className="object-contain"
+              />
             </Link>
 
             {/* Desktop nav */}
@@ -625,14 +638,14 @@ export default function Navbar() {
               />
 
               {/* Account */}
-              <Link
+              {/* <Link
                 href="/account"
                 className="hidden sm:block p-2 hover:text-[var(--rj-gold)] transition-colors duration-300"
                 aria-label="Account"
                 style={{ cursor: "pointer" }}
               >
                 <User size={20} />
-              </Link>
+              </Link> */}
 
               {/* Cart — always visible including mobile */}
               <IconWithBadge

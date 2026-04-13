@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
@@ -19,272 +19,6 @@ import {
 } from "lucide-react";
 import type { Product } from "../../../types/Product.types";
 import { useCartStore, useWishlistStore } from "@/app/store/cartStore";
-import { useCollectionProducts } from "@/app/lib/hooks/useCollectionProducts";
-
-// ─────────────────────────────────────────────────────────────────
-// SAMPLE DATA — replace with API fetch by collectionId
-// ─────────────────────────────────────────────────────────────────
-const sampleProducts: Product[] = [
-  {
-    id: "nawabi-22kt",
-    name: "Nawabi Chain",
-    subtitle: "22kt · 18 inch",
-    price: "₹8,999",
-    originalPrice: "₹10,499",
-    tag: "Bestseller",
-    rating: 5,
-    reviewCount: 248,
-    category: "Chains",
-    href: "/products/nawabi-chain-22kt",
-    images: [
-      {
-        src: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=500&q=80",
-        alt: "Nawabi Chain",
-      },
-    ],
-    sizes: [
-      { label: '16"', available: true },
-      { label: '18"', available: true },
-      { label: '20"', available: true },
-    ],
-  },
-  {
-    id: "cuban-22kt",
-    name: "Cuban Link Chain",
-    subtitle: "22kt · 20 inch",
-    price: "₹11,299",
-    originalPrice: "₹13,500",
-    tag: "Trending",
-    rating: 5,
-    reviewCount: 134,
-    category: "Chains",
-    href: "/products/cuban-link-chain",
-    images: [
-      {
-        src: "https://images.unsplash.com/photo-1602173574767-37ac01994b2a?w=500&q=80",
-        alt: "Cuban Chain",
-      },
-    ],
-    sizes: [
-      { label: '18"', available: true },
-      { label: '20"', available: true },
-    ],
-  },
-  {
-    id: "rope-22kt",
-    name: "Rope Chain",
-    subtitle: "22kt · 22 inch",
-    price: "₹7,499",
-    originalPrice: "₹8,800",
-    tag: "New",
-    rating: 4,
-    reviewCount: 67,
-    category: "Chains",
-    href: "/products/rope-chain-gold",
-    images: [
-      {
-        src: "https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?w=500&q=80",
-        alt: "Rope Chain",
-      },
-    ],
-    sizes: [
-      { label: '18"', available: true },
-      { label: '22"', available: true },
-    ],
-  },
-  {
-    id: "signet-22kt",
-    name: "Signet Ring",
-    subtitle: "22kt · Men's",
-    price: "₹5,299",
-    originalPrice: "₹6,200",
-    tag: "Popular",
-    rating: 5,
-    reviewCount: 312,
-    category: "Rings",
-    href: "/products/signet-ring-gold",
-    images: [
-      {
-        src: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=500&q=80",
-        alt: "Signet Ring",
-      },
-    ],
-    sizes: [
-      { label: "18", available: true },
-      { label: "20", available: true },
-      { label: "22", available: true },
-    ],
-  },
-  {
-    id: "band-22kt",
-    name: "Classic Band Ring",
-    subtitle: "22kt · Plain",
-    price: "₹3,499",
-    tag: "Bestseller",
-    rating: 4,
-    reviewCount: 445,
-    category: "Rings",
-    href: "/products/band-ring-plain",
-    images: [
-      {
-        src: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=500&q=80",
-        alt: "Band Ring",
-      },
-    ],
-    sizes: [
-      { label: "18", available: true },
-      { label: "20", available: true },
-    ],
-  },
-  {
-    id: "royal-kada",
-    name: "Royal Kada",
-    subtitle: "22kt · Adjustable",
-    price: "₹12,499",
-    originalPrice: "₹14,999",
-    tag: "New",
-    rating: 5,
-    reviewCount: 189,
-    category: "Kadas",
-    href: "/products/royal-kada-heavy",
-    images: [
-      {
-        src: "https://images.unsplash.com/photo-1720528347642-ba00bbf6794d?w=500&q=80",
-        alt: "Royal Kada",
-      },
-    ],
-    sizes: [
-      { label: "S", available: true },
-      { label: "M", available: true },
-      { label: "L", available: true },
-    ],
-  },
-  {
-    id: "link-bracelet",
-    name: "Link Bracelet",
-    subtitle: "22kt · 8 inch",
-    price: "₹7,199",
-    originalPrice: "₹8,500",
-    tag: "Limited",
-    rating: 5,
-    reviewCount: 98,
-    category: "Bracelets",
-    href: "/products/link-bracelet-gold",
-    images: [
-      {
-        src: "https://images.unsplash.com/photo-1574169208507-84376144848b?w=500&q=80",
-        alt: "Link Bracelet",
-      },
-    ],
-    sizes: [
-      { label: '7"', available: true },
-      { label: '8"', available: true },
-    ],
-  },
-  {
-    id: "sol-pendant",
-    name: "Sol Pendant",
-    subtitle: "22kt · Unisex",
-    price: "₹4,499",
-    originalPrice: "₹5,200",
-    tag: "New",
-    rating: 5,
-    reviewCount: 143,
-    category: "Pendants",
-    href: "/products/sol-pendant-gold",
-    images: [
-      {
-        src: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&q=80",
-        alt: "Sol Pendant",
-      },
-    ],
-    sizes: [{ label: "Free", available: true }],
-  },
-  {
-    id: "moghul-kada",
-    name: "Moghul Kada",
-    subtitle: "22kt · Carved",
-    price: "₹15,999",
-    originalPrice: "₹18,500",
-    tag: "Exclusive",
-    rating: 5,
-    reviewCount: 56,
-    category: "Kadas",
-    href: "/products/moghul-kada-carved",
-    images: [
-      {
-        src: "https://images.unsplash.com/photo-1613053341085-db794820ce43?w=500&q=80",
-        alt: "Moghul Kada",
-      },
-    ],
-    sizes: [
-      { label: "S", available: true },
-      { label: "M", available: true },
-    ],
-  },
-  {
-    id: "cord-bracelet",
-    name: "Cord Bracelet",
-    subtitle: "22kt · Minimal",
-    price: "₹3,899",
-    tag: "Bestseller",
-    rating: 4,
-    reviewCount: 567,
-    category: "Bracelets",
-    href: "/products/cord-bracelet-gold",
-    images: [
-      {
-        src: "https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?w=500&q=80",
-        alt: "Cord Bracelet",
-      },
-    ],
-    sizes: [
-      { label: '7"', available: true },
-      { label: '8"', available: true },
-    ],
-  },
-  {
-    id: "om-pendant",
-    name: "Om Pendant",
-    subtitle: "22kt · Sacred",
-    price: "₹5,899",
-    originalPrice: "₹6,499",
-    tag: "Popular",
-    rating: 5,
-    reviewCount: 278,
-    category: "Pendants",
-    href: "/products/om-pendant-22kt",
-    images: [
-      {
-        src: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=500&q=80",
-        alt: "Om Pendant",
-      },
-    ],
-    sizes: [{ label: "Free", available: true }],
-  },
-  {
-    id: "cuban-22kt-2",
-    name: "Cuban Chain Pro",
-    subtitle: "22kt · 24 inch",
-    price: "₹13,499",
-    originalPrice: "₹15,000",
-    tag: "New",
-    rating: 4,
-    reviewCount: 34,
-    category: "Chains",
-    href: "/products/cuban-link-chain-2",
-    images: [
-      {
-        src: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=500&q=80",
-        alt: "Cuban Pro",
-      },
-    ],
-    sizes: [
-      { label: '20"', available: true },
-      { label: '24"', available: true },
-    ],
-  },
-];
 
 const TAG_STYLES: Record<string, { bg: string; color: string }> = {
   Bestseller: { bg: "var(--rj-gold)", color: "#000" },
@@ -303,7 +37,8 @@ const SORT_OPTIONS = [
   { value: "newest", label: "New Arrivals" },
 ];
 
-function parsePrice(s: string) {
+function parsePrice(s: string | number): number {
+  if (typeof s === "number") return s;
   return parseInt(s.replace(/[^\d]/g, ""), 10);
 }
 
@@ -847,27 +582,7 @@ const ALL_TAGS = [
   "Exclusive",
   "Trending",
 ];
-const ALL_SIZES = [
-  '14"',
-  '16"',
-  '18"',
-  '20"',
-  '22"',
-  '24"',
-  "S",
-  "M",
-  "L",
-  "XL",
-  "Free",
-  '7"',
-  '8"',
-  '9"',
-  "18",
-  "20",
-  "22",
-  "24",
-  "26",
-];
+
 const PRICE_MAX = 20000;
 
 function Sidebar({
@@ -1162,14 +877,18 @@ function Sidebar({
 // MAIN GRID SECTION
 // ─────────────────────────────────────────────────────────────────
 export default function CollectionProductGrid({
-  collectionSlug, // ← replaces the static `products` prop
+  collectionSlug,
+  products,
+  loading,
+  error,
+  // reload,
 }: {
   collectionSlug: string;
+  products: Product[];
+  loading: boolean;
+  error: string | null;
+  // reload: () => void;
 }) {
-  const { products, loading, error, reload } = useCollectionProducts({
-    collectionSlug,
-  });
-
   console.log(products);
 
   // Derive usedSizes from live data (passed down to Sidebar)
@@ -1193,7 +912,10 @@ export default function CollectionProductGrid({
   const [showSort, setShowSort] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const [visibleCount, setVisibleCount] = useState(9);
+  // const [visibleCount, setVisibleCount] = useState(9);
+  const INITIAL_COUNT = 9;
+  const PAGE_STEP = 3;
+  const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);
 
   const activeFilterCount =
     filters.tags.length +
@@ -1239,6 +961,10 @@ export default function CollectionProductGrid({
     return list;
   }, [products, query, filters, sortBy]);
 
+  useEffect(() => {
+    setVisibleCount(INITIAL_COUNT);
+  }, [query, filters, sortBy]);
+
   const visible = results.slice(0, visibleCount);
   const hasMore = visibleCount < results.length;
 
@@ -1269,7 +995,7 @@ export default function CollectionProductGrid({
               {error}
             </p>
             <button
-              onClick={reload}
+              // onClick={reload}
               className="flex items-center gap-1 font-cinzel text-[9px] tracking-widest uppercase text-red-500"
               style={{ cursor: "pointer" }}
             >
@@ -1350,6 +1076,110 @@ export default function CollectionProductGrid({
                   </AnimatePresence>
                 </motion.div>
                 {/* Load more / end — unchanged */}
+
+                {/* ── Pagination ── */}
+                {hasMore ? (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-10 flex flex-col items-center gap-3"
+                  >
+                    {/* Progress bar */}
+                    <div className="w-full max-w-xs flex flex-col items-center gap-2">
+                      <div
+                        className="w-full h-[3px] rounded-full overflow-hidden"
+                        style={{ background: "var(--rj-bone)" }}
+                      >
+                        <motion.div
+                          className="h-full rounded-full"
+                          style={{ background: "var(--rj-gold)" }}
+                          initial={{ width: 0 }}
+                          animate={{
+                            width: `${Math.min((visibleCount / results.length) * 100, 100)}%`,
+                          }}
+                          transition={{ duration: 0.5, ease: "easeOut" }}
+                        />
+                      </div>
+                      <p
+                        className="font-cinzel text-[9px] tracking-widest"
+                        style={{ color: "var(--rj-ash)" }}
+                      >
+                        Showing {Math.min(visibleCount, results.length)} of{" "}
+                        {results.length} products
+                      </p>
+                    </div>
+
+                    {/* Explore More button */}
+                    <motion.button
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
+                      onClick={() => setVisibleCount((c) => c + PAGE_STEP)}
+                      className="group flex items-center gap-3 px-8 py-3.5 rounded-full font-cinzel text-[10px] tracking-[0.25em] uppercase font-bold transition-all duration-300 cursor-pointer"
+                      style={{
+                        background: "transparent",
+                        border: "1.5px solid var(--rj-emerald)",
+                        color: "var(--rj-emerald)",
+                      }}
+                      onMouseEnter={(e) => {
+                        (
+                          e.currentTarget as HTMLButtonElement
+                        ).style.background = "var(--rj-emerald)";
+                        (e.currentTarget as HTMLButtonElement).style.color =
+                          "var(--rj-gold)";
+                      }}
+                      onMouseLeave={(e) => {
+                        (
+                          e.currentTarget as HTMLButtonElement
+                        ).style.background = "transparent";
+                        (e.currentTarget as HTMLButtonElement).style.color =
+                          "var(--rj-emerald)";
+                      }}
+                    >
+                      <span>Explore More</span>
+                      <motion.span
+                        animate={{ y: [0, 3, 0] }}
+                        transition={{
+                          duration: 1.4,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }}
+                        className="text-xs"
+                      >
+                        ↓
+                      </motion.span>
+                      <span
+                        className="font-cinzel text-[8px] tracking-widest px-2 py-0.5 rounded-full"
+                        // style={{
+                        //   background: "rgba(0,55,32,0.08)",
+                        //   color: "var(--rj-emerald)",
+                        // }}
+                      >
+                        +{Math.min(PAGE_STEP, results.length - visibleCount)}{" "}
+                        items
+                      </span>
+                    </motion.button>
+                  </motion.div>
+                ) : (
+                  /* End of collection */
+                  results.length > INITIAL_COUNT && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="mt-10 flex flex-col items-center gap-3"
+                    >
+                      <div
+                        className="w-full max-w-xs h-[3px] rounded-full"
+                        style={{ background: "var(--rj-gold)" }}
+                      />
+                      <p
+                        className="font-cinzel text-[9px] tracking-[0.3em] uppercase"
+                        style={{ color: "var(--rj-ash)" }}
+                      >
+                        ✦ All {results.length} products shown ✦
+                      </p>
+                    </motion.div>
+                  )
+                )}
               </>
             )}
           </div>

@@ -3,35 +3,6 @@
 
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
-// export interface ApiProduct {
-//   weight: string;
-//   badge: string | undefined;
-//   karat: "22kt" | "18kt" | "14kt" | "24kt" | undefined;
-//   description: string;
-//   originalPriceFormatted: string | undefined;
-//   priceFormatted: string;
-//   _id: string;
-//   id: string; // virtual or alias — add to your mongoose schema if needed
-//   name: string;
-//   subtitle: string;
-//   slug: string;
-//   price: number; // "₹8,999"  — formatted on the backend, or format here
-//   priceNum: number; // raw number for sorting/filtering
-//   originalPrice?: string;
-//   tag?: string;
-//   rating?: number;
-//   reviewCount?: number;
-//   category: string;
-//   collection: string; // slug of the parent collection
-//   href: string; // "/products/<slug>"
-//   images: { src: string; alt: string }[];
-//   sizeChartImage: { src: string; alt: string };
-//   offerBannerImage: { src: string; alt: string };
-//   sizes: { label: string; available: boolean }[];
-//   isActive: boolean;
-//   createdAt: string;
-// }
-
 export interface ApiProduct {
   id: any;
   _id: string;

@@ -4,7 +4,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { fetchPublicProducts, type ApiProduct } from "../api/products";
+import { ApiProduct, fetchPublicProducts } from "../api/productLive";
 
 export interface UseCollectionProductsOptions {
   collectionSlug: string;
@@ -47,30 +47,10 @@ export function useCollectionProducts({
     load();
   }, [load]);
 
+  console.log(data);
+
   // ── Normalise ApiProduct → Product shape the grid expects ───────
   // This is a thin adapter so CollectionProductGrid keeps its Product type
-  // const products = useMemo(
-  //   () =>
-  //     data.map((p) => ({
-  //       id: p._id,
-  //       name: p.name,
-  //       subtitle: p.subtitle,
-
-  //       // ✅ FIX HERE
-  //       price: p.priceFormatted ?? `₹${p.price}`,
-  //       priceNum: p.price ?? 0,
-
-  //       originalPrice: p.originalPriceFormatted ?? p.originalPrice,
-  //       tag: p.tag,
-  //       rating: p.rating,
-  //       reviewCount: p.reviewCount,
-  //       category: p.category,
-  //       href: p.href ?? `/products/${p.slug}`,
-  //       images: p.images,
-  //       sizes: p.sizes,
-  //     })),
-  //   [data],
-  // );
 
   const products = useMemo(
     () =>
