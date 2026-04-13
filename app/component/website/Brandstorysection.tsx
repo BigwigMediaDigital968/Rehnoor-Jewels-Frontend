@@ -139,14 +139,14 @@ export default function BrandStorySection() {
             <p className="text-white/70 leading-relaxed mb-5">
               Rehnoor Jewels was born from a simple belief: that men deserve
               jewellery as bold and beautiful as their ambitions. Founded in
-              Jaipur&apos;s ancient jewellery bazaars, we blend the finest 22kt
-              gold with modern design sensibility.
+              Jaipur&apos;s ancient jewellery bazaars, we blend the finest gold
+              with modern design sensibility.
             </p>
 
             <p className="text-white/70 leading-relaxed mb-8">
               Every piece in our collection carries the weight of tradition and
               the lightness of modern craft. From the artisan&apos;s hands to
-              yours — with love, precision, and gold.
+              yours with love, precision, and gold.
             </p>
 
             <Link

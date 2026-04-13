@@ -816,9 +816,9 @@ function ProductCard({ product }: { product: ApiProduct }) {
           className="block p-4"
           style={{ cursor: "pointer" }}
         >
-          <p className="label-accent text-[var(--rj-ash)] text-[9px] mb-1">
+          {/* <p className="label-accent text-[var(--rj-ash)] text-[9px] mb-1">
             {product.purity} · {product.weightGrams}
-          </p>
+          </p> */}
           <h3 className="font-cormorant text-[var(--rj-charcoal)] text-lg leading-tight mb-2 group-hover:text-[var(--rj-emerald)] transition-colors duration-300">
             {product.name}
           </h3>
@@ -984,13 +984,14 @@ export default function BestsellerSection() {
         {/* Heading */}
         <div className="text-center mb-12">
           <p className="label-accent text-[var(--rj-emerald)] mb-3">
-            ✦ Bestsellers
+            ✦ OUR Gems
           </p>
           <h2 className="heading-lg text-[var(--rj-charcoal)] mb-4">
             The Gold Standard
           </h2>
           <p className="text-[var(--rj-ash)] max-w-md mx-auto">
-            Our most-loved pieces — loved by thousands, crafted for the bold.
+            Discover our complete range of timeless designs - crafted to suit
+            every style, occasion, and statement.
           </p>
           <div className="divider-gold-center mt-6" />
           <FloatingIndicators />
@@ -1055,7 +1056,7 @@ export default function BestsellerSection() {
               transition={{ duration: 0.3 }}
               className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6"
             >
-              {filtered.map((product) => (
+              {filtered?.slice(0, 8)?.map((product) => (
                 <ProductCard key={product._id} product={product} />
               ))}
             </motion.div>

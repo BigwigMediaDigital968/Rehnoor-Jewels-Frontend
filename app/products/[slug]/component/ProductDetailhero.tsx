@@ -16,12 +16,10 @@ import {
   Shield,
   RefreshCw,
   Truck,
-  Award,
   ZoomIn,
   ChevronRight as Chevron,
   Ruler,
   X,
-  Tag,
   Info,
 } from "lucide-react";
 import type { Product } from "../../../types/Product.types";
@@ -52,6 +50,10 @@ const TRUST = [
 // ─────────────────────────────────────────────────────────────────
 interface Props {
   product: ExtendedProduct;
+  /** e.g. "chains-for-men"  — used for breadcrumb href */
+  collectionSlug?: string;
+  /** e.g. "Chains for Men" — used for breadcrumb label */
+  collectionName?: string;
   onAddToCart?: (size: string, qty: number) => void;
   onBuyNow?: (size: string, qty: number) => void;
 }
@@ -144,7 +146,6 @@ function SizeChartModal({
           style={{ background: "#fff", maxHeight: "90vh" }}
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Modal Header */}
           <div
             className="flex items-center justify-between px-6 py-4"
             style={{
@@ -179,7 +180,6 @@ function SizeChartModal({
             </button>
           </div>
 
-          {/* Chart Image */}
           <div
             className="overflow-y-auto"
             style={{ maxHeight: "calc(90vh - 72px)" }}
@@ -196,7 +196,6 @@ function SizeChartModal({
                 />
               </div>
             ) : (
-              // Fallback size guide when no image
               <div className="p-6">
                 <p
                   className="font-cinzel text-[10px] tracking-widest uppercase font-bold mb-4"
@@ -296,7 +295,7 @@ function OfferBanner({ imageUrl }: { imageUrl: string }) {
 }
 
 // ─────────────────────────────────────────────────────────────────
-// SHORT DESCRIPTION BLOCK
+// SHORT DESCRIPTION / OUR PROMISE BLOCK
 // ─────────────────────────────────────────────────────────────────
 function ShortDescriptionBlock({ text }: { text: string }) {
   if (!text) return null;
@@ -346,10 +345,68 @@ function ShortDescriptionBlock({ text }: { text: string }) {
 }
 
 // ─────────────────────────────────────────────────────────────────
+// BREADCRUMB
+// ─────────────────────────────────────────────────────────────────
+function Breadcrumb({
+  product,
+  collectionSlug,
+  collectionName,
+}: {
+  product: ExtendedProduct;
+  collectionSlug: string;
+  collectionName: string;
+}) {
+  const crumbs = [
+    { label: "Home", href: "/" },
+    { label: "Products", href: "/products" },
+    { label: collectionName, href: `/collections/${collectionSlug}` },
+    { label: product.name, href: null }, // current page — no link
+  ];
+
+  return (
+    <nav
+      className="flex items-center gap-1.5 mb-8 flex-wrap"
+      aria-label="Breadcrumb"
+    >
+      {crumbs.map((crumb, i) => (
+        <span key={i} className="flex items-center gap-1.5 min-w-0">
+          {crumb.href ? (
+            <>
+              <Link
+                href={crumb.href}
+                className="font-cinzel text-[9px] tracking-widest uppercase transition-opacity hover:opacity-60 whitespace-nowrap"
+                style={{ color: "var(--rj-ash)" }}
+              >
+                {crumb.label}
+              </Link>
+              <Chevron
+                size={10}
+                style={{ color: "var(--rj-bone)", flexShrink: 0 }}
+              />
+            </>
+          ) : (
+            // Current page — truncate long product names
+            <span
+              className="font-cinzel text-[9px] tracking-widest uppercase truncate max-w-[160px] sm:max-w-xs"
+              style={{ color: "var(--rj-emerald)" }}
+              title={crumb.label}
+            >
+              {crumb.label}
+            </span>
+          )}
+        </span>
+      ))}
+    </nav>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────
 // MAIN COMPONENT
 // ─────────────────────────────────────────────────────────────────
 export default function ProductDetailHero({
   product,
+  collectionSlug = "",
+  collectionName = "",
   onAddToCart,
   onBuyNow,
 }: Props) {
@@ -362,7 +419,6 @@ export default function ProductDetailHero({
   const [sizeError, setSizeError] = useState(false);
   const [sizeChartOpen, setSizeChartOpen] = useState(false);
 
-  // ── Wishlist (Zustand) ──────────────────────────────────────────
   const { toggleItem, isWishlisted } = useWishlistStore();
   const wishlisted = isWishlisted(product.id);
 
@@ -431,11 +487,16 @@ export default function ProductDetailHero({
       )
     : 0;
 
-  // console.log(product);
+  // Derive a display name for the collection breadcrumb
+  // Prefer the explicit prop; fall back to product.category
+  const breadcrumbCollectionSlug =
+    collectionSlug ||
+    (product.category ?? "").toLowerCase().replace(/\s+/g, "-");
+  const breadcrumbCollectionName =
+    collectionName || product.category || "Collection";
 
   return (
     <>
-      {/* ── Modals ── */}
       {zoomed && (
         <ZoomModal
           src={images[imgIdx].src}
@@ -455,55 +516,17 @@ export default function ProductDetailHero({
         style={{ background: "var(--rj-ivory)" }}
       >
         <div className="container-rj">
-          {/* ── Breadcrumb ── */}
-          <nav
-            className="flex items-center gap-1.5 mb-8 flex-wrap"
-            aria-label="Breadcrumb"
-          >
-            {[
-              "Home",
-              "Products",
-              product.category ?? "Collection",
-              product.name,
-            ].map((crumb, i, arr) => (
-              <span key={crumb} className="flex items-center gap-1.5">
-                {i < arr.length - 1 ? (
-                  <>
-                    <Link
-                      href={
-                        i === 0
-                          ? "/"
-                          : i === 1
-                            ? "/products"
-                            : `/collections/${(product.category ?? "").toLowerCase()}`
-                      }
-                      className="font-cinzel text-[9px] tracking-widest uppercase transition-opacity hover:opacity-60"
-                      style={{ color: "var(--rj-ash)", cursor: "pointer" }}
-                    >
-                      {crumb}
-                    </Link>
-                    <Chevron
-                      size={10}
-                      style={{ color: "var(--rj-bone)", flexShrink: 0 }}
-                    />
-                  </>
-                ) : (
-                  <span
-                    className="font-cinzel text-[9px] tracking-widest uppercase"
-                    style={{ color: "var(--rj-emerald)" }}
-                  >
-                    {crumb}
-                  </span>
-                )}
-              </span>
-            ))}
-          </nav>
+          {/* ── Breadcrumb (now correct) ── */}
+          <Breadcrumb
+            product={product}
+            collectionSlug={breadcrumbCollectionSlug}
+            collectionName={breadcrumbCollectionName}
+          />
 
           {/* ── Main Grid ── */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 xl:gap-16 items-start">
             {/* ══ LEFT: Image Gallery ══ */}
             <div className="flex flex-col gap-3 lg:sticky lg:top-24">
-              {/* Main image */}
               <div
                 className="relative overflow-hidden rounded-2xl group"
                 style={{
@@ -533,7 +556,6 @@ export default function ProductDetailHero({
                   </motion.div>
                 </AnimatePresence>
 
-                {/* Zoom hint */}
                 <div className="absolute bottom-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <div
                     className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full font-cinzel text-[9px] tracking-wider"
@@ -543,7 +565,6 @@ export default function ProductDetailHero({
                   </div>
                 </div>
 
-                {/* Tag badge */}
                 {product.tag && (
                   <div className="absolute top-3 left-3 z-10 pointer-events-none">
                     <span
@@ -555,7 +576,6 @@ export default function ProductDetailHero({
                   </div>
                 )}
 
-                {/* ── Wishlist button (now wired to Zustand) ── */}
                 <button
                   onClick={handleToggleWishlist}
                   className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
@@ -583,7 +603,6 @@ export default function ProductDetailHero({
                   />
                 </button>
 
-                {/* Arrows */}
                 {images.length > 1 && (
                   <>
                     <button
@@ -620,7 +639,6 @@ export default function ProductDetailHero({
                 )}
               </div>
 
-              {/* Thumbnail strip */}
               {images.length > 1 && (
                 <div className="flex gap-2 overflow-x-auto no-scrollbar">
                   {images.map((img, i) => (
@@ -652,11 +670,11 @@ export default function ProductDetailHero({
 
             {/* ══ RIGHT: Product Details ══ */}
             <div className="flex flex-col">
-              {/* Category + Purity pills */}
+              {/* Category pill — now links to the correct collection slug */}
               <div className="flex items-center gap-3 mb-3">
                 {product.category && (
                   <Link
-                    href={`/collections/${product.category.toLowerCase()}`}
+                    href={`/collections/${breadcrumbCollectionSlug}`}
                     className="font-cinzel text-[9px] tracking-widest uppercase px-2.5 py-1 rounded-full transition-opacity hover:opacity-70"
                     style={{
                       background: "rgba(0,55,32,0.08)",
@@ -664,10 +682,10 @@ export default function ProductDetailHero({
                       cursor: "pointer",
                     }}
                   >
-                    {product.category}
+                    {breadcrumbCollectionName}
                   </Link>
                 )}
-                {product.purity && (
+                {(product as any).purity && (
                   <span
                     className="font-cinzel text-[9px] tracking-widest uppercase px-2.5 py-1 rounded-full"
                     style={{
@@ -675,12 +693,11 @@ export default function ProductDetailHero({
                       color: "#a07800",
                     }}
                   >
-                    {product.purity}
+                    {(product as any).purity}
                   </span>
                 )}
               </div>
 
-              {/* Name */}
               <h1
                 className="font-cormorant font-light leading-tight mb-2"
                 style={{
@@ -692,7 +709,6 @@ export default function ProductDetailHero({
                 {product.name}
               </h1>
 
-              {/* Subtitle */}
               <p
                 className="mb-4"
                 style={{
@@ -704,7 +720,6 @@ export default function ProductDetailHero({
                 {product.subtitle}
               </p>
 
-              {/* Rating row */}
               {product.rating && product.rating > 0 && (
                 <div
                   className="flex items-center gap-3 mb-5 pb-5"
@@ -746,7 +761,6 @@ export default function ProductDetailHero({
                 </div>
               )}
 
-              {/* Price */}
               <div className="flex items-baseline gap-3 flex-wrap mb-6">
                 <span
                   className="font-cinzel font-bold"
@@ -772,10 +786,8 @@ export default function ProductDetailHero({
                 )}
               </div>
 
-              {/* ── Offer Banner (below Buy Now) ── */}
               <OfferBanner imageUrl={product.offerBannerImage || ""} />
 
-              {/* ── Size Picker ── */}
               {product.sizes && product.sizes.length > 0 && (
                 <div className="mb-6">
                   <div className="flex items-center justify-between mb-3">
@@ -789,14 +801,12 @@ export default function ProductDetailHero({
                         ? "Please select a size"
                         : `Size${selectedSize ? `: ${selectedSize}` : ""}`}
                     </p>
-                    {/* ── Size Guide button — opens popup ── */}
                     <button
                       onClick={() => setSizeChartOpen(true)}
                       className="flex items-center gap-1.5 font-cinzel text-[9px] tracking-wider uppercase transition-all hover:opacity-70"
                       style={{ color: "var(--rj-emerald)", cursor: "pointer" }}
                     >
-                      <Ruler size={11} />
-                      Size Guide
+                      <Ruler size={11} /> Size Guide
                     </button>
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -847,9 +857,7 @@ export default function ProductDetailHero({
                 </div>
               )}
 
-              {/* ── Qty + Add to Cart + Share ── */}
               <div className="flex items-center gap-3 mb-4">
-                {/* Qty stepper */}
                 <div
                   className="flex items-center rounded-full flex-shrink-0"
                   style={{ border: "1.5px solid var(--rj-bone)" }}
@@ -876,7 +884,6 @@ export default function ProductDetailHero({
                   </button>
                 </div>
 
-                {/* Add to Cart */}
                 <button
                   onClick={handleAddToCart}
                   className="flex-1 flex items-center justify-center gap-2 py-3 font-cinzel text-[11px] tracking-widest uppercase font-bold rounded-full transition-all duration-300 active:scale-95"
@@ -903,7 +910,6 @@ export default function ProductDetailHero({
                   )}
                 </button>
 
-                {/* Wishlist button (right of cart row) */}
                 <button
                   onClick={handleToggleWishlist}
                   className="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-200 hover:scale-110"
@@ -930,7 +936,6 @@ export default function ProductDetailHero({
                   />
                 </button>
 
-                {/* Share */}
                 <button
                   onClick={handleShare}
                   className="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-200 hover:scale-110"
@@ -948,7 +953,6 @@ export default function ProductDetailHero({
                 </button>
               </div>
 
-              {/* ── Buy Now ── */}
               <button
                 onClick={handleBuyNow}
                 className="w-full py-3 font-cinzel text-[11px] tracking-widest uppercase font-bold rounded-full transition-all duration-300 hover:opacity-90 active:scale-95 mb-6"
@@ -961,7 +965,6 @@ export default function ProductDetailHero({
                 Buy It Now
               </button>
 
-              {/* Description */}
               {product.description && (
                 <p
                   className="text-sm leading-relaxed mb-6"
@@ -974,12 +977,10 @@ export default function ProductDetailHero({
                 </p>
               )}
 
-              {/* ── Short Description / Our Promise (below offer banner) ── */}
               <ShortDescriptionBlock
                 text={product.ourPromise || product.shortDescription || ""}
               />
 
-              {/* ── Trust strip ── */}
               <div
                 className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6"
                 style={{ borderTop: "1px solid var(--rj-bone)" }}

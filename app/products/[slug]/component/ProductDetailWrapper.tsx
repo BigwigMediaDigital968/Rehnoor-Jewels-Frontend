@@ -9,6 +9,8 @@ import type { Product } from "../../../types/Product.types";
 
 interface Props {
   product: Product;
+  collectionSlug?: string;
+  collectionName?: string;
 }
 
 export default function ProductDetailWrapper({ product }: Props) {

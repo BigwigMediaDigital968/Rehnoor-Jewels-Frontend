@@ -8,44 +8,57 @@ import RelatedProducts from "./component/Relatedproducts";
 import {
   fetchProductBySlug,
   fetchAllProductSlugs,
-  type ApiProduct,
 } from "@/app/lib/api/productLive";
 import type { Product } from "../../types/Product.types";
 
 // ─────────────────────────────────────────────────────────────────
-// ADAPTER — ApiProduct → Product (what the existing client components expect)
+// HELPERS
 // ─────────────────────────────────────────────────────────────────
-function toProduct(p: ApiProduct): Product {
+function slugify(str: string): string {
+  return str.toLowerCase().trim().replace(/\s+/g, "-").replace(/-+/g, "-");
+}
+
+/** Handles populated object, plain string, or undefined */
+function extractCollection(collection: any, category?: string) {
+  if (collection && typeof collection === "object") {
+    return {
+      slug: collection.slug ?? slugify(collection.name ?? category ?? ""),
+      name: collection.name ?? collection.label ?? category ?? "Collection",
+    };
+  }
+  if (collection && typeof collection === "string" && collection.trim()) {
+    return { slug: slugify(collection), name: collection };
+  }
+  if (category) {
+    return { slug: slugify(category), name: category };
+  }
+  return { slug: "new-arrivals", name: "Collection" };
+}
+
+function toProduct(p: any): Product {
   return {
     id: p._id,
     name: p.name,
     subtitle: p.subtitle,
-
     price: p.priceFormatted ?? `₹${p.price.toLocaleString("en-IN")}`,
     originalPrice: p.originalPriceFormatted ?? undefined,
-
-    tag: p.tag as Product["tag"],
+    tag: p.tag,
     rating: p.rating,
     reviewCount: p.reviewCount,
     category: p.category,
-
     description: p.shortDescription || p.longDescription || "",
-
     href: `/products/${p.slug}`,
-
     images: p.images,
     sizes: p.sizes,
-
     offerBannerImage: p.offerBannerImage,
     sizeChartImage: p.sizeChartImage,
-
     ourPromise: p.ourPromise,
     specifications: p.specifications || [],
   };
 }
 
 // ─────────────────────────────────────────────────────────────────
-// STATIC PARAMS — pre-render known slugs at build time
+// STATIC PARAMS
 // ─────────────────────────────────────────────────────────────────
 export async function generateStaticParams() {
   const slugs = await fetchAllProductSlugs();
@@ -88,43 +101,44 @@ export default async function ProductDetailPage({
 
   let product: Product;
   let collectionSlug: string;
+  let collectionName: string;
   let rawProductId: string;
   let rawSlug: string;
 
   try {
     const res = await fetchProductBySlug(slug);
     if (!res.success || !res.data) return notFound();
+
     product = toProduct(res.data);
-    collectionSlug =
-      res.data.collection ?? (res.data.category ?? "chains").toLowerCase();
-    // Keep raw _id and slug for the reviews API
+
+    // collection is a populated object: { slug, name, _id, ... }
+    const col = extractCollection(res.data.collection, res.data.category);
+    collectionSlug = col.slug; // "chains-for-men"
+    collectionName = col.name; // "Chains for Men"
+
     rawProductId = res.data._id;
     rawSlug = res.data.slug;
   } catch {
     return notFound();
   }
 
-  console.log(product);
-
   return (
     <main>
-      {/* Hero — cart / wishlist logic lives inside the wrapper */}
-      <ProductDetailWrapper product={product} />
-
-      {/* Specs, details, etc. */}
+      <ProductDetailWrapper
+        product={product}
+        collectionSlug={collectionSlug}
+        collectionName={collectionName}
+      />
       <ProductTabs product={product} />
-
-      {/* ── Reviews — fully wired to live API ── */}
       <ProductReviews
         productId={rawProductId}
         productName={product.name}
         productSlug={rawSlug}
       />
-
-      {/* Related products from same collection */}
       <RelatedProducts
         collectionSlug={collectionSlug}
-        currentProductId={product.id}
+        currentProductId={rawSlug}
+        currentProductDbId={rawProductId}
       />
     </main>
   );

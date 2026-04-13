@@ -83,6 +83,7 @@ export interface Product {
    * Drives the category filter chips in ProductGrid.
    */
   category?: ProductCategory;
+  collection?: string | null;
 
   /**
    * Short paragraph shown in the Quick View modal and product page hero.
