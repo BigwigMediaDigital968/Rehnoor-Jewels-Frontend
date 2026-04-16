@@ -531,14 +531,14 @@ export default function Navbar() {
             </Link> */}
             <Link
               href="/"
-              className="flex-shrink-0 flex items-center"
+              className="flex-shrink-0 flex items-center pt-2"
               style={{ cursor: "pointer" }}
             >
               <Image
-                src="/logo-transparent.png" // 👈 from public folder
+                src="/rehnoor-nav-logo.png" // 👈 from public folder
                 alt="Rehnoor Jewels logo image"
-                width={70} // adjust based on your logo
-                height={40}
+                width={180} // adjust based on your logo
+                height={80}
                 priority
                 className="object-contain"
               />
