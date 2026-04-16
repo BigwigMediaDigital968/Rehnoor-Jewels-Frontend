@@ -82,10 +82,10 @@ export default function TestimonialsSection() {
   const active = testimonials[current];
 
   return (
-    <section className="section-padding bg-[var(--rj-ivory-dark)] overflow-hidden">
+    <section className="py-14 h-[90vh] bg-[var(--rj-ivory-dark)] overflow-hidden">
       <div className="container-rj">
         {/* Heading */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-8">
           <p className="label-accent text-[var(--rj-emerald)] mb-3">
             ✦ Customer Love
           </p>
@@ -96,7 +96,7 @@ export default function TestimonialsSection() {
         </div>
 
         {/* Main testimonial */}
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-4xl mx-auto">
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
               key={active.id}
@@ -105,7 +105,7 @@ export default function TestimonialsSection() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -direction * 60 }}
               transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
-              className="bg-white rounded-2xl p-8 lg:p-12 shadow-[var(--shadow-card)] relative"
+              className="bg-white rounded-2xl p-8 lg:p-10 shadow-[var(--shadow-card)] relative"
             >
               {/* Quote icon */}
               <div className="absolute top-8 right-8 opacity-10">
@@ -183,34 +183,6 @@ export default function TestimonialsSection() {
               </button>
             </div>
           </div>
-        </div>
-
-        {/* Trust numbers */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 pt-12 border-t border-[var(--rj-bone)]">
-          {[
-            {
-              value: "4.9",
-              label: "Average Rating",
-              sub: "Based on 2,400+ reviews",
-            },
-            {
-              value: "98%",
-              label: "Satisfaction Rate",
-              sub: "Would recommend us",
-            },
-            { value: "50K+", label: "Happy Customers", sub: "Across India" },
-            { value: "5★", label: "Google Rating", sub: "Verified reviews" },
-          ].map((item) => (
-            <div key={item.label} className="text-center">
-              <p className="font-[var(--font-cinzel)] text-[var(--rj-emerald)] text-3xl font-bold mb-1">
-                {item.value}
-              </p>
-              <p className="font-medium text-[var(--rj-charcoal)] text-sm">
-                {item.label}
-              </p>
-              <p className="text-[var(--rj-ash)] text-xs mt-0.5">{item.sub}</p>
-            </div>
-          ))}
         </div>
       </div>
     </section>

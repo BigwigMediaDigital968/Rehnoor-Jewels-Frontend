@@ -12,6 +12,7 @@ import {
   Mail,
   ArrowRight,
   Linkedin,
+  Loader2,
 } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
@@ -69,8 +70,8 @@ const socials = [
 
 const certifications = [
   // { label: "Certified ", icon: "⚜" },
-  { label: "ISO Certified", icon: "✓" },
-  { label: "GIA Partner", icon: "◈" },
+  // { label: "ISO Certified", icon: "✓" },
+  // { label: "GIA Partner", icon: "◈" },
   { label: "SSL Secured", icon: "🔒" },
 ];
 
@@ -85,13 +86,44 @@ const payments = [
 
 export default function Footer() {
   const [email, setEmail] = useState("");
-  const [subscribed, setSubscribed] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email) {
-      setSubscribed(true);
+
+    if (!email.includes("@")) {
+      setError("Please enter a valid email");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/newsletter/subscribe`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        },
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.message);
+
+      setSuccess("✦ You're on the list. Welcome to Rehnoor.");
       setEmail("");
+    } catch (err: any) {
+      setError(err.message || "Subscription failed");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -110,7 +142,7 @@ export default function Footer() {
               {
                 icon: "♾",
                 title: "Lifetime Buyback",
-                sub: "50% gold buyback guaranteed",
+                sub: "50% buyback guaranteed",
               },
               {
                 icon: "↩",
@@ -138,7 +170,7 @@ export default function Footer() {
       </div>
 
       {/* Main footer */}
-      <div className="container-rj py-16">
+      <div className="container-rj py-14">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           {/* Brand column */}
           <div className="lg:col-span-4">
@@ -178,7 +210,7 @@ export default function Footer() {
               <p className="font-cinzel text-[var(--rj-gold)] text-[10px] tracking-[0.25em] uppercase mb-3">
                 Stay in the gold
               </p>
-              {subscribed ? (
+              {success ? (
                 <motion.p
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -187,21 +219,50 @@ export default function Footer() {
                   ✦ You&apos;re on the list. Welcome to Rehnoor.
                 </motion.p>
               ) : (
-                <form onSubmit={handleSubscribe} className="flex">
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Your email address"
-                    className="flex-1 bg-white/10 border border-white/20 text-white placeholder:text-white/40 px-4 py-2.5 text-sm focus:outline-none focus:border-[var(--rj-gold)] transition-colors"
-                  />
-                  <button
-                    type="submit"
-                    className="bg-[var(--rj-gold)] text-[var(--rj-emerald)] px-4 py-2.5 hover:bg-[var(--rj-gold-light)] transition-colors flex items-center"
-                    aria-label="Subscribe"
-                  >
-                    <ArrowRight size={16} />
-                  </button>
+                <form onSubmit={handleSubscribe} className="space-y-3">
+                  <div className="flex">
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Your email address"
+                      className="flex-1 bg-white/10 border border-white/20 text-white placeholder:text-white/40 px-4 py-2.5 text-sm focus:outline-none focus:border-[var(--rj-gold)] transition-colors"
+                    />
+
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="bg-[var(--rj-gold)] text-[var(--rj-emerald)] px-4 py-2.5 hover:bg-[var(--rj-gold-light)] transition-colors flex items-center justify-center disabled:opacity-60"
+                    >
+                      {loading ? (
+                        <Loader2 className="animate-spin" size={16} />
+                      ) : (
+                        <ArrowRight size={16} />
+                      )}
+                    </button>
+                  </div>
+
+                  {/* SUCCESS MESSAGE */}
+                  {success && (
+                    <motion.p
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="text-[var(--rj-gold)] text-sm font-medium"
+                    >
+                      {success}
+                    </motion.p>
+                  )}
+
+                  {/* ERROR MESSAGE */}
+                  {error && (
+                    <motion.p
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="text-red-400 text-sm font-medium"
+                    >
+                      {error}
+                    </motion.p>
+                  )}
                 </form>
               )}
             </div>

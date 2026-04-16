@@ -7,6 +7,7 @@ import InstagramSection from "@/app/component/website/Instagramsection";
 import ProductGridCarousel from "./component/website/Productgridcarousel";
 import GoldPriceScroll from "./component/shared/GoldPriceScroll";
 import HomeBlogSection from "./component/website/Homeblogsection";
+import Stats from "./component/Stats";
 
 export default function HomePage() {
   return (
@@ -15,6 +16,7 @@ export default function HomePage() {
       <main>
         <HeroSection />
         <CategoriesSection />
+        <Stats />
         <BestsellersSection />
         <BrandStorySection />
         <ProductGridCarousel />

@@ -379,7 +379,7 @@ function MobileMenu({
               <Link
                 href="/wishlist"
                 onClick={onClose}
-                className="flex items-center justify-between py-3 px-4 rounded-xl transition-all"
+                className="flex items-center justify-between py-3 px-4 rounded-xl transition-all text-[var(--rj-gold-light)]"
                 style={{
                   background: "rgba(252,193,81,0.06)",
                   border: "1px solid rgba(252,193,81,0.18)",
@@ -399,7 +399,7 @@ function MobileMenu({
                   />
                   <span
                     className="font-cinzel text-sm tracking-wider"
-                    style={{ color: "var(--rj-charcoal)" }}
+                    style={{ color: "var(--rj-gold-light)" }}
                   >
                     Wishlist
                   </span>
@@ -464,12 +464,6 @@ export default function Navbar() {
   const navRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
 
-  // ── Hydration guard ───────────────────────────────────────────
-  // Zustand persist reads localStorage — server always returns 0.
-  // We must NOT expose the real count until after the client mounts
-  // or React throws a hydration mismatch on aria-label, the badge
-  // element, and the Heart fill attribute.
-  // Always call the hooks (Rules of Hooks), but mask the value.
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
@@ -503,8 +497,8 @@ export default function Navbar() {
         ref={navRef}
         className={`sticky top-0 z-100 transition-all duration-500 ${
           scrolled
-            ? "bg-white/95 backdrop-blur-md shadow-[0_2px_30px_rgba(0,0,0,0.08)]"
-            : "bg-white"
+            ? "bg-[var(--rj-emerald)] backdrop-blur-md shadow-[0_2px_30px_rgba(0,0,0,0.08)]"
+            : "bg-[var(--rj-emerald)]/80"
         }`}
       >
         <nav className="container-rj">
@@ -512,7 +506,7 @@ export default function Navbar() {
             {/* Mobile hamburger */}
             <button
               onClick={() => setMobileOpen(true)}
-              className="lg:hidden p-2 hover:text-[var(--rj-gold)] transition-colors"
+              className="lg:hidden p-2 text-[var(--rj-gold-light)] hover:text-[var(--rj-gold)] transition-colors"
               aria-label="Open menu"
               style={{ cursor: "pointer" }}
             >
@@ -591,7 +585,7 @@ export default function Navbar() {
                   ) : (
                     <Link
                       href={item.href!}
-                      className="relative flex items-center gap-1.5 px-4 py-2 font-cinzel text-[11px] tracking-[0.2em] uppercase text-[var(--rj-charcoal)] hover:text-[var(--rj-emerald)] transition-colors duration-300 hover-gold-line"
+                      className="relative flex items-center gap-1.5 px-4 py-2 font-cinzel text-[11px] tracking-[0.2em] uppercase text-[var(--rj-gold-light)] hover:text-[var(--rj-gold-dark)] transition-colors duration-300 hover-gold-line"
                       style={{ cursor: "pointer" }}
                     >
                       {item.label}
@@ -609,13 +603,12 @@ export default function Navbar() {
               {/* Search */}
               <button
                 onClick={() => setSearchOpen((s) => !s)}
-                className="p-2 hover:text-[var(--rj-gold)] transition-colors duration-300"
+                className="p-2 hover:text-[var(--rj-gold)] text-[var(--rj-gold-light)] transition-colors duration-300"
                 aria-label="Search"
                 style={{ cursor: "pointer" }}
               >
                 <Search size={20} />
               </button>
-
               {/* Wishlist — with live badge, hidden on mobile (shown in slide-out) */}
               <IconWithBadge
                 href="/wishlist"
@@ -634,9 +627,8 @@ export default function Navbar() {
                 count={wishlistCount}
                 label="Wishlist"
                 badgeColor="gold"
-                className="hidden sm:block"
+                className="hidden sm:block text-[var(--rj-gold-light)] hover:text-[var(--rj-gold-dark)] transition-colors duration-300"
               />
-
               {/* Account */}
               {/* <Link
                 href="/account"
@@ -646,7 +638,6 @@ export default function Navbar() {
               >
                 <User size={20} />
               </Link> */}
-
               {/* Cart — always visible including mobile */}
               <IconWithBadge
                 href="/cart"
@@ -654,6 +645,7 @@ export default function Navbar() {
                 count={cartCount}
                 label="Cart"
                 badgeColor="gold"
+                className="text-[var(--rj-gold-light)]"
               />
 
               {/*
@@ -677,7 +669,7 @@ export default function Navbar() {
                 count={wishlistCount}
                 label="Wishlist"
                 badgeColor="gold"
-                className="sm:hidden"
+                className="sm:hidden text-[var(--rj-gold-light)] hover:text-[var(--rj-gold-dark)] transition-colors duration-300"
               />
             </div>
           </div>
@@ -698,6 +690,7 @@ export default function Navbar() {
                     size={18}
                     className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--rj-ash)]"
                   />
+
                   <input
                     autoFocus
                     type="text"

@@ -79,7 +79,7 @@
   --transition-slow: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 
   /* ── Spacing ── */
-  --spacing-section: 7rem;
+  --spacing-section: 3.5rem;
   --spacing-container: 1.5rem;
   --radius-card: 0.75rem;
 

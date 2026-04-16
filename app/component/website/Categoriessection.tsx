@@ -164,7 +164,7 @@ export default function CategoriesSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="section-padding bg-[var(--rj-ivory)]">
+    <section ref={sectionRef} className="py-16 bg-[var(--rj-ivory)]">
       <div className="container-rj">
         {/* Heading row */}
         <div className="cat-heading flex flex-col md:flex-row items-start md:items-end justify-between gap-4 mb-10">
