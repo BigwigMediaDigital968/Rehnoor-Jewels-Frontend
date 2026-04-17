@@ -230,7 +230,7 @@ function MobileMenu({
             className="fixed left-0 top-0 bottom-0 w-[85vw] max-w-sm bg-white z-105 overflow-y-auto flex flex-col"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-5 border-b border-[var(--rj-bone)]">
+            <div className="flex items-center justify-between px-6 py-5 border-b border-[var(--rj-bone) bg-[var(--rj-emerald)]">
               <div>
                 {/* <p className="font-cinzel font-bold text-[var(--rj-emerald)] text-lg tracking-widest">
                   REHNOOR
@@ -239,7 +239,7 @@ function MobileMenu({
                   Gold Reimagined
                 </p> */}
                 <Image
-                  src="/logo-transparent.png" // 👈 from public folder
+                  src="/logo-transparnet-square.png" // 👈 from public folder
                   alt="Rehnoor Jewels logo image"
                   width={70} // adjust based on your logo
                   height={40}
@@ -249,7 +249,7 @@ function MobileMenu({
               </div>
               <button
                 onClick={onClose}
-                className="p-2 hover:text-[var(--rj-gold)] transition-colors"
+                className="p-2 hover:text-[var(--rj-gold)] text-white transition-colors"
                 style={{ cursor: "pointer" }}
               >
                 <X size={20} />
@@ -428,14 +428,14 @@ function MobileMenu({
               </Link>
 
               {/* Account + phone */}
-              <Link
+              {/* <Link
                 href="/account"
                 onClick={onClose}
                 className="flex items-center gap-3 text-sm text-[var(--rj-ash)] py-2"
                 style={{ cursor: "pointer" }}
               >
                 <User size={16} /> My Account
-              </Link>
+              </Link> */}
               <a
                 href="tel:+919876543210"
                 className="flex items-center gap-3 text-sm font-medium py-2"
@@ -495,14 +495,14 @@ export default function Navbar() {
     <>
       <header
         ref={navRef}
-        className={`sticky top-0 z-100 transition-all duration-500 ${
+        className={`sticky top-0 z-10 transition-all duration-500 ${
           scrolled
             ? "bg-[var(--rj-emerald)] backdrop-blur-md shadow-[0_2px_30px_rgba(0,0,0,0.08)]"
-            : "bg-[var(--rj-emerald)]/80"
+            : "bg-[var(--rj-emerald)]"
         }`}
       >
         <nav className="container-rj">
-          <div className="flex items-center justify-between h-[82px] gap-4 sm:gap-6">
+          <div className="flex items-center justify-between h-[95px] gap-4 sm:gap-6">
             {/* Mobile hamburger */}
             <button
               onClick={() => setMobileOpen(true)}
@@ -535,9 +535,9 @@ export default function Navbar() {
               style={{ cursor: "pointer" }}
             >
               <Image
-                src="/rehnoor-nav-logo.png" // 👈 from public folder
+                src="/rehnoor-logo-new.png" // 👈 from public folder
                 alt="Rehnoor Jewels logo image"
-                width={180} // adjust based on your logo
+                width={230} // adjust based on your logo
                 height={80}
                 priority
                 className="object-contain"

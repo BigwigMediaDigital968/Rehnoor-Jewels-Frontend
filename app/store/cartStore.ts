@@ -22,6 +22,7 @@ export interface CartItem {
   href: string;
   category?: string;
   tag?: string;
+  customNote?: string;
 }
 
 export interface WishlistItem {

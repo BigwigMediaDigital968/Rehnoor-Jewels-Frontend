@@ -186,13 +186,13 @@ export default function Footer() {
 
             <Link
               href="/"
-              className="flex-shrink-0 flex items-center"
+              className="flex-shrink-0 flex items-start"
               style={{ cursor: "pointer" }}
             >
               <Image
-                src="/rehnoor-logo.jpeg" // 👈 from public folder
+                src="/logo-green-bg.png" // 👈 from public folder
                 alt="Rehnoor Jewels logo image"
-                width={140} // adjust based on your logo
+                width={160} // adjust based on your logo
                 height={40}
                 priority
                 className="object-contain"

@@ -13,7 +13,7 @@ export default function AboutPage() {
       <OurStory />
       <WhyTrustUs />
       <Features />
-      <OurPartners />
+      {/* <OurPartners /> */}
       {/* <OurTeam /> */}
       <SocialFeed />
     </main>

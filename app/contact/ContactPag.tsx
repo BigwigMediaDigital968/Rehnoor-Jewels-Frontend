@@ -1074,7 +1074,7 @@ export default function ContactPage() {
             ))}
 
             {/* Store hours */}
-            <motion.div
+            {/* <motion.div
               initial={{ opacity: 0, x: -16 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
@@ -1131,7 +1131,7 @@ export default function ContactPage() {
                   </div>
                 ))}
               </div>
-            </motion.div>
+            </motion.div> */}
           </div>
 
           {/* ── RIGHT: Form (spans 2 cols) ── */}
@@ -1199,7 +1199,7 @@ export default function ContactPage() {
               transition={{ duration: 0.6, delay: 0.15 }}
               className="lg:col-span-2 flex flex-col gap-5"
             >
-              <div
+              {/* <div
                 className="p-5 rounded-2xl md:mt-20"
                 style={{
                   background: "#fff",
@@ -1245,10 +1245,10 @@ export default function ContactPage() {
                 >
                   Get directions <ArrowRight size={11} />
                 </a>
-              </div>
+              </div> */}
 
               <div
-                className="p-5 rounded-2xl"
+                className="p-5 md:mt-20 rounded-2xl"
                 style={{
                   background: "var(--rj-emerald)",
                   border: "1px solid rgba(255,255,255,0.05)",
