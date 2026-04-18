@@ -495,9 +495,9 @@ export default function Navbar() {
     <>
       <header
         ref={navRef}
-        className={`sticky top-0 z-10 transition-all duration-500 ${
+        className={`sticky top-0 z-100 ransition-all duration-500 ${
           scrolled
-            ? "bg-[var(--rj-emerald)] backdrop-blur-md shadow-[0_2px_30px_rgba(0,0,0,0.08)]"
+            ? "bg-[var(--rj-emerald)] backdrop-blur-lg shadow-[0_2px_30px_rgba(0,0,0,0.08)]"
             : "bg-[var(--rj-emerald)]"
         }`}
       >
