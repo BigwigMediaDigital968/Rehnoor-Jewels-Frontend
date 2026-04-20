@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, DM_Sans, Cinzel } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
-import Navbar from "./component/website/Navbar";
 import Footer from "./component/website/Footer";
 import DiscountPopup, {
   FloatingOfferBadge,

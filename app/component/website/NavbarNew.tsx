@@ -316,7 +316,7 @@ function MobileMenu({
               <Image
                 src="/rehnoor-jewels-logo-new.png"
                 alt="Rehnoor Jewels logo image"
-                width={102}
+                width={92}
                 height={40}
                 priority
                 className="object-contain"
@@ -732,7 +732,8 @@ export default function NavbarNew() {
             </div>
 
             {/* Right actions */}
-            <div className="flex items-center gap-0.5 sm:gap-1">
+            <div className="flex items-center gap-1">
+              {/* Search (keep visible on all devices) */}
               <button
                 onClick={() => setSearchOpen((s) => !s)}
                 className="p-2 hover:text-[var(--rj-gold)] transition-colors duration-300"
@@ -742,51 +743,35 @@ export default function NavbarNew() {
                 <Search size={20} />
               </button>
 
-              <IconWithBadge
-                href="/wishlist"
-                icon={
-                  <Heart
-                    size={20}
-                    style={{
-                      fill:
-                        wishlistCount > 0 ? "var(--rj-gold)" : "transparent",
-                      color:
-                        wishlistCount > 0 ? "var(--rj-gold)" : "currentColor",
-                      transition: "all 0.3s",
-                    }}
-                  />
-                }
-                count={wishlistCount}
-                label="Wishlist"
-                className="hidden sm:block text-[var(--rj-gold-light)]"
-              />
+              {/* Desktop ONLY icons */}
+              <div className="hidden lg:flex items-center gap-1">
+                <IconWithBadge
+                  href="/wishlist"
+                  icon={
+                    <Heart
+                      size={20}
+                      style={{
+                        fill:
+                          wishlistCount > 0 ? "var(--rj-gold)" : "transparent",
+                        color:
+                          wishlistCount > 0 ? "var(--rj-gold)" : "currentColor",
+                        transition: "all 0.3s",
+                      }}
+                    />
+                  }
+                  count={wishlistCount}
+                  label="Wishlist"
+                  className="text-[var(--rj-gold-light)]"
+                />
 
-              <IconWithBadge
-                href="/cart"
-                icon={<ShoppingBag size={20} />}
-                count={cartCount}
-                label="Cart"
-                className="text-[var(--rj-gold-light)]"
-              />
-
-              <IconWithBadge
-                href="/wishlist"
-                icon={
-                  <Heart
-                    size={20}
-                    style={{
-                      fill:
-                        wishlistCount > 0 ? "var(--rj-gold)" : "transparent",
-                      color:
-                        wishlistCount > 0 ? "var(--rj-gold)" : "currentColor",
-                      transition: "all 0.3s",
-                    }}
-                  />
-                }
-                count={wishlistCount}
-                label="Wishlist"
-                className="sm:hidden text-[var(--rj-gold-light)]"
-              />
+                <IconWithBadge
+                  href="/cart"
+                  icon={<ShoppingBag size={20} />}
+                  count={cartCount}
+                  label="Cart"
+                  className="text-[var(--rj-gold-light)]"
+                />
+              </div>
             </div>
           </div>
         </nav>
