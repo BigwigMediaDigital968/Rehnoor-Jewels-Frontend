@@ -15,18 +15,18 @@ if (typeof window !== "undefined") {
 const values = [
   {
     icon: "⚜",
-    title: "Premium Craftsmanship",
-    desc: "Expertly crafted with attention to detail, ensuring timeless quality and elegance.",
+    title: "Skin-Friendly Finish",
+    desc: "Crafted with care to ensure a comfortable wearing experience for everyday use. Designed to be gentle on skin while maintaining a premium gold-like shine.",
   },
   {
     icon: "✦",
-    title: "Master Craftsmen",
-    desc: "Over 40 years of heritage passed down through generations of artisans.",
+    title: "Premium Gold Plating",
+    desc: "Our jewellery features high-quality gold plating, giving you the look of real gold with lasting brilliance and durability.",
   },
   {
     icon: "♾",
-    title: "Lifetime Buyback",
-    desc: "Sell it back at fair value - because jewellery is always an investment.",
+    title: "Elegant & Durable",
+    desc: "Each piece is designed to combine style with strength, so you can enjoy beauty that lasts beyond occasions.",
   },
   {
     icon: "◈",
@@ -108,7 +108,7 @@ export default function BrandStorySection() {
                 Est. 2020
               </p>
               <p className="font-cormorant text-white text-2xl leading-tight">
-                With Purity & Precision
+                Crafted with Precision & Care
               </p>
             </motion.div>
 
@@ -129,24 +129,24 @@ export default function BrandStorySection() {
             </p>
 
             <h2 className="heading-lg text-white mb-6 leading-tight">
-              Rooted in
-              <br />
+              Rooted in{" "}
               <em className="text-gold-shimmer font-normal">heritage,</em>
               <br />
-              crafted for today
+              crafted for modern jewellery lovers
             </h2>
 
             <p className="text-white/70 leading-relaxed mb-5">
-              Rehnoor Jewels was born from a simple belief: that men deserve
-              jewellery as bold and beautiful as their ambitions. Founded in
-              Jaipur&apos;s ancient jewellery bazaars, we blend the finest gold
-              with modern design sensibility.
+              Rehnoor Jewels was born from a simple belief that jewellery should
+              be bold, elegant, and accessible. Inspired by India’s rich
+              heritage, we create gold-plated designs that reflect timeless
+              beauty with a modern touch.
             </p>
 
             <p className="text-white/70 leading-relaxed mb-8">
-              Every piece in our collection carries the weight of tradition and
-              the lightness of modern craft. From the artisan&apos;s hands to
-              yours with love, precision, and gold.
+              Each piece is thoughtfully crafted to offer the look of real gold,
+              combining tradition with contemporary style. From everyday wear to
+              special occasions, our jewellery is designed to complement every
+              moment with effortless elegance.
             </p>
 
             <Link
@@ -164,9 +164,21 @@ export default function BrandStorySection() {
             {/* Stats */}
             <div className="stats-row grid grid-cols-3 gap-6 mt-12 pt-8 border-t border-white/10">
               {[
-                { value: "20+", label: "Partners" },
-                { value: "50K+", label: "Customers" },
-                { value: "500+", label: "Designs" },
+                {
+                  value: "1000+",
+                  label: "Orders Delivered",
+                  caption: "Across India",
+                },
+                {
+                  value: "Premium",
+                  label: "Quality Finish",
+                  caption: "Real gold-like shine",
+                },
+                {
+                  value: "500+",
+                  label: "Unique Designs",
+                  caption: "Curated collections",
+                },
               ].map((stat) => (
                 <div key={stat.label}>
                   <p
@@ -178,10 +190,19 @@ export default function BrandStorySection() {
                   <p className="text-white/50 text-xs tracking-widest mt-1">
                     {stat.label}
                   </p>
+                  <p className="text-white/50 text-xs tracking-widest mt-1">
+                    {stat.caption}
+                  </p>
                 </div>
               ))}
             </div>
           </motion.div>
+        </div>
+
+        <div className="flex mb-3">
+          <h2 className="heading-sm text-[var(--rj-gold)]">
+            SHOP WITH CONFIDENCE
+          </h2>
         </div>
 
         {/* ── Values grid ── */}

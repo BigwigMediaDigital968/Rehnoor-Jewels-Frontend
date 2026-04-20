@@ -190,7 +190,7 @@ export default function Footer() {
               style={{ cursor: "pointer" }}
             >
               <Image
-                src="/logo-green-bg.png" // 👈 from public folder
+                src="/rehnoor-jewels-logo-new.png" // 👈 from public folder
                 alt="Rehnoor Jewels logo image"
                 width={160} // adjust based on your logo
                 height={40}

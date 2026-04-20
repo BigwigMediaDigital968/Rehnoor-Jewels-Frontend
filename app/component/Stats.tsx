@@ -5,17 +5,17 @@ export default function Stats() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6 py-12 px-14 border-y border-[var(--rj-bone)] bg-[var(--rj-emerald)]">
         {[
           {
-            value: "4.9",
-            label: "Average Rating",
-            sub: "Based on 2,400+ reviews",
+            value: "4.9✦",
+            label: "Customer Rating",
+            sub: "Loved by our buyers",
           },
           {
             value: "98%",
             label: "Satisfaction Rate",
-            sub: "Would recommend us",
+            sub: "Quality you can trust",
           },
           { value: "50K+", label: "Happy Customers", sub: "Across India" },
-          { value: "5★", label: "Google Rating", sub: "Verified reviews" },
+          { value: "Premium", label: "Craftsmanship", sub: "Designed to last" },
         ].map((item) => (
           <div key={item.label} className="text-center">
             <p className="font-[var(--font-cinzel)] text-[var(--rj-gold)] text-3xl font-bold mb-1">

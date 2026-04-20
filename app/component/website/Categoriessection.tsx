@@ -169,20 +169,22 @@ export default function CategoriesSection() {
         {/* Heading row */}
         <div className="cat-heading flex flex-col md:flex-row items-start md:items-end justify-between gap-4 mb-10">
           <div>
-            <p
+            <h2
               className="label-accent mb-3"
               style={{ color: "var(--rj-emerald)" }}
             >
-              ✦ Shop By Category
-            </p>
-            <h2
+              ✦ Crafted for modern style
+            </h2>
+            <h3
               className="heading-lg leading-tight"
               style={{ color: "var(--rj-charcoal)" }}
             >
-              Crafted for
+              Discover Categories Designed
               <br />
-              <em className="text-gold-shimmer font-normal">the modern man</em>
-            </h2>
+              <em className="text-gold-shimmer font-normal pe-2">
+                for Every Style
+              </em>
+            </h3>
           </div>
           <Link
             href="/collections"

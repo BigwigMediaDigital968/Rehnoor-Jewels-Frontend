@@ -230,18 +230,12 @@ function MobileMenu({
             className="fixed left-0 top-0 bottom-0 w-[85vw] max-w-sm bg-white z-105 overflow-y-auto flex flex-col"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-5 border-b border-[var(--rj-bone) bg-[var(--rj-emerald)]">
+            <div className="flex items-center justify-between px-6 py-1 border-b border-[var(--rj-bone) bg-[var(--rj-emerald)]">
               <div>
-                {/* <p className="font-cinzel font-bold text-[var(--rj-emerald)] text-lg tracking-widest">
-                  REHNOOR
-                </p>
-                <p className="text-[var(--rj-gold)] font-cinzel text-[9px] tracking-[0.3em] uppercase mt-0.5">
-                  Gold Reimagined
-                </p> */}
                 <Image
-                  src="/logo-transparnet-square.png" // 👈 from public folder
+                  src="/rehnoor-jewels-logo-new.png" // 👈 from public folder
                   alt="Rehnoor Jewels logo image"
-                  width={70} // adjust based on your logo
+                  width={102} // adjust based on your logo
                   height={40}
                   priority
                   className="object-contain"
@@ -502,7 +496,7 @@ export default function Navbar() {
         }`}
       >
         <nav className="container-rj">
-          <div className="flex items-center justify-between h-[95px] gap-4 sm:gap-6">
+          <div className="flex items-center justify-between h-[110px] gap-4 sm:gap-6">
             {/* Mobile hamburger */}
             <button
               onClick={() => setMobileOpen(true)}
@@ -514,30 +508,16 @@ export default function Navbar() {
             </button>
 
             {/* Logo */}
-            {/* <Link
-              href="/"
-              className="flex-shrink-0 flex flex-col items-start lg:items-center"
-              style={{ cursor: "pointer" }}
-            >
-              <span className="font-cinzel font-black text-[var(--rj-emerald)] text-xl tracking-[0.25em] leading-none">
-                REHNOOR
-              </span>
-              <span
-                className="font-cinzel text-[var(--rj-gold)] leading-none mt-0.5"
-                style={{ fontSize: "9px", letterSpacing: "0.35em" }}
-              >
-                JEWELS
-              </span>
-            </Link> */}
+
             <Link
               href="/"
               className="flex-shrink-0 flex items-center pt-2"
               style={{ cursor: "pointer" }}
             >
               <Image
-                src="/rehnoor-logo-new.png" // 👈 from public folder
+                src="/rehnoor-jewels-logo-new.png"
                 alt="Rehnoor Jewels logo image"
-                width={230} // adjust based on your logo
+                width={140}
                 height={80}
                 priority
                 className="object-contain"

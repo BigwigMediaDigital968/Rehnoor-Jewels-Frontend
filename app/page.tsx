@@ -8,6 +8,11 @@ import ProductGridCarousel from "./component/website/Productgridcarousel";
 import GoldPriceScroll from "./component/shared/GoldPriceScroll";
 import HomeBlogSection from "./component/website/Homeblogsection";
 import Stats from "./component/Stats";
+import MenWomen from "./component/website/MenWomen";
+import FAQs from "./component/website/FAQ";
+import { homeFAQProps } from "./data/Faqdata";
+import WhyChoose from "./component/website/WhyChoose";
+import PopularSearch from "./component/website/PopularSearch";
 
 export default function HomePage() {
   return (
@@ -18,11 +23,15 @@ export default function HomePage() {
         <CategoriesSection />
         <Stats />
         <BestsellersSection />
-        <BrandStorySection />
+        <MenWomen />
         <ProductGridCarousel />
+        <BrandStorySection />
         <TestimonialsSection />
-        <HomeBlogSection />
-        <InstagramSection />
+        <WhyChoose />
+        {/* <HomeBlogSection /> */}
+        {/* <InstagramSection /> */}
+        <FAQs {...homeFAQProps} />
+        <PopularSearch />
       </main>
     </>
   );

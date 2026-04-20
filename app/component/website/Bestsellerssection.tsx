@@ -987,11 +987,11 @@ export default function BestsellerSection() {
             ✦ OUR Gems
           </p>
           <h2 className="heading-lg text-[var(--rj-charcoal)] mb-4">
-            The Gold Standard
+            Luxury Gold Plated Jewellery Designs
           </h2>
           <p className="text-[var(--rj-ash)] max-w-md mx-auto">
-            Discover our complete range of timeless designs - crafted to suit
-            every style, occasion, and statement.
+            Discover timeless designs that blend elegance and modern style -
+            crafted to elevate every look.
           </p>
           <div className="divider-gold-center mt-6" />
           <FloatingIndicators />

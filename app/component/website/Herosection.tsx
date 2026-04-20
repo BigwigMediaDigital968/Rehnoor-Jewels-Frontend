@@ -59,8 +59,8 @@ export default function HeroSection() {
     offset: ["start start", "end start"],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "90%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.9], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
 
   useEffect(() => {
@@ -149,13 +149,13 @@ export default function HeroSection() {
         <div className="max-w-3xl">
           <div className="hero-badge mb-6 flex items-center gap-3">
             <div className="divider-gold" />
-            <span className="label-accent text-[var(--rj-gold)]">
-              India&apos;s Premier Men&apos;s Jewellery
-            </span>
+            <h1 className="label-accent text-[var(--rj-gold)]">
+              India's Premier Gold Plated Jewellery
+            </h1>
           </div>
 
           <div ref={headingRef} className="overflow-hidden mb-6">
-            <h1
+            <p
               className="heading-xl text-white leading-[0.95]"
               aria-label="Gold Reimagined"
             >
@@ -173,12 +173,13 @@ export default function HeroSection() {
                   {char}
                 </span>
               ))}
-            </h1>
+            </p>
           </div>
 
           <p className="hero-sub text-white/70 text-lg md:text-xl leading-relaxed mb-10 max-w-xl font-light">
-            Where timeless craftsmanship meets bold modern design. Every Rehnoor
-            piece is made to endure and created to make a statement.
+            Where timeless craftsmanship meets modern design, every Rehnoor
+            piece is crafted in Gold Plated Jewellery, made to endure and stand
+            out.
           </p>
 
           <div className="flex flex-wrap gap-4 mb-12">
@@ -199,7 +200,7 @@ export default function HeroSection() {
             </Link>
 
             <Link
-              href="/our-story"
+              href="/about"
               className="hero-cta btn-outline group"
               style={{
                 display: "inline-flex",
@@ -258,9 +259,9 @@ export default function HeroSection() {
         <p className="font-cormorant text-white text-lg font-medium">
           Nawabi Chain
         </p>
-        <p className="text-white/50 text-xs mt-0.5">Starting ₹8,999</p>
+        <p className="text-white/50 text-xs mt-0.5">Starting ₹940</p>
         <Link
-          href="/collections/nawabi-chain"
+          href="/collections/chains-for-men"
           className="mt-3 flex items-center gap-1.5 text-[var(--rj-gold)] text-xs hover:gap-3 transition-all duration-300"
         >
           View <ArrowRight size={12} />

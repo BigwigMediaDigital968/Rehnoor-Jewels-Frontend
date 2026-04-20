@@ -431,7 +431,7 @@ export default function ProductGridCarousel() {
   return (
     <section
       className="section-padding overflow-hidden"
-      style={{ background: "var(--rj-charcoal)" }}
+      // style={{ background: "var(--rj-charcoal)" }}
     >
       <div className="container-rj">
         {/* ── Heading ── */}
@@ -445,21 +445,21 @@ export default function ProductGridCarousel() {
           <div>
             <p
               className="label-accent mb-3"
-              style={{ color: "var(--rj-gold)" }}
+              style={{ color: "var(--rj-emerald)" }}
             >
               ✦ Just Arrived
             </p>
             <div className="flex items-center gap-4">
               <div
                 className="h-px w-10 flex-shrink-0"
-                style={{ background: "rgba(252,193,81,0.4)" }}
+                style={{ background: "rgba(252,193,81,0.9)" }}
               />
-              <h2 className="heading-lg text-white leading-tight whitespace-nowrap">
+              <h2 className="heading-lg leading-tight whitespace-nowrap">
                 New Arrivals
               </h2>
               <div
                 className="h-px w-10 flex-shrink-0"
-                style={{ background: "rgba(252,193,81,0.4)" }}
+                style={{ background: "rgba(252,193,81,0.9)" }}
               />
             </div>
           </div>
@@ -468,7 +468,7 @@ export default function ProductGridCarousel() {
             <Link
               href="/collections/new-arrivals"
               className="group flex items-center gap-1.5 font-cinzel text-[11px] tracking-widest uppercase transition-opacity hover:opacity-70"
-              style={{ color: "var(--rj-gold)" }}
+              style={{ color: "var(--rj-emerald)" }}
             >
               View All
               <ArrowRight
@@ -667,8 +667,8 @@ export default function ProductGridCarousel() {
 
                 {/* Counter */}
                 <span
-                  className="font-cinzel text-[10px] tracking-widest flex-shrink-0 tabular-nums"
-                  style={{ color: "rgba(255,255,255,0.35)" }}
+                  className="font-cinzel text-[15px] border border-amber-500 p-2 tracking-widest flex-shrink-0 tabular-nums"
+                  style={{ color: "#003720" }}
                 >
                   {loading ? "—" : String(index + 1).padStart(2, "0")} /{" "}
                   {loading ? "—" : String(products.length).padStart(2, "0")}
@@ -703,19 +703,19 @@ function NavButton({
     <motion.button
       onClick={onClick}
       disabled={disabled}
-      className={`${dim} rounded-full flex items-center justify-center transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400`}
+      className={`${dim} rounded-full flex items-center justify-center transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-900 bg-[var(--rj-emerald)]`}
       style={{
-        border: "1px solid rgba(255,255,255,0.15)",
+        border: "1px solid rgba(255,255,255,0.9)",
         color: "#fff",
         cursor: disabled ? "default" : "pointer",
-        background: "rgba(255,255,255,0.04)",
       }}
       whileHover={
         !disabled
           ? {
               scale: 1.08,
               background: "rgba(252,193,81,0.1)",
-              borderColor: "rgba(252,193,81,0.4)",
+              color: "#000",
+              borderColor: "rgba(252,193,81,0.9)",
             }
           : {}
       }
