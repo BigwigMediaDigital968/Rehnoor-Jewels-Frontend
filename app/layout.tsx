@@ -7,6 +7,7 @@ import Footer from "./component/website/Footer";
 import DiscountPopup, {
   FloatingOfferBadge,
 } from "./component/shared/DiscountPopup";
+import NavbarNew from "./component/website/NavbarNew";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -79,7 +80,7 @@ export default function RootLayout({
       <body className="antialiased">
         {/* <DiscountPopup offerKey="welcome" /> */}
         <FloatingOfferBadge offerKey="welcome" />
-        <Navbar />
+        <NavbarNew />
         {children}
         <Footer />
         <Toaster

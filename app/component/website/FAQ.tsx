@@ -165,16 +165,15 @@ function FAQAccordionItem({
             >
               {String(index + 1).padStart(2, "0")}
             </span>
-            <span
-              className="text-sm font-semibold leading-snug tracking-wide"
+            <h3
+              className="heading-sm text-[18px] leading-snug tracking-wide"
               style={{
-                fontFamily: "Georgia, 'Times New Roman', serif",
                 color: isOpen ? accent : questionColor,
                 transition: "color 0.3s ease",
               }}
             >
               {item.question}
-            </span>
+            </h3>
           </div>
 
           {/* +/− icon */}

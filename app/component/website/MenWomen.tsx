@@ -226,7 +226,7 @@ const CollectionCard: React.FC<CardProps> = ({
         }}
       >
         {/* Top visual area */}
-        <div className="relative h-52 flex items-center justify-center overflow-hidden">
+        <div className="relative h-62 flex items-center justify-center overflow-hidden">
           {/* ── Background image ── */}
           <Image
             src={image}
@@ -240,14 +240,14 @@ const CollectionCard: React.FC<CardProps> = ({
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
           {/* ── Gradient overlay — preserves card colour identity ── */}
-          <div
+          {/* <div
             className="absolute inset-0"
             style={{
               background: dark
                 ? `linear-gradient(to bottom, rgba(0,36,16,0.2) 0%, rgba(0,36,16,0.3) 100%)`
                 : `linear-gradient(to bottom, rgba(254,244,220,0.2) 0%, rgba(254,244,220,0.30) 100%)`,
             }}
-          />
+          /> */}
           {/* ── Radial accent glow (kept from original) ── */}
           <div
             className="absolute inset-0 opacity-20"
@@ -257,7 +257,7 @@ const CollectionCard: React.FC<CardProps> = ({
             }}
           />
           {/* Animated ring */}
-          <div
+          {/* <div
             className="absolute w-40 h-40 rounded-full"
             style={{
               border: `1px solid ${accent}50`,
@@ -272,9 +272,9 @@ const CollectionCard: React.FC<CardProps> = ({
               transform: hovered ? "scale(1.1)" : "scale(1)",
               transition: "transform 0.6s ease 0.05s",
             }}
-          />
+          /> */}
           {/* Central gem icon */}
-          <div
+          {/* <div
             className="relative z-10 flex items-center justify-center w-16 h-16 rounded-full"
             style={{
               background: `radial-gradient(circle, ${accent}40 0%, transparent 70%)`,
@@ -286,7 +286,7 @@ const CollectionCard: React.FC<CardProps> = ({
             }}
           >
             <DiamondIcon color={accent} size={36} />
-          </div>
+          </div> */}
           {/* Badge */}
           <div className="absolute top-4 left-4">
             <Badge label={tag} dark={dark} />
