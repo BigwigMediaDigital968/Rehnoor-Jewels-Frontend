@@ -190,9 +190,9 @@ export default function Footer() {
               style={{ cursor: "pointer" }}
             >
               <Image
-                src="/rehnoor-jewels-logo-new.png" // 👈 from public folder
+                src="/rehnoor-jewels-svg-logo.svg" // 👈 from public folder
                 alt="Rehnoor Jewels logo image"
-                width={160} // adjust based on your logo
+                width={130} // adjust based on your logo
                 height={40}
                 priority
                 className="object-contain"

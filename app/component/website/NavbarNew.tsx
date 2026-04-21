@@ -314,7 +314,7 @@ function MobileMenu({
               }}
             >
               <Image
-                src="/rehnoor-jewels-logo-new.png"
+                src="/rehnoor-jewels-svg-logo.svg"
                 alt="Rehnoor Jewels logo image"
                 width={92}
                 height={40}
@@ -638,9 +638,9 @@ export default function NavbarNew() {
               style={{ cursor: "pointer" }}
             >
               <Image
-                src="/rehnoor-jewels-logo-new.png"
+                src="/rehnoor-jewels-svg-logo.svg"
                 alt="Rehnoor Jewels logo image"
-                width={120}
+                width={130}
                 height={80}
                 priority
                 className="object-contain"
