@@ -1103,7 +1103,7 @@ export function StepReview({
           <button
             onClick={onPlaceOrder}
             disabled={loading}
-            className="flex-1 flex items-center justify-center gap-2 py-4 rounded-full font-cinzel text-[12px] tracking-widest uppercase font-bold transition-all duration-300 active:scale-95 disabled:opacity-50"
+            className="flex-1 w-45 flex items-center justify-center gap-2 py-4 rounded-full font-cinzel text-[12px] tracking-widest uppercase font-bold transition-all duration-300 active:scale-95 disabled:opacity-50"
             style={{
               background: "var(--rj-emerald)",
               color: "var(--rj-gold)",

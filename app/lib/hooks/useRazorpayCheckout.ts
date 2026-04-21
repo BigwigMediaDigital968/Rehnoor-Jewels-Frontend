@@ -38,7 +38,7 @@ interface UseRazorpayCheckoutReturn {
 }
 
 const RJ_NAME = "Rehnoor Jewels";
-const RJ_LOGO = "/logo-square.png"; // put your square logo here
+const RJ_LOGO = "/rehnoor-jewels-svg-logo.svg";
 const RJ_THEME = "#003720"; // --rj-emerald
 
 export function useRazorpayCheckout(): UseRazorpayCheckoutReturn {
@@ -72,6 +72,10 @@ export function useRazorpayCheckout(): UseRazorpayCheckoutReturn {
       paymentMethod,
       razorpayOrderId,
     } = res.data;
+
+    console.log("placeOrder response:", res.data);
+    console.log("razorpayOrderId:", razorpayOrderId);
+    console.log("paymentMethod:", paymentMethod);
 
     // ── COD / non-gateway path ────────────────────────────────────────────────
     if (paymentMethod !== "razorpay" || !razorpayOrderId) {
