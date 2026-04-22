@@ -7,6 +7,7 @@ import DiscountPopup, {
   FloatingOfferBadge,
 } from "./component/shared/DiscountPopup";
 import NavbarNew from "./component/website/NavbarNew";
+import Script from "next/script";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -80,6 +81,21 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="antialiased">
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-WBLXS066M3"
+          strategy="afterInteractive"
+        />
+
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-WBLXS066M3');
+    `}
+        </Script>
+
         {/* <DiscountPopup offerKey="welcome" /> */}
         <FloatingOfferBadge offerKey="welcome" />
         <NavbarNew />
