@@ -58,6 +58,9 @@ export const metadata: Metadata = {
     description: "India's premier destination for men's gold jewellery",
   },
   robots: { index: true, follow: true },
+  verification: {
+    google: "xZ5KrWq2226rPvsPhIi-8jMOjyaqb_qBk9Mb5_SCz4E",
+  },
 };
 
 export const viewport: Viewport = {
