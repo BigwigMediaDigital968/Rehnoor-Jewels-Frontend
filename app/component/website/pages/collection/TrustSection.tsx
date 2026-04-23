@@ -12,44 +12,44 @@ const trustPoints = [
   {
     icon: "⚜",
     title: "Premium Craftsmanship",
-    desc: "Every piece is meticulously handcrafted with exceptional attention to detail, ensuring a flawless finish and lasting quality.",
+    desc: "Every piece is crafted with precision to deliver a flawless finish and a real gold-like shine that lasts.",
     stat: "100%",
-    statLabel: "Quality Assured",
+    statLabel: "Quality Checked",
   },
   {
     icon: "✦",
-    title: "Master Artisans",
-    desc: "Our craftsmen bring decades of experience, shaping each piece with precision and expertise.",
+    title: "Expert Artisans",
+    desc: "Designed and finished by experienced craftsmen who understand detail, balance, and lasting quality.",
     stat: "40+",
-    statLabel: "Years of Craft",
+    statLabel: "Years of Craft Expertise",
   },
   {
     icon: "♾",
-    title: "Lifetime Buyback",
-    desc: "We offer fair value buyback on every piece, ensuring long-term trust and flexibility.",
-    stat: "Fair",
-    statLabel: "Market Rate",
+    title: "Anti-Tarnish Finish",
+    desc: "Designed to retain its shine for longer, our jewellery resists fading with proper care.",
+    stat: "100%",
+    statLabel: "Long-Lasting Shine",
   },
   {
     icon: "✧",
     title: "Exclusive Designs",
-    desc: "Thoughtfully designed collections that stand apart and reflect individuality.",
+    desc: "Modern, stylish, and made to stand out our designs are created for everyday confidence.",
     stat: "500+",
     statLabel: "Unique Styles",
   },
   {
     icon: "⟳",
     title: "07-Day Returns",
-    desc: "Enjoy a hassle-free return or exchange within 07 days.",
+    desc: "Changed your mind? Return or exchange your order within 7 days quick and hassle-free.",
     stat: "07",
-    statLabel: "Day Window",
+    statLabel: "Day no stress return",
   },
   {
     icon: "◉",
     title: "Secure Packaging",
-    desc: "Delivered in signature packaging with tamper-proof sealing and insured shipping.",
+    desc: "Each piece is packed safely in tamper-proof packaging to ensure it reaches you in perfect condition.",
     stat: "100%",
-    statLabel: "Insured",
+    statLabel: "Safe & Insured Delivery",
   },
 ];
 
@@ -96,9 +96,11 @@ export default function TrustSection() {
             <h2 className="heading-lg text-white leading-tight">
               Six reasons
               <br />
-              <em className="text-gold-shimmer font-normal">to trust us</em>
+              <em className="text-gold-shimmer font-normal">
+                to trust Rehnoor
+              </em>
               <br />
-              with your gold
+              for timeless jewellery
             </h2>
           </motion.div>
 
@@ -109,9 +111,9 @@ export default function TrustSection() {
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             <p className="text-white/60 leading-relaxed mb-6">
-              We don't just sell jewellery. We stand behind every gram, every
-              stone, every clasp. Since 1983, one principle has guided us: your
-              trust is worth more than the gold itself.
+              Discover premium gold plated jewellery designed for everyday
+              elegance. Crafted with precision, long-lasting shine, and a real
+              gold-like finish.
             </p>
             <div className="flex flex-wrap gap-3">
               {["Secure Checkout", "Free Shipping", "Premium Packaging"].map(

@@ -114,35 +114,36 @@ export default function CollectionsHero() {
         {/* Badge */}
         <div className="hero-col-badge inline-flex items-center gap-3 mb-8">
           <div className="divider-gold" />
-          <span className="label-accent" style={{ color: "var(--rj-gold)" }}>
-            The Complete Collection
-          </span>
+          <h1 className="label-accent" style={{ color: "var(--rj-gold)" }}>
+            Explore Our Gold Plated Jewellery Collection
+          </h1>
         </div>
 
         {/* Heading */}
-        <h1
+        <h2
           className="heading-lg text-white mb-6 leading-none"
           aria-label="Every Piece. Pure Gold."
         >
-          {["Every", " ", "Piece."].map((w, i) => (
+          {["Designed to", " ", "Glow."].map((w, i) => (
             <span key={i} className="hero-col-word inline-block">
               {w === " " ? "\u00A0" : w}
             </span>
           ))}
           <br />
-          {["Pure", " "].map((w, i) => (
+          {["Defined by", " "].map((w, i) => (
             <span key={i} className="hero-col-word inline-block">
               {w === " " ? "\u00A0" : w}
             </span>
           ))}
-          <span className="hero-col-word inline-block text-gold-shimmer">
-            Gold.
+          <span className="hero-col-word inline-block text-gold-shimmer pb-2">
+            Elegance.
           </span>
-        </h1>
+        </h2>
 
         <p className="hero-col-sub text-white/65 text-lg md:text-xl max-w-xl mb-10 font-light leading-relaxed">
-          Signature collections. Meticulously handcrafted for those who
-          understand that true style is defined by the details you choose.
+          Discover premium gold plated jewellery designed for everyday elegance.
+          Crafted with precision, long-lasting shine, and a real gold-like
+          finish.
         </p>
 
         <div className="flex flex-wrap gap-4">
@@ -155,7 +156,7 @@ export default function CollectionsHero() {
               color: "var(--rj-emerald)",
             }}
           >
-            Browse All
+            Find Collections
             <ArrowRight
               size={16}
               className="transition-transform duration-300 group-hover:translate-x-1"

@@ -10,6 +10,15 @@ import {
 import { ApiProduct } from "@/app/lib/api/productLive";
 import { Product } from "@/app/types/Product.types";
 import CollectionIntroStrip from "./component/Collectionintrostrip";
+import ChainForMenPage from "./custom/ChainForMen";
+import BraceletForMen from "./custom/BraceletForMen";
+import KadaForMen from "./custom/KadaForMen";
+
+const EXTRA_SECTIONS: Record<string, React.FC<{ meta: CollectionMeta }>> = {
+  "chains-for-men": ChainForMenPage,
+  "bracelet-for-men": BraceletForMen,
+  "kada-for-men": KadaForMen,
+};
 
 function toMeta(
   col: Awaited<ReturnType<typeof fetchCollectionBySlug>>["data"],
@@ -58,40 +67,6 @@ export async function generateMetadata({
   return { title: "Collection | Rehnoor Jewels" };
 }
 
-// export default async function CollectionDetailPage({
-//   params,
-// }: {
-//   params: Promise<{ slug: string }>;
-// }) {
-//   const { slug } = await params;
-
-//   let meta: CollectionMeta;
-
-//   try {
-//     const res = await fetchCollectionBySlug(slug);
-//     if (!res.success || !res.data) return notFound();
-//     meta = toMeta(res.data);
-//   } catch {
-//     return notFound();
-//   }
-
-//   console.log(meta);
-
-//   // Fetch full product data if products are just IDs
-//   const products =
-//     typeof meta.products[0] === "string"
-//       ? [] // Replace with actual product fetching logic if needed
-//       : meta.products;
-
-//   return (
-//     <main>
-//       <CollectionHero meta={meta} />
-//       <CollectionProductGrid collectionSlug={slug} products={products} />
-//       <CollectionTestimonials />
-//     </main>
-//   );
-// }
-
 function normalizeProducts(raw: ApiProduct[]): Product[] {
   return raw.map((p) => ({
     id: p._id,
@@ -126,6 +101,7 @@ export default async function CollectionDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+
   let meta: CollectionMeta;
 
   try {
@@ -144,6 +120,8 @@ export default async function CollectionDetailPage({
     ),
   );
 
+  const ExtraSection = EXTRA_SECTIONS[slug];
+
   return (
     <main>
       <CollectionHero meta={meta} />
@@ -156,7 +134,9 @@ export default async function CollectionDetailPage({
       />
       <CollectionIntroStrip meta={meta} />
 
-      <CollectionTestimonials />
+      {ExtraSection && <ExtraSection meta={meta} />}
+
+      {/* <CollectionTestimonials /> */}
     </main>
   );
 }

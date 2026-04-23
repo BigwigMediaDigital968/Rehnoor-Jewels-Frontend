@@ -100,15 +100,18 @@ export default function NewsletterSection() {
               className="label-accent mb-4"
               style={{ color: "var(--rj-gold)" }}
             >
-              ✦ Join the Inner Circle
+              ✦ Join the Rehnoor's inner Circle
             </p>
             <h2 className="heading-lg text-white leading-tight mb-4">
-              First access to
-              <em className="text-gold-shimmer font-normal"> new gold drops</em>
+              Be the first to see
+              <em className="text-gold-shimmer font-normal pe-2">
+                {" "}
+                what’s new
+              </em>
             </h2>
             <p className="text-white/50 leading-relaxed mb-10 max-w-xl mx-auto">
-              Get early access to new collections, exclusive offers, and
-              gold-care tips - delivered to your inbox before anyone else.
+              Get early access to our latest designs, special offers, and simple
+              tips to keep your jewellery looking its best.
             </p>
           </motion.div>
 

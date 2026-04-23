@@ -109,7 +109,7 @@ const testimonials = [
     rating: 5,
     collection: "nawabi-chain",
     collectionLabel: "Nawabi Chain",
-    text: "The finish on this chain is exceptional. Got compliments at every event. Worth every rupee — feels like heirloom quality.",
+    text: "The finish on this chain is exceptional. Got compliments at every event. Worth every rupee feels like heirloom quality.",
     avatar: "AM",
   },
   {
@@ -119,7 +119,7 @@ const testimonials = [
     rating: 5,
     collection: "royal-kada",
     collectionLabel: "Royal Kada",
-    text: "Solid weight, perfect thickness. The hallmark certificate gave me confidence. Will definitely be ordering the bracelet next.",
+    text: "Solid weight, perfect thickness. Will definitely be ordering the bracelet next.",
     avatar: "RS",
   },
   {
@@ -149,7 +149,7 @@ const testimonials = [
     rating: 5,
     collection: "sol-pendant",
     collectionLabel: "Sol Pendant",
-    text: "Lightweight yet substantial. The pendant sits beautifully on a chain. Customer service was also top notch — very responsive.",
+    text: "Lightweight yet substantial. The pendant sits beautifully on a chain. Customer service was also top notch, very responsive.",
     avatar: "DS",
   },
   {

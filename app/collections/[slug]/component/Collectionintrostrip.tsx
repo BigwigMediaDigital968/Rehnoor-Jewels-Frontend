@@ -302,7 +302,7 @@ export default function CollectionIntroStrip({
       <TickerStrip />
 
       {/* ── MAIN INTRO SECTION ── */}
-      <div className="container-rj py-10">
+      <div className="container-rj pt-10">
         {/* ── Eyebrow line ── */}
         <motion.div
           initial={{ opacity: 0, y: -6 }}

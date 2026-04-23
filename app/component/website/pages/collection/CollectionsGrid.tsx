@@ -381,7 +381,7 @@ export default function CollectionsGrid() {
             ✦ Shop by Collection
           </p>
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-            <h2 className="heading-lg text-white leading-tight">
+            <h2 className="heading-lg text-white">
               Every piece,
               <br />
               <em className="text-gold-shimmer font-normal pe-3">pure gold</em>

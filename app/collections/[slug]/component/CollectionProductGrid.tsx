@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import type { Product } from "../../../types/Product.types";
 import { useCartStore, useWishlistStore } from "@/app/store/cartStore";
+import Link from "next/link";
 
 const TAG_STYLES: Record<string, { bg: string; color: string }> = {
   Bestseller: { bg: "var(--rj-gold)", color: "#000" },
@@ -978,6 +979,84 @@ export default function CollectionProductGrid({
     });
     setQuery("");
   };
+
+  // Condition for no products in the collection
+  if (!loading && products.length === 0) {
+    return (
+      <section
+        className="section-padding flex items-center justify-center"
+        style={{ background: "var(--rj-ivory)", minHeight: "60vh" }}
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center max-w-xl mx-auto flex flex-col items-center"
+        >
+          {/* Decorative Line */}
+          <div
+            className="w-16 h-[2px] mb-6"
+            style={{ background: "var(--rj-gold)" }}
+          />
+
+          {/* Heading */}
+          <h2
+            className="font-cinzel text-xl md:text-2xl tracking-[0.3em] uppercase mb-4"
+            style={{ color: "var(--rj-emerald)" }}
+          >
+            Coming Soon
+          </h2>
+
+          {/* Description */}
+          <p
+            className="font-cinzel text-[11px] tracking-widest leading-relaxed mb-6"
+            style={{ color: "var(--rj-ash)" }}
+          >
+            This collection is being crafted with precision and elegance. Stay
+            tuned — something exquisite is on its way.
+          </p>
+
+          {/* Subtle Loader Animation */}
+          <motion.div
+            className="flex gap-2 mt-2"
+            initial="hidden"
+            animate="visible"
+          >
+            {[0, 1, 2].map((i) => (
+              <motion.span
+                key={i}
+                className="w-2 h-2 rounded-full"
+                style={{ background: "var(--rj-gold)" }}
+                animate={{
+                  opacity: [0.3, 1, 0.3],
+                  y: [0, -4, 0],
+                }}
+                transition={{
+                  duration: 1.2,
+                  repeat: Infinity,
+                  delay: i * 0.2,
+                }}
+              />
+            ))}
+          </motion.div>
+
+          {/* Optional CTA */}
+          <Link
+            href="/collection"
+            className="mt-8 font-cinzel text-[10px] tracking-[0.25em] uppercase px-6 py-2.5 rounded-full transition-all duration-300"
+            style={{
+              border: "1px solid var(--rj-emerald)",
+              color: "var(--rj-emerald)",
+              background: "transparent",
+              cursor: "pointer",
+            }}
+          >
+            Explore Other Collections
+          </Link>
+        </motion.div>
+      </section>
+    );
+  }
 
   return (
     <section
