@@ -320,16 +320,16 @@ const REVIEWS: ReviewItem[] = [
     city: "Chandigarh",
     text: "Wore my one gram gold bracelet to a wedding last week and received so many compliments! Everyone thought it was a real gold bracelet. Rehnoor Jewels truly delivers on quality and style!",
   },
-  {
-    name: "Sandeep Kulkarni",
-    city: "Pune",
-    text: "I ordered two gold plated bracelets from Rehnoor Jewels, one for myself and one for my brother. Both of us are extremely happy with the purchase. The designs are trendy, the quality is great, and the price is unbeatable!",
-  },
-  {
-    name: "Vishal Dubey",
-    city: "Surat",
-    text: "The one gram gold bracelet I ordered looks exactly like the pictures on the website. The shine is incredible and the anti-tarnish finish keeps it looking brand new. Rehnoor Jewels has earned a loyal customer!",
-  },
+  // {
+  //   name: "Sandeep Kulkarni",
+  //   city: "Pune",
+  //   text: "I ordered two gold plated bracelets from Rehnoor Jewels, one for myself and one for my brother. Both of us are extremely happy with the purchase. The designs are trendy, the quality is great, and the price is unbeatable!",
+  // },
+  // {
+  //   name: "Vishal Dubey",
+  //   city: "Surat",
+  //   text: "The one gram gold bracelet I ordered looks exactly like the pictures on the website. The shine is incredible and the anti-tarnish finish keeps it looking brand new. Rehnoor Jewels has earned a loyal customer!",
+  // },
   {
     name: "Anjali Sharma",
     city: "Delhi",

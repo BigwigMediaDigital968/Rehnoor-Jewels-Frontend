@@ -12,6 +12,7 @@ if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger);
 
 export interface CollectionMeta {
   id: string;
+  name: string;
   label: string;
   tagline: string;
   description: string;
@@ -27,6 +28,7 @@ export interface CollectionMeta {
 // ── Default collection data — swap via props/API ──────────────────
 const DEFAULT_META: CollectionMeta = {
   id: "chains",
+  name: "Chain for Men",
   label: "Chains",
   tagline: "Bold, layered, iconic",
   description:
@@ -101,13 +103,15 @@ export default function CollectionHero({
     return () => ctx.revert();
   }, [meta.id]);
 
+  console.log(meta);
+
   const heroImage =
     meta?.heroImage && meta.heroImage.trim() !== "" ? meta.heroImage : null;
 
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden flex items-end"
+      className="relative overflow-hidden flex items-center"
       style={{
         minHeight: "clamp(420px, 80vh, 680px)",
         background: "var(--rj-emerald-dark)",
@@ -214,7 +218,7 @@ export default function CollectionHero({
           }}
           aria-label={meta.label}
         >
-          {meta.label.split(" ").map((word, wi) => (
+          {/* {meta.label.split(" ").map((word, wi) => (
             <span
               key={wi}
               className="ch-word inline-block mr-4 text-white"
@@ -227,7 +231,19 @@ export default function CollectionHero({
             >
               {word}
             </span>
-          ))}
+          ))} */}
+
+          <span
+            className="ch-word inline-block mr-4 text-white"
+            style={{
+              fontSize: "clamp(2.8rem,7vw,7rem)",
+              fontWeight: 300,
+              letterSpacing: "-0.02em",
+              lineHeight: 1,
+            }}
+          >
+            {meta.name}
+          </span>
         </h1>
 
         {/* Tagline */}

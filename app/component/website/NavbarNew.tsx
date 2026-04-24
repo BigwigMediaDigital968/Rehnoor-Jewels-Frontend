@@ -681,14 +681,23 @@ export default function NavbarNew() {
                         </motion.span>
                         {/* Active / hover underline */}
                         <span
-                          className="absolute bottom-0 left-4 right-4 h-px transition-all duration-300"
+                          className="absolute bottom-0 left-4 right-4 h-[2px] rounded-full transition-all duration-500 ease-out"
                           style={{
-                            background: "var(--rj-gold)",
+                            background: `linear-gradient(90deg, transparent, #d4af37, #f9e27d, #d4af37, transparent)`,
+                            boxShadow:
+                              isActive || collectionsOpen
+                                ? "0 0 8px rgba(212, 175, 55, 0.6), 0 0 16px rgba(212, 175, 55, 0.4)"
+                                : "none",
                             opacity: isActive || collectionsOpen ? 1 : 0,
                             transform:
                               isActive || collectionsOpen
                                 ? "scaleX(1)"
                                 : "scaleX(0)",
+                            transformOrigin: "center",
+                            filter:
+                              isActive || collectionsOpen
+                                ? "blur(0.3px)"
+                                : "blur(1px)",
                           }}
                         />
                       </button>
@@ -719,11 +728,23 @@ export default function NavbarNew() {
                     {item.label}
                     {/* Active indicator */}
                     <span
-                      className="absolute bottom-0 left-4 right-4 h-px transition-all duration-300"
+                      className="absolute bottom-0 left-4 right-4 h-[2px] rounded-full transition-all duration-500 ease-out"
                       style={{
-                        background: "var(--rj-gold)",
-                        opacity: isActive ? 1 : 0,
-                        transform: isActive ? "scaleX(1)" : "scaleX(0)",
+                        background: `linear-gradient(90deg, transparent, #d4af37, #f9e27d, #d4af37, transparent)`,
+                        boxShadow:
+                          isActive || collectionsOpen
+                            ? "0 0 8px rgba(212, 175, 55, 0.6), 0 0 16px rgba(212, 175, 55, 0.4)"
+                            : "none",
+                        opacity: isActive || collectionsOpen ? 1 : 0,
+                        transform:
+                          isActive || collectionsOpen
+                            ? "scaleX(1)"
+                            : "scaleX(0)",
+                        transformOrigin: "center",
+                        filter:
+                          isActive || collectionsOpen
+                            ? "blur(0.3px)"
+                            : "blur(1px)",
                       }}
                     />
                   </Link>
@@ -783,9 +804,24 @@ export default function NavbarNew() {
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="overflow-hidden bg-white"
+              className="overflow-hidden bg-white relative"
               style={{ borderTop: "1px solid rgba(0,55,32,0.1)" }}
             >
+              {/* 🔥 CLOSE BUTTON */}
+              <button
+                onClick={() => setSearchOpen(false)}
+                className="absolute top-8 right-52 p-2 rounded-full transition-all duration-300 group cursor-pointer"
+                style={{
+                  background: "rgba(0,0,0,0.04)",
+                }}
+              >
+                <X
+                  size={18}
+                  className="transition-transform duration-300 group-hover:rotate-90"
+                  style={{ color: "var(--rj-ash)" }}
+                />
+              </button>
+
               <div className="container-rj py-4">
                 <div className="relative max-w-2xl mx-auto">
                   <Search
@@ -793,6 +829,7 @@ export default function NavbarNew() {
                     className="absolute left-4 top-1/2 -translate-y-1/2"
                     style={{ color: "var(--rj-ash)" }}
                   />
+
                   <input
                     autoFocus
                     type="text"
@@ -801,6 +838,7 @@ export default function NavbarNew() {
                     placeholder="Search for chains, rings, kadas…"
                     className="input-rj pl-12 pr-12"
                   />
+
                   {searchQuery && (
                     <button
                       onClick={() => setSearchQuery("")}
@@ -811,6 +849,8 @@ export default function NavbarNew() {
                     </button>
                   )}
                 </div>
+
+                {/* Tags */}
                 <div className="mt-3 flex flex-wrap gap-2 max-w-2xl mx-auto">
                   {["Nawabi Chain", "Gold Ring", "Kada", "Bracelet"].map(
                     (tag) => (

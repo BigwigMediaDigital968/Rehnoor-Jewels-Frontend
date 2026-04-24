@@ -13,11 +13,13 @@ import CollectionIntroStrip from "./component/Collectionintrostrip";
 import ChainForMenPage from "./custom/ChainForMen";
 import BraceletForMen from "./custom/BraceletForMen";
 import KadaForMen from "./custom/KadaForMen";
+import RingsForMen from "./custom/RingsForMen";
 
 const EXTRA_SECTIONS: Record<string, React.FC<{ meta: CollectionMeta }>> = {
   "chains-for-men": ChainForMenPage,
   "bracelet-for-men": BraceletForMen,
   "kada-for-men": KadaForMen,
+  "rings-for-men": RingsForMen,
 };
 
 function toMeta(
@@ -26,6 +28,7 @@ function toMeta(
   if (!col) throw new Error("No collection data");
   return {
     id: col.slug,
+    name: col.name,
     label: col.label || col.name,
     tagline: col.tagline,
     description: col.description,
