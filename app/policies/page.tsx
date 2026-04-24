@@ -42,15 +42,15 @@ const POLICIES = [
     icon: <Lock size={20} />,
     tags: ["IT Act 2000", "Data Protection", "GDPR Aligned"],
   },
-  {
-    key: "terms",
-    label: "Terms & Conditions",
-    description:
-      "Website usage rules, account creation, gold pricing policy, product accuracy disclaimer, intellectual property, and governing law.",
-    href: "/policies/terms",
-    icon: <FileText size={20} />,
-    tags: ["Dynamic Pricing", "IP Rights", "Delhi Jurisdiction"],
-  },
+  // {
+  //   key: "terms",
+  //   label: "Terms & Conditions",
+  //   description:
+  //     "Website usage rules, account creation, gold pricing policy, product accuracy disclaimer, intellectual property, and governing law.",
+  //   href: "/policies/terms",
+  //   icon: <FileText size={20} />,
+  //   tags: ["Dynamic Pricing", "IP Rights", "Delhi Jurisdiction"],
+  // },
   {
     key: "cancellation",
     label: "Cancellation Policy",

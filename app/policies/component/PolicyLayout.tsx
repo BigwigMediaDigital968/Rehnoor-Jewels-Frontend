@@ -55,12 +55,12 @@ export const POLICY_TABS: {
     icon: <Lock size={14} />,
     href: "/policies/privacy",
   },
-  {
-    key: "terms",
-    label: "Terms & Conditions",
-    icon: <FileText size={14} />,
-    href: "/policies/terms",
-  },
+  // {
+  //   key: "terms",
+  //   label: "Terms & Conditions",
+  //   icon: <FileText size={14} />,
+  //   href: "/policies/terms",
+  // },
   {
     key: "cancellation",
     label: "Cancellation Policy",
@@ -584,7 +584,7 @@ export function PolicyPageShell({
                   ✦ Our Commitment
                 </p>
                 {[
-                  "BIS Hallmarked Jewellery",
+                  // "BIS Hallmarked Jewellery",
                   "Pure 24K Gold Plating",
                   "100–300 mg Gold Per Piece",
                   "6-Month Warranty",

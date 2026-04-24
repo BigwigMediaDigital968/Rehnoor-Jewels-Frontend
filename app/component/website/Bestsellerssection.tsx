@@ -592,7 +592,7 @@ function QuickViewModal({
                 className="flex flex-wrap items-center justify-center gap-3 pt-4"
                 style={{ borderTop: "1px solid var(--rj-bone)" }}
               >
-                {["⚜ BIS Hallmarked", "✂ Free Sizing", "↩ 30-Day Returns"].map(
+                {["⚜ Certified", "✂ Free Sizing", "↩ 07-Day Returns"].map(
                   (t) => (
                     <span
                       key={t}

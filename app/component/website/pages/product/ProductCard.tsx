@@ -1233,7 +1233,7 @@ function QuickViewModal({
               className="text-center font-cinzel text-[9px] tracking-wider mt-4"
               style={{ color: "var(--rj-ash)" }}
             >
-              ⚜ BIS Hallmarked · Free Sizing · 30-Day Returns
+              ⚜ Carftmenship · Free Sizing · 07-Day Returns
             </p>
           </div>
         </div>

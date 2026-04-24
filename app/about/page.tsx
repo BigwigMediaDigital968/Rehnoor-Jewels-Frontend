@@ -15,7 +15,7 @@ export default function AboutPage() {
       <Features />
       {/* <OurPartners /> */}
       {/* <OurTeam /> */}
-      <SocialFeed />
+      {/* <SocialFeed /> */}
     </main>
   );
 }

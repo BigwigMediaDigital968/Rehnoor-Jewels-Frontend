@@ -612,21 +612,21 @@ const SHIPPING_OPTIONS: {
     icon: <Truck size={16} />,
     badge: "Free",
   },
-  {
-    value: "express",
-    label: "Express Delivery",
-    sub: "2–3 business days",
-    price: 149,
-    icon: <Zap size={16} />,
-  },
-  {
-    value: "same_day",
-    label: "Same Day Delivery",
-    sub: "Order before 12 PM · Select metros only",
-    price: 299,
-    icon: <Clock size={16} />,
-    badge: "Fastest",
-  },
+  // {
+  //   value: "express",
+  //   label: "Express Delivery",
+  //   sub: "2–3 business days",
+  //   price: 149,
+  //   icon: <Zap size={16} />,
+  // },
+  // {
+  //   value: "same_day",
+  //   label: "Same Day Delivery",
+  //   sub: "Order before 12 PM · Select metros only",
+  //   price: 299,
+  //   icon: <Clock size={16} />,
+  //   badge: "Fastest",
+  // },
 ];
 
 export function StepShipping({
@@ -790,12 +790,12 @@ const PAYMENT_OPTIONS: {
     icon: "💳",
     badge: "Recommended",
   },
-  {
-    value: "upi",
-    label: "UPI Direct",
-    sub: "GPay, PhonePe, Paytm, BHIM",
-    icon: "📱",
-  },
+  // {
+  //   value: "upi",
+  //   label: "UPI Direct",
+  //   sub: "GPay, PhonePe, Paytm, BHIM",
+  //   icon: "📱",
+  // },
   {
     value: "cod",
     label: "Cash on Delivery",

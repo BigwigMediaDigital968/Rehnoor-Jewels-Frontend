@@ -31,7 +31,7 @@ export default function HomePage() {
         {/* <HomeBlogSection /> */}
         {/* <InstagramSection /> */}
         <FAQs {...homeFAQProps} />
-        <PopularSearch />
+        {/* <PopularSearch /> */}
       </main>
     </>
   );

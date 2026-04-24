@@ -28,23 +28,23 @@ const footerLinks = {
   ],
   company: [
     { label: "About Us", href: "/about" },
-    { label: "Our Story", href: "/story" },
-    { label: "Franchise", href: "/franchise" },
-    { label: "Careers", href: "/careers" },
-    { label: "Press", href: "/press" },
+    // { label: "Our Story", href: "/story" },
+    // { label: "Franchise", href: "/franchise" },
+    // { label: "Careers", href: "/careers" },
+    // { label: "Press", href: "/press" },
     { label: "Blogs", href: "/blogs" },
   ],
   support: [
     { label: "Contact Us", href: "/contact" },
     { label: "FAQ", href: "/faq" },
-    { label: "Size Guide", href: "/size-guide" },
+    // { label: "Size Guide", href: "/size-guide" },
     { label: "Track Order", href: "/track-order" },
-    { label: "Return Policy", href: "/returns" },
-    { label: "Shipping Info", href: "/shipping" },
+    // { label: "Return Policy", href: "/returns" },
+    // { label: "Shipping Info", href: "/shipping" },
   ],
   policies: [
     { label: "Privacy Policy", href: "/policies/privacy" },
-    { label: "Terms of Service", href: "/terms" },
+    // { label: "Terms of Service", href: "/terms" },
     { label: "Shipping", href: "/policies/shipping" },
     { label: "Return & Refund", href: "/policies/returns" },
     { label: "Cookies", href: "/policies/cookies" },
@@ -200,7 +200,7 @@ export default function Footer() {
             </Link>
 
             <p className="text-white/60 text-sm leading-relaxed mb-6 max-w-sm">
-              Rehnoor Jewels redefines men’s gold jewellery - a fusion of
+              Rehnoor Jewels redefines 1-gram gold jewellery - a fusion of
               heritage artistry and contemporary boldness. Every creation
               reflects enduring quality and refined craftsmanship.
             </p>

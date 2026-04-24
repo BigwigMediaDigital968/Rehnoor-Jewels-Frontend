@@ -35,7 +35,7 @@ const testimonials: Testimonial[] = [
     city: "Delhi",
     rating: 5,
     review:
-      "Quality is exceptional for the price. BIS hallmark gave me complete confidence. Packaging was premium — felt like a luxury brand.",
+      "Quality is exceptional for the price. It gave me complete confidence. Packaging was premium — felt like a luxury brand.",
     productBought: "Cuban Link Chain",
     verified: true,
     date: "Nov 2024",

@@ -1169,7 +1169,7 @@ export default function ContactPage() {
       ══════════════════════════════════════ */}
       <div style={{ background: "var(--rj-ivory-dark)" }}>
         <div className="container-rj py-20">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
+          <div className="grid grid-cols gap-8 items-start">
             <motion.div
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -1247,7 +1247,7 @@ export default function ContactPage() {
                 </a>
               </div> */}
 
-              <div
+              {/* <div
                 className="p-5 md:mt-20 rounded-2xl"
                 style={{
                   background: "var(--rj-emerald)",
@@ -1291,7 +1291,7 @@ export default function ContactPage() {
                     </p>
                   </div>
                 ))}
-              </div>
+              </div> */}
             </motion.div>
           </div>
         </div>
