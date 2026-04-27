@@ -21,7 +21,10 @@ export interface CollectionMeta {
   productCount: number;
   purity: string;
   tag?: string;
-  breadcrumb?: string[]; // e.g. ["Home","Collections","Chains"]
+  seoTitle?: string;
+  seoDescription?: string;
+  seoKeywords?: string[];
+  breadcrumb: string[]; // e.g. ["Home","Collections","Chains"]
   products: string[]; // ObjectId refs (public list)
 }
 
@@ -103,7 +106,7 @@ export default function CollectionHero({
     return () => ctx.revert();
   }, [meta.id]);
 
-  console.log(meta);
+  // console.log(meta);
 
   const heroImage =
     meta?.heroImage && meta.heroImage.trim() !== "" ? meta.heroImage : null;
@@ -168,36 +171,60 @@ export default function CollectionHero({
       <div className="relative z-10 container-rj pb-12 w-full">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-1.5 mb-6" aria-label="Breadcrumb">
-          {(meta.breadcrumb ?? ["Home", "Collections", meta.label]).map(
-            (crumb, i, arr) => (
-              <span key={crumb} className="ch-crumb flex items-center gap-1.5">
-                {i < arr.length - 1 ? (
-                  <>
-                    <Link
-                      href={i === 0 ? "/" : `/${crumb.toLowerCase()}`}
-                      className="font-cinzel text-[9px] tracking-widest uppercase transition-opacity hover:opacity-70"
-                      style={{
-                        color: "rgba(255,255,255,0.45)",
-                        cursor: "pointer",
-                      }}
+          {(meta.breadcrumb ?? ["Home", "Collections", meta.id]).map(
+            (crumb, i, arr) => {
+              // 👉 Generate correct URLs
+              let href = "/";
+              if (i === 1) href = "/collections";
+              if (i === 2) href = `/collections/${meta.id}`;
+
+              // 👉 Shorten only last breadcrumb (collection name)
+              const formatCrumb = (text: string) => {
+                if (i !== arr.length - 1) return text;
+
+                const words = text.split(" ");
+                if (words.length <= 2) return text;
+
+                return words.slice(0, 2).join(" ") + "...";
+              };
+
+              return (
+                <span
+                  key={crumb}
+                  className="ch-crumb flex items-center gap-1.5"
+                >
+                  {i < arr.length - 1 ? (
+                    <>
+                      <Link
+                        href={href}
+                        className="font-cinzel text-[9px] tracking-widest uppercase transition-opacity hover:opacity-70"
+                        style={{
+                          color: "rgba(255,255,255,0.45)",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {formatCrumb(crumb)}
+                      </Link>
+
+                      <ChevronRight
+                        size={10}
+                        style={{
+                          color: "rgba(255,255,255,0.25)",
+                          flexShrink: 0,
+                        }}
+                      />
+                    </>
+                  ) : (
+                    <span
+                      className="font-cinzel text-[9px] tracking-widest uppercase"
+                      style={{ color: "var(--rj-gold)" }}
                     >
-                      {crumb}
-                    </Link>
-                    <ChevronRight
-                      size={10}
-                      style={{ color: "rgba(255,255,255,0.25)", flexShrink: 0 }}
-                    />
-                  </>
-                ) : (
-                  <span
-                    className="font-cinzel text-[9px] tracking-widest uppercase"
-                    style={{ color: "var(--rj-gold)" }}
-                  >
-                    {crumb}
-                  </span>
-                )}
-              </span>
-            ),
+                      {formatCrumb(crumb)}
+                    </span>
+                  )}
+                </span>
+              );
+            },
           )}
         </nav>
 
@@ -236,7 +263,7 @@ export default function CollectionHero({
           <span
             className="ch-word inline-block mr-4 text-white"
             style={{
-              fontSize: "clamp(2.8rem,7vw,7rem)",
+              fontSize: "clamp(2.8rem,4vw,7rem)",
               fontWeight: 300,
               letterSpacing: "-0.02em",
               lineHeight: 1,

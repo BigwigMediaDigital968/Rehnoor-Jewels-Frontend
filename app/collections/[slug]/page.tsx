@@ -14,12 +14,14 @@ import ChainForMenPage from "./custom/ChainForMen";
 import BraceletForMen from "./custom/BraceletForMen";
 import KadaForMen from "./custom/KadaForMen";
 import RingsForMen from "./custom/RingsForMen";
+import PendantsForMen from "./custom/PendantsForMen";
 
 const EXTRA_SECTIONS: Record<string, React.FC<{ meta: CollectionMeta }>> = {
-  "chains-for-men": ChainForMenPage,
-  "bracelet-for-men": BraceletForMen,
+  "gold-plated-chains-for-men": ChainForMenPage,
+  "gold-plated-bracelets-for-men": BraceletForMen,
   "kada-for-men": KadaForMen,
   "rings-for-men": RingsForMen,
+  "pendants-for-men": PendantsForMen,
 };
 
 function toMeta(
@@ -32,6 +34,9 @@ function toMeta(
     label: col.label || col.name,
     tagline: col.tagline,
     description: col.description,
+    seoTitle: col.seoTitle,
+    seoDescription: col.seoDescription,
+    seoKeywords: Array.isArray(col.seoKeywords) ? col.seoKeywords : [],
     heroImage: col.heroImage,
     accentColor: col.accentColor || "rgba(0,36,16,0.88)",
     productCount: col.productCount,
@@ -59,15 +64,73 @@ export async function generateMetadata({
 
   try {
     const res = await fetchCollectionBySlug(slug);
+
     if (res.success && res.data) {
+      const col = res.data;
+
+      const title =
+        col.seoTitle ||
+        `${col.name} | Premium Men's Gold Jewellery | Rehnoor Jewels`;
+
+      const description =
+        col.seoDescription ||
+        col.description ||
+        `Explore ${col.name} collection by Rehnoor Jewels. Premium 22kt gold jewellery crafted for modern men.`;
+
+      const url = `https://www.rehnoorjewels.com/collections/${col.slug}`;
+
       return {
-        title: `${res.data.seoTitle || res.data.label} | Rehnoor Jewels`,
-        description: res.data.seoDescription || res.data.description,
+        title,
+        description,
+
+        keywords: col.seoKeywords?.length
+          ? col.seoKeywords
+          : [
+              `${col.name} online`,
+              `${col.name} India`,
+              `buy ${col.name}`,
+              `${col.name} 22kt gold`,
+            ],
+
+        alternates: {
+          canonical: url,
+        },
+
+        openGraph: {
+          title,
+          description,
+          url,
+          siteName: "Rehnoor Jewels",
+          images: [
+            {
+              url: col.heroImage,
+              width: 1200,
+              height: 630,
+              alt: col.name,
+            },
+          ],
+          locale: "en_IN",
+          type: "website",
+        },
+
+        twitter: {
+          card: "summary_large_image",
+          title,
+          description,
+          images: [col.heroImage],
+        },
+
+        robots: {
+          index: true,
+          follow: true,
+        },
       };
     }
   } catch {}
 
-  return { title: "Collection | Rehnoor Jewels" };
+  return {
+    title: "Collections | Rehnoor Jewels",
+  };
 }
 
 function normalizeProducts(raw: ApiProduct[]): Product[] {
@@ -125,8 +188,54 @@ export default async function CollectionDetailPage({
 
   const ExtraSection = EXTRA_SECTIONS[slug];
 
+  console.log(meta);
+
   return (
     <main>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: meta.breadcrumb.map((item, index) => ({
+              "@type": "ListItem",
+              position: index + 1,
+              name: item,
+              item:
+                index === 0
+                  ? "https://www.rehnoorjewels.com"
+                  : index === 1
+                    ? "https://www.rehnoorjewels.com/collections"
+                    : `https://www.rehnoorjewels.com/collections/${meta.id}`,
+            })),
+          }),
+        }}
+      />
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: meta.name,
+            description: meta.description,
+            image: meta.heroImage,
+            url: `https://www.rehnoorjewels.com/collections/${meta.id}`,
+            mainEntity: {
+              "@type": "ItemList",
+              itemListElement: products.map((product, index) => ({
+                "@type": "ListItem",
+                position: index + 1,
+                url: `https://www.rehnoorjewels.com${product.href}`,
+                name: product.name,
+              })),
+            },
+          }),
+        }}
+      />
+
       <CollectionHero meta={meta} />
 
       <CollectionProductGrid

@@ -32,12 +32,12 @@ const navLinks = [
         items: [
           {
             label: "Chain for Men",
-            href: "/collections/chains-for-men",
+            href: "/collections/gold-plated-chains-for-men",
             icon: "⛓",
           },
           {
             label: "Bracelet for Men",
-            href: "/collections/bracelet-for-men",
+            href: "/collections/gold-plated-bracelets-for-men",
             icon: "🔗",
           },
         ],

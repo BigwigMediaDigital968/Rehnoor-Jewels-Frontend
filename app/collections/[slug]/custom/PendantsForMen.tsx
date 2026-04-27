@@ -1,4 +1,4 @@
-// app/collections/kada-for-men/component/KadaForMen.tsx
+// app/collections/pendants-for-men/component/PendantsForMen.tsx
 "use client";
 
 import { useRef, useState } from "react";
@@ -21,7 +21,7 @@ import {
   Wind,
   Gift,
   Quote,
-  Hammer,
+  Heart,
 } from "lucide-react";
 
 // ─────────────────────────────────────────────────────────────────
@@ -31,22 +31,6 @@ interface ReviewItem {
   name: string;
   city: string;
   text: string;
-}
-
-interface StyleTip {
-  context: string;
-  tip: string;
-  num: string;
-}
-
-interface FaqEntry {
-  q: string;
-  a: string;
-}
-
-interface KadaStyle {
-  name: string;
-  desc: string;
 }
 
 interface Feature {
@@ -59,6 +43,18 @@ interface WhyItem {
   icon: React.ReactNode;
   title: string;
   desc: string;
+}
+
+interface StyleTip {
+  context: string;
+  tip: string;
+  num: string;
+  dark: boolean;
+}
+
+interface FaqEntry {
+  q: string;
+  a: string;
 }
 
 interface DurabilityItem {
@@ -116,7 +112,7 @@ function Section({
 }
 
 // ─────────────────────────────────────────────────────────────────
-// SHARED UI PRIMITIVES
+// SHARED PRIMITIVES
 // ─────────────────────────────────────────────────────────────────
 function GoldDivider() {
   return (
@@ -148,27 +144,43 @@ function Label({ children }: { children: React.ReactNode }) {
 // ─────────────────────────────────────────────────────────────────
 // DATA
 // ─────────────────────────────────────────────────────────────────
+const STAT_BADGES = [
+  { value: "1 Gram", label: "Gold Polish" },
+  { value: "50K+", label: "Happy Customers" },
+  { value: "Free", label: "Pan-India Delivery" },
+  { value: "∞", label: "Style Options" },
+];
 
-const KADA_STYLES: KadaStyle[] = [
+const PENDANT_STYLES = [
   {
-    name: "Plain Kada",
-    desc: "A simple, sleek, and timeless gold plated kada that pairs effortlessly with any outfit, ethnic or casual. Perfect for everyday wear.",
+    name: "God Locket / Religious Pendant",
+    desc: "A deeply meaningful and timeless piece, our gold plated god lockets for men are designed to reflect faith and devotion while offering a premium finish for everyday wear.",
+    tag: "Devotional",
   },
   {
-    name: "Designer Kada",
-    desc: "Intricately crafted with detailed patterns and engravings, our designer golden kada adds a touch of elegance and sophistication to any look.",
+    name: "Plain & Minimal Pendant",
+    desc: "Sleek, understated, and endlessly versatile. Our plain gold plated pendants for men pair effortlessly with every outfit from casual to formal.",
+    tag: "Everyday",
   },
   {
-    name: "Broad Kada",
-    desc: "Bold, wide, and striking. Our broad gold kada makes a strong style statement and is ideal for festive and wedding occasions.",
+    name: "Geometric Pendant",
+    desc: "Bold shapes and contemporary designs for the modern man. Our geometric pendants are crafted for those who express themselves through unique style.",
+    tag: "Contemporary",
   },
   {
-    name: "Twisted Kada",
-    desc: "A unique and contemporary design featuring a twisted pattern, perfect for men who love to stand out with their style.",
+    name: "Oxidised Pendant",
+    desc: "A striking fusion of rustic charm and modern design. Our oxidised pendants for men feature an antique finish that makes a bold, edgy style statement.",
+    tag: "Statement",
   },
   {
-    name: "Dual Tone Kada",
-    desc: "A modern take on the classic golden kada, featuring a combination of gold and oxidised finishes for a bold and trendy look.",
+    name: "Initial / Personalised Pendant",
+    desc: "Make it uniquely yours. Our initial and personalised pendants for men are the perfect way to express identity and individuality in a meaningful piece.",
+    tag: "Personalised",
+  },
+  {
+    name: "Golden Locket",
+    desc: "A classic pendant style with a rich gold finish, designed for daily or special occasion wear. Available in religious, plain, and designer varieties.",
+    tag: "Classic",
   },
 ];
 
@@ -181,27 +193,17 @@ const SPECIAL_FEATURES: Feature[] = [
   {
     icon: <ShieldCheck size={18} />,
     title: "Anti-Tarnish Coating",
-    desc: "Every golden kada comes with a protective anti-tarnish finish that keeps it looking fresh and radiant with regular use.",
+    desc: "Every 1 gram gold pendant comes with a protective anti-tarnish finish that keeps it looking fresh and radiant.",
   },
   {
     icon: <Wind size={18} />,
     title: "Lightweight & Comfortable",
-    desc: "Designed for all-day wear — lightweight, smooth, and comfortable on the wrist.",
+    desc: "Designed for all-day wear — lightweight and comfortable around the neck.",
   },
   {
     icon: <Sparkles size={18} />,
     title: "Affordable Luxury",
-    desc: "Get the bold, traditional look of a gold kada at a price that suits every budget.",
-  },
-  {
-    icon: <Layers size={18} />,
-    title: "Wide Range of Designs",
-    desc: "From plain and minimal to bold and ornate — a golden kada for every man and every occasion.",
-  },
-  {
-    icon: <Hammer size={18} />,
-    title: "Sturdy Build",
-    desc: "Our gold plated kada for men is built to last — a reliable everyday accessory and a treasured festive piece.",
+    desc: "Get the rich, premium look of golden lockets and pendants at a price that suits every budget.",
   },
 ];
 
@@ -209,81 +211,81 @@ const WHY_REHNOOR: WhyItem[] = [
   {
     icon: <BadgeCheck size={16} />,
     title: "Trusted Quality",
-    desc: "Every 1 gram gold kada at Rehnoor Jewels goes through strict quality checks to ensure a flawless finish and lasting shine.",
+    desc: "Every 1 gram gold pendant at Rehnoor Jewels goes through strict quality checks to ensure a flawless finish and lasting shine.",
   },
   {
     icon: <Star size={16} />,
     title: "Affordable Pricing",
-    desc: "We bring you the finest gold kada for men designs at prices that are easy on the pocket without compromising on craftsmanship.",
-  },
-  {
-    icon: <Layers size={16} />,
-    title: "Wide Collection",
-    desc: "From plain everyday kadas to bold festive pieces, our gold plated kada range has something for every taste, style, and budget.",
+    desc: "We bring you the finest pendants for men and golden lockets at prices that are easy on the pocket without compromising on craftsmanship.",
   },
   {
     icon: <Truck size={16} />,
     title: "Pan-India Delivery",
-    desc: "We deliver your favourite golden kada safely and securely to your doorstep, anywhere across India.",
+    desc: "We deliver your favourite pendants for men safely and securely to your doorstep, anywhere across India.",
   },
   {
     icon: <RefreshCw size={16} />,
     title: "Customer First Approach",
-    desc: "At Rehnoor Jewels, your satisfaction is our priority. We are always here to help you find the perfect gold kada for men.",
+    desc: "At Rehnoor Jewels, your satisfaction is our priority. We are always here to help you find the perfect pendant or golden locket.",
   },
 ];
 
 const STYLE_TIPS: StyleTip[] = [
   {
-    context: "Traditional & Festive",
-    tip: "Pair a bold gold kada for men with a kurta or sherwani for a classic and complete traditional look at weddings, pujas, or festive celebrations.",
+    context: "Casual Look",
+    tip: "Pair a simple 1 gram gold pendant or golden locket with a plain tee and jeans for an effortlessly stylish everyday look.",
     num: "01",
+    dark: true,
   },
   {
-    context: "Casual Look",
-    tip: "Wear a simple plain golden kada with a plain tee and jeans for a stylish and effortless everyday look.",
+    context: "Festive & Traditional",
+    tip: "Wear a bold god locket or religious pendant for men over a kurta or sherwani to add a meaningful and elegant touch to your festive outfit.",
     num: "02",
+    dark: false,
   },
   {
     context: "Formal Style",
-    tip: "A sleek and minimal 1 gram gold kada adds a subtle yet confident touch to any formal or semi-formal outfit.",
+    tip: "A sleek and minimal pendant for men worn under a formal shirt adds a subtle yet confident personal touch to your professional look.",
     num: "03",
+    dark: false,
   },
   {
-    context: "Stacked Look",
-    tip: "Pair your gold plated kada with a chain bracelet or beaded bracelet for a trendy and personalised stacked wrist look.",
+    context: "Layered Look",
+    tip: "Layer two or three pendants for men of different lengths and styles for a trendy, personalised layered necklace look.",
     num: "04",
+    dark: true,
   },
   {
     context: "Fusion Look",
-    tip: "Mix your golden kada with contemporary western outfits like shirts and chinos for a bold indo-western style statement.",
+    tip: "Combine a geometric or oxidised pendant for men with a casual western outfit for a bold and edgy indo-western style statement.",
     num: "05",
+    dark: false,
   },
 ];
 
 const DURABILITY_ITEMS: DurabilityItem[] = [
   {
-    icon: "✨",
+    icon: "⏱",
     title: "With Regular Care",
-    body: "A well-maintained 1 gram gold kada can retain its shine and colour for up to 1 to 2 years or even longer.",
+    body: "A well-maintained 1 gram gold pendant can retain its shine and colour for up to 1 to 2 years or even longer.",
     highlight: true,
   },
   {
-    icon: "✨",
+    icon: "🧪",
     title: "Key Factors",
-    body: "The longevity of your golden kada depends on skin type, exposure to sweat, water, perfumes, and how frequently it is worn.",
+    body: "The longevity of your golden locket or pendant depends on skin type, exposure to sweat, water, perfumes, and how frequently it is worn.",
     highlight: false,
   },
   {
-    icon: "✨",
+    icon: "🛡",
     title: "Anti-Tarnish Advantage",
-    body: "At Rehnoor Jewels, every gold plated kada for men comes with a premium anti-tarnish coating that adds an extra layer of protection and significantly extends the life of the plating.",
+    body: "At Rehnoor Jewels, every pendant for men comes with a premium anti-tarnish coating that adds an extra layer of protection and significantly extends the life of the plating.",
     highlight: false,
   },
   {
-    icon: "✨",
+    icon: "💡",
     title: "Pro Tip",
-    body: "Remove your gold kada before bathing, swimming, or exercising to keep it looking its best for longer.",
+    body: "Remove your pendant before bathing, swimming, or exercising to keep it looking its best for longer.",
     highlight: true,
   },
 ];
@@ -291,7 +293,7 @@ const DURABILITY_ITEMS: DurabilityItem[] = [
 const CARE_TIPS = [
   {
     icon: <Sun size={15} />,
-    tip: "Wipe your kada with a soft, dry cloth after every use to remove sweat and dust.",
+    tip: "Wipe your pendant with a soft, dry cloth after every use to remove sweat and dust.",
   },
   {
     icon: <Droplets size={15} />,
@@ -299,7 +301,7 @@ const CARE_TIPS = [
   },
   {
     icon: <ShieldCheck size={15} />,
-    tip: "Store your golden kada in a dry, airtight pouch or jewellery box when not in use.",
+    tip: "Store your 1 gram gold pendant or golden locket in a dry, airtight pouch or jewellery box when not in use.",
   },
   {
     icon: <Zap size={15} />,
@@ -309,91 +311,91 @@ const CARE_TIPS = [
 
 const FAQS: FaqEntry[] = [
   {
-    q: "What is a gold plated kada for men?",
-    a: "A gold plated kada for men is a traditional wrist ornament made from a base metal electroplated with a layer of real gold, offering the bold and rich look of a golden kada at a very affordable price.",
+    q: "What is a 1 gram gold pendant?",
+    a: "A 1 gram gold pendant is a pendant crafted from a base metal and electroplated with one gram of real gold, giving it a rich and luxurious finish at a very affordable price. Our 1 gram gold pendant collection at Rehnoor Jewels offers a wide variety of styles for every occasion.",
   },
   {
-    q: "Is a 1 gram gold kada for men suitable for daily wear?",
-    a: "Yes! Our 1 gram gold kada for men is lightweight, comfortable, and designed for everyday use. With proper care, it holds up well with regular wear and retains its shine for a long time.",
+    q: "What is a golden locket?",
+    a: "A golden locket is a classic pendant style with a gold finish, designed to be worn daily or on special occasions. At Rehnoor Jewels, our golden lockets for men are available in various designs including religious, plain, and designer styles.",
   },
   {
-    q: "How long does a gold plated kada for men last?",
-    a: "With regular care, a gold plated kada for men from Rehnoor Jewels can last anywhere from 1 to 2 years or more, thanks to our premium anti-tarnish coating.",
+    q: "Are pendants for men suitable for daily wear?",
+    a: "Yes! Our pendants for men are lightweight, comfortable, and designed for everyday use. With proper care, they hold up well with regular wear and retain their shine for a long time.",
   },
   {
-    q: "Can I wear a golden kada in water?",
-    a: "We recommend avoiding prolonged water exposure. Remove your gold plated kada before bathing, swimming, or any water-related activity to preserve the plating and shine.",
+    q: "How long do pendants for men last?",
+    a: "With regular care, a pendant for men from Rehnoor Jewels can last anywhere from 1 to 2 years or more, thanks to our premium anti-tarnish coating.",
   },
   {
-    q: "What is the difference between a golden kada and a gold kada for men?",
-    a: "Both terms refer to the same style of wrist ornament. A golden kada typically refers to its colour and finish, while a gold kada refers to the style and target wearer. At Rehnoor Jewels, all our kadas are gold plated and designed specifically for men.",
+    q: "Do your pendants for men come with a chain?",
+    a: "Select pendants in our collection come paired with a matching chain for a complete ready-to-wear look. Please check individual product descriptions for details.",
   },
   {
-    q: "How do I clean my gold plated kada for men?",
+    q: "How do I clean my 1 gram gold pendant or golden locket?",
     a: "Simply wipe it with a soft, dry cloth after each use. For a deeper clean, use a soft cloth dampened with mild soapy lukewarm water, then dry completely before storing.",
   },
 ];
 
 const REVIEWS: ReviewItem[] = [
-  // {
-  //   name: "Amarjeet Singh",
-  //   city: "Amritsar",
-  //   text: "I have been looking for a good gold plated kada for myself for a long time and Rehnoor Jewels did not disappoint! The finish is smooth, the weight feels just right, and it looks exactly like a real golden kada. Absolutely love it!",
-  // },
-  // {
-  //   name: "Ramesh Yadav",
-  //   city: "Lucknow",
-  //   text: "Ordered a 1 gram gold kada for men from Rehnoor Jewels and I am beyond impressed. The quality is outstanding, the shine is incredible, and it has held up really well with daily wear. Highly recommend!",
-  // },
-  // {
-  //   name: "Gurpreet Dhillon",
-  //   city: "Chandigarh",
-  //   text: "The gold plated kada I ordered from Rehnoor Jewels is just perfect. Bold, sturdy, and looks amazing with both my kurta and casual outfits. The anti-tarnish coating is a great feature — still looks brand new after months of wear!",
-  // },
   {
-    name: "Manoj Tiwari",
-    city: "Bhopal",
-    text: "Finally found a golden kada that looks premium without the premium price tag! Rehnoor Jewels has nailed the quality and design. My friends keep asking where I got it from!",
+    name: "Rohit Verma",
+    city: "Delhi",
+    text: "I ordered a god locket from Rehnoor Jewels and the quality genuinely surprised me. The detailing is beautiful, the finish is smooth, and it looks absolutely premium. Totally worth every rupee!",
   },
   {
-    name: "Sunil Chauhan",
+    name: "Arjun Nair",
+    city: "Mumbai",
+    text: "Been wearing my pendant from Rehnoor Jewels every single day and there is no fading at all even after months of use. The anti-tarnish coating really does its job. Highly recommend!",
+  },
+  {
+    name: "Suresh Yadav",
     city: "Jaipur",
-    text: "The broad gold kada I ordered from Rehnoor Jewels is stunning. Wore it to a wedding last week and received so many compliments! Everyone thought it was a real gold kada. Truly impressed with the quality!",
+    text: "Finally found a pendant that looks expensive without the expensive price tag! The finish is flawless and it pairs perfectly with both my casual and ethnic outfits. Rehnoor Jewels never disappoints!",
   },
   {
-    name: "Deepak Verma",
+    name: "Gaurav Mishra",
+    city: "Ahmedabad",
+    text: "Ordered the geometric pendant as a gift for my friend's birthday and he absolutely loved it! The packaging was neat and elegant and the pendant looked stunning. Will definitely order again!",
+  },
+  {
+    name: "Harpreet Singh",
+    city: "Chandigarh",
+    text: "The religious pendant I ordered from Rehnoor Jewels is exactly what I was looking for. Meaningful, beautifully crafted, and the gold finish is absolutely stunning. Wore it to the Gurudwara and received so many compliments!",
+  },
+  {
+    name: "Manoj Chauhan",
     city: "Pune",
-    text: "I ordered the 1 gram gold kada for Diwali and it was the best purchase I made this festive season. The detailing is beautiful, the finish is flawless, and it paired perfectly with my kurta. Will definitely order more pieces!",
+    text: "I have tried pendants from many brands but Rehnoor Jewels is on a completely different level. The quality is outstanding, the designs are unique, and the price is very reasonable. Could not be happier!",
   },
   {
-    name: "Rahul Nair",
-    city: "Kochi",
-    text: "Been wearing my gold plated kada from Rehnoor Jewels every day for the past 3 months and there is no fading at all. The anti-tarnish finish really makes a difference. Great value for money!",
+    name: "Siddharth Joshi",
+    city: "Hyderabad",
+    text: "Ordered the oxidised pendant and it is just perfect for my style. Bold, edgy, and looks great with my casual outfits. The finish has held up really well with regular wear. Absolutely love it!",
   },
   {
     name: "Vishal Sharma",
     city: "Surat",
-    text: "The golden kada I ordered from Rehnoor Jewels exceeded all my expectations. Fast delivery, beautiful packaging, and the quality is top class. Could not have asked for more at this price!",
+    text: "The locket I ordered from Rehnoor Jewels exceeded all my expectations. Fast delivery, beautiful packaging, and the quality is top class. Rehnoor Jewels has definitely earned a loyal customer!",
   },
   {
     name: "Nikhil Patil",
     city: "Nagpur",
-    text: "I ordered a gold kada for men from Rehnoor Jewels as a birthday gift for my best friend and he absolutely loved it! The packaging was elegant and the kada looked stunning. Will definitely be ordering again!",
+    text: "Ordered a pendant as a Diwali gift for my brother and he was thrilled! It arrived beautifully packed and looked absolutely stunning. My brother has been wearing it every day since. Great purchase!",
   },
   {
-    name: "Harish Dubey",
-    city: "Varanasi",
-    text: "The 1 gram gold kada from Rehnoor Jewels is a perfect blend of tradition and style. It looks bold and rich, feels lightweight and comfortable, and the price is very reasonable. Rehnoor Jewels has earned a loyal customer!",
+    name: "Deepak Saxena",
+    city: "Bhopal",
+    text: "The initial pendant I ordered for myself is such a unique and personalised piece. The finish is flawless and it looks great with every outfit. Rehnoor Jewels has the best collection at the best price!",
   },
   {
-    name: "Pooja Agarwal",
+    name: "Anita Sharma",
     city: "Delhi",
-    text: "I gifted a gold plated kada from Rehnoor Jewels to my husband on his birthday and he has not taken it off since! The golden kada looks so rich and premium on his wrist. He gets compliments every time he steps out. So happy with my purchase!",
+    text: "I gifted a god locket from Rehnoor Jewels to my husband on our wedding anniversary and he was so moved by the gesture. The locket is beautifully crafted and looks so premium. He wears it every day and gets compliments wherever he goes!",
   },
   {
-    name: "Simran Kaur",
-    city: "Ludhiana",
-    text: "Was looking for a meaningful Rakhi gift for my brother and came across Rehnoor Jewels. I ordered a 1 gram gold kada for men and he absolutely loved it! It arrived beautifully packed and looked just like a real gold kada. I will definitely order more from Rehnoor Jewels!",
+    name: "Kavita Patel",
+    city: "Mumbai",
+    text: "Was looking for a meaningful Rakhi gift for my brother and found Rehnoor Jewels. I ordered a religious pendant for him and he absolutely loved it! It arrived beautifully packed and the quality is outstanding. Will definitely be ordering more!",
   },
 ];
 
@@ -402,8 +404,8 @@ const GIFT_OCCASIONS = [
   "Anniversary",
   "Rakhi",
   "Diwali",
-  "Wedding",
-  "Festive Occasions",
+  "Religious Milestone",
+  "Special Occasion",
 ];
 
 // ─────────────────────────────────────────────────────────────────
@@ -412,7 +414,6 @@ const GIFT_OCCASIONS = [
 function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
-
   return (
     <motion.details
       ref={ref}
@@ -423,14 +424,11 @@ function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
       className="group"
       style={{ borderBottom: "1px solid rgba(252,193,81,0.15)" }}
     >
-      <summary
-        className="flex items-center justify-between gap-4 py-5 cursor-pointer list-none select-none"
-        style={{ color: "var(--rj-charcoal)" }}
-      >
+      <summary className="flex items-center justify-between gap-4 py-5 cursor-pointer list-none select-none">
         <span
           className="font-cormorant font-semibold leading-snug"
           style={{
-            fontSize: "clamp(1rem, 2vw, 1.15rem)",
+            fontSize: "clamp(1rem,2vw,1.15rem)",
             color: "var(--rj-charcoal)",
           }}
         >
@@ -500,12 +498,10 @@ function ReviewCarousel({ reviews }: { reviews: ReviewItem[] }) {
                   />
                 ))}
               </div>
-
               <Quote
                 size={18}
                 style={{ color: "rgba(252,193,81,0.3)", flexShrink: 0 }}
               />
-
               <p
                 className="flex-1 leading-relaxed text-sm"
                 style={{
@@ -516,7 +512,6 @@ function ReviewCarousel({ reviews }: { reviews: ReviewItem[] }) {
               >
                 &ldquo;{review.text}&rdquo;
               </p>
-
               <div
                 className="flex items-center gap-3 pt-3"
                 style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
@@ -553,7 +548,6 @@ function ReviewCarousel({ reviews }: { reviews: ReviewItem[] }) {
         </motion.div>
       </AnimatePresence>
 
-      {/* Pagination */}
       <div className="flex items-center justify-center gap-4 mt-8">
         <button
           onClick={() => setPage((p) => Math.max(0, p - 1))}
@@ -564,11 +558,10 @@ function ReviewCarousel({ reviews }: { reviews: ReviewItem[] }) {
             color: "#fff",
             cursor: "pointer",
           }}
-          aria-label="Previous reviews"
+          aria-label="Previous"
         >
           <ChevronLeft size={14} />
         </button>
-
         <div className="flex items-center gap-1.5">
           {Array.from({ length: totalPages }).map((_, i) => (
             <button
@@ -586,7 +579,6 @@ function ReviewCarousel({ reviews }: { reviews: ReviewItem[] }) {
             />
           ))}
         </div>
-
         <button
           onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
           disabled={page === totalPages - 1}
@@ -596,11 +588,10 @@ function ReviewCarousel({ reviews }: { reviews: ReviewItem[] }) {
             color: "#fff",
             cursor: "pointer",
           }}
-          aria-label="Next reviews"
+          aria-label="Next"
         >
           <ChevronRight size={14} />
         </button>
-
         <span
           className="font-cinzel text-[10px] tracking-widest tabular-nums"
           style={{ color: "rgba(255,255,255,0.3)" }}
@@ -629,7 +620,7 @@ const faqSchema = {
 // ─────────────────────────────────────────────────────────────────
 // MAIN COMPONENT
 // ─────────────────────────────────────────────────────────────────
-export default function KadaForMen() {
+export default function PendantsForMen() {
   return (
     <>
       <script
@@ -645,83 +636,90 @@ export default function KadaForMen() {
         className="overflow-hidden"
       >
         {/* ══════════════════════════════════════════════════
-          HERO INTRO — charcoal bg
+          HERO — charcoal bg, pendant-specific chain motif
       ══════════════════════════════════════════════════ */}
         {/* <Section
-          className="relative overflow-hidden"
-          style={{ background: "var(--rj-charcoal)" }}
-        >
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background:
-                "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(252,193,81,0.06) 0%, transparent 70%)",
-            }}
-          />
-          <div
-            className="absolute top-0 left-0 right-0 h-px"
-            style={{
-              background:
-                "linear-gradient(90deg, transparent, rgba(252,193,81,0.4), transparent)",
-            }}
-          />
+        className="relative overflow-hidden"
+        style={{ background: "var(--rj-charcoal)" }}
+      >
 
-          <div className="container-rj py-14 relative z-10">
-            <div className="max-w-3xl mx-auto text-center">
-              <motion.div variants={fadeUp} custom={0}>
-                <Label>Rehnoor Jewels Collection</Label>
-              </motion.div>
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(252,193,81,0.06) 0%, transparent 70%)",
+          }}
+        />
+        <div
+          className="absolute top-0 left-0 right-0 h-px"
+          style={{
+            background:
+              "linear-gradient(90deg, transparent, rgba(252,193,81,0.4), transparent)",
+          }}
+        />
+        <div
+          className="absolute top-0 left-1/2 -translate-x-1/2 bottom-0 w-px hidden lg:block pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(252,193,81,0.18), transparent 30%, transparent 70%, rgba(252,193,81,0.08))",
+          }}
+        />
 
-              <motion.h1
-                variants={fadeUp}
-                custom={1}
-                className="font-cormorant font-light leading-tight mb-5"
+        <div className="container-rj py-20 relative z-10">
+          <div className="max-w-3xl mx-auto text-center">
+            <motion.div variants={fadeUp} custom={0}>
+              <Label>Rehnoor Jewels Collection</Label>
+            </motion.div>
+
+            <motion.h2
+              variants={fadeUp}
+              custom={1}
+              className="font-cormorant font-light leading-tight mb-5"
+              style={{
+                fontSize: "clamp(2.2rem,6vw,4rem)",
+                color: "#fff",
+                letterSpacing: "-0.01em",
+              }}
+            >
+              Pendants{" "}
+              <em
+                className="font-normal not-italic"
                 style={{
-                  fontSize: "clamp(2.2rem, 6vw, 4rem)",
-                  color: "#fff",
-                  letterSpacing: "-0.01em",
+                  background:
+                    "var(--gradient-gold, linear-gradient(135deg,#fcc151,#e8a020))",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
                 }}
               >
-                Gold Plated Kada{" "}
-                <em
-                  className="font-normal not-italic"
-                  style={{
-                    background:
-                      "var(--gradient-gold, linear-gradient(135deg,#fcc151,#e8a020))",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}
-                >
-                  for Men
-                </em>
-              </motion.h1>
+                for Men
+              </em>
+            </motion.h2>
 
-              <GoldDivider />
+            <GoldDivider />
 
-              <motion.p
-                variants={fadeUp}
-                custom={2}
-                className="mt-5 leading-relaxed"
-                style={{
-                  color: "rgba(255,255,255,0.6)",
-                  fontSize: "clamp(0.95rem, 2vw, 1.1rem)",
-                  fontFamily: "var(--font-body,'DM Sans'),sans-serif",
-                  lineHeight: "1.85",
-                }}
-              >
-                Explore our exclusive collection of gold plated kada for men —
-                where tradition meets contemporary style. Each piece is crafted
-                to give you the bold, rich look of a golden kada at an
-                affordable price, making it perfect for daily wear, festive
-                celebrations, and special occasions.
-              </motion.p>
-            </div>
+            <motion.p
+              variants={fadeUp}
+              custom={2}
+              className="mt-5 leading-relaxed"
+              style={{
+                color: "rgba(255,255,255,0.6)",
+                fontSize: "clamp(0.95rem,2vw,1.1rem)",
+                fontFamily: "var(--font-body,'DM Sans'),sans-serif",
+                lineHeight: "1.85",
+              }}
+            >
+              Explore our exclusive collection of pendants for men where bold
+              expression meets everyday elegance. Each piece is crafted to give
+              you a rich, premium look at an affordable price, making it perfect
+              for casual wear, festive celebrations, and special occasions.
+            </motion.p>
           </div>
-        </Section> */}
+        </div>
+      </Section> */}
 
         {/* ══════════════════════════════════════════════════
-          WHAT IS A GOLD PLATED KADA? — ivory bg
+          WHAT ARE PENDANTS FOR MEN? — ivory bg
       ══════════════════════════════════════════════════ */}
         <Section
           className="section-padding"
@@ -736,18 +734,17 @@ export default function KadaForMen() {
                   <h2
                     className="font-cormorant font-light leading-tight mb-5"
                     style={{
-                      fontSize: "clamp(1.8rem, 4vw, 3rem)",
+                      fontSize: "clamp(1.8rem,4vw,3rem)",
                       color: "var(--rj-charcoal)",
                       letterSpacing: "-0.01em",
                     }}
                   >
-                    What is a Gold Plated
-                    <br />
+                    What are{" "}
                     <em
                       className="font-normal"
                       style={{ color: "var(--rj-emerald)" }}
                     >
-                      Kada for Men?
+                      Pendants for Men?
                     </em>
                   </h2>
                 </motion.div>
@@ -758,16 +755,14 @@ export default function KadaForMen() {
                   className="leading-relaxed"
                   style={{
                     color: "var(--rj-ash)",
-                    fontSize: "clamp(0.92rem, 1.8vw, 1.05rem)",
+                    fontSize: "clamp(0.92rem,1.8vw,1.05rem)",
                     fontFamily: "var(--font-body,'DM Sans'),sans-serif",
                     lineHeight: "1.9",
                   }}
                 >
-                  A gold plated kada for men is a traditional wrist ornament
-                  crafted from a base metal such as brass or copper,
-                  electroplated with a layer of real gold, giving it the rich
-                  and bold appearance of a solid gold kada at a fraction of the
-                  cost.
+                  Pendants for men are decorative ornaments worn around the
+                  neck, crafted from a base metal such as brass or copper and
+                  gold plated to give them a rich, luxurious finish.
                 </motion.p>
 
                 <motion.p
@@ -776,7 +771,7 @@ export default function KadaForMen() {
                   className="mt-4 leading-relaxed"
                   style={{
                     color: "var(--rj-ash)",
-                    fontSize: "clamp(0.92rem, 1.8vw, 1.05rem)",
+                    fontSize: "clamp(0.92rem,1.8vw,1.05rem)",
                     fontFamily: "var(--font-body,'DM Sans'),sans-serif",
                     lineHeight: "1.9",
                   }}
@@ -785,17 +780,18 @@ export default function KadaForMen() {
                   <strong
                     style={{ color: "var(--rj-charcoal)", fontWeight: 600 }}
                   >
-                    1 gram gold kada for men
+                    1 gram gold pendant
                   </strong>{" "}
-                  collection is designed with precision, finished to perfection,
-                  and built to complement every style from traditional ethnic
-                  looks to modern contemporary outfits. Whether you are looking
-                  for a simple golden kada for daily wear or a bold gold kada
-                  for festive occasions, we have the perfect piece for you.
+                  collection is designed with precision and finished to
+                  perfection, offering a wide range of styles from bold
+                  statement pieces to subtle everyday designs. Whether you are
+                  looking for a simple golden locket for daily wear or an
+                  intricately designed pendant for a special occasion, we have
+                  the perfect piece for you.
                 </motion.p>
               </div>
 
-              {/* Right — decorative 2×2 card grid */}
+              {/* Right — 2×2 card grid */}
               <motion.div
                 variants={fadeUp}
                 custom={1}
@@ -803,9 +799,9 @@ export default function KadaForMen() {
               >
                 {[
                   {
-                    label: "Traditional Roots",
-                    sub: "Rooted in culture",
-                    icon: <Gem size={22} />,
+                    label: "God Lockets",
+                    sub: "Faith & devotion",
+                    icon: <Heart size={22} />,
                   },
                   {
                     label: "Lasting Shine",
@@ -813,8 +809,8 @@ export default function KadaForMen() {
                     icon: <Sun size={22} />,
                   },
                   {
-                    label: "5+ Styles",
-                    sub: "For every occasion",
+                    label: "6+ Styles",
+                    sub: "For every personality",
                     icon: <Layers size={22} />,
                   },
                   {
@@ -880,7 +876,8 @@ export default function KadaForMen() {
         </Section>
 
         {/* ══════════════════════════════════════════════════
-          TOP KADA STYLES — dark bg with horizontal timeline feel
+          PENDANT STYLES — dark bg
+          Unique: style TAG chip inline with name
       ══════════════════════════════════════════════════ */}
         <Section
           className="section-padding relative overflow-hidden"
@@ -890,18 +887,9 @@ export default function KadaForMen() {
             className="absolute inset-0 pointer-events-none"
             style={{
               background:
-                "radial-gradient(ellipse 60% 50% at 100% 50%, rgba(252,193,81,0.05) 0%, transparent 70%)",
+                "radial-gradient(ellipse 60% 50% at 0% 50%, rgba(252,193,81,0.05) 0%, transparent 70%)",
             }}
           />
-          {/* Vertical gold line decoration — desktop only */}
-          <div
-            className="absolute left-[calc(50%-1px)] top-32 bottom-16 w-px hidden lg:block pointer-events-none"
-            style={{
-              background:
-                "linear-gradient(to bottom, transparent, rgba(252,193,81,0.15), transparent)",
-            }}
-          />
-
           <div className="container-rj relative z-10">
             <div className="text-center mb-12">
               <motion.div variants={fadeUp} custom={0}>
@@ -909,12 +897,12 @@ export default function KadaForMen() {
                 <h2
                   className="font-cormorant font-light leading-tight"
                   style={{
-                    fontSize: "clamp(1.8rem, 4vw, 3rem)",
+                    fontSize: "clamp(1.8rem,4vw,3rem)",
                     color: "#fff",
                     letterSpacing: "-0.01em",
                   }}
                 >
-                  Top Styles in{" "}
+                  Pendant Styles for{" "}
                   <em
                     className="font-normal not-italic"
                     style={{
@@ -925,19 +913,19 @@ export default function KadaForMen() {
                       backgroundClip: "text",
                     }}
                   >
-                    Gold Plated Kada
+                    Every Man
                   </em>
                 </h2>
               </motion.div>
             </div>
 
-            <div className="flex flex-col gap-3">
-              {KADA_STYLES.map((style, i) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {PENDANT_STYLES.map((style, i) => (
                 <motion.div
                   key={style.name}
                   variants={fadeUp}
-                  custom={i * 0.15}
-                  className="group flex items-start gap-5 p-5 sm:p-6 rounded-2xl mx-auto max-w-4xl transition-all duration-300 cursor-default"
+                  custom={i * 0.12}
+                  className="group flex items-start gap-5 p-5 sm:p-6 rounded-2xl transition-all duration-300 cursor-default"
                   style={{
                     background: "rgba(255,255,255,0.03)",
                     border: "1px solid rgba(255,255,255,0.06)",
@@ -945,7 +933,7 @@ export default function KadaForMen() {
                   whileHover={{
                     background: "rgba(252,193,81,0.05)",
                     borderColor: "rgba(252,193,81,0.2)",
-                    x: 4,
+                    y: -2,
                   }}
                 >
                   {/* Numbered circle */}
@@ -960,12 +948,24 @@ export default function KadaForMen() {
                     {String(i + 1).padStart(2, "0")}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3
-                      className="font-cinzel text-sm tracking-wider font-bold mb-2"
-                      style={{ color: "#fff" }}
-                    >
-                      {style.name}
-                    </h3>
+                    <div className="flex items-center gap-2 flex-wrap mb-2">
+                      <h3
+                        className="font-cinzel text-sm tracking-wider font-bold"
+                        style={{ color: "#fff" }}
+                      >
+                        {style.name}
+                      </h3>
+                      <span
+                        className="font-cinzel text-[8px] tracking-widest uppercase px-2 py-0.5 rounded-full"
+                        style={{
+                          background: "rgba(252,193,81,0.12)",
+                          color: "var(--rj-gold)",
+                          border: "1px solid rgba(252,193,81,0.2)",
+                        }}
+                      >
+                        {style.tag}
+                      </span>
+                    </div>
                     <p
                       className="leading-relaxed text-sm"
                       style={{
@@ -989,7 +989,8 @@ export default function KadaForMen() {
         </Section>
 
         {/* ══════════════════════════════════════════════════
-          WHAT MAKES IT SPECIAL — ivory bg, 6-card grid
+          WHAT MAKES IT SPECIAL — ivory bg, 2×2 grid
+          (4 features for pendants — smaller set)
       ══════════════════════════════════════════════════ */}
         <Section
           className="section-padding"
@@ -998,16 +999,16 @@ export default function KadaForMen() {
           <div className="container-rj">
             <div className="text-center mb-12">
               <motion.div variants={fadeUp} custom={0}>
-                <Label>Crafted with Precision</Label>
+                <Label>Crafted with Care</Label>
                 <h2
                   className="font-cormorant font-light leading-tight"
                   style={{
-                    fontSize: "clamp(1.8rem, 4vw, 3rem)",
+                    fontSize: "clamp(1.8rem,4vw,3rem)",
                     color: "var(--rj-charcoal)",
                     letterSpacing: "-0.01em",
                   }}
                 >
-                  What Makes Our Gold Kada{" "}
+                  What Makes Our Pendants{" "}
                   <em
                     className="font-normal"
                     style={{ color: "var(--rj-emerald)" }}
@@ -1018,12 +1019,13 @@ export default function KadaForMen() {
               </motion.div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {/* 2×2 grid — balanced for 4 features */}
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 sm:mx-auto">
               {SPECIAL_FEATURES.map((feat, i) => (
                 <motion.div
                   key={feat.title}
                   variants={fadeUp}
-                  custom={i * 0.1}
+                  custom={i * 0.12}
                   className="p-6 rounded-2xl transition-all duration-300"
                   style={{
                     background: "#fff",
@@ -1068,7 +1070,7 @@ export default function KadaForMen() {
         </Section>
 
         {/* ══════════════════════════════════════════════════
-          WHY CHOOSE REHNOOR — emerald bg, split layout
+          WHY CHOOSE REHNOOR — emerald bg
       ══════════════════════════════════════════════════ */}
         <Section
           className="section-padding relative overflow-hidden"
@@ -1078,24 +1080,23 @@ export default function KadaForMen() {
             className="absolute inset-0 pointer-events-none"
             style={{
               background:
-                "radial-gradient(ellipse 70% 60% at 0% 50%, rgba(252,193,81,0.08) 0%, transparent 65%)",
+                "radial-gradient(ellipse 70% 60% at 100% 50%, rgba(252,193,81,0.08) 0%, transparent 65%)",
             }}
           />
           <div className="container-rj relative z-10">
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 items-start">
-              {/* Left — sticky heading */}
               <div className="lg:col-span-2 lg:sticky lg:top-28">
                 <motion.div variants={fadeUp} custom={0}>
                   <Label>Our Promise</Label>
                   <h2
                     className="font-cormorant font-light leading-tight mb-4"
                     style={{
-                      fontSize: "clamp(1.8rem, 4vw, 3rem)",
+                      fontSize: "clamp(1.8rem,4vw,3rem)",
                       color: "#fff",
                       letterSpacing: "-0.01em",
                     }}
                   >
-                    Why Choose Rehnoor Jewels for Your{" "}
+                    Why Choose Rehnoor Jewels for{" "}
                     <em
                       className="font-normal not-italic"
                       style={{
@@ -1106,7 +1107,7 @@ export default function KadaForMen() {
                         backgroundClip: "text",
                       }}
                     >
-                      Gold Plated Kada?
+                      Pendants?
                     </em>
                   </h2>
                   <p
@@ -1117,13 +1118,11 @@ export default function KadaForMen() {
                       lineHeight: "1.85",
                     }}
                   >
-                    When it comes to buying a gold plated kada for men online,
-                    Rehnoor Jewels is a name you can trust.
+                    When it comes to buying pendants for men online, Rehnoor
+                    Jewels is a name you can trust.
                   </p>
                 </motion.div>
               </div>
-
-              {/* Right — feature list */}
               <div className="lg:col-span-3 flex flex-col gap-4">
                 {WHY_REHNOOR.map((item, i) => (
                   <motion.div
@@ -1172,7 +1171,7 @@ export default function KadaForMen() {
         </Section>
 
         {/* ══════════════════════════════════════════════════
-          HOW TO STYLE — ivory bg, 5-tip grid (3+2)
+          HOW TO STYLE — ivory bg, 3+2 layout
       ══════════════════════════════════════════════════ */}
         <Section
           className="section-padding"
@@ -1185,7 +1184,7 @@ export default function KadaForMen() {
                 <h2
                   className="font-cormorant font-light leading-tight"
                   style={{
-                    fontSize: "clamp(1.8rem, 4vw, 3rem)",
+                    fontSize: "clamp(1.8rem,4vw,3rem)",
                     color: "var(--rj-charcoal)",
                     letterSpacing: "-0.01em",
                   }}
@@ -1197,12 +1196,12 @@ export default function KadaForMen() {
                   >
                     Style
                   </em>{" "}
-                  a Gold Plated Kada
+                  Pendants for Men
                 </h2>
               </motion.div>
             </div>
 
-            {/* Top row — 3 cards */}
+            {/* Top 3 */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
               {STYLE_TIPS.slice(0, 3).map((tip, i) => (
                 <motion.div
@@ -1211,8 +1210,8 @@ export default function KadaForMen() {
                   custom={i * 0.15}
                   className="relative p-6 sm:p-7 rounded-2xl overflow-hidden"
                   style={{
-                    background: i === 1 ? "var(--rj-charcoal)" : "#fff",
-                    border: i === 1 ? "none" : "1px solid var(--rj-bone)",
+                    background: tip.dark ? "var(--rj-charcoal)" : "#fff",
+                    border: !tip.dark ? "1px solid var(--rj-bone)" : "none",
                   }}
                 >
                   <span
@@ -1220,10 +1219,9 @@ export default function KadaForMen() {
                     style={{
                       fontSize: "5rem",
                       lineHeight: 1,
-                      color:
-                        i === 1
-                          ? "rgba(255,255,255,0.05)"
-                          : "rgba(0,55,32,0.05)",
+                      color: tip.dark
+                        ? "rgba(255,255,255,0.05)"
+                        : "rgba(0,55,32,0.05)",
                     }}
                   >
                     {tip.num}
@@ -1231,11 +1229,10 @@ export default function KadaForMen() {
                   <span
                     className="font-cinzel text-[9px] tracking-[0.2em] uppercase font-bold px-2.5 py-1 rounded-full mb-4 inline-block"
                     style={{
-                      background:
-                        i === 1
-                          ? "rgba(252,193,81,0.15)"
-                          : "rgba(0,55,32,0.08)",
-                      color: i === 1 ? "var(--rj-gold)" : "var(--rj-emerald)",
+                      background: tip.dark
+                        ? "rgba(252,193,81,0.15)"
+                        : "rgba(0,55,32,0.08)",
+                      color: tip.dark ? "var(--rj-gold)" : "var(--rj-emerald)",
                     }}
                   >
                     {tip.context}
@@ -1243,8 +1240,9 @@ export default function KadaForMen() {
                   <p
                     className="leading-relaxed text-sm relative z-10 mt-2"
                     style={{
-                      color:
-                        i === 1 ? "rgba(255,255,255,0.65)" : "var(--rj-ash)",
+                      color: tip.dark
+                        ? "rgba(255,255,255,0.65)"
+                        : "var(--rj-ash)",
                       fontFamily: "var(--font-body,'DM Sans'),sans-serif",
                       lineHeight: "1.85",
                     }}
@@ -1255,7 +1253,7 @@ export default function KadaForMen() {
               ))}
             </div>
 
-            {/* Bottom row — 2 cards (centered) */}
+            {/* Bottom 2 */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:max-w-2xl sm:mx-auto">
               {STYLE_TIPS.slice(3).map((tip, i) => (
                 <motion.div
@@ -1264,8 +1262,8 @@ export default function KadaForMen() {
                   custom={(i + 3) * 0.15}
                   className="relative p-6 sm:p-7 rounded-2xl overflow-hidden"
                   style={{
-                    background: i === 0 ? "#fff" : "var(--rj-charcoal)",
-                    border: i === 0 ? "1px solid var(--rj-bone)" : "none",
+                    background: tip.dark ? "var(--rj-charcoal)" : "#fff",
+                    border: !tip.dark ? "1px solid var(--rj-bone)" : "none",
                   }}
                 >
                   <span
@@ -1273,10 +1271,9 @@ export default function KadaForMen() {
                     style={{
                       fontSize: "5rem",
                       lineHeight: 1,
-                      color:
-                        i === 0
-                          ? "rgba(0,55,32,0.05)"
-                          : "rgba(255,255,255,0.05)",
+                      color: tip.dark
+                        ? "rgba(255,255,255,0.05)"
+                        : "rgba(0,55,32,0.05)",
                     }}
                   >
                     {tip.num}
@@ -1284,11 +1281,10 @@ export default function KadaForMen() {
                   <span
                     className="font-cinzel text-[9px] tracking-[0.2em] uppercase font-bold px-2.5 py-1 rounded-full mb-4 inline-block"
                     style={{
-                      background:
-                        i === 0
-                          ? "rgba(0,55,32,0.08)"
-                          : "rgba(252,193,81,0.15)",
-                      color: i === 0 ? "var(--rj-emerald)" : "var(--rj-gold)",
+                      background: tip.dark
+                        ? "rgba(252,193,81,0.15)"
+                        : "rgba(0,55,32,0.08)",
+                      color: tip.dark ? "var(--rj-gold)" : "var(--rj-emerald)",
                     }}
                   >
                     {tip.context}
@@ -1296,8 +1292,9 @@ export default function KadaForMen() {
                   <p
                     className="leading-relaxed text-sm relative z-10 mt-2"
                     style={{
-                      color:
-                        i === 0 ? "var(--rj-ash)" : "rgba(255,255,255,0.65)",
+                      color: tip.dark
+                        ? "rgba(255,255,255,0.65)"
+                        : "var(--rj-ash)",
                       fontFamily: "var(--font-body,'DM Sans'),sans-serif",
                       lineHeight: "1.85",
                     }}
@@ -1311,7 +1308,8 @@ export default function KadaForMen() {
         </Section>
 
         {/* ══════════════════════════════════════════════════
-          PERFECT GIFT — charcoal bg with gold glow card
+          PERFECT GIFT — dark card on ivory
+          Pendant-specific: includes religious milestone
       ══════════════════════════════════════════════════ */}
         <Section
           className="section-padding"
@@ -1323,7 +1321,7 @@ export default function KadaForMen() {
               custom={0}
               className="relative rounded-3xl overflow-hidden p-8 sm:p-12 text-center"
               style={{
-                background: "var(--rj-emerald)",
+                background: "var(--rj-charcoal)",
                 border: "1px solid rgba(252,193,81,0.2)",
               }}
             >
@@ -1351,12 +1349,12 @@ export default function KadaForMen() {
                 <h2
                   className="font-cormorant font-light leading-tight mb-5"
                   style={{
-                    fontSize: "clamp(1.8rem, 4vw, 3rem)",
+                    fontSize: "clamp(1.8rem,4vw,3rem)",
                     color: "#fff",
                     letterSpacing: "-0.01em",
                   }}
                 >
-                  1 Gram Gold Kada for Men:{" "}
+                  1 Gram Pendant: A Perfect Gift{" "}
                   <em
                     className="font-normal not-italic"
                     style={{
@@ -1367,7 +1365,7 @@ export default function KadaForMen() {
                       backgroundClip: "text",
                     }}
                   >
-                    A Perfect Gift
+                    for Every Occasion
                   </em>
                 </h2>
 
@@ -1375,34 +1373,32 @@ export default function KadaForMen() {
                   className="leading-relaxed mb-4"
                   style={{
                     color: "rgba(255,255,255,0.55)",
-                    fontSize: "clamp(0.9rem, 1.8vw, 1.05rem)",
+                    fontSize: "clamp(0.9rem,1.8vw,1.05rem)",
                     fontFamily: "var(--font-body,'DM Sans'),sans-serif",
                     lineHeight: "1.85",
                   }}
                 >
-                  Looking for a gift that is traditional, meaningful, and
-                  budget-friendly? A 1 gram gold kada for men from Rehnoor
-                  Jewels makes for a perfect gift for every occasion. Whether it
-                  is a birthday, anniversary, Rakhi, Diwali, or wedding, our
-                  gold plated kada for men is a thoughtful and elegant choice
-                  that any man would be proud to wear.
+                  Looking for a gift that is meaningful, stylish, and
+                  budget-friendly? A 1 gram gold pendant from Rehnoor Jewels
+                  makes for a perfect gift for every occasion. Whether it is a
+                  birthday, anniversary, Rakhi, Diwali, or a religious
+                  milestone, our pendants for men and golden lockets are a
+                  thoughtful and elegant choice that any man would cherish.
                 </p>
                 <p
                   className="leading-relaxed"
                   style={{
                     color: "rgba(255,255,255,0.55)",
-                    fontSize: "clamp(0.9rem, 1.8vw, 1.05rem)",
+                    fontSize: "clamp(0.9rem,1.8vw,1.05rem)",
                     fontFamily: "var(--font-body,'DM Sans'),sans-serif",
                     lineHeight: "1.85",
                   }}
                 >
-                  Each piece comes beautifully presented, making it ready to
-                  gift straight out of the box. Give the gift of tradition and
-                  style and let Rehnoor Jewels make every occasion truly
-                  special.
+                  From classic god lockets to personalised initial pendants, our
+                  collection has something for every personality and every
+                  budget. Give the gift of meaning and style.
                 </p>
 
-                {/* Occasion pills */}
                 <div className="flex flex-wrap items-center justify-center gap-2 mt-8">
                   {GIFT_OCCASIONS.map((occasion) => (
                     <span
@@ -1424,7 +1420,7 @@ export default function KadaForMen() {
         </Section>
 
         {/* ══════════════════════════════════════════════════
-          PRODUCT LIFE — dark bg
+          DURABILITY — dark bg
       ══════════════════════════════════════════════════ */}
         <Section
           className="section-padding relative overflow-hidden"
@@ -1441,16 +1437,16 @@ export default function KadaForMen() {
             <div className="max-w-3xl mx-auto">
               <div className="text-center mb-10">
                 <motion.div variants={fadeUp} custom={0}>
-                  <Label>PRODUCT LIFE</Label>
+                  <Label>Durability</Label>
                   <h2
                     className="font-cormorant font-light leading-tight"
                     style={{
-                      fontSize: "clamp(1.8rem, 4vw, 3rem)",
+                      fontSize: "clamp(1.8rem,4vw,3rem)",
                       color: "#fff",
                       letterSpacing: "-0.01em",
                     }}
                   >
-                    How Long Does a{" "}
+                    How Long Do{" "}
                     <em
                       className="font-normal not-italic"
                       style={{
@@ -1461,9 +1457,8 @@ export default function KadaForMen() {
                         backgroundClip: "text",
                       }}
                     >
-                      Gold Plated Kada
-                    </em>{" "}
-                    Last?
+                      Pendants Last?
+                    </em>
                   </h2>
                 </motion.div>
               </div>
@@ -1526,7 +1521,7 @@ export default function KadaForMen() {
                 <h2
                   className="font-cormorant font-light leading-tight"
                   style={{
-                    fontSize: "clamp(1.8rem, 4vw, 3rem)",
+                    fontSize: "clamp(1.8rem,4vw,3rem)",
                     color: "var(--rj-charcoal)",
                     letterSpacing: "-0.01em",
                   }}
@@ -1536,7 +1531,7 @@ export default function KadaForMen() {
                     className="font-normal"
                     style={{ color: "var(--rj-emerald)" }}
                   >
-                    Gold Plated Kada
+                    Pendant
                   </em>
                 </h2>
               </motion.div>
@@ -1585,7 +1580,7 @@ export default function KadaForMen() {
         </Section>
 
         {/* ══════════════════════════════════════════════════
-          CUSTOMER REVIEWS — dark bg, paginated carousel
+          CUSTOMER REVIEWS — dark bg
       ══════════════════════════════════════════════════ */}
         <Section
           className="section-padding relative overflow-hidden"
@@ -1595,22 +1590,22 @@ export default function KadaForMen() {
             className="absolute inset-0 pointer-events-none"
             style={{
               background:
-                "radial-gradient(ellipse 60% 50% at 0% 50%, rgba(252,193,81,0.05) 0%, transparent 65%)",
+                "radial-gradient(ellipse 60% 50% at 100% 50%, rgba(252,193,81,0.05) 0%, transparent 65%)",
             }}
           />
           <div className="container-rj relative z-10">
             <div className="text-center mb-12">
               <motion.div variants={fadeUp} custom={0}>
-                <Label>Testimonials</Label>
+                <Label>Customer Love</Label>
                 <h2
                   className="font-cormorant font-light leading-tight"
                   style={{
-                    fontSize: "clamp(1.8rem, 4vw, 3rem)",
+                    fontSize: "clamp(1.8rem,4vw,3rem)",
                     color: "#fff",
                     letterSpacing: "-0.01em",
                   }}
                 >
-                  What Our Customers{" "}
+                  Loved by Our Customers{" "}
                   <em
                     className="font-normal not-italic"
                     style={{
@@ -1621,11 +1616,9 @@ export default function KadaForMen() {
                       backgroundClip: "text",
                     }}
                   >
-                    Are Saying
+                    Across India
                   </em>
                 </h2>
-
-                {/* Aggregate rating */}
                 <div className="flex items-center justify-center gap-2 mt-4">
                   <div className="flex gap-0.5">
                     {Array.from({ length: 5 }).map((_, i) => (
@@ -1654,7 +1647,6 @@ export default function KadaForMen() {
                 </div>
               </motion.div>
             </div>
-
             <ReviewCarousel reviews={REVIEWS} />
           </div>
         </Section>
@@ -1674,7 +1666,7 @@ export default function KadaForMen() {
                   <h2
                     className="font-cormorant font-light leading-tight"
                     style={{
-                      fontSize: "clamp(1.8rem, 4vw, 3rem)",
+                      fontSize: "clamp(1.8rem,4vw,3rem)",
                       color: "var(--rj-charcoal)",
                       letterSpacing: "-0.01em",
                     }}
@@ -1689,7 +1681,6 @@ export default function KadaForMen() {
                   </h2>
                 </motion.div>
               </div>
-
               <div
                 className="rounded-2xl overflow-hidden p-2"
                 style={{
@@ -1708,7 +1699,7 @@ export default function KadaForMen() {
         </Section>
 
         {/* ══════════════════════════════════════════════════
-          CTA FOOTER STRIP — dark bg
+          CTA FOOTER — dark bg
       ══════════════════════════════════════════════════ */}
         <Section
           className="section-padding relative overflow-hidden"
@@ -1735,12 +1726,12 @@ export default function KadaForMen() {
               <h2
                 className="font-cormorant font-light leading-tight mb-5"
                 style={{
-                  fontSize: "clamp(1.8rem, 5vw, 3.5rem)",
+                  fontSize: "clamp(1.8rem,5vw,3.5rem)",
                   color: "#fff",
                   letterSpacing: "-0.01em",
                 }}
               >
-                Shop Gold Plated Kada for Men
+                Shop Pendants for Men
                 <br />
                 <em
                   className="font-normal not-italic"
@@ -1760,17 +1751,18 @@ export default function KadaForMen() {
             <motion.p
               variants={fadeUp}
               custom={1}
-              className="max-w-3xl mx-auto mb-10 leading-relaxed"
+              className="max-w-2xl mx-auto mb-10 leading-relaxed"
               style={{
                 color: "rgba(255,255,255,0.5)",
-                fontSize: "clamp(0.9rem, 2vw, 1.05rem)",
+                fontSize: "clamp(0.9rem,2vw,1.05rem)",
+                fontFamily: "var(--font-body,'DM Sans'),sans-serif",
                 lineHeight: "1.85",
               }}
             >
               At Rehnoor Jewels, we believe every man deserves an accessory that
-              is rooted in tradition yet styled for today. Browse our golden
-              kada and 1 gram gold kada for men collection today and find the
-              perfect piece that speaks to your style and tradition.
+              tells his story. Browse our 1 gram gold pendant and golden locket
+              collection today and find the perfect piece that speaks to your
+              faith, personality, and style.
             </motion.p>
 
             <motion.div
@@ -1779,7 +1771,7 @@ export default function KadaForMen() {
               className="flex flex-col sm:flex-row items-center justify-center gap-3"
             >
               <Link
-                href="/collections"
+                href="/collections/"
                 className="inline-flex items-center gap-2 font-cinzel text-[11px] tracking-widest uppercase px-8 py-4 rounded-full transition-all duration-300 hover:gap-3 hover:opacity-90"
                 style={{
                   background:
@@ -1789,7 +1781,7 @@ export default function KadaForMen() {
                   boxShadow: "0 4px 24px rgba(252,193,81,0.3)",
                 }}
               >
-                Find Gold Plated <ChevronRight size={13} />
+                Browse Collections <ChevronRight size={13} />
               </Link>
             </motion.div>
           </div>

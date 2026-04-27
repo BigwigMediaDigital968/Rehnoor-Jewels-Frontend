@@ -585,272 +585,75 @@ function ReviewCarousel({ reviews }: { reviews: ReviewItem[] }) {
   );
 }
 
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: FAQS.map((faq) => ({
+    "@type": "Question",
+    name: faq.q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.a,
+    },
+  })),
+};
+
 // ─────────────────────────────────────────────────────────────────
 // MAIN COMPONENT
 // ─────────────────────────────────────────────────────────────────
 export default function RingsForMen() {
   return (
-    <div style={{ background: "var(--rj-ivory)" }} className="overflow-hidden">
-      {/* ══════════════════════════════════════════════════
+    <>
+      <script
+        id="faq-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(faqSchema),
+        }}
+      />
+      <div
+        style={{ background: "var(--rj-ivory)" }}
+        className="overflow-hidden"
+      >
+        {/* ══════════════════════════════════════════════════
           HERO INTRO — charcoal bg
       ══════════════════════════════════════════════════ */}
-      <Section
-        className="relative overflow-hidden"
-        style={{ background: "var(--rj-charcoal)" }}
-      >
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(252,193,81,0.06) 0%, transparent 70%)",
-          }}
-        />
-        <div
-          className="absolute top-0 left-0 right-0 h-px"
-          style={{
-            background:
-              "linear-gradient(90deg, transparent, rgba(252,193,81,0.4), transparent)",
-          }}
-        />
+        {/* <Section
+          className="relative overflow-hidden"
+          style={{ background: "var(--rj-charcoal)" }}
+        >
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(252,193,81,0.06) 0%, transparent 70%)",
+            }}
+          />
+          <div
+            className="absolute top-0 left-0 right-0 h-px"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent, rgba(252,193,81,0.4), transparent)",
+            }}
+          />
 
-        <div className="container-rj py-14 relative z-10">
-          <div className="max-w-3xl mx-auto text-center">
-            <motion.div variants={fadeUp} custom={0}>
-              <Label>Rehnoor Jewels Collection</Label>
-            </motion.div>
-
-            <motion.h1
-              variants={fadeUp}
-              custom={1}
-              className="font-cormorant font-light leading-tight mb-5"
-              style={{
-                fontSize: "clamp(2.2rem, 6vw, 4rem)",
-                color: "#fff",
-                letterSpacing: "-0.01em",
-              }}
-            >
-              Gold Plated Rings{" "}
-              <em
-                className="font-normal not-italic"
-                style={{
-                  background:
-                    "var(--gradient-gold, linear-gradient(135deg,#fcc151,#e8a020))",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}
-              >
-                for Men
-              </em>
-            </motion.h1>
-
-            <GoldDivider />
-
-            <motion.p
-              variants={fadeUp}
-              custom={2}
-              className="mt-5 leading-relaxed"
-              style={{
-                color: "rgba(255,255,255,0.6)",
-                fontSize: "clamp(0.95rem, 2vw, 1.1rem)",
-                fontFamily: "var(--font-body,'DM Sans'),sans-serif",
-                lineHeight: "1.85",
-              }}
-            >
-              Explore our exclusive collection of gold plated rings for men,
-              crafted for those who believe every detail matters. Each piece is
-              designed to give you the bold, luxurious look of gold at an
-              affordable price, making it perfect for daily wear, festive
-              celebrations, and special occasions.
-            </motion.p>
-          </div>
-        </div>
-      </Section>
-
-      {/* ══════════════════════════════════════════════════
-          WHAT ARE GOLD PLATED RINGS? — ivory bg
-      ══════════════════════════════════════════════════ */}
-      <Section
-        className="section-padding"
-        style={{ background: "var(--rj-ivory)" }}
-      >
-        <div className="container-rj">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 xl:gap-16 items-center">
-            {/* Left — text */}
-            <div>
+          <div className="container-rj py-14 relative z-10">
+            <div className="max-w-3xl mx-auto text-center">
               <motion.div variants={fadeUp} custom={0}>
-                <Label>About Our Collection</Label>
-                <h2
-                  className="font-cormorant font-light leading-tight mb-5"
-                  style={{
-                    fontSize: "clamp(1.8rem, 4vw, 3rem)",
-                    color: "var(--rj-charcoal)",
-                    letterSpacing: "-0.01em",
-                  }}
-                >
-                  What are Gold Plated
-                  <br />
-                  <em
-                    className="font-normal"
-                    style={{ color: "var(--rj-emerald)" }}
-                  >
-                    Rings for Men?
-                  </em>
-                </h2>
+                <Label>Rehnoor Jewels Collection</Label>
               </motion.div>
 
-              <motion.p
+              <motion.h1
                 variants={fadeUp}
                 custom={1}
-                className="leading-relaxed"
+                className="font-cormorant font-light leading-tight mb-5"
                 style={{
-                  color: "var(--rj-ash)",
-                  fontSize: "clamp(0.92rem, 1.8vw, 1.05rem)",
-                  fontFamily: "var(--font-body,'DM Sans'),sans-serif",
-                  lineHeight: "1.9",
-                }}
-              >
-                Gold plated rings are crafted from a base metal such as brass or
-                copper, electroplated with a layer of real gold, giving them the
-                rich and luxurious appearance of solid gold at a fraction of the
-                cost.
-              </motion.p>
-
-              <motion.p
-                variants={fadeUp}
-                custom={2}
-                className="mt-4 leading-relaxed"
-                style={{
-                  color: "var(--rj-ash)",
-                  fontSize: "clamp(0.92rem, 1.8vw, 1.05rem)",
-                  fontFamily: "var(--font-body,'DM Sans'),sans-serif",
-                  lineHeight: "1.9",
-                }}
-              >
-                At Rehnoor Jewels, our{" "}
-                <strong
-                  style={{ color: "var(--rj-charcoal)", fontWeight: 600 }}
-                >
-                  1 gram gold rings for men
-                </strong>{" "}
-                are designed with precision, finished to perfection, and built
-                to complement every style — from bold statement looks to subtle
-                everyday elegance. Whether you are looking for a simple ad ring
-                for daily wear or a designer piece for a special occasion, we
-                have the perfect ring for you.
-              </motion.p>
-            </div>
-
-            {/* Right — decorative 2×2 card grid */}
-            <motion.div
-              variants={fadeUp}
-              custom={1}
-              className="grid grid-cols-2 gap-3"
-            >
-              {[
-                {
-                  label: "5 Unique Styles",
-                  sub: "For every occasion",
-                  icon: <Gem size={22} />,
-                },
-                {
-                  label: "Free Size Adjust",
-                  sub: "Perfect fit always",
-                  icon: <Maximize2 size={22} />,
-                },
-                {
-                  label: "Lasting Shine",
-                  sub: "Anti-tarnish finish",
-                  icon: <Sun size={22} />,
-                },
-                {
-                  label: "Perfect Gift",
-                  sub: "For every celebration",
-                  icon: <Gift size={22} />,
-                },
-              ].map((card, i) => (
-                <motion.div
-                  key={card.label}
-                  variants={fadeUp}
-                  custom={i * 0.3}
-                  className="p-5 rounded-2xl flex flex-col gap-3"
-                  style={{
-                    background:
-                      i % 2 === 0 ? "var(--rj-charcoal)" : "rgba(0,55,32,0.06)",
-                    border:
-                      i % 2 === 0 ? "none" : "1px solid rgba(0,55,32,0.12)",
-                  }}
-                >
-                  <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center"
-                    style={{
-                      background:
-                        i % 2 === 0
-                          ? "rgba(252,193,81,0.15)"
-                          : "rgba(0,55,32,0.1)",
-                      color:
-                        i % 2 === 0 ? "var(--rj-gold)" : "var(--rj-emerald)",
-                    }}
-                  >
-                    {card.icon}
-                  </div>
-                  <div>
-                    <p
-                      className="font-cinzel text-[11px] tracking-wider font-bold"
-                      style={{
-                        color: i % 2 === 0 ? "#fff" : "var(--rj-charcoal)",
-                      }}
-                    >
-                      {card.label}
-                    </p>
-                    <p
-                      className="text-[11px] mt-0.5"
-                      style={{
-                        color:
-                          i % 2 === 0
-                            ? "rgba(255,255,255,0.45)"
-                            : "var(--rj-ash)",
-                        fontFamily: "var(--font-body,'DM Sans'),sans-serif",
-                      }}
-                    >
-                      {card.sub}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </div>
-      </Section>
-
-      {/* ══════════════════════════════════════════════════
-          TOP RING STYLES — dark bg
-          Ring-specific: style TAG chips per card
-      ══════════════════════════════════════════════════ */}
-      <Section
-        className="section-padding relative overflow-hidden"
-        style={{ background: "var(--rj-emerald-dark)" }}
-      >
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse 60% 50% at 100% 50%, rgba(252,193,81,0.05) 0%, transparent 70%)",
-          }}
-        />
-        <div className="container-rj relative z-10">
-          <div className="text-center mb-12">
-            <motion.div variants={fadeUp} custom={0}>
-              <Label>Style Guide</Label>
-              <h2
-                className="font-cormorant font-light leading-tight"
-                style={{
-                  fontSize: "clamp(1.8rem, 4vw, 3rem)",
+                  fontSize: "clamp(2.2rem, 6vw, 4rem)",
                   color: "#fff",
                   letterSpacing: "-0.01em",
                 }}
               >
-                Top Styles in{" "}
+                Gold Plated Rings{" "}
                 <em
                   className="font-normal not-italic"
                   style={{
@@ -861,239 +664,219 @@ export default function RingsForMen() {
                     backgroundClip: "text",
                   }}
                 >
-                  Gold Plated Rings
+                  for Men
                 </em>
-              </h2>
-            </motion.div>
-          </div>
+              </motion.h1>
 
-          <div className="flex flex-col gap-3">
-            {RING_STYLES.map((style, i) => (
-              <motion.div
-                key={style.name}
+              <GoldDivider />
+
+              <motion.p
                 variants={fadeUp}
-                custom={i * 0.15}
-                className="group flex items-center max-w-3xl mx-auto gap-5 p-5 sm:p-6 rounded-2xl transition-all duration-300 cursor-default"
+                custom={2}
+                className="mt-5 leading-relaxed"
                 style={{
-                  background: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(255,255,255,0.06)",
-                }}
-                whileHover={{
-                  background: "rgba(252,193,81,0.05)",
-                  borderColor: "rgba(252,193,81,0.2)",
-                  x: 4,
+                  color: "rgba(255,255,255,0.6)",
+                  fontSize: "clamp(0.95rem, 2vw, 1.1rem)",
+                  fontFamily: "var(--font-body,'DM Sans'),sans-serif",
+                  lineHeight: "1.85",
                 }}
               >
-                {/* Numbered circle */}
-                <div
-                  className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center font-cormorant text-xl font-light"
-                  style={{
-                    border: "1px solid rgba(252,193,81,0.3)",
-                    color: "var(--rj-gold)",
-                    background: "rgba(252,193,81,0.06)",
-                  }}
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </div>
+                Explore our exclusive collection of gold plated rings for men,
+                crafted for those who believe every detail matters. Each piece
+                is designed to give you the bold, luxurious look of gold at an
+                affordable price, making it perfect for daily wear, festive
+                celebrations, and special occasions.
+              </motion.p>
+            </div>
+          </div>
+        </Section> */}
 
-                <div className="flex-1 min-w-0">
-                  {/* Name + occasion tag on same row */}
-                  <div className="flex items-center gap-2 flex-wrap mb-2">
-                    <h3
-                      className="font-cinzel text-sm tracking-wider font-bold"
-                      style={{ color: "#fff" }}
-                    >
-                      {style.name}
-                    </h3>
-                    <span
-                      className="font-cinzel text-[8px] tracking-widest uppercase px-2 py-0.5 rounded-full"
-                      style={{
-                        background: "rgba(252,193,81,0.12)",
-                        color: "var(--rj-gold)",
-                        border: "1px solid rgba(252,193,81,0.2)",
-                      }}
-                    >
-                      {style.tag}
-                    </span>
-                  </div>
-                  <p
-                    className="leading-relaxed text-sm"
+        {/* ══════════════════════════════════════════════════
+          WHAT ARE GOLD PLATED RINGS? — ivory bg
+      ══════════════════════════════════════════════════ */}
+        <Section
+          className="section-padding"
+          style={{ background: "var(--rj-ivory)" }}
+        >
+          <div className="container-rj">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 xl:gap-16 items-center">
+              {/* Left — text */}
+              <div>
+                <motion.div variants={fadeUp} custom={0}>
+                  <Label>About Our Collection</Label>
+                  <h2
+                    className="font-cormorant font-light leading-tight mb-5"
                     style={{
-                      color: "rgba(255,255,255,0.5)",
-                      fontFamily: "var(--font-body,'DM Sans'),sans-serif",
-                      lineHeight: "1.75",
+                      fontSize: "clamp(1.8rem, 4vw, 3rem)",
+                      color: "var(--rj-charcoal)",
+                      letterSpacing: "-0.01em",
                     }}
                   >
-                    {style.desc}
-                  </p>
-                </div>
+                    What are Gold Plated
+                    <br />
+                    <em
+                      className="font-normal"
+                      style={{ color: "var(--rj-emerald)" }}
+                    >
+                      Rings for Men?
+                    </em>
+                  </h2>
+                </motion.div>
 
-                <ChevronRight
-                  size={16}
-                  className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 mt-1"
-                  style={{ color: "var(--rj-gold)" }}
-                />
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </Section>
-
-      {/* ══════════════════════════════════════════════════
-          WHAT MAKES IT SPECIAL — ivory bg
-      ══════════════════════════════════════════════════ */}
-      <Section
-        className="section-padding"
-        style={{ background: "var(--rj-ivory)" }}
-      >
-        <div className="container-rj">
-          <div className="text-center mb-12">
-            <motion.div variants={fadeUp} custom={0}>
-              <Label>Crafted with Precision</Label>
-              <h2
-                className="font-cormorant font-light leading-tight"
-                style={{
-                  fontSize: "clamp(1.8rem, 4vw, 3rem)",
-                  color: "var(--rj-charcoal)",
-                  letterSpacing: "-0.01em",
-                }}
-              >
-                What Makes Our Gold Plated
-                <br />
-                <em
-                  className="font-normal"
-                  style={{ color: "var(--rj-emerald)" }}
-                >
-                  Rings Special?
-                </em>
-              </h2>
-            </motion.div>
-          </div>
-
-          {/* 5-card grid: 3 top + 2 bottom centered */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
-            {SPECIAL_FEATURES.slice(0, 3).map((feat, i) => (
-              <motion.div
-                key={feat.title}
-                variants={fadeUp}
-                custom={i * 0.1}
-                className="p-6 rounded-2xl transition-all duration-300"
-                style={{
-                  background: "#fff",
-                  border: "1px solid var(--rj-bone)",
-                  boxShadow: "0 2px 12px rgba(0,0,0,0.04)",
-                }}
-                whileHover={{
-                  y: -4,
-                  boxShadow: "0 12px 32px rgba(0,0,0,0.1)",
-                  borderColor: "rgba(252,193,81,0.4)",
-                }}
-              >
-                <div
-                  className="w-11 h-11 rounded-2xl flex items-center justify-center mb-4"
-                  style={{
-                    background: "rgba(0,55,32,0.07)",
-                    color: "var(--rj-emerald)",
-                  }}
-                >
-                  {feat.icon}
-                </div>
-                <h3
-                  className="font-cinzel text-[11px] tracking-wider font-bold mb-2"
-                  style={{ color: "var(--rj-charcoal)" }}
-                >
-                  {feat.title}
-                </h3>
-                <p
-                  className="text-sm leading-relaxed"
+                <motion.p
+                  variants={fadeUp}
+                  custom={1}
+                  className="leading-relaxed"
                   style={{
                     color: "var(--rj-ash)",
+                    fontSize: "clamp(0.92rem, 1.8vw, 1.05rem)",
                     fontFamily: "var(--font-body,'DM Sans'),sans-serif",
-                    lineHeight: "1.75",
+                    lineHeight: "1.9",
                   }}
                 >
-                  {feat.desc}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:max-w-2xl sm:mx-auto">
-            {SPECIAL_FEATURES.slice(3).map((feat, i) => (
-              <motion.div
-                key={feat.title}
-                variants={fadeUp}
-                custom={(i + 3) * 0.1}
-                className="p-6 rounded-2xl transition-all duration-300"
-                style={{
-                  background: "#fff",
-                  border: "1px solid var(--rj-bone)",
-                  boxShadow: "0 2px 12px rgba(0,0,0,0.04)",
-                }}
-                whileHover={{
-                  y: -4,
-                  boxShadow: "0 12px 32px rgba(0,0,0,0.1)",
-                  borderColor: "rgba(252,193,81,0.4)",
-                }}
-              >
-                <div
-                  className="w-11 h-11 rounded-2xl flex items-center justify-center mb-4"
-                  style={{
-                    background: "rgba(0,55,32,0.07)",
-                    color: "var(--rj-emerald)",
-                  }}
-                >
-                  {feat.icon}
-                </div>
-                <h3
-                  className="font-cinzel text-[11px] tracking-wider font-bold mb-2"
-                  style={{ color: "var(--rj-charcoal)" }}
-                >
-                  {feat.title}
-                </h3>
-                <p
-                  className="text-sm leading-relaxed"
+                  Gold plated rings are crafted from a base metal such as brass
+                  or copper, electroplated with a layer of real gold, giving
+                  them the rich and luxurious appearance of solid gold at a
+                  fraction of the cost.
+                </motion.p>
+
+                <motion.p
+                  variants={fadeUp}
+                  custom={2}
+                  className="mt-4 leading-relaxed"
                   style={{
                     color: "var(--rj-ash)",
+                    fontSize: "clamp(0.92rem, 1.8vw, 1.05rem)",
                     fontFamily: "var(--font-body,'DM Sans'),sans-serif",
-                    lineHeight: "1.75",
+                    lineHeight: "1.9",
                   }}
                 >
-                  {feat.desc}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </Section>
+                  At Rehnoor Jewels, our{" "}
+                  <strong
+                    style={{ color: "var(--rj-charcoal)", fontWeight: 600 }}
+                  >
+                    1 gram gold rings for men
+                  </strong>{" "}
+                  are designed with precision, finished to perfection, and built
+                  to complement every style — from bold statement looks to
+                  subtle everyday elegance. Whether you are looking for a simple
+                  ad ring for daily wear or a designer piece for a special
+                  occasion, we have the perfect ring for you.
+                </motion.p>
+              </div>
 
-      {/* ══════════════════════════════════════════════════
-          WHY CHOOSE REHNOOR — emerald bg, split layout
+              {/* Right — decorative 2×2 card grid */}
+              <motion.div
+                variants={fadeUp}
+                custom={1}
+                className="grid grid-cols-2 gap-3"
+              >
+                {[
+                  {
+                    label: "5 Unique Styles",
+                    sub: "For every occasion",
+                    icon: <Gem size={22} />,
+                  },
+                  {
+                    label: "Free Size Adjust",
+                    sub: "Perfect fit always",
+                    icon: <Maximize2 size={22} />,
+                  },
+                  {
+                    label: "Lasting Shine",
+                    sub: "Anti-tarnish finish",
+                    icon: <Sun size={22} />,
+                  },
+                  {
+                    label: "Perfect Gift",
+                    sub: "For every celebration",
+                    icon: <Gift size={22} />,
+                  },
+                ].map((card, i) => (
+                  <motion.div
+                    key={card.label}
+                    variants={fadeUp}
+                    custom={i * 0.3}
+                    className="p-5 rounded-2xl flex flex-col gap-3"
+                    style={{
+                      background:
+                        i % 2 === 0
+                          ? "var(--rj-charcoal)"
+                          : "rgba(0,55,32,0.06)",
+                      border:
+                        i % 2 === 0 ? "none" : "1px solid rgba(0,55,32,0.12)",
+                    }}
+                  >
+                    <div
+                      className="w-10 h-10 rounded-xl flex items-center justify-center"
+                      style={{
+                        background:
+                          i % 2 === 0
+                            ? "rgba(252,193,81,0.15)"
+                            : "rgba(0,55,32,0.1)",
+                        color:
+                          i % 2 === 0 ? "var(--rj-gold)" : "var(--rj-emerald)",
+                      }}
+                    >
+                      {card.icon}
+                    </div>
+                    <div>
+                      <p
+                        className="font-cinzel text-[11px] tracking-wider font-bold"
+                        style={{
+                          color: i % 2 === 0 ? "#fff" : "var(--rj-charcoal)",
+                        }}
+                      >
+                        {card.label}
+                      </p>
+                      <p
+                        className="text-[11px] mt-0.5"
+                        style={{
+                          color:
+                            i % 2 === 0
+                              ? "rgba(255,255,255,0.45)"
+                              : "var(--rj-ash)",
+                          fontFamily: "var(--font-body,'DM Sans'),sans-serif",
+                        }}
+                      >
+                        {card.sub}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </div>
+          </div>
+        </Section>
+
+        {/* ══════════════════════════════════════════════════
+          TOP RING STYLES — dark bg
+          Ring-specific: style TAG chips per card
       ══════════════════════════════════════════════════ */}
-      <Section
-        className="section-padding relative overflow-hidden"
-        style={{ background: "var(--rj-emerald, #003720)" }}
-      >
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse 70% 60% at 0% 50%, rgba(252,193,81,0.08) 0%, transparent 65%)",
-          }}
-        />
-        <div className="container-rj relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 items-start">
-            <div className="lg:col-span-2 lg:sticky lg:top-28">
+        <Section
+          className="section-padding relative overflow-hidden"
+          style={{ background: "var(--rj-emerald-dark)" }}
+        >
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(ellipse 60% 50% at 100% 50%, rgba(252,193,81,0.05) 0%, transparent 70%)",
+            }}
+          />
+          <div className="container-rj relative z-10">
+            <div className="text-center mb-12">
               <motion.div variants={fadeUp} custom={0}>
-                <Label>Our Promise</Label>
+                <Label>Style Guide</Label>
                 <h2
-                  className="font-cormorant font-light leading-tight mb-4"
+                  className="font-cormorant font-light leading-tight"
                   style={{
                     fontSize: "clamp(1.8rem, 4vw, 3rem)",
                     color: "#fff",
                     letterSpacing: "-0.01em",
                   }}
                 >
-                  Why Choose Rehnoor Jewels for{" "}
+                  Top Styles in{" "}
                   <em
                     className="font-normal not-italic"
                     style={{
@@ -1104,470 +887,95 @@ export default function RingsForMen() {
                       backgroundClip: "text",
                     }}
                   >
-                    Gold Plated Rings?
+                    Gold Plated Rings
                   </em>
                 </h2>
-                <p
-                  className="text-sm leading-relaxed"
-                  style={{
-                    color: "rgba(255,255,255,0.5)",
-                    fontFamily: "var(--font-body,'DM Sans'),sans-serif",
-                    lineHeight: "1.85",
-                  }}
-                >
-                  When it comes to buying gold plated rings online, Rehnoor
-                  Jewels is a name you can trust.
-                </p>
               </motion.div>
             </div>
 
-            <div className="lg:col-span-3 flex flex-col gap-4">
-              {WHY_REHNOOR.map((item, i) => (
+            <div className="flex flex-col gap-3">
+              {RING_STYLES.map((style, i) => (
                 <motion.div
-                  key={item.title}
+                  key={style.name}
                   variants={fadeUp}
                   custom={i * 0.15}
-                  className="flex items-start gap-4 p-5 rounded-2xl"
+                  className="group flex items-center max-w-3xl mx-auto gap-5 p-5 sm:p-6 rounded-2xl transition-all duration-300 cursor-default"
                   style={{
-                    background: "rgba(255,255,255,0.05)",
-                    border: "1px solid rgba(255,255,255,0.08)",
+                    background: "rgba(255,255,255,0.03)",
+                    border: "1px solid rgba(255,255,255,0.06)",
+                  }}
+                  whileHover={{
+                    background: "rgba(252,193,81,0.05)",
+                    borderColor: "rgba(252,193,81,0.2)",
+                    x: 4,
                   }}
                 >
+                  {/* Numbered circle */}
                   <div
-                    className="flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center"
+                    className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center font-cormorant text-xl font-light"
                     style={{
-                      background: "rgba(252,193,81,0.15)",
+                      border: "1px solid rgba(252,193,81,0.3)",
                       color: "var(--rj-gold)",
-                      border: "1px solid rgba(252,193,81,0.25)",
+                      background: "rgba(252,193,81,0.06)",
                     }}
                   >
-                    {item.icon}
+                    {String(i + 1).padStart(2, "0")}
                   </div>
-                  <div>
-                    <h3
-                      className="font-cinzel text-[11px] tracking-wider font-bold mb-1.5"
-                      style={{ color: "#fff" }}
-                    >
-                      {item.title}
-                    </h3>
+
+                  <div className="flex-1 min-w-0">
+                    {/* Name + occasion tag on same row */}
+                    <div className="flex items-center gap-2 flex-wrap mb-2">
+                      <h3
+                        className="font-cinzel text-sm tracking-wider font-bold"
+                        style={{ color: "#fff" }}
+                      >
+                        {style.name}
+                      </h3>
+                      <span
+                        className="font-cinzel text-[8px] tracking-widest uppercase px-2 py-0.5 rounded-full"
+                        style={{
+                          background: "rgba(252,193,81,0.12)",
+                          color: "var(--rj-gold)",
+                          border: "1px solid rgba(252,193,81,0.2)",
+                        }}
+                      >
+                        {style.tag}
+                      </span>
+                    </div>
                     <p
-                      className="text-sm leading-relaxed"
+                      className="leading-relaxed text-sm"
                       style={{
                         color: "rgba(255,255,255,0.5)",
                         fontFamily: "var(--font-body,'DM Sans'),sans-serif",
                         lineHeight: "1.75",
                       }}
                     >
-                      {item.desc}
+                      {style.desc}
                     </p>
                   </div>
+
+                  <ChevronRight
+                    size={16}
+                    className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 mt-1"
+                    style={{ color: "var(--rj-gold)" }}
+                  />
                 </motion.div>
               ))}
             </div>
           </div>
-        </div>
-      </Section>
+        </Section>
 
-      {/* ══════════════════════════════════════════════════
-          HOW TO STYLE — ivory bg, 3+2 grid
+        {/* ══════════════════════════════════════════════════
+          WHAT MAKES IT SPECIAL — ivory bg
       ══════════════════════════════════════════════════ */}
-      <Section
-        className="section-padding"
-        style={{ background: "var(--rj-ivory)" }}
-      >
-        <div className="container-rj">
-          <div className="text-center mb-12">
-            <motion.div variants={fadeUp} custom={0}>
-              <Label>Styling Tips</Label>
-              <h2
-                className="font-cormorant font-light leading-tight"
-                style={{
-                  fontSize: "clamp(1.8rem, 4vw, 3rem)",
-                  color: "var(--rj-charcoal)",
-                  letterSpacing: "-0.01em",
-                }}
-              >
-                How to{" "}
-                <em
-                  className="font-normal"
-                  style={{ color: "var(--rj-emerald)" }}
-                >
-                  Style
-                </em>{" "}
-                Gold Plated Rings
-              </h2>
-            </motion.div>
-          </div>
-
-          {/* Top 3 */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
-            {STYLE_TIPS.slice(0, 3).map((tip, i) => (
-              <motion.div
-                key={tip.context}
-                variants={fadeUp}
-                custom={i * 0.15}
-                className="relative p-6 sm:p-7 rounded-2xl overflow-hidden"
-                style={{
-                  background: i === 1 ? "var(--rj-charcoal)" : "#fff",
-                  border: i === 1 ? "none" : "1px solid var(--rj-bone)",
-                }}
-              >
-                <span
-                  className="absolute top-4 right-5 font-cormorant font-light select-none pointer-events-none"
-                  style={{
-                    fontSize: "5rem",
-                    lineHeight: 1,
-                    color:
-                      i === 1 ? "rgba(255,255,255,0.05)" : "rgba(0,55,32,0.05)",
-                  }}
-                >
-                  {tip.num}
-                </span>
-                <span
-                  className="font-cinzel text-[9px] tracking-[0.2em] uppercase font-bold px-2.5 py-1 rounded-full mb-4 inline-block"
-                  style={{
-                    background:
-                      i === 1 ? "rgba(252,193,81,0.15)" : "rgba(0,55,32,0.08)",
-                    color: i === 1 ? "var(--rj-gold)" : "var(--rj-emerald)",
-                  }}
-                >
-                  {tip.context}
-                </span>
-                <p
-                  className="leading-relaxed text-sm relative z-10 mt-2"
-                  style={{
-                    color: i === 1 ? "rgba(255,255,255,0.65)" : "var(--rj-ash)",
-                    fontFamily: "var(--font-body,'DM Sans'),sans-serif",
-                    lineHeight: "1.85",
-                  }}
-                >
-                  {tip.tip}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Bottom 2 */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:max-w-2xl sm:mx-auto">
-            {STYLE_TIPS.slice(3).map((tip, i) => (
-              <motion.div
-                key={tip.context}
-                variants={fadeUp}
-                custom={(i + 3) * 0.15}
-                className="relative p-6 sm:p-7 rounded-2xl overflow-hidden"
-                style={{
-                  background: i === 0 ? "var(--rj-charcoal)" : "#fff",
-                  border: i === 0 ? "none" : "1px solid var(--rj-bone)",
-                }}
-              >
-                <span
-                  className="absolute top-4 right-5 font-cormorant font-light select-none pointer-events-none"
-                  style={{
-                    fontSize: "5rem",
-                    lineHeight: 1,
-                    color:
-                      i === 0 ? "rgba(255,255,255,0.05)" : "rgba(0,55,32,0.05)",
-                  }}
-                >
-                  {tip.num}
-                </span>
-                <span
-                  className="font-cinzel text-[9px] tracking-[0.2em] uppercase font-bold px-2.5 py-1 rounded-full mb-4 inline-block"
-                  style={{
-                    background:
-                      i === 0 ? "rgba(252,193,81,0.15)" : "rgba(0,55,32,0.08)",
-                    color: i === 0 ? "var(--rj-gold)" : "var(--rj-emerald)",
-                  }}
-                >
-                  {tip.context}
-                </span>
-                <p
-                  className="leading-relaxed text-sm relative z-10 mt-2"
-                  style={{
-                    color: i === 0 ? "rgba(255,255,255,0.65)" : "var(--rj-ash)",
-                    fontFamily: "var(--font-body,'DM Sans'),sans-serif",
-                    lineHeight: "1.85",
-                  }}
-                >
-                  {tip.tip}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </Section>
-
-      {/* ══════════════════════════════════════════════════
-          PERFECT GIFT — charcoal card on ivory
-      ══════════════════════════════════════════════════ */}
-      <Section
-        className="section-padding"
-        style={{ background: "var(--rj-emerald-dark)" }}
-      >
-        <div className="container-rj">
-          <motion.div
-            variants={fadeUp}
-            custom={0}
-            className="relative rounded-3xl overflow-hidden p-8 sm:p-12 text-center"
-            style={{
-              background: "var(--rj-emerald)",
-              border: "1px solid rgba(252,193,81,0.2)",
-            }}
-          >
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                background:
-                  "radial-gradient(ellipse 70% 60% at 50% 100%, rgba(252,193,81,0.08) 0%, transparent 65%)",
-              }}
-            />
-
-            <div className="relative z-10 max-w-2xl mx-auto">
-              <div
-                className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-6"
-                style={{
-                  background: "rgba(252,193,81,0.12)",
-                  border: "1px solid rgba(252,193,81,0.3)",
-                }}
-              >
-                <Gift size={22} style={{ color: "var(--rj-gold)" }} />
-              </div>
-
-              <Label>Gift Ideas</Label>
-
-              <h2
-                className="font-cormorant font-light leading-tight mb-5"
-                style={{
-                  fontSize: "clamp(1.8rem, 4vw, 3rem)",
-                  color: "#fff",
-                  letterSpacing: "-0.01em",
-                }}
-              >
-                1 Gram Gold Rings for Men:{" "}
-                <em
-                  className="font-normal not-italic"
-                  style={{
-                    background:
-                      "var(--gradient-gold, linear-gradient(135deg,#fcc151,#e8a020))",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}
-                >
-                  A Perfect Gift
-                </em>
-              </h2>
-
-              <p
-                className="leading-relaxed mb-4"
-                style={{
-                  color: "rgba(255,255,255,0.55)",
-                  fontSize: "clamp(0.9rem, 1.8vw, 1.05rem)",
-                  fontFamily: "var(--font-body,'DM Sans'),sans-serif",
-                  lineHeight: "1.85",
-                }}
-              >
-                Looking for a gift that is stylish, meaningful, and
-                budget-friendly? A 1 gram gold ring for men from Rehnoor Jewels
-                makes for a perfect gift for every occasion. Whether it is a
-                birthday, anniversary, Rakhi, Diwali, or wedding, our gold
-                plated rings are a thoughtful and elegant choice that any man
-                would be proud to wear.
-              </p>
-              <p
-                className="leading-relaxed"
-                style={{
-                  color: "rgba(255,255,255,0.55)",
-                  fontSize: "clamp(0.9rem, 1.8vw, 1.05rem)",
-                  fontFamily: "var(--font-body,'DM Sans'),sans-serif",
-                  lineHeight: "1.85",
-                }}
-              >
-                Each piece comes beautifully presented, making it ready to gift
-                straight out of the box. Give the gift of style and let Rehnoor
-                Jewels make every occasion truly special.
-              </p>
-
-              {/* Occasion pills */}
-              <div className="flex flex-wrap items-center justify-center gap-2 mt-8">
-                {GIFT_OCCASIONS.map((occasion) => (
-                  <span
-                    key={occasion}
-                    className="font-cinzel text-[9px] tracking-widest uppercase px-3 py-1.5 rounded-full"
-                    style={{
-                      background: "rgba(252,193,81,0.1)",
-                      border: "1px solid rgba(252,193,81,0.2)",
-                      color: "var(--rj-gold)",
-                    }}
-                  >
-                    {occasion}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </Section>
-
-      {/* ══════════════════════════════════════════════════
-          CARE TIPS — ivory bg
-      ══════════════════════════════════════════════════ */}
-      <Section
-        className="section-padding"
-        style={{ background: "var(--rj-ivory)" }}
-      >
-        <div className="container-rj">
-          <div className="text-center mb-10">
-            <motion.div variants={fadeUp} custom={0}>
-              <Label>Maintenance</Label>
-              <h2
-                className="font-cormorant font-light leading-tight"
-                style={{
-                  fontSize: "clamp(1.8rem, 4vw, 3rem)",
-                  color: "var(--rj-charcoal)",
-                  letterSpacing: "-0.01em",
-                }}
-              >
-                Care Tips for Your{" "}
-                <em
-                  className="font-normal"
-                  style={{ color: "var(--rj-emerald)" }}
-                >
-                  Gold Plated Rings
-                </em>
-              </h2>
-            </motion.div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {CARE_TIPS.map((tip, i) => (
-              <motion.div
-                key={i}
-                variants={fadeUp}
-                custom={i * 0.12}
-                className="p-6 rounded-2xl text-center flex flex-col items-center gap-3"
-                style={{
-                  background: "#fff",
-                  border: "1px solid var(--rj-bone)",
-                  boxShadow: "0 2px 10px rgba(0,0,0,0.04)",
-                }}
-                whileHover={{
-                  y: -3,
-                  boxShadow: "0 10px 28px rgba(0,0,0,0.09)",
-                }}
-              >
-                <div
-                  className="w-10 h-10 rounded-full flex items-center justify-center"
-                  style={{
-                    background: "rgba(0,55,32,0.07)",
-                    color: "var(--rj-emerald)",
-                  }}
-                >
-                  {tip.icon}
-                </div>
-                <p
-                  className="text-sm leading-relaxed"
-                  style={{
-                    color: "var(--rj-ash)",
-                    fontFamily: "var(--font-body,'DM Sans'),sans-serif",
-                    lineHeight: "1.75",
-                  }}
-                >
-                  {tip.tip}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </Section>
-
-      {/* ══════════════════════════════════════════════════
-          CUSTOMER REVIEWS — dark bg, paginated carousel
-      ══════════════════════════════════════════════════ */}
-      <Section
-        className="section-padding relative overflow-hidden"
-        style={{ background: "var(--rj-charcoal)" }}
-      >
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse 60% 50% at 0% 50%, rgba(252,193,81,0.05) 0%, transparent 65%)",
-          }}
-        />
-        <div className="container-rj relative z-10">
-          <div className="text-center mb-12">
-            <motion.div variants={fadeUp} custom={0}>
-              <Label>Customer Love</Label>
-              <h2
-                className="font-cormorant font-light leading-tight"
-                style={{
-                  fontSize: "clamp(1.8rem, 4vw, 3rem)",
-                  color: "#fff",
-                  letterSpacing: "-0.01em",
-                }}
-              >
-                Loved by Our Customers{" "}
-                <em
-                  className="font-normal not-italic"
-                  style={{
-                    background:
-                      "var(--gradient-gold, linear-gradient(135deg,#fcc151,#e8a020))",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}
-                >
-                  Across India
-                </em>
-              </h2>
-
-              {/* Aggregate rating */}
-              <div className="flex items-center justify-center gap-2 mt-4">
-                <div className="flex gap-0.5">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star
-                      key={i}
-                      size={14}
-                      style={{
-                        fill: "var(--rj-gold)",
-                        color: "var(--rj-gold)",
-                      }}
-                    />
-                  ))}
-                </div>
-                <span
-                  className="font-cinzel text-xs font-bold"
-                  style={{ color: "#fff" }}
-                >
-                  5.0
-                </span>
-                <span
-                  className="font-cinzel text-[10px] tracking-wider"
-                  style={{ color: "rgba(255,255,255,0.35)" }}
-                >
-                  · {REVIEWS.length} verified reviews
-                </span>
-              </div>
-            </motion.div>
-          </div>
-
-          <ReviewCarousel reviews={REVIEWS} />
-        </div>
-      </Section>
-
-      {/* ══════════════════════════════════════════════════
-          FAQ — ivory bg
-      ══════════════════════════════════════════════════ */}
-      <Section
-        className="section-padding"
-        style={{ background: "var(--rj-ivory)" }}
-      >
-        <div className="container-rj">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-10">
+        <Section
+          className="section-padding"
+          style={{ background: "var(--rj-ivory)" }}
+        >
+          <div className="container-rj">
+            <div className="text-center mb-12">
               <motion.div variants={fadeUp} custom={0}>
-                <Label>Frequently Asked Questions</Label>
+                <Label>Crafted with Precision</Label>
                 <h2
                   className="font-cormorant font-light leading-tight"
                   style={{
@@ -1576,119 +984,751 @@ export default function RingsForMen() {
                     letterSpacing: "-0.01em",
                   }}
                 >
-                  Got{" "}
+                  What Makes Our Gold Plated
+                  <br />
                   <em
                     className="font-normal"
                     style={{ color: "var(--rj-emerald)" }}
                   >
-                    Questions?
+                    Rings Special?
                   </em>
                 </h2>
               </motion.div>
             </div>
 
-            <div
-              className="rounded-2xl overflow-hidden p-2"
-              style={{ border: "1px solid var(--rj-bone)", background: "#fff" }}
-            >
-              {FAQS.map((faq, i) => (
-                <div key={i} className="px-4">
-                  <FaqItem q={faq.q} a={faq.a} index={i} />
-                </div>
+            {/* 5-card grid: 3 top + 2 bottom centered */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+              {SPECIAL_FEATURES.slice(0, 3).map((feat, i) => (
+                <motion.div
+                  key={feat.title}
+                  variants={fadeUp}
+                  custom={i * 0.1}
+                  className="p-6 rounded-2xl transition-all duration-300"
+                  style={{
+                    background: "#fff",
+                    border: "1px solid var(--rj-bone)",
+                    boxShadow: "0 2px 12px rgba(0,0,0,0.04)",
+                  }}
+                  whileHover={{
+                    y: -4,
+                    boxShadow: "0 12px 32px rgba(0,0,0,0.1)",
+                    borderColor: "rgba(252,193,81,0.4)",
+                  }}
+                >
+                  <div
+                    className="w-11 h-11 rounded-2xl flex items-center justify-center mb-4"
+                    style={{
+                      background: "rgba(0,55,32,0.07)",
+                      color: "var(--rj-emerald)",
+                    }}
+                  >
+                    {feat.icon}
+                  </div>
+                  <h3
+                    className="font-cinzel text-[11px] tracking-wider font-bold mb-2"
+                    style={{ color: "var(--rj-charcoal)" }}
+                  >
+                    {feat.title}
+                  </h3>
+                  <p
+                    className="text-sm leading-relaxed"
+                    style={{
+                      color: "var(--rj-ash)",
+                      fontFamily: "var(--font-body,'DM Sans'),sans-serif",
+                      lineHeight: "1.75",
+                    }}
+                  >
+                    {feat.desc}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:max-w-2xl sm:mx-auto">
+              {SPECIAL_FEATURES.slice(3).map((feat, i) => (
+                <motion.div
+                  key={feat.title}
+                  variants={fadeUp}
+                  custom={(i + 3) * 0.1}
+                  className="p-6 rounded-2xl transition-all duration-300"
+                  style={{
+                    background: "#fff",
+                    border: "1px solid var(--rj-bone)",
+                    boxShadow: "0 2px 12px rgba(0,0,0,0.04)",
+                  }}
+                  whileHover={{
+                    y: -4,
+                    boxShadow: "0 12px 32px rgba(0,0,0,0.1)",
+                    borderColor: "rgba(252,193,81,0.4)",
+                  }}
+                >
+                  <div
+                    className="w-11 h-11 rounded-2xl flex items-center justify-center mb-4"
+                    style={{
+                      background: "rgba(0,55,32,0.07)",
+                      color: "var(--rj-emerald)",
+                    }}
+                  >
+                    {feat.icon}
+                  </div>
+                  <h3
+                    className="font-cinzel text-[11px] tracking-wider font-bold mb-2"
+                    style={{ color: "var(--rj-charcoal)" }}
+                  >
+                    {feat.title}
+                  </h3>
+                  <p
+                    className="text-sm leading-relaxed"
+                    style={{
+                      color: "var(--rj-ash)",
+                      fontFamily: "var(--font-body,'DM Sans'),sans-serif",
+                      lineHeight: "1.75",
+                    }}
+                  >
+                    {feat.desc}
+                  </p>
+                </motion.div>
               ))}
             </div>
           </div>
-        </div>
-      </Section>
+        </Section>
 
-      {/* ══════════════════════════════════════════════════
-          CTA FOOTER STRIP — dark bg
+        {/* ══════════════════════════════════════════════════
+          WHY CHOOSE REHNOOR — emerald bg, split layout
       ══════════════════════════════════════════════════ */}
-      <Section
-        className="section-padding relative overflow-hidden"
-        style={{ background: "var(--rj-charcoal)" }}
-      >
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse 80% 60% at 50% 50%, rgba(252,193,81,0.07) 0%, transparent 70%)",
-          }}
-        />
-        <div
-          className="absolute top-0 left-0 right-0 h-px"
-          style={{
-            background:
-              "linear-gradient(90deg, transparent, rgba(252,193,81,0.4), transparent)",
-          }}
-        />
+        <Section
+          className="section-padding relative overflow-hidden"
+          style={{ background: "var(--rj-emerald, #003720)" }}
+        >
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(ellipse 70% 60% at 0% 50%, rgba(252,193,81,0.08) 0%, transparent 65%)",
+            }}
+          />
+          <div className="container-rj relative z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 items-start">
+              <div className="lg:col-span-2 lg:sticky lg:top-28">
+                <motion.div variants={fadeUp} custom={0}>
+                  <Label>Our Promise</Label>
+                  <h2
+                    className="font-cormorant font-light leading-tight mb-4"
+                    style={{
+                      fontSize: "clamp(1.8rem, 4vw, 3rem)",
+                      color: "#fff",
+                      letterSpacing: "-0.01em",
+                    }}
+                  >
+                    Why Choose Rehnoor Jewels for{" "}
+                    <em
+                      className="font-normal not-italic"
+                      style={{
+                        background:
+                          "var(--gradient-gold, linear-gradient(135deg,#fcc151,#e8a020))",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        backgroundClip: "text",
+                      }}
+                    >
+                      Gold Plated Rings?
+                    </em>
+                  </h2>
+                  <p
+                    className="text-sm leading-relaxed"
+                    style={{
+                      color: "rgba(255,255,255,0.5)",
+                      fontFamily: "var(--font-body,'DM Sans'),sans-serif",
+                      lineHeight: "1.85",
+                    }}
+                  >
+                    When it comes to buying gold plated rings online, Rehnoor
+                    Jewels is a name you can trust.
+                  </p>
+                </motion.div>
+              </div>
 
-        <div className="container-rj relative z-10 text-center">
-          <motion.div variants={fadeUp} custom={0}>
-            <Label>Shop Now</Label>
-            <h2
-              className="font-cormorant font-light leading-tight mb-5"
+              <div className="lg:col-span-3 flex flex-col gap-4">
+                {WHY_REHNOOR.map((item, i) => (
+                  <motion.div
+                    key={item.title}
+                    variants={fadeUp}
+                    custom={i * 0.15}
+                    className="flex items-start gap-4 p-5 rounded-2xl"
+                    style={{
+                      background: "rgba(255,255,255,0.05)",
+                      border: "1px solid rgba(255,255,255,0.08)",
+                    }}
+                  >
+                    <div
+                      className="flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center"
+                      style={{
+                        background: "rgba(252,193,81,0.15)",
+                        color: "var(--rj-gold)",
+                        border: "1px solid rgba(252,193,81,0.25)",
+                      }}
+                    >
+                      {item.icon}
+                    </div>
+                    <div>
+                      <h3
+                        className="font-cinzel text-[11px] tracking-wider font-bold mb-1.5"
+                        style={{ color: "#fff" }}
+                      >
+                        {item.title}
+                      </h3>
+                      <p
+                        className="text-sm leading-relaxed"
+                        style={{
+                          color: "rgba(255,255,255,0.5)",
+                          fontFamily: "var(--font-body,'DM Sans'),sans-serif",
+                          lineHeight: "1.75",
+                        }}
+                      >
+                        {item.desc}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </Section>
+
+        {/* ══════════════════════════════════════════════════
+          HOW TO STYLE — ivory bg, 3+2 grid
+      ══════════════════════════════════════════════════ */}
+        <Section
+          className="section-padding"
+          style={{ background: "var(--rj-ivory)" }}
+        >
+          <div className="container-rj">
+            <div className="text-center mb-12">
+              <motion.div variants={fadeUp} custom={0}>
+                <Label>Styling Tips</Label>
+                <h2
+                  className="font-cormorant font-light leading-tight"
+                  style={{
+                    fontSize: "clamp(1.8rem, 4vw, 3rem)",
+                    color: "var(--rj-charcoal)",
+                    letterSpacing: "-0.01em",
+                  }}
+                >
+                  How to{" "}
+                  <em
+                    className="font-normal"
+                    style={{ color: "var(--rj-emerald)" }}
+                  >
+                    Style
+                  </em>{" "}
+                  Gold Plated Rings
+                </h2>
+              </motion.div>
+            </div>
+
+            {/* Top 3 */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+              {STYLE_TIPS.slice(0, 3).map((tip, i) => (
+                <motion.div
+                  key={tip.context}
+                  variants={fadeUp}
+                  custom={i * 0.15}
+                  className="relative p-6 sm:p-7 rounded-2xl overflow-hidden"
+                  style={{
+                    background: i === 1 ? "var(--rj-charcoal)" : "#fff",
+                    border: i === 1 ? "none" : "1px solid var(--rj-bone)",
+                  }}
+                >
+                  <span
+                    className="absolute top-4 right-5 font-cormorant font-light select-none pointer-events-none"
+                    style={{
+                      fontSize: "5rem",
+                      lineHeight: 1,
+                      color:
+                        i === 1
+                          ? "rgba(255,255,255,0.05)"
+                          : "rgba(0,55,32,0.05)",
+                    }}
+                  >
+                    {tip.num}
+                  </span>
+                  <span
+                    className="font-cinzel text-[9px] tracking-[0.2em] uppercase font-bold px-2.5 py-1 rounded-full mb-4 inline-block"
+                    style={{
+                      background:
+                        i === 1
+                          ? "rgba(252,193,81,0.15)"
+                          : "rgba(0,55,32,0.08)",
+                      color: i === 1 ? "var(--rj-gold)" : "var(--rj-emerald)",
+                    }}
+                  >
+                    {tip.context}
+                  </span>
+                  <p
+                    className="leading-relaxed text-sm relative z-10 mt-2"
+                    style={{
+                      color:
+                        i === 1 ? "rgba(255,255,255,0.65)" : "var(--rj-ash)",
+                      fontFamily: "var(--font-body,'DM Sans'),sans-serif",
+                      lineHeight: "1.85",
+                    }}
+                  >
+                    {tip.tip}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Bottom 2 */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:max-w-2xl sm:mx-auto">
+              {STYLE_TIPS.slice(3).map((tip, i) => (
+                <motion.div
+                  key={tip.context}
+                  variants={fadeUp}
+                  custom={(i + 3) * 0.15}
+                  className="relative p-6 sm:p-7 rounded-2xl overflow-hidden"
+                  style={{
+                    background: i === 0 ? "var(--rj-charcoal)" : "#fff",
+                    border: i === 0 ? "none" : "1px solid var(--rj-bone)",
+                  }}
+                >
+                  <span
+                    className="absolute top-4 right-5 font-cormorant font-light select-none pointer-events-none"
+                    style={{
+                      fontSize: "5rem",
+                      lineHeight: 1,
+                      color:
+                        i === 0
+                          ? "rgba(255,255,255,0.05)"
+                          : "rgba(0,55,32,0.05)",
+                    }}
+                  >
+                    {tip.num}
+                  </span>
+                  <span
+                    className="font-cinzel text-[9px] tracking-[0.2em] uppercase font-bold px-2.5 py-1 rounded-full mb-4 inline-block"
+                    style={{
+                      background:
+                        i === 0
+                          ? "rgba(252,193,81,0.15)"
+                          : "rgba(0,55,32,0.08)",
+                      color: i === 0 ? "var(--rj-gold)" : "var(--rj-emerald)",
+                    }}
+                  >
+                    {tip.context}
+                  </span>
+                  <p
+                    className="leading-relaxed text-sm relative z-10 mt-2"
+                    style={{
+                      color:
+                        i === 0 ? "rgba(255,255,255,0.65)" : "var(--rj-ash)",
+                      fontFamily: "var(--font-body,'DM Sans'),sans-serif",
+                      lineHeight: "1.85",
+                    }}
+                  >
+                    {tip.tip}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </Section>
+
+        {/* ══════════════════════════════════════════════════
+          PERFECT GIFT — charcoal card on ivory
+      ══════════════════════════════════════════════════ */}
+        <Section
+          className="section-padding"
+          style={{ background: "var(--rj-emerald-dark)" }}
+        >
+          <div className="container-rj">
+            <motion.div
+              variants={fadeUp}
+              custom={0}
+              className="relative rounded-3xl overflow-hidden p-8 sm:p-12 text-center"
               style={{
-                fontSize: "clamp(1.8rem, 5vw, 3.5rem)",
-                color: "#fff",
-                letterSpacing: "-0.01em",
+                background: "var(--rj-emerald)",
+                border: "1px solid rgba(252,193,81,0.2)",
               }}
             >
-              Shop Gold Plated Rings for Men
-              <br />
-              <em
-                className="font-normal not-italic"
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background:
+                    "radial-gradient(ellipse 70% 60% at 50% 100%, rgba(252,193,81,0.08) 0%, transparent 65%)",
+                }}
+              />
+
+              <div className="relative z-10 max-w-2xl mx-auto">
+                <div
+                  className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-6"
+                  style={{
+                    background: "rgba(252,193,81,0.12)",
+                    border: "1px solid rgba(252,193,81,0.3)",
+                  }}
+                >
+                  <Gift size={22} style={{ color: "var(--rj-gold)" }} />
+                </div>
+
+                <Label>Gift Ideas</Label>
+
+                <h2
+                  className="font-cormorant font-light leading-tight mb-5"
+                  style={{
+                    fontSize: "clamp(1.8rem, 4vw, 3rem)",
+                    color: "#fff",
+                    letterSpacing: "-0.01em",
+                  }}
+                >
+                  1 Gram Gold Rings for Men:{" "}
+                  <em
+                    className="font-normal not-italic"
+                    style={{
+                      background:
+                        "var(--gradient-gold, linear-gradient(135deg,#fcc151,#e8a020))",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      backgroundClip: "text",
+                    }}
+                  >
+                    A Perfect Gift
+                  </em>
+                </h2>
+
+                <p
+                  className="leading-relaxed mb-4"
+                  style={{
+                    color: "rgba(255,255,255,0.55)",
+                    fontSize: "clamp(0.9rem, 1.8vw, 1.05rem)",
+                    fontFamily: "var(--font-body,'DM Sans'),sans-serif",
+                    lineHeight: "1.85",
+                  }}
+                >
+                  Looking for a gift that is stylish, meaningful, and
+                  budget-friendly? A 1 gram gold ring for men from Rehnoor
+                  Jewels makes for a perfect gift for every occasion. Whether it
+                  is a birthday, anniversary, Rakhi, Diwali, or wedding, our
+                  gold plated rings are a thoughtful and elegant choice that any
+                  man would be proud to wear.
+                </p>
+                <p
+                  className="leading-relaxed"
+                  style={{
+                    color: "rgba(255,255,255,0.55)",
+                    fontSize: "clamp(0.9rem, 1.8vw, 1.05rem)",
+                    fontFamily: "var(--font-body,'DM Sans'),sans-serif",
+                    lineHeight: "1.85",
+                  }}
+                >
+                  Each piece comes beautifully presented, making it ready to
+                  gift straight out of the box. Give the gift of style and let
+                  Rehnoor Jewels make every occasion truly special.
+                </p>
+
+                {/* Occasion pills */}
+                <div className="flex flex-wrap items-center justify-center gap-2 mt-8">
+                  {GIFT_OCCASIONS.map((occasion) => (
+                    <span
+                      key={occasion}
+                      className="font-cinzel text-[9px] tracking-widest uppercase px-3 py-1.5 rounded-full"
+                      style={{
+                        background: "rgba(252,193,81,0.1)",
+                        border: "1px solid rgba(252,193,81,0.2)",
+                        color: "var(--rj-gold)",
+                      }}
+                    >
+                      {occasion}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </Section>
+
+        {/* ══════════════════════════════════════════════════
+          CARE TIPS — ivory bg
+      ══════════════════════════════════════════════════ */}
+        <Section
+          className="section-padding"
+          style={{ background: "var(--rj-ivory)" }}
+        >
+          <div className="container-rj">
+            <div className="text-center mb-10">
+              <motion.div variants={fadeUp} custom={0}>
+                <Label>Maintenance</Label>
+                <h2
+                  className="font-cormorant font-light leading-tight"
+                  style={{
+                    fontSize: "clamp(1.8rem, 4vw, 3rem)",
+                    color: "var(--rj-charcoal)",
+                    letterSpacing: "-0.01em",
+                  }}
+                >
+                  Care Tips for Your{" "}
+                  <em
+                    className="font-normal"
+                    style={{ color: "var(--rj-emerald)" }}
+                  >
+                    Gold Plated Rings
+                  </em>
+                </h2>
+              </motion.div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {CARE_TIPS.map((tip, i) => (
+                <motion.div
+                  key={i}
+                  variants={fadeUp}
+                  custom={i * 0.12}
+                  className="p-6 rounded-2xl text-center flex flex-col items-center gap-3"
+                  style={{
+                    background: "#fff",
+                    border: "1px solid var(--rj-bone)",
+                    boxShadow: "0 2px 10px rgba(0,0,0,0.04)",
+                  }}
+                  whileHover={{
+                    y: -3,
+                    boxShadow: "0 10px 28px rgba(0,0,0,0.09)",
+                  }}
+                >
+                  <div
+                    className="w-10 h-10 rounded-full flex items-center justify-center"
+                    style={{
+                      background: "rgba(0,55,32,0.07)",
+                      color: "var(--rj-emerald)",
+                    }}
+                  >
+                    {tip.icon}
+                  </div>
+                  <p
+                    className="text-sm leading-relaxed"
+                    style={{
+                      color: "var(--rj-ash)",
+                      fontFamily: "var(--font-body,'DM Sans'),sans-serif",
+                      lineHeight: "1.75",
+                    }}
+                  >
+                    {tip.tip}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </Section>
+
+        {/* ══════════════════════════════════════════════════
+          CUSTOMER REVIEWS — dark bg, paginated carousel
+      ══════════════════════════════════════════════════ */}
+        <Section
+          className="section-padding relative overflow-hidden"
+          style={{ background: "var(--rj-charcoal)" }}
+        >
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(ellipse 60% 50% at 0% 50%, rgba(252,193,81,0.05) 0%, transparent 65%)",
+            }}
+          />
+          <div className="container-rj relative z-10">
+            <div className="text-center mb-12">
+              <motion.div variants={fadeUp} custom={0}>
+                <Label>Customer Love</Label>
+                <h2
+                  className="font-cormorant font-light leading-tight"
+                  style={{
+                    fontSize: "clamp(1.8rem, 4vw, 3rem)",
+                    color: "#fff",
+                    letterSpacing: "-0.01em",
+                  }}
+                >
+                  Loved by Our Customers{" "}
+                  <em
+                    className="font-normal not-italic"
+                    style={{
+                      background:
+                        "var(--gradient-gold, linear-gradient(135deg,#fcc151,#e8a020))",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      backgroundClip: "text",
+                    }}
+                  >
+                    Across India
+                  </em>
+                </h2>
+
+                {/* Aggregate rating */}
+                <div className="flex items-center justify-center gap-2 mt-4">
+                  <div className="flex gap-0.5">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star
+                        key={i}
+                        size={14}
+                        style={{
+                          fill: "var(--rj-gold)",
+                          color: "var(--rj-gold)",
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <span
+                    className="font-cinzel text-xs font-bold"
+                    style={{ color: "#fff" }}
+                  >
+                    5.0
+                  </span>
+                  <span
+                    className="font-cinzel text-[10px] tracking-wider"
+                    style={{ color: "rgba(255,255,255,0.35)" }}
+                  >
+                    · {REVIEWS.length} verified reviews
+                  </span>
+                </div>
+              </motion.div>
+            </div>
+
+            <ReviewCarousel reviews={REVIEWS} />
+          </div>
+        </Section>
+
+        {/* ══════════════════════════════════════════════════
+          FAQ — ivory bg
+      ══════════════════════════════════════════════════ */}
+        <Section
+          className="section-padding"
+          style={{ background: "var(--rj-ivory)" }}
+        >
+          <div className="container-rj">
+            <div className="max-w-4xl mx-auto">
+              <div className="text-center mb-10">
+                <motion.div variants={fadeUp} custom={0}>
+                  <Label>Frequently Asked Questions</Label>
+                  <h2
+                    className="font-cormorant font-light leading-tight"
+                    style={{
+                      fontSize: "clamp(1.8rem, 4vw, 3rem)",
+                      color: "var(--rj-charcoal)",
+                      letterSpacing: "-0.01em",
+                    }}
+                  >
+                    Got{" "}
+                    <em
+                      className="font-normal"
+                      style={{ color: "var(--rj-emerald)" }}
+                    >
+                      Questions?
+                    </em>
+                  </h2>
+                </motion.div>
+              </div>
+
+              <div
+                className="rounded-2xl overflow-hidden p-2"
+                style={{
+                  border: "1px solid var(--rj-bone)",
+                  background: "#fff",
+                }}
+              >
+                {FAQS.map((faq, i) => (
+                  <div key={i} className="px-4">
+                    <FaqItem q={faq.q} a={faq.a} index={i} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </Section>
+
+        {/* ══════════════════════════════════════════════════
+          CTA FOOTER STRIP — dark bg
+      ══════════════════════════════════════════════════ */}
+        <Section
+          className="section-padding relative overflow-hidden"
+          style={{ background: "var(--rj-charcoal)" }}
+        >
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(ellipse 80% 60% at 50% 50%, rgba(252,193,81,0.07) 0%, transparent 70%)",
+            }}
+          />
+          <div
+            className="absolute top-0 left-0 right-0 h-px"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent, rgba(252,193,81,0.4), transparent)",
+            }}
+          />
+
+          <div className="container-rj relative z-10 text-center">
+            <motion.div variants={fadeUp} custom={0}>
+              <Label>Shop Now</Label>
+              <h2
+                className="font-cormorant font-light leading-tight mb-5"
+                style={{
+                  fontSize: "clamp(1.8rem, 5vw, 3.5rem)",
+                  color: "#fff",
+                  letterSpacing: "-0.01em",
+                }}
+              >
+                Shop Gold Plated Rings for Men
+                <br />
+                <em
+                  className="font-normal not-italic"
+                  style={{
+                    background:
+                      "var(--gradient-gold, linear-gradient(135deg,#fcc151,#e8a020))",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                >
+                  at Rehnoor Jewels
+                </em>
+              </h2>
+            </motion.div>
+
+            <motion.p
+              variants={fadeUp}
+              custom={1}
+              className="max-w-2xl mx-auto mb-10 leading-relaxed"
+              style={{
+                color: "rgba(255,255,255,0.5)",
+                fontSize: "clamp(0.9rem, 2vw, 1.05rem)",
+                fontFamily: "var(--font-body,'DM Sans'),sans-serif",
+                lineHeight: "1.85",
+              }}
+            >
+              At Rehnoor Jewels, we believe every man deserves an accessory that
+              makes him stand out. Browse our 1 gram gold rings for men and ad
+              rings collection today and find the perfect piece that speaks to
+              your style.
+            </motion.p>
+
+            <motion.div
+              variants={fadeUp}
+              custom={2}
+              className="flex flex-col sm:flex-row items-center justify-center gap-3"
+            >
+              <Link
+                href="/collections"
+                className="inline-flex items-center gap-2 font-cinzel text-[11px] tracking-widest uppercase px-8 py-4 rounded-full transition-all duration-300 hover:gap-3 hover:opacity-90"
                 style={{
                   background:
                     "var(--gradient-gold, linear-gradient(135deg,#fcc151,#e8a020))",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
+                  color: "var(--rj-charcoal, #1a1a1a)",
+                  fontWeight: 700,
+                  boxShadow: "0 4px 24px rgba(252,193,81,0.3)",
                 }}
               >
-                at Rehnoor Jewels
-              </em>
-            </h2>
-          </motion.div>
-
-          <motion.p
-            variants={fadeUp}
-            custom={1}
-            className="max-w-2xl mx-auto mb-10 leading-relaxed"
-            style={{
-              color: "rgba(255,255,255,0.5)",
-              fontSize: "clamp(0.9rem, 2vw, 1.05rem)",
-              fontFamily: "var(--font-body,'DM Sans'),sans-serif",
-              lineHeight: "1.85",
-            }}
-          >
-            At Rehnoor Jewels, we believe every man deserves an accessory that
-            makes him stand out. Browse our 1 gram gold rings for men and ad
-            rings collection today and find the perfect piece that speaks to
-            your style.
-          </motion.p>
-
-          <motion.div
-            variants={fadeUp}
-            custom={2}
-            className="flex flex-col sm:flex-row items-center justify-center gap-3"
-          >
-            <Link
-              href="/collections"
-              className="inline-flex items-center gap-2 font-cinzel text-[11px] tracking-widest uppercase px-8 py-4 rounded-full transition-all duration-300 hover:gap-3 hover:opacity-90"
-              style={{
-                background:
-                  "var(--gradient-gold, linear-gradient(135deg,#fcc151,#e8a020))",
-                color: "var(--rj-charcoal, #1a1a1a)",
-                fontWeight: 700,
-                boxShadow: "0 4px 24px rgba(252,193,81,0.3)",
-              }}
-            >
-              Browse Articles <ChevronRight size={13} />
-            </Link>
-          </motion.div>
-        </div>
-      </Section>
-    </div>
+                Browse Articles <ChevronRight size={13} />
+              </Link>
+            </motion.div>
+          </div>
+        </Section>
+      </div>
+    </>
   );
 }

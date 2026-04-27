@@ -23,6 +23,7 @@ export interface ApiCollection {
   products: string[]; // ObjectId refs (public list)
   seoTitle: string;
   seoDescription: string;
+  seoKeywords: string[];
   createdAt: string;
   updatedAt: string;
 }
