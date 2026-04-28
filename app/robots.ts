@@ -23,7 +23,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/", // allow everything
-        disallow: ["/cart", "/checkout"], // 🚫 block these routes
+        disallow: ["/cart", "/checkout", "/products"], // 🚫 block these routes
       },
     ],
     sitemap: `${process.env.NEXT_PUBLIC_SITE_URL}/sitemap.xml`,
