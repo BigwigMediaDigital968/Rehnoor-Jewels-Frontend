@@ -1,20 +1,5 @@
 // For Production
 
-import { MetadataRoute } from "next";
-
-export default function robots(): MetadataRoute.Robots {
-  return {
-    rules: [
-      {
-        userAgent: "*",
-        disallow: "/", // block everything
-      },
-    ],
-  };
-}
-
-// For Live (Allow Page)
-
 // import { MetadataRoute } from "next";
 
 // export default function robots(): MetadataRoute.Robots {
@@ -22,9 +7,25 @@ export default function robots(): MetadataRoute.Robots {
 //     rules: [
 //       {
 //         userAgent: "*",
-//         allow: "/", // allow everything
+//         disallow: "/", // block everything
 //       },
 //     ],
-//     sitemap: `${process.env.NEXT_PUBLIC_SITE_URL}/sitemap.xml`,
 //   };
 // }
+
+// For Live (Allow Page)
+
+import { MetadataRoute } from "next";
+
+export default function robots(): MetadataRoute.Robots {
+  return {
+    rules: [
+      {
+        userAgent: "*",
+        allow: "/", // allow everything
+        disallow: ["/cart", "/checkout"], // 🚫 block these routes
+      },
+    ],
+    sitemap: `${process.env.NEXT_PUBLIC_SITE_URL}/sitemap.xml`,
+  };
+}
