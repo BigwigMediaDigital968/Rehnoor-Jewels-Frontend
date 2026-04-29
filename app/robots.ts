@@ -22,8 +22,13 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-        allow: "/", // allow everything
-        disallow: ["/cart", "/checkout", "/products"], // 🚫 block these routes
+        allow: "/",
+        disallow: [
+          "/cart",
+          "/checkout",
+          // "/products",
+          "/products/*", // 🔥 blocks ALL product pages
+        ],
       },
     ],
     sitemap: `${process.env.NEXT_PUBLIC_SITE_URL}/sitemap.xml`,
