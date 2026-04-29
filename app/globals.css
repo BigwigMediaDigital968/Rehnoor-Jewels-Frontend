@@ -140,6 +140,25 @@ body {
   outline-offset: 3px;
 }
 
+.shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.6) 40%,
+    transparent 60%
+  );
+  transform: translateX(-100%);
+  animation: shimmerMove 1.8s infinite;
+}
+
+@keyframes shimmerMove {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
 /* ============================================
    TYPOGRAPHY COMPONENT CLASSES
    In @layer components — cascade-safe, never purged

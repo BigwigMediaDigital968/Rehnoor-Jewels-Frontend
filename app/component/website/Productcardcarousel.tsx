@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
+
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -113,6 +114,7 @@ export default function ProductCardCarousel({ product }: { product: Product }) {
   const [addedToCart, setAddedToCart] = useState(false);
   const [cartAnim, setCartAnim] = useState(false);
   const [showSizePicker, setShowSizePicker] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   // ── Stores ────────────────────────────────────────────────────
   const addItem = useCartStore((s) => s.addItem);
@@ -122,6 +124,11 @@ export default function ProductCardCarousel({ product }: { product: Product }) {
   // Stable wishlist ID: same as CartItem.id convention but without size
   const wishlistId = product.id;
   const wishlisted = isWishlisted(wishlistId);
+
+  // Add this effect
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // ── Image nav ─────────────────────────────────────────────────
   const prevImg = useCallback(
@@ -346,7 +353,7 @@ export default function ProductCardCarousel({ product }: { product: Product }) {
                 transition={{ duration: 0.18 }}
                 className="absolute inset-0 hidden md:flex flex-col items-center justify-center gap-2.5 z-10"
               >
-                <div className="absolute inset-0 bg-[var(--rj-emerald)]/25 backdrop-blur-[1px]" />
+                <div className="absolute inset-0 bg-[var(--rj-emerald)]/25 backdrop-blur-[1px] pointer-events-none" />
 
                 <motion.button
                   initial={{ opacity: 0, y: 10 }}
@@ -380,6 +387,7 @@ export default function ProductCardCarousel({ product }: { product: Product }) {
                   transition={{ duration: 0.18, delay: 0.09 }}
                   onClick={handleCart}
                   whileTap={{ scale: 0.96 }}
+                  onPointerDown={(e) => e.stopPropagation()}
                   className="relative z-10 flex items-center gap-2 px-5 py-2.5 rounded-full font-cinzel text-[10px] tracking-widest uppercase font-bold transition-all duration-250"
                   style={{
                     background: addedToCart
@@ -538,7 +546,7 @@ export default function ProductCardCarousel({ product }: { product: Product }) {
           </h3>
 
           {/* Subtitle */}
-          <p
+          {/* <p
             className="text-xs mb-2.5 line-clamp-1"
             style={{
               color: "var(--rj-ash)",
@@ -546,7 +554,7 @@ export default function ProductCardCarousel({ product }: { product: Product }) {
             }}
           >
             {product.subtitle}
-          </p>
+          </p> */}
 
           {/* Price */}
           <div className="flex items-center gap-2 mt-auto flex-wrap">
@@ -646,7 +654,7 @@ export default function ProductCardCarousel({ product }: { product: Product }) {
       </motion.article>
 
       {/* Quick View Modal */}
-      {quickView && (
+      {quickView && isMounted && (
         <QuickViewModal product={product} onClose={() => setQuickView(false)} />
       )}
     </>

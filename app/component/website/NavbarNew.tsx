@@ -40,21 +40,36 @@ const navLinks = [
             href: "/collections/gold-plated-bracelets-for-men",
             icon: "🔗",
           },
+          {
+            label: "Pendants for Men",
+            href: "/collections/pendants-for-men",
+            icon: "📿",
+          },
+          {
+            label: "Rings for Men",
+            href: "/collections/rings-for-men",
+            icon: "💍",
+          },
+          {
+            label: "Kada for Men",
+            href: "/collections/kada-for-men",
+            icon: "🛡️",
+          },
         ],
       },
       {
         group: "For Women",
         items: [
           {
-            label: "Pendant for Women",
-            href: "/collections/women-pendants",
+            label: "Comming Soon",
+            href: "#",
             icon: "💎",
           },
-          {
-            label: "Necklace for Women",
-            href: "/collections/women-necklaces",
-            icon: "✨",
-          },
+          // {
+          //   label: "Necklace for Women",
+          //   href: "/collections/women-necklaces",
+          //   icon: "✨",
+          // },
         ],
       },
     ],
@@ -125,7 +140,7 @@ function CollectionsDropdown({ onClose }: { onClose: () => void }) {
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: -6, scale: 0.98 }}
       transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
-      className="absolute top-[calc(100%+12px)] left-1/2 -translate-x-1/2 w-[420px] bg-white rounded-2xl shadow-2xl overflow-hidden"
+      className="absolute top-[calc(100%+12px)] left-1/2 -translate-x-1/2 w-[520px] bg-white rounded-2xl shadow-2xl overflow-hidden"
       style={{
         border: "1px solid rgba(0,55,32,0.1)",
         boxShadow:
