@@ -61,15 +61,20 @@ const navLinks = [
         group: "For Women",
         items: [
           {
-            label: "Comming Soon",
-            href: "#",
-            icon: "💎",
+            label: "Chain For Women",
+            href: "/collections/gold-plated-chains-for-women",
+            icon: "⛓",
           },
-          // {
-          //   label: "Necklace for Women",
-          //   href: "/collections/women-necklaces",
-          //   icon: "✨",
-          // },
+          {
+            label: "Rings for Women",
+            href: "/collections/gold-plated-rings-for-women",
+            icon: "💍",
+          },
+          {
+            label: "Exclusive Rani Haar",
+            href: "/collections/rani-haar-designed-for-every-women",
+            icon: "⚓",
+          },
         ],
       },
     ],

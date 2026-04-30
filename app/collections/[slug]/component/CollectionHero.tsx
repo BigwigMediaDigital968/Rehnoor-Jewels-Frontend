@@ -238,28 +238,13 @@ export default function CollectionHero({
 
         {/* Heading */}
         <h1
-          className="leading-none mb-4"
+          className="leading-none mb-4 max-w-2xl"
           style={{
             fontFamily:
               "var(--font-display,'Cormorant Garamond'),Georgia,serif",
           }}
           aria-label={meta.label}
         >
-          {/* {meta.label.split(" ").map((word, wi) => (
-            <span
-              key={wi}
-              className="ch-word inline-block mr-4 text-white"
-              style={{
-                fontSize: "clamp(2.8rem,7vw,7rem)",
-                fontWeight: 300,
-                letterSpacing: "-0.02em",
-                lineHeight: 1,
-              }}
-            >
-              {word}
-            </span>
-          ))} */}
-
           <span
             className="ch-word inline-block mr-4 text-white"
             style={{

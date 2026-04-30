@@ -17,6 +17,7 @@ import RingsForMen from "./custom/RingsForMen";
 import PendantsForMen from "./custom/PendantsForMen";
 import RingsForWomen from "./custom/RingsForWomen";
 import ChainsForWomen from "./custom/ChainsForWomen";
+import RaaniHaarPage from "./custom/RaniHaar";
 
 const EXTRA_SECTIONS: Record<string, React.FC<{ meta: CollectionMeta }>> = {
   "gold-plated-chains-for-men": ChainForMenPage,
@@ -26,6 +27,7 @@ const EXTRA_SECTIONS: Record<string, React.FC<{ meta: CollectionMeta }>> = {
   "pendants-for-men": PendantsForMen,
   "gold-plated-rings-for-women": RingsForWomen,
   "gold-plated-chains-for-women": ChainsForWomen,
+  "rani-haar-designed-for-every-women": RaaniHaarPage,
 };
 
 function toMeta(

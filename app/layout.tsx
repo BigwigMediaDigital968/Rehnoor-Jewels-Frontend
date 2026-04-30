@@ -19,14 +19,14 @@ const cormorant = Cormorant_Garamond({
 const dmSans = DM_Sans({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-body", // ✅ matches var(--font-body) in CSS
+  variable: "--font-body",
   display: "swap",
 });
 
 const cinzel = Cinzel({
   subsets: ["latin"],
   weight: ["400", "600", "700", "900"],
-  variable: "--font-accent", // ✅ matches var(--font-accent) in CSS
+  variable: "--font-accent",
   display: "swap",
 });
 
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     template: "%s | Rehnoor Jewels",
   },
   description:
-    "Discover India's finest men's gold jewellery. Chains, Kadas, Rings, Bracelets — crafted for the modern man. Gold Reimagined.",
+    "Explore Rehnoor Jewels' stunning collection of gold plated jewellery and one gram gold jewellery. Elegant designs, lasting shine - shop the latest styles today.",
   keywords: [
     "men's jewellery",
     "gold jewellery India",
@@ -46,14 +46,14 @@ export const metadata: Metadata = {
     "Rehnoor Jewels",
   ],
   icons: {
-    icon: "rehnoor-jewels-svg-logo.svg",
+    icon: "/rehnoor-jewels-svg-logo.svg",
   },
   authors: [{ name: "Rehnoor Jewels" }],
   creator: "Rehnoor Jewels",
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: "https://rehnoorrjewels.com",
+    url: "https://www.rehnoorjewels.com",
     siteName: "Rehnoor Jewels",
     title: "Rehnoor Jewels - Gold Reimagined",
     description: "India's premier destination for men's gold jewellery",
