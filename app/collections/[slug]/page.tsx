@@ -15,6 +15,8 @@ import BraceletForMen from "./custom/BraceletForMen";
 import KadaForMen from "./custom/KadaForMen";
 import RingsForMen from "./custom/RingsForMen";
 import PendantsForMen from "./custom/PendantsForMen";
+import RingsForWomen from "./custom/RingsForWomen";
+import ChainsForWomen from "./custom/ChainsForWomen";
 
 const EXTRA_SECTIONS: Record<string, React.FC<{ meta: CollectionMeta }>> = {
   "gold-plated-chains-for-men": ChainForMenPage,
@@ -22,6 +24,8 @@ const EXTRA_SECTIONS: Record<string, React.FC<{ meta: CollectionMeta }>> = {
   "kada-for-men": KadaForMen,
   "rings-for-men": RingsForMen,
   "pendants-for-men": PendantsForMen,
+  "gold-plated-rings-for-women": RingsForWomen,
+  "gold-plated-chains-for-women": ChainsForWomen,
 };
 
 function toMeta(
@@ -188,7 +192,7 @@ export default async function CollectionDetailPage({
 
   const ExtraSection = EXTRA_SECTIONS[slug];
 
-  console.log(meta);
+  // console.log(meta);
 
   return (
     <main>

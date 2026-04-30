@@ -1042,7 +1042,7 @@ export default function CollectionProductGrid({
 
           {/* Optional CTA */}
           <Link
-            href="/collection"
+            href="/collections"
             className="mt-8 font-cinzel text-[10px] tracking-[0.25em] uppercase px-6 py-2.5 rounded-full transition-all duration-300"
             style={{
               border: "1px solid var(--rj-emerald)",
