@@ -92,7 +92,7 @@ export default function ProductsHero() {
       <motion.div className="absolute inset-0" style={{ y }}>
         <div ref={bgRef} className="absolute inset-0">
           <Image
-            src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=1600&q=85"
+            src="/assets/product-hero.png"
             alt="Rehnoor Jewels Products"
             fill
             priority

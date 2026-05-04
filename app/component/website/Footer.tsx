@@ -36,7 +36,7 @@ const footerLinks = {
   ],
   support: [
     { label: "Contact Us", href: "/contact" },
-    { label: "FAQ", href: "/faq" },
+    // { label: "FAQ", href: "/faq" },
     // { label: "Size Guide", href: "/size-guide" },
     { label: "Track Order", href: "/track-order" },
     // { label: "Return Policy", href: "/returns" },

@@ -84,7 +84,7 @@ export default function BrandStorySection() {
           >
             <div className="relative aspect-[4/5] overflow-hidden rounded-2xl">
               <Image
-                src="https://images.unsplash.com/photo-1613053341085-db794820ce43?w=800&q=85"
+                src="/assets/brand-story.png"
                 alt="Rehnoor Jewels Craftsmanship"
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
@@ -165,7 +165,7 @@ export default function BrandStorySection() {
             <div className="stats-row grid grid-cols-3 gap-6 mt-12 pt-8 border-t border-white/10">
               {[
                 {
-                  value: "1000+",
+                  value: "50K+",
                   label: "Orders Delivered",
                   caption: "Across India",
                 },

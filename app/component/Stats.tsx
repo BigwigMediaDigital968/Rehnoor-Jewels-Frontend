@@ -15,7 +15,7 @@ export default function Stats() {
             sub: "Quality you can trust",
           },
           { value: "50K+", label: "Happy Customers", sub: "Across India" },
-          { value: "Premium", label: "Craftsmanship", sub: "Designed to last" },
+          { value: "6+", label: "Years Of", sub: "Authenticity" },
         ].map((item) => (
           <div key={item.label} className="text-center">
             <p className="font-[var(--font-cinzel)] text-[var(--rj-gold)] text-3xl font-bold mb-1">

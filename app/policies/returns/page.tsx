@@ -213,14 +213,13 @@ export default function ReturnsRefundPage() {
         <PolicyP>
           All Rehnoor Jewels products are crafted with pure 24K gold plating.
           Each piece contains approximately 100–300 mg of 24K gold, ensuring
-          durability, lustre, and value. Our products comply with BIS
-          hallmarking standards applicable to gold-plated jewellery.
+          durability, lustre, and value.
         </PolicyP>
         <InfoGrid
           items={[
             { label: "Gold Purity", value: "24K Gold Plating" },
             { label: "Gold Content per Piece", value: "100–300 mg (approx.)" },
-            { label: "Certification", value: "BIS Hallmarked" },
+            { label: "100%", value: "Authenticated" },
             { label: "Warranty Period", value: "6 Months from Purchase" },
           ]}
         />

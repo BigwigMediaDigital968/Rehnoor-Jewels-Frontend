@@ -261,7 +261,7 @@ export default function HeroSection() {
         </p>
         <p className="text-white/50 text-xs mt-0.5">Starting ₹940</p>
         <Link
-          href="/collections/chains-for-men"
+          href="/collections/gold-plated-chains-for-men"
           className="mt-3 flex items-center gap-1.5 text-[var(--rj-gold)] text-xs hover:gap-3 transition-all duration-300"
         >
           View <ArrowRight size={12} />

@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Check, Copy, Tag, Clock, Zap, Gift } from "lucide-react";
+import Link from "next/link";
 
 // ─────────────────────────────────────────────────────────────────
 // OFFER CONFIG — swap from server/CMS
@@ -26,12 +27,11 @@ const OFFERS: Record<string, OfferConfig> = {
   welcome: {
     type: "welcome",
     code: "FIRST15",
-    discount: "₹750 OFF",
+    discount: "₹500 OFF",
     headline: "Welcome to Rehnoor",
-    sub: "Get ₹750 off your first order of ₹3,000+",
+    sub: "Get ₹500 off your first order min. of ₹3,000+",
     minOrder: "₹3,000",
-    image:
-      "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&q=80",
+    image: "/assets/rings-image.png",
     trigger: "delay",
     delayMs: 6000,
   },
@@ -168,7 +168,7 @@ function PopupInner({
   }[offer.type];
 
   return (
-    <div className="relative w-full" style={{ maxWidth: 420 }}>
+    <div className="relative w-full" style={{ maxWidth: 520 }}>
       {/* Close */}
       <button
         onClick={onClose}
@@ -410,7 +410,8 @@ function PopupInner({
                 )}
               </button>
             </div>
-            <button
+            <Link
+              href="/products"
               onClick={onClose}
               className="font-cinzel text-[10px] tracking-widest uppercase px-6 py-2.5 rounded-full transition-all hover:opacity-90"
               style={{
@@ -420,7 +421,7 @@ function PopupInner({
               }}
             >
               Start Shopping
-            </button>
+            </Link>
           </motion.div>
         )}
       </div>

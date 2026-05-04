@@ -136,7 +136,7 @@ export default function AboutHero() {
         {/* ── GSAP owns clipPath on this inner div — no FM conflict ── */}
         <div ref={bgWrapperRef} className="absolute inset-0">
           <Image
-            src="https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?w=1600&q=85"
+            src="/assets/about-hero.jpg"
             alt="Rehnoor Jewels — crafted with gold"
             fill
             priority
@@ -320,7 +320,7 @@ export default function AboutHero() {
             {[
               { value: "50K+", label: "Happy Customers" },
               { value: "500+", label: "Unique Designs" },
-              { value: "6+", label: "Years of Craft" },
+              { value: "6+", label: "Years of Authenticity" },
               { value: "4.9★", label: "Avg. Rating" },
             ].map((stat) => (
               <div key={stat.label} className="about-stat">

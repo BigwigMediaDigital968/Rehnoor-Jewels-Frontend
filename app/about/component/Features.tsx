@@ -34,26 +34,26 @@ export default function Features() {
       quote:
         "Looks like 50 grams. Costs like 1gm. That's the quiet confidence of patra.",
       body: "You don't need heavy gold to carry heavy style. 1g can outshine the real thing.",
-      img: "https://images.unsplash.com/photo-1613053341085-db794820ce43?w=600&q=85",
+      img: "/assets/about-feature-1.jpg",
     },
     {
       tag: "Smart Style",
       quote:
         "Real talk: it's not real gold. But it's real style, real confidence, real savings.",
       body: "Patra isn't a shortcut. It's a strategy. We don't fake it — we style it smart.",
-      img: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&q=85",
+      img: "/assets/about-feature-2.jpg",
     },
     {
       tag: "Royal Vibe",
       quote: "Why spend like a queen when you can look like one — for less?",
       body: "Our patra pieces give you the royal vibe, not the royal expense. Claim your throne.",
-      img: "https://images.unsplash.com/photo-1574169208507-84376144848b?w=600&q=85",
+      img: "/assets/about-feature-3.jpg",
     },
     {
       tag: "Power in Patra",
       quote: "They'll assume it's 22k. You don't need to correct them.",
       body: "Patra that passes the gold test from 3 feet or 3 inches away. Confidence isn't measured in grams.",
-      img: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&q=85",
+      img: "/assets/about-feature-4.jpg",
     },
   ];
 

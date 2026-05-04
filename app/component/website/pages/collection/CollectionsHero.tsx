@@ -72,7 +72,7 @@ export default function CollectionsHero() {
       <motion.div className="absolute inset-0" style={{ y }}>
         <div ref={bgRef} className="absolute inset-0">
           <Image
-            src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=1600&q=85"
+            src="/assets/collection-hero.jpg"
             alt="Collections"
             fill
             priority

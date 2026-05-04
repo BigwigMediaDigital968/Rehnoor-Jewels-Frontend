@@ -87,11 +87,7 @@ const FAQS = [
     a: "Standard delivery takes 5–7 business days across India. Express (2–3 days) and same-day delivery (select metros, order before 12 PM) are also available. All orders are fully insured and arrive in our signature gift box.",
     icon: <Package size={14} />,
   },
-  // {
-  //   q: "Is your gold BIS hallmarked?",
-  //   a: "Yes, every piece we sell is BIS hallmarked as per Bureau of Indian Standards norms. Your order includes a physical hallmark certificate. You can verify the hallmark number on the BIS official website.",
-  //   icon: <Shield size={14} />,
-  // },
+
   {
     q: "Can I return or exchange my order?",
     a: "Absolutely. We offer a 07-day no-questions-asked return and free exchange policy. Simply contact us within 07 days of delivery, and we will arrange a free doorstep pickup. Refunds process within 5–7 business days.",
