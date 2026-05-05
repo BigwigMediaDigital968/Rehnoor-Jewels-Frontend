@@ -18,6 +18,8 @@ import PendantsForMen from "./custom/PendantsForMen";
 import RingsForWomen from "./custom/RingsForWomen";
 import ChainsForWomen from "./custom/ChainsForWomen";
 import RaaniHaarPage from "./custom/RaniHaar";
+import PendantForWomen from "./custom/Pendantforwomen";
+import RelatedCollection from "./component/RelatedCollection";
 
 const EXTRA_SECTIONS: Record<string, React.FC<{ meta: CollectionMeta }>> = {
   "gold-plated-chains-for-men": ChainForMenPage,
@@ -28,6 +30,7 @@ const EXTRA_SECTIONS: Record<string, React.FC<{ meta: CollectionMeta }>> = {
   "gold-plated-rings-for-women": RingsForWomen,
   "gold-plated-chains-for-women": ChainsForWomen,
   "rani-haar-designed-for-every-women": RaaniHaarPage,
+  "gold-plated-pendants-for-women": PendantForWomen,
 };
 
 function toMeta(
@@ -174,15 +177,15 @@ export default async function CollectionDetailPage({
 }) {
   const { slug } = await params;
 
-  let meta: CollectionMeta;
+  const [res, allRes] = await Promise.all([
+    fetchCollectionBySlug(slug),
+    fetchPublicCollections({ limit: 20 }),
+  ]);
 
-  try {
-    const res = await fetchCollectionBySlug(slug);
-    if (!res.success || !res.data) return notFound();
-    meta = toMeta(res.data);
-  } catch {
-    return notFound();
-  }
+  if (!res.success || !res.data) return notFound();
+
+  const meta = toMeta(res.data);
+  const allCollections = allRes.success ? allRes.data : [];
 
   // col.products arrives as populated objects at runtime — cast away the
   // incorrect string[] type that the generated type gives us
@@ -253,6 +256,8 @@ export default async function CollectionDetailPage({
       <CollectionIntroStrip meta={meta} />
 
       {ExtraSection && <ExtraSection meta={meta} />}
+
+      <RelatedCollection currentSlug={slug} allCollections={allCollections} />
 
       {/* <CollectionTestimonials /> */}
     </main>

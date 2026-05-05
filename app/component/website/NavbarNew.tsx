@@ -33,27 +33,27 @@ const navLinks = [
           {
             label: "Chain for Men",
             href: "/collections/gold-plated-chains-for-men",
-            icon: "⛓",
+            icon: "✨",
           },
           {
             label: "Bracelet for Men",
             href: "/collections/gold-plated-bracelets-for-men",
-            icon: "🔗",
+            icon: "✨",
           },
           {
             label: "Pendants for Men",
             href: "/collections/pendants-for-men",
-            icon: "📿",
+            icon: "✨",
           },
           {
             label: "Rings for Men",
             href: "/collections/rings-for-men",
-            icon: "💍",
+            icon: "✨",
           },
           {
             label: "Kada for Men",
             href: "/collections/kada-for-men",
-            icon: "🛡️",
+            icon: "✨",
           },
         ],
       },
@@ -63,17 +63,22 @@ const navLinks = [
           {
             label: "Chain For Women",
             href: "/collections/gold-plated-chains-for-women",
-            icon: "⛓",
+            icon: "✨",
           },
           {
             label: "Rings for Women",
             href: "/collections/gold-plated-rings-for-women",
-            icon: "💍",
+            icon: "✨",
           },
           {
             label: "Exclusive Rani Haar",
             href: "/collections/rani-haar-designed-for-every-women",
-            icon: "⚓",
+            icon: "✨",
+          },
+          {
+            label: "Pendant for Women",
+            href: "/collections/gold-plated-pendants-for-women",
+            icon: "✨",
           },
         ],
       },
@@ -181,6 +186,7 @@ function CollectionsDropdown({ onClose }: { onClose: () => void }) {
                   className="w-1.5 h-1.5 rounded-full"
                   style={{ background: "var(--rj-gold)" }}
                 />
+
                 <span
                   className="font-cinzel text-[9px] tracking-[0.25em] uppercase font-bold"
                   style={{ color: "var(--rj-emerald)" }}

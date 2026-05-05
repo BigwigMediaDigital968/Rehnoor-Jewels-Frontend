@@ -18,30 +18,40 @@ import { useState } from "react";
 import Image from "next/image";
 
 const footerLinks = {
-  collections: [
-    { label: "Chains", href: "/collections/chains" },
-    { label: "Kadas", href: "/collections/kadas" },
-    { label: "Rings", href: "/collections/rings" },
-    { label: "Bracelets", href: "/collections/bracelets" },
-    { label: "Pendants", href: "/collections/pendants" },
+  collectionsMen: [
+    { label: "Chains", href: "/collections/gold-plated-chains-for-men" },
+    { label: "Kadas", href: "/collections/kada-for-men" },
+    { label: "Rings", href: "/collections/rings-for-men" },
+    { label: "Bracelets", href: "/collections/gold-plated-bracelets-for-men" },
+    { label: "Pendants", href: "/collections/pendants-for-men" },
     { label: "New Arrivals", href: "/collections/new-arrivals" },
   ],
+
+  collectionsWomen: [
+    { label: "Chains", href: "/collections/gold-plated-chains-for-women" },
+
+    { label: "Rings", href: "/collections/gold-plated-rings-for-women" },
+
+    { label: "Pendants", href: "/collections/gold-plated-pendants-for-women" },
+    {
+      label: "Mangalsutra",
+      href: "/collections/gold-plated-mangalsutra-for-women",
+    },
+    {
+      label: "Rani Haar",
+      href: "/collections/rani-haar-designed-for-every-women",
+    },
+  ],
+
   company: [
     { label: "About Us", href: "/about" },
-    // { label: "Our Story", href: "/story" },
-    // { label: "Franchise", href: "/franchise" },
-    // { label: "Careers", href: "/careers" },
-    // { label: "Press", href: "/press" },
     { label: "Blogs", href: "/blogs" },
-  ],
-  support: [
     { label: "Contact Us", href: "/contact" },
     // { label: "FAQ", href: "/faq" },
     // { label: "Size Guide", href: "/size-guide" },
     { label: "Track Order", href: "/track-order" },
-    // { label: "Return Policy", href: "/returns" },
-    // { label: "Shipping Info", href: "/shipping" },
   ],
+
   policies: [
     { label: "Privacy Policy", href: "/policies/privacy" },
     // { label: "Terms of Service", href: "/terms" },
@@ -288,14 +298,21 @@ export default function Footer() {
           <div className="lg:col-span-8 grid grid-cols-2 md:grid-cols-4 gap-8">
             {(
               [
-                { title: "Collections", links: footerLinks.collections },
+                {
+                  title: "Men's",
+                  links: footerLinks.collectionsMen,
+                },
+                {
+                  title: "Women's",
+                  links: footerLinks.collectionsWomen,
+                },
                 { title: "Company", links: footerLinks.company },
-                { title: "Support", links: footerLinks.support },
+                // { title: "Support", links: footerLinks.support },
                 { title: "Legal", links: footerLinks.policies },
               ] as const
             ).map((col) => (
               <div key={col.title}>
-                <p className="font-cinzel text-[var(--rj-gold)] text-[10px] tracking-[0.25em] uppercase mb-5">
+                <p className="font-cinzel text-[var(--rj-gold)] text-[12px] tracking-[0.25em] uppercase mb-5">
                   {col.title}
                 </p>
                 <ul className="space-y-2.5">
