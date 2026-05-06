@@ -870,7 +870,7 @@ function SkeletonCard({ width }: { width: number }) {
 // MARQUEE TRACK — core infinite scroll logic
 // ─────────────────────────────────────────────────────────────────
 const GAP = 16;
-const SPEED = 0.6; // px per frame
+const SPEED = 1.2; // px per frame
 
 function MarqueeTrack({
   products,
@@ -1016,7 +1016,7 @@ function MarqueeTrack({
       <div
         className="absolute left-0 top-0 bottom-0 z-10 pointer-events-none"
         style={{
-          width: "80px",
+          width: "30px",
           background:
             "linear-gradient(to right, var(--rj-bg, #f8f5f0), transparent)",
         }}
@@ -1026,7 +1026,7 @@ function MarqueeTrack({
       <div
         className="absolute right-0 top-0 bottom-0 z-10 pointer-events-none"
         style={{
-          width: "80px",
+          width: "30px",
           background:
             "linear-gradient(to left, var(--rj-bg, #f8f5f0), transparent)",
         }}
@@ -1078,7 +1078,7 @@ export default function ProductGridCarousel() {
   const cardWidth = useCardWidth();
 
   return (
-    <section className="section-padding" style={{ overflow: "hidden" }}>
+    <section className="py-14 md:py-24" style={{ overflow: "hidden" }}>
       <div className="container-rj">
         {/* ── Heading ── */}
         <motion.div

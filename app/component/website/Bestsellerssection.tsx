@@ -769,7 +769,15 @@ function ProductCard({ product }: { product: ApiProduct }) {
           </button>
 
           {/* Hover actions */}
-          <div className="absolute bottom-3 left-3 right-3 flex gap-2 translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 z-10">
+          <div
+            className="
+    absolute bottom-3 left-3 right-3 flex gap-2 z-10
+    translate-y-0 opacity-100
+    md:translate-y-3 md:opacity-0
+    md:group-hover:translate-y-0 md:group-hover:opacity-100
+    transition-all duration-300
+  "
+          >
             <button
               onClick={handleAddToCart}
               className="flex-1 flex items-center justify-center gap-1.5 py-2 text-[10px] font-cinzel tracking-wider uppercase transition-all duration-250 active:scale-95"
@@ -797,7 +805,7 @@ function ProductCard({ product }: { product: ApiProduct }) {
                 e.stopPropagation();
                 setQuickView(true);
               }}
-              className="w-9 flex items-center justify-center transition-colors hover:bg-[var(--rj-gold)] hover:text-[var(--rj-emerald)]"
+              className="hidden md:flex w-9 items-center justify-center transition-colors hover:bg-[var(--rj-gold)] hover:text-[var(--rj-emerald)]"
               style={{
                 background: "white",
                 color: "var(--rj-charcoal)",

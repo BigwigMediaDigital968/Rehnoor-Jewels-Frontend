@@ -162,7 +162,7 @@ export default function BrandStorySection() {
             </Link>
 
             {/* Stats */}
-            <div className="stats-row grid grid-cols-3 gap-6 mt-12 pt-8 border-t border-white/10">
+            <div className="stats-row grid grid-cols-3 gap-3 mt-12 pt-8 border-t border-white/10">
               {[
                 {
                   value: "50K+",
@@ -170,9 +170,9 @@ export default function BrandStorySection() {
                   caption: "Across India",
                 },
                 {
-                  value: "Premium",
-                  label: "Quality Finish",
-                  caption: "Real gold-like shine",
+                  value: "6+",
+                  label: "Year Exprerience",
+                  caption: "Smooth Finish",
                 },
                 {
                   value: "500+",
@@ -182,7 +182,7 @@ export default function BrandStorySection() {
               ].map((stat) => (
                 <div key={stat.label}>
                   <p
-                    className="font-cinzel text-3xl font-bold"
+                    className="font-cinzel text-2xl font-bold"
                     style={{ color: "var(--rj-gold)" }}
                   >
                     {stat.value}

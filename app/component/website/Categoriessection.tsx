@@ -95,7 +95,12 @@ function CategoryCard({ cat, index }: { cat: ApiCollection; index: number }) {
           {/* Shop Now — slides up on hover */}
           <div className="h-4 overflow-hidden">
             <div
-              className="flex items-center gap-1 font-cinzel uppercase tracking-widest text-white/75 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 ease-out"
+              className="
+      flex items-center gap-1 font-cinzel uppercase tracking-widest text-white/75
+      translate-y-0 md:translate-y-4
+      md:group-hover:translate-y-0
+      transition-transform duration-300 ease-out
+    "
               style={{ fontSize: "0.6rem" }}
             >
               Shop Now <ArrowRight size={9} />
