@@ -28,6 +28,7 @@ import {
   StepPayment,
   StepReview,
 } from "../component/steps/CheckoutSteps";
+import { PlaceOrderPayloadV2, PlaceOrderResponse } from "../lib/api/orders";
 
 // ─── Order success screen ─────────────────────────────────────────────────────
 
@@ -132,7 +133,7 @@ function OrderSuccess({
                 >
                   Please keep{" "}
                   <strong style={{ color: "var(--rj-charcoal)" }}>
-                    ₹{total.toLocaleString("en-IN")}
+                    ₹{(total ?? 0).toLocaleString("en-IN")}
                   </strong>{" "}
                   ready at the time of delivery. Payment is collected by the
                   courier partner.
@@ -189,7 +190,7 @@ function OrderSuccess({
           >
             Order total:{" "}
             <span className="font-bold" style={{ color: "var(--rj-charcoal)" }}>
-              ₹{total.toLocaleString("en-IN")}
+              ₹{(total ?? 0).toLocaleString("en-IN")}
             </span>
           </p>
 
@@ -351,6 +352,9 @@ export default function CheckoutPage() {
     initiate,
     reset: resetPayment,
   } = useRazorpayCheckout();
+
+  console.log(result);
+
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -387,7 +391,54 @@ export default function CheckoutPage() {
   }
 
   // ── Place order ─────────────────────────────────────────────────────────────
-  const handlePlaceOrder = async () => {
+  //   const handlePlaceOrder = async (
+  //   payload: PlaceOrderPayloadV2,
+  // ): Promise<PlaceOrderResponse> => {
+  //     await initiate({
+  //       customerName: contact.name,
+  //       customerEmail: contact.email,
+  //       customerPhone: contact.phone,
+  //       items: items.map((i) => ({
+  //         productId: i.productId,
+  //         quantity: i.qty,
+  //         sizeSelected: i.size,
+  //         customNote: i.customNote,
+  //       })),
+  //       shippingAddress: {
+  //         fullName: address.fullName,
+  //         phone: address.phone,
+  //         addressLine1: address.addressLine1,
+  //         addressLine2: address.addressLine2,
+  //         city: address.city,
+  //         state: address.state,
+  //         pincode: address.pincode,
+  //         country: address.country || "India",
+  //         landmark: address.landmark,
+  //       },
+  //       billingAddress: billingDiff
+  //         ? {
+  //             fullName: billingAddress.fullName,
+  //             phone: billingAddress.phone,
+  //             addressLine1: billingAddress.addressLine1,
+  //             addressLine2: billingAddress.addressLine2,
+  //             city: billingAddress.city,
+  //             state: billingAddress.state,
+  //             pincode: billingAddress.pincode,
+  //             country: billingAddress.country || "India",
+  //             landmark: billingAddress.landmark,
+  //           }
+  //         : undefined,
+  //       billingSameAsShipping: !billingDiff,
+  //       paymentMethod: paymentMethod as "cod" | "razorpay",
+  //       couponCode: couponApplied ? couponCode : null,
+  //       customerNote,
+  //       giftMessage,
+  //       isGift,
+  //       source: "website",
+  //     });
+  //   };
+
+  const handlePlaceOrder = async (): Promise<void> => {
     await initiate({
       customerName: contact.name,
       customerEmail: contact.email,
@@ -424,14 +475,10 @@ export default function CheckoutPage() {
         : undefined,
       billingSameAsShipping: !billingDiff,
       paymentMethod: paymentMethod as "cod" | "razorpay",
-      coupon: couponApplied
-        ? {
-            code: couponCode,
-            discountType: "flat",
-            discountValue: couponDiscount,
-            discountAmount: couponDiscount,
-          }
-        : null,
+
+      // ✅ correct
+      couponCode: couponApplied ? couponCode : null,
+
       customerNote,
       giftMessage,
       isGift,

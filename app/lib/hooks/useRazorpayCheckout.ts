@@ -8,6 +8,7 @@ import {
   placeOrder,
   verifyRazorpayPayment,
   PlaceOrderPayload,
+  PlaceOrderPayloadV2,
 } from "@/app/lib/api/orders";
 import {
   openRazorpayCheckout,
@@ -33,7 +34,7 @@ interface UseRazorpayCheckoutReturn {
   stage: CheckoutStage;
   error: string;
   result: CheckoutResult | null;
-  initiate: (payload: PlaceOrderPayload) => Promise<void>;
+  initiate: (payload: PlaceOrderPayloadV2) => Promise<void>;
   reset: () => void;
 }
 
@@ -68,10 +69,12 @@ export function useRazorpayCheckout(): UseRazorpayCheckoutReturn {
     const {
       _id: orderId,
       orderNumber,
-      total,
+      pricing,
       paymentMethod,
       razorpayOrderId,
     } = res.data;
+
+    const total = pricing?.total ?? 0;
 
     console.log("placeOrder response:", res.data);
     console.log("razorpayOrderId:", razorpayOrderId);

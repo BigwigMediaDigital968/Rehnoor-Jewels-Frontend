@@ -8,6 +8,10 @@ import { useState } from "react";
 import Tooltip from "../../shared/Tooltip";
 import { useCheckoutStore } from "@/app/store/checkoutStore";
 import { useCartStore } from "@/app/store/cartStore";
+import {
+  validateCoupon,
+  type ValidateCouponResponse,
+} from "@/app/lib/api/orders";
 
 function fmt(n: number) {
   return "₹" + n.toLocaleString("en-IN");
@@ -46,25 +50,59 @@ export default function OrderSummaryPanel() {
   const discount = couponDiscount;
   const total = Math.max(0, sub - discount + ship);
 
+  // const applyCoupon = async () => {
+  //   const code = couponInput.trim().toUpperCase();
+  //   if (!code) return;
+  //   setCouponLoad(true);
+  //   setCouponErr("");
+  //   // Client-side demo — replace with real API call from lib/api/orders.ts
+  //   await new Promise((r) => setTimeout(r, 700));
+  //   const DEMO: Record<string, number> = {
+  //     GOLD10: 500,
+  //     REHNOOR20: 1000,
+  //     FIRST15: 750,
+  //   };
+  //   if (DEMO[code]) {
+  //     setCoupon(code, DEMO[code]);
+  //     setCouponInput("");
+  //   } else {
+  //     setCouponErr("Invalid code. Try GOLD10");
+  //   }
+  //   setCouponLoad(false);
+  // };
+
   const applyCoupon = async () => {
     const code = couponInput.trim().toUpperCase();
     if (!code) return;
+
     setCouponLoad(true);
     setCouponErr("");
-    // Client-side demo — replace with real API call from lib/api/orders.ts
-    await new Promise((r) => setTimeout(r, 700));
-    const DEMO: Record<string, number> = {
-      GOLD10: 500,
-      REHNOOR20: 1000,
-      FIRST15: 750,
-    };
-    if (DEMO[code]) {
-      setCoupon(code, DEMO[code]);
+
+    try {
+      const res = await validateCoupon(code, sub, items.length);
+
+      if (!res.success || !res.coupon) {
+        setCouponErr(res.message || "Invalid coupon code.");
+        return;
+      }
+
+      const discountAmount = res.discountAmount ?? 0;
+
+      // Free shipping coupon: discount is 0 but shipping is waived.
+      // We surface this in the UI as "Free Shipping" rather than ₹0 off.
+      if (res.coupon.discountType === "free_shipping") {
+        setCoupon(code, 0); // no monetary discount
+        // Optionally: setFreeShipping(true) if your store has that flag
+      } else {
+        setCoupon(code, discountAmount);
+      }
+
       setCouponInput("");
-    } else {
-      setCouponErr("Invalid code. Try GOLD10");
+    } catch {
+      setCouponErr("Something went wrong. Try again.");
+    } finally {
+      setCouponLoad(false);
     }
-    setCouponLoad(false);
   };
 
   return (

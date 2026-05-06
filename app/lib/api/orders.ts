@@ -1,92 +1,3 @@
-// // lib/api/orders.ts
-// // All HTTP calls to the order backend. Single source of truth.
-
-// const BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
-
-// export interface PlaceOrderPayload {
-//   customerName: string;
-//   customerEmail: string;
-//   customerPhone: string;
-//   items: {
-//     productId: string;
-//     quantity: number;
-//     sizeSelected: string;
-//     customNote?: string;
-//   }[];
-//   shippingAddress: Record<string, string>;
-//   billingAddress?: Record<string, string>;
-//   billingSameAsShipping: boolean;
-//   paymentMethod: string;
-//   coupon?: {
-//     code: string;
-//     discountType: string;
-//     discountValue: number;
-//     discountAmount: number;
-//   } | null;
-//   customerNote: string;
-//   giftMessage: string;
-//   isGift: boolean;
-//   source: string;
-// }
-
-// export interface PlaceOrderResponse {
-//   success: boolean;
-//   message: string;
-//   data?: {
-//     _id: string;
-//     orderNumber: string;
-//     status: string;
-//     total: number;
-//     paymentMethod: string;
-//   };
-// }
-
-// export async function placeOrder(
-//   payload: PlaceOrderPayload,
-// ): Promise<PlaceOrderResponse> {
-//   const res = await fetch(`${BASE}/api/orders`, {
-//     method: "POST",
-//     headers: { "Content-Type": "application/json" },
-//     body: JSON.stringify(payload),
-//   });
-//   return res.json();
-// }
-
-// // Razorpay: create gateway order → get orderId + amount
-// export async function createRazorpayOrder(amount: number, orderNumber: string) {
-//   const res = await fetch(`${BASE}/api/payment/razorpay/create`, {
-//     method: "POST",
-//     headers: { "Content-Type": "application/json" },
-//     body: JSON.stringify({ amount, currency: "INR", receipt: orderNumber }),
-//   });
-//   return res.json();
-// }
-
-// // Razorpay: verify signature after payment
-// export async function verifyRazorpayPayment(data: {
-//   razorpay_order_id: string;
-//   razorpay_payment_id: string;
-//   razorpay_signature: string;
-//   orderNumber: string;
-// }) {
-//   const res = await fetch(`${BASE}/api/payment/razorpay/verify`, {
-//     method: "POST",
-//     headers: { "Content-Type": "application/json" },
-//     body: JSON.stringify(data),
-//   });
-//   return res.json();
-// }
-
-// // Validate coupon server-side
-// export async function validateCoupon(code: string, subtotal: number) {
-//   const res = await fetch(`${BASE}/api/coupons/validate`, {
-//     method: "POST",
-//     headers: { "Content-Type": "application/json" },
-//     body: JSON.stringify({ code, subtotal }),
-//   });
-//   return res.json();
-// }
-
 // lib/api/orders.ts
 // Single source of truth for all order-related HTTP calls.
 // Never call fetch() for orders anywhere else in the app.
@@ -182,6 +93,10 @@ export interface PlaceOrderPayload {
   source: string;
 }
 
+export interface PlaceOrderPayloadV2 extends Omit<PlaceOrderPayload, "coupon"> {
+  couponCode?: string | null; // ← backend reads this and validates server-side
+}
+
 export interface PlaceOrderResponse {
   success: boolean;
   message: string;
@@ -189,6 +104,12 @@ export interface PlaceOrderResponse {
     _id: string;
     orderNumber: string;
     status: string;
+    pricing: {
+      subtotal: number;
+      shippingCharge: number;
+      discountAmount: number;
+      total: number;
+    };
     total: number;
     paymentMethod: PaymentMethod;
     // Only present when paymentMethod === "razorpay"
@@ -338,19 +259,57 @@ export async function getMyOrders(): Promise<{
 /**
  * Validate a coupon code server-side before applying it.
  */
+// export async function validateCoupon(
+//   code: string,
+//   subtotal: number,
+// ): Promise<{
+//   success: boolean;
+//   discount?: number;
+//   type?: "flat" | "percent";
+//   message?: string;
+// }> {
+//   try {
+//     return await api("/api/coupons/validate", {
+//       method: "POST",
+//       body: JSON.stringify({ code, subtotal }),
+//     });
+//   } catch (err) {
+//     if (err instanceof ApiError)
+//       return { success: false, message: err.message };
+//     return { success: false, message: "Could not validate coupon." };
+//   }
+// }
+
+export interface ValidateCouponResponse {
+  success: boolean;
+  message?: string;
+  // These come from your backend's /api/coupons/validate response
+  discountAmount?: number; // actual ₹ saved
+  coupon?: {
+    code: string;
+    name: string;
+    description?: string;
+    discountType: "flat" | "percent" | "free_shipping" | "buy_x_get_y";
+    discountValue: number;
+    maxDiscountAmount?: number | null;
+  };
+}
+
 export async function validateCoupon(
   code: string,
   subtotal: number,
-): Promise<{
-  success: boolean;
-  discount?: number;
-  type?: "flat" | "percent";
-  message?: string;
-}> {
+  itemCount?: number,
+  email?: string,
+): Promise<ValidateCouponResponse> {
   try {
-    return await api("/api/coupons/validate", {
+    return await api<ValidateCouponResponse>("/api/coupons/validate", {
       method: "POST",
-      body: JSON.stringify({ code, subtotal }),
+      body: JSON.stringify({
+        code,
+        subtotal,
+        ...(itemCount !== undefined && { itemCount }),
+        ...(email && { email }),
+      }),
     });
   } catch (err) {
     if (err instanceof ApiError)
