@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     "Rehnoor Jewels",
   ],
   icons: {
-    icon: "/rehnoor-jewels-svg-logo.svg",
+    icon: "/logo-green-bg.png",
   },
   authors: [{ name: "Rehnoor Jewels" }],
   creator: "Rehnoor Jewels",

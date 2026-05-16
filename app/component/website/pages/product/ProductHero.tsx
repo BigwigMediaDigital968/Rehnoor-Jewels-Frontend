@@ -6,6 +6,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight, Shield, Award, RefreshCw } from "lucide-react";
+import Link from "next/link";
 
 if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger);
 
@@ -340,7 +341,12 @@ export default function ProductsHero() {
             className="flex items-center gap-1 mt-2.5"
             style={{ color: "var(--rj-gold)", fontSize: "0.6rem" }}
           >
-            <span className="font-cinzel tracking-wider">Explore</span>
+            <Link
+              href="/collections/new-arrivals"
+              className="font-cinzel tracking-wider"
+            >
+              Explore
+            </Link>
             <ArrowRight size={10} />
           </div>
         </div>
