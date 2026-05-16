@@ -74,7 +74,7 @@ export function useProducts(opts: UseProductsOptions = {}) {
     return ["All", ...unique];
   }, [data]);
 
-  console.log(data);
+  // console.log(data);
 
   // Client-side category filter (instant, no extra round-trip)
   const filtered = useMemo(

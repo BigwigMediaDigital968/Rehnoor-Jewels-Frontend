@@ -18,7 +18,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 
 export const metadata: Metadata = {
-  title: "Shop Gold Plated Jewellery & One Gram Gold Jewellery",
+  title: "Shop Gold Plated Jewellery & One Gram Gold Jewellery ",
   description:
     "Explore Rehnoor Jewels' stunning collection of gold plated jewellery and one gram gold jewellery. Elegant designs, lasting shine - shop the latest styles today.",
   keywords: [

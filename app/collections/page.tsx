@@ -8,7 +8,7 @@ import NewsletterSection from "../component/website/NewsletterSection";
 import Script from "next/script";
 
 export const metadata: Metadata = {
-  title: "Explore All Jewellery Collections | Rehnoor Jewels",
+  title: "Explore All Jewellery Collections",
   description:
     "Discover Rehnoor Jewels' curated collections of gold plated jewellery for every occasion. From bracelets to necklaces, find your perfect piece today.",
   keywords: [
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
 export default function CollectionsPage() {
   return (
     <>
-      {/* SEO Tags */}
+      {/* SEO Schema */}
 
       <Script
         id="collection-schema"
@@ -55,42 +55,80 @@ export default function CollectionsPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "CollectionPage",
-            name: "Jewellery Collections",
+            name: "Jewellery Collections – Rehnoor Jewels",
             description:
-              "Explore all gold plated jewellery collections from Rehnoor Jewels.",
+              "Browse all collections including chains, rings, bracelets, kadas, pendants and more at Rehnoor Jewels.",
             url: "https://www.rehnoorjewels.com/collections",
             mainEntity: {
               "@type": "ItemList",
+              itemListOrder: "http://schema.org/ItemListOrderAscending",
+              numberOfItems: 12,
               itemListElement: [
                 {
                   "@type": "ListItem",
                   position: 1,
-                  name: "Chains",
-                  url: "https://www.rehnoorjewels.com/collections/chains",
+                  name: "Chains for Men",
+                  url: "https://www.rehnoorjewels.com/collections/gold-plated-chains-for-men",
                 },
                 {
                   "@type": "ListItem",
                   position: 2,
-                  name: "Rings",
-                  url: "https://www.rehnoorjewels.com/collections/rings",
+                  name: "Kadas for Men",
+                  url: "https://www.rehnoorjewels.com/collections/kada-for-men",
                 },
                 {
                   "@type": "ListItem",
                   position: 3,
-                  name: "Bracelets",
-                  url: "https://www.rehnoorjewels.com/collections/bracelets",
+                  name: "Rings for Men",
+                  url: "https://www.rehnoorjewels.com/collections/rings-for-men",
                 },
                 {
                   "@type": "ListItem",
                   position: 4,
-                  name: "Kadas",
-                  url: "https://www.rehnoorjewels.com/collections/kadas",
+                  name: "Bracelets for Men",
+                  url: "https://www.rehnoorjewels.com/collections/gold-plated-bracelets-for-men",
                 },
                 {
                   "@type": "ListItem",
                   position: 5,
-                  name: "Pendants",
-                  url: "https://www.rehnoorjewels.com/collections/pendants",
+                  name: "Pendants for Men",
+                  url: "https://www.rehnoorjewels.com/collections/pendants-for-men",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 6,
+                  name: "New Arrivals",
+                  url: "https://www.rehnoorjewels.com/collections/new-arrivals",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 7,
+                  name: "Chains for Women",
+                  url: "https://www.rehnoorjewels.com/collections/gold-plated-chains-for-women",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 8,
+                  name: "Rings for Women",
+                  url: "https://www.rehnoorjewels.com/collections/gold-plated-rings-for-women",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 9,
+                  name: "Pendants for Women",
+                  url: "https://www.rehnoorjewels.com/collections/gold-plated-pendants-for-women",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 10,
+                  name: "Mangalsutra",
+                  url: "https://www.rehnoorjewels.com/collections/gold-plated-mangalsutra-for-women",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 11,
+                  name: "Rani Haar",
+                  url: "https://www.rehnoorjewels.com/collections/rani-haar-designed-for-every-women",
                 },
               ],
             },
