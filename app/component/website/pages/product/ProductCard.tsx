@@ -1125,36 +1125,36 @@ function QuickViewModal({
             )}
 
             {/* Qty + Cart */}
-            <div className="flex items-center gap-3 mb-3">
+            <div className="flex items-center justify-between mb-3">
               <div
                 className="flex items-center rounded-full overflow-hidden"
                 style={{ border: "1.5px solid var(--rj-bone)" }}
               >
                 <button
                   onClick={() => setQty((q) => Math.max(1, q - 1))}
-                  className="w-9 h-9 flex items-center justify-center transition-colors cursor-pointer hover:bg-[var(--rj-ivory-dark)]"
+                  className="w-8 h-9 flex items-center justify-center transition-colors cursor-pointer hover:bg-[var(--rj-ivory-dark)]"
                   style={{ color: "var(--rj-charcoal)" }}
                 >
                   −
                 </button>
                 <span
-                  className="w-8 text-center font-cinzel text-sm"
+                  className="w-6 text-center font-cinzel text-sm"
                   style={{ color: "var(--rj-charcoal)" }}
                 >
                   {qty}
                 </span>
                 <button
                   onClick={() => setQty((q) => q + 1)}
-                  className="w-9 h-9 flex items-center justify-center transition-colors cursor-pointer hover:bg-[var(--rj-ivory-dark)]"
+                  className="w-8 h-9 flex items-center justify-center transition-colors cursor-pointer hover:bg-[var(--rj-ivory-dark)]"
                   style={{ color: "var(--rj-charcoal)" }}
                 >
                   +
                 </button>
               </div>
 
-              <button
+                <button
                 onClick={handleAddToCart}
-                className="flex-1 flex items-center justify-center gap-2 py-2.5 font-cinzel text-[10px] tracking-widest uppercase font-bold transition-all duration-300 rounded-full cursor-pointer"
+                className="min-w-10 flex items-center justify-center gap-1 py-2.5 px-3 font-cinzel text-[10px] tracking-widest uppercase font-bold transition-all duration-300 rounded-full cursor-pointer"
                 style={{
                   background: addedToCart
                     ? "var(--rj-emerald)"
@@ -1485,7 +1485,7 @@ export default function ProductCard({ product }: { product: Product }) {
         {/* ── Card body ── */}
         <Link href={product.href} className="flex flex-col flex-1 p-4">
           <h3
-            className="font-cormorant font-light leading-tight mb-1 truncate group-hover:text-[var(--rj-emerald)] transition-colors duration-300"
+            className="font-cormorant font-light leading-tight mb-1 line-clamp-2 group-hover:text-[var(--rj-emerald)] transition-colors duration-300"
             style={{
               fontSize: "clamp(1rem, 1.8vw, 1.2rem)",
               color: "var(--rj-charcoal)",
@@ -1495,7 +1495,7 @@ export default function ProductCard({ product }: { product: Product }) {
             {product.name}
           </h3>
           <p
-            className="font-body text-xs mb-3"
+            className="hidden md:block font-body text-xs mb-3"
             style={{ color: "var(--rj-ash)" }}
           >
             {product.subtitle}
@@ -1572,7 +1572,7 @@ export default function ProductCard({ product }: { product: Product }) {
 
           {/* CTA — changes to "Added!" feedback */}
           <div
-            onClick={handleQuickAdd}
+            // onClick={handleQuickAdd}
             className="flex items-center justify-center gap-2 py-2.5 rounded-full font-cinzel text-[10px] tracking-widest uppercase font-bold transition-all duration-300 cursor-pointer"
             style={{
               background: addedToCart
@@ -1583,7 +1583,8 @@ export default function ProductCard({ product }: { product: Product }) {
               color: addedToCart ? "#fff" : "#fff",
             }}
           >
-            {addedToCart ? (
+            {/* NOTE : ENABLE handleQuickAdd ONCLICK TO MAKE THIS FRTURE ACTIVE AND FUNCTIONAL*/}
+            {/* {addedToCart ? (
               <>
                 <Check size={12} /> Added to Cart
               </>
@@ -1595,7 +1596,8 @@ export default function ProductCard({ product }: { product: Product }) {
               <>
                 <ShoppingBag size={12} /> Add to Cart
               </>
-            )}
+            )} */}
+            <Eye size={12} /> View Details
           </div>
         </Link>
       </motion.article>

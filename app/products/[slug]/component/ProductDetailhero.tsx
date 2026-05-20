@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import type { Product } from "../../../types/Product.types";
 import { useWishlistStore } from "@/app/store/cartStore";
+import ZoomModal from "./ZoomModal";
 
 // ─────────────────────────────────────────────────────────────────
 // EXTENDED PRODUCT TYPE (API fields)
@@ -61,7 +62,7 @@ interface Props {
 // ─────────────────────────────────────────────────────────────────
 // ZOOM MODAL
 // ─────────────────────────────────────────────────────────────────
-function ZoomModal({
+function ZoomModalOld({
   src,
   alt,
   onClose,
@@ -89,7 +90,7 @@ function ZoomModal({
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
           transition={{ duration: 0.25 }}
-          className="relative w-full max-w-3xl"
+          className="relative w-full max-w-2xl"
           style={{ aspectRatio: "1/1", cursor: "default" }}
           onClick={(e) => e.stopPropagation()}
         >
@@ -497,13 +498,22 @@ export default function ProductDetailHero({
 
   return (
     <>
-      {zoomed && (
+      {/* {zoomed && (
         <ZoomModal
           src={images[imgIdx].src}
           alt={images[imgIdx].alt}
           onClose={() => setZoomed(false)}
         />
+      )} */}
+      {zoomed && (
+        <ZoomModal
+    images={images} // Full reference objects array [{src, alt}, ...]
+    currentIndex={imgIdx}
+    setCurrentIndex={setImgIdx}
+    onClose={() => setZoomed(false)}
+  />
       )}
+      
       {sizeChartOpen && (
         <SizeChartModal
           imageUrl={product.sizeChartImage || ""}

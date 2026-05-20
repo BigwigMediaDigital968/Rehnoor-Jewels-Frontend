@@ -115,7 +115,7 @@ function Specifications({ specs }: { specs?: Product["specifications"] }) {
 }
 
 function CareGuide() {
-  const tips = [
+  const tipsOld = [
     {
       icon: "✦",
       title: "Daily Cleaning",
@@ -142,6 +142,28 @@ function CareGuide() {
       desc: "Bring it to us every 12–18 months for professional polishing and inspection. Free for life for all Rehnoor purchases.",
     },
   ];
+  const tips = [
+  {
+    icon: "✦",
+    title: "Remove Before Sleep",
+    desc: "Take off your jewellery before sleeping to help preserve its shape, finish, and overall beauty over time.",
+  },
+  {
+    icon: "◈",
+    title: "Keep Away from Water",
+    desc: "Remove jewellery before swimming, bathing, or prolonged exposure to water to maintain its lasting brilliance.",
+  },
+  {
+    icon: "⚜",
+    title: "Avoid Beauty Products",
+    desc: "Allow perfumes, lotions, and cosmetics to fully dry before wearing jewellery to prevent residue buildup and dullness.",
+  },
+  {
+    icon: "♾",
+    title: "Proper Storage",
+    desc: "Store jewellery in a soft pouch or dedicated jewellery box when not in use to help prevent scratches and tangling.",
+  },
+];
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
       {tips.map((t) => (
