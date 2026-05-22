@@ -71,8 +71,8 @@ const navLinks = [
             icon: "✨",
           },
           {
-            label: "Exclusive Rani Haar",
-            href: "/collections/rani-haar-designed-for-every-women",
+            label: "Exclusive Bracelets",
+            href: "/collections/gold-plated-bracelets-for-women",
             icon: "✨",
           },
           {

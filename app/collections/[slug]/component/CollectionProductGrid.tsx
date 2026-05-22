@@ -918,12 +918,6 @@ export default function CollectionProductGrid({
   const PAGE_STEP = 3;
   const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);
 
-  const activeFilterCount =
-    filters.tags.length +
-    filters.sizes.length +
-    filters.ratings.length +
-    (filters.priceMax < PRICE_MAX ? 1 : 0);
-
   // ── Filter + sort — identical logic, now operates on `products` ─
   const results = useMemo(() => {
     let list = [...products] as Product[];

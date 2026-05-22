@@ -11,94 +11,94 @@ import React, { useRef, useEffect, useState } from "react";
 const menItems = [
   {
     id: 1,
-    name: "Charming Design",
-    subtitle: "Gold Plated Rajwadi Chain for Men",
+    name: "Chanins of Distinction",
+    subtitle: "Gold Plated Chain for Men",
     tag: "Bestseller",
-    price: "₹2,040",
+    price: "₹999",
     gradient: "from-[#1a1a1a] via-[#2a2208] to-[#1a1a1a]",
     accent: "#fcc151",
-    image: "/men-collection/chain-1.webp",
-    link: "/products/charming-design-gold-plated-rajwadi-chain-for-men-style-e818",
+    image: "/men-collection/chains.png",
+    link: "/collections/gold-plated-chains-for-men",
   },
   {
     id: 2,
-    name: "Artisanal Design",
-    subtitle: "Gold Plated pipe Chain for Men",
+    name: "Pendants of Prestige",
+    subtitle: "Gold Plated Pendants for Men",
     tag: "New",
-    price: "₹1,390",
+    price: "₹999",
     gradient: "from-[#0a1f12] via-[#003720] to-[#0a1f12]",
     accent: "#fdd07a",
-    image: "/men-collection/chain-2.webp",
-    link: "/products/artisanal-design-gold-plated-pipe-chain-for-men-style-e820",
+    image: "/men-collection/pendants.png",
+    link: "/collections/pendants-for-men",
   },
   {
     id: 3,
-    name: "Style E403",
+    name: "Bracelets of Strength",
     subtitle: "Design Link Bracelet for Men",
     tag: "Limited",
-    price: "₹4,450",
+    price: "₹999",
     gradient: "from-[#1a1108] via-[#2e1f00] to-[#1a1108]",
     accent: "#f5a623",
-    image: "/men-collection/bracelet-1.webp",
-    link: "products/1-gram-gold-plated-trending-design-link-bracelet-for-men-style-e403",
+    image: "/men-collection/bracelets.png",
+    link: "/collections/gold-plated-bracelets-for-men",
   },
   {
     id: 4,
-    name: "Style E420",
-    subtitle: "Best Quality Bracelet for Men",
+    name: "Rings of Power",
+    subtitle: "Gold Plated Rings for Men",
     tag: "Trending",
-    price: "₹9,550",
+    price: "₹999",
     gradient: "from-[#1a1a1a] via-[#002410] to-[#1a1a1a]",
     accent: "#fcc151",
-    image: "/men-collection/bracelet-2.webp",
-    link: "/products/1-gram-gold-plated-stylish-design-best-quality-bracelet-for-men-style-e420",
+    image: "/men-collection/rings.png",
+    link: "/collections/rings-for-men",
   },
 ];
 
 const womenItems = [
   {
     id: 1,
-    name: "Lumière Drops",
+    name: "Earrings of Elegance",
     subtitle: "Tear-drop gemstone earrings",
     tag: "Bestseller",
-    price: "₹3,599",
+    price: "₹599",
     gradient: "from-[#fef4dc] via-[#fdf0d0] to-[#fef4dc]",
     accent: "#003720",
-    image: "/images/collections/women/lumiere-drops.jpg",
-    link: "/collection/women-item",
+    image: "/women-collection/earrings.png",
+    link: "/collections/gold-plated-earrings-for-women",
   },
   {
     id: 2,
-    name: "Petal Choker",
-    subtitle: "Floral-motif collar necklace",
+    name: "Elegant Bracelets",
+    subtitle: "Delicate gold-plated bracelets",
     tag: "New",
     price: "₹5,199",
     gradient: "from-[#faf8f3] via-[#fef4dc] to-[#faf8f3]",
     accent: "#004d2d",
-    image: "/images/collections/women/petal-choker.jpg",
-    link: "/collection/women-item",
+    image: "/women-collection/bracelets.png",
+    link: "/collections/gold-plated-bracelets-for-women",
   },
   {
     id: 3,
-    name: "Bloom Bangle",
-    subtitle: "Engraved gold-tone bangle",
+    name: "Pendants",
+    subtitle: "Elegant gold-plated pendants",
     tag: "Limited",
     price: "₹2,499",
     gradient: "from-[#fef4dc] via-[#fdf5e0] to-[#fef4dc]",
     accent: "#003720",
-    image: "/images/collections/women/bloom-bangle.jpg",
-    link: "/collection/women-item",
+    image: "/women-collection/pendants.png",
+    link: "/collections/gold-plated-pendants-for-women",
   },
   {
     id: 4,
-    name: "Silhouette Ring",
+    name: "Ring of Grace",
     subtitle: "Stackable minimalist ring",
     tag: "Trending",
-    price: "₹1,899",
+    price: "₹599",
     gradient: "from-[#faf8f3] via-[#f2ede2] to-[#faf8f3]",
     accent: "#002410",
-    image: "/images/collections/women/silhouette-ring.jpg",
-    link: "/collection/women-item",
+    image: "/women-collection/rings.png",
+    link: "/collections/gold-plated-rings-for-women",
   },
 ];
 
@@ -149,8 +149,8 @@ const Badge = ({ label, dark }: { label: string; dark: boolean }) => (
     className="relative overflow-hidden text-[10px] tracking-[0.18em] uppercase font-semibold px-3 py-1 rounded-full"
     style={{
       background: dark ? "rgba(252,193,81,0.12)" : "rgba(0,55,32,0.10)",
-      border: `1px solid ${dark ? "rgba(252,193,81,0.35)" : "rgba(0,55,32,0.25)"}`,
-      color: dark ? "#fcc151" : "#003720",
+      border: `1px solid ${dark ? "rgba(252,193,81,0.35)" : "rgba(255, 215, 0, 1)"}`,
+      color: dark ? "#fcc151" : "#fdd07a",
     }}
   >
     <span
@@ -158,7 +158,7 @@ const Badge = ({ label, dark }: { label: string; dark: boolean }) => (
       style={{
         background: dark
           ? "linear-gradient(90deg, transparent, rgba(252,193,81,0.22), transparent)"
-          : "linear-gradient(90deg, transparent, rgba(0,77,45,0.14), transparent)",
+          : "linear-gradient(90deg, transparent, rgba(255, 215, 0, 1), transparent)",
       }}
     />
     {label}
@@ -519,10 +519,10 @@ export default function MenWomen() {
         {/* ══════════════════════════════════════
             WOMEN'S COLLECTION — light / ivory
         ══════════════════════════════════════ */}
-        {/* <section
+        <section
           ref={womenRef}
           className="relative overflow-hidden py-14 px-4 sm:px-6 lg:px-8"
-          style={{ background: "var(--rj-ivory)" }}
+          style={{ background: "#ffefd2" }}
         >
           <div
             className="absolute inset-0 opacity-[0.06] pointer-events-none"
@@ -600,7 +600,7 @@ export default function MenWomen() {
               </button>
             </div>
           </div>
-        </section> */}
+        </section>
       </main>
     </>
   );
