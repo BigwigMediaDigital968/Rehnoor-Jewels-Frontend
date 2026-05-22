@@ -98,14 +98,14 @@ const FAQS = [
     a: "Every jewellery purchase comes with one complimentary resizing. For chains and bracelets, we offer up to 2 inch length adjustments. For rings and kadas, we adjust up or down 2 sizes. Just contact us after your order arrives.",
     icon: <Ruler size={14} />,
   },
-  {
-    q: "Do you offer custom / personalised pieces?",
-    a: "Yes — we offer engraving, custom weight, and fully bespoke designs. Personalised pieces take 7–14 business days. Contact us via WhatsApp or email with your requirements and we will send you a quote within 24 hours.",
-    icon: <Star size={14} />,
-  },
+  // {
+  //   q: "Do you offer custom / personalised pieces?",
+  //   a: "Yes — we offer engraving, custom weight, and fully bespoke designs. Personalised pieces take 7–14 business days. Contact us via WhatsApp or email with your requirements and we will send you a quote within 24 hours.",
+  //   icon: <Star size={14} />,
+  // },
   {
     q: "What payment methods do you accept?",
-    a: "We accept all major UPI apps (GPay, PhonePe, Paytm), net banking, all credit and debit cards, and EMI on select cards (0% EMI available). Cash on delivery is available for orders up to ₹5,000.",
+    a: "We accept all major UPI apps (GPay, PhonePe, Paytm), net banking, all credit and debit cards. Cash on delivery is available for orders up to ₹999.",
     icon: <Shield size={14} />,
   },
 ];

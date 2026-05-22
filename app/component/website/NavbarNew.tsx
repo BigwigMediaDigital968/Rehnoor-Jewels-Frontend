@@ -580,13 +580,13 @@ function MobileMenu({
                 )}
               </Link>
 
-              <a
+              {/* <a
                 href="tel:+919876543210"
                 className="flex items-center gap-3 text-sm font-medium py-2"
                 style={{ color: "var(--rj-emerald)", cursor: "pointer" }}
               >
                 <Phone size={16} /> +91 98765 43210
-              </a>
+              </a> */}
             </div>
           </motion.div>
         </>
