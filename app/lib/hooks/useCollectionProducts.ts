@@ -75,6 +75,7 @@ export function useCollectionProducts({
         // reviewCount: p.reviewCount,
 
         category: p.category,
+        ourPromise: p.ourPromise,
 
         // ✅ FIXED
         href: `/products/${p.slug}`,

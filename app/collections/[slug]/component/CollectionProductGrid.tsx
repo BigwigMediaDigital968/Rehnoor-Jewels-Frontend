@@ -5,10 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  SlidersHorizontal,
   X,
-  ChevronDown,
-  Search,
   Heart,
   Star,
   Check,
@@ -404,8 +401,8 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
                 backdropFilter: "blur(8px)",
               }}
             >
-              This product is trending 🔥 <br />
-              Limited stock available.
+              {product.ourPromise ||
+                "Crafted with 22kt gold, ethically sourced and designed to last generations."}
             </div>
           </div>
 
@@ -890,8 +887,6 @@ export default function CollectionProductGrid({
   error: string | null;
   // reload: () => void;
 }) {
-  console.log(products);
-
   // Derive usedSizes from live data (passed down to Sidebar)
   const usedSizes = useMemo(
     () =>

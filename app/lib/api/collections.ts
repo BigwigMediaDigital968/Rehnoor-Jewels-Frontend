@@ -13,6 +13,7 @@ export interface ApiCollection {
   slug: string;
   label: string;
   tagline: string;
+  ourPromise: string;
   description: string;
   heroImage: string;
   accentColor: string;

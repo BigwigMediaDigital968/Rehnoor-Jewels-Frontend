@@ -15,6 +15,7 @@ export interface CollectionMeta {
   name: string;
   label: string;
   tagline: string;
+
   description: string;
   heroImage: string;
   accentColor: string; // CSS color for tint overlay
