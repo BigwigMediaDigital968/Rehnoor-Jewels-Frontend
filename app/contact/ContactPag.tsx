@@ -83,30 +83,39 @@ const SUBJECT_OPTIONS = [
 
 const FAQS = [
   {
-    q: "How long does delivery take?",
-    a: "Standard delivery takes 5–7 business days across India. Express (2–3 days) and same-day delivery (select metros, order before 12 PM) are also available. All orders are fully insured and arrive in our signature gift box.",
+    q: "How long does shipping and delivery take?",
+    a: "Orders are usually processed and dispatched within 1–2 working days. Delivery timelines are generally 2–4 business days for metro cities and 5–7 business days for other locations across India. Once shipped, tracking details are shared via SMS or email.",
     icon: <Package size={14} />,
   },
 
   {
     q: "Can I return or exchange my order?",
-    a: "Absolutely. We offer a 07-day no-questions-asked return and free exchange policy. Simply contact us within 07 days of delivery, and we will arrange a free doorstep pickup. Refunds process within 5–7 business days.",
+    a: "Yes. If you receive a damaged, defective, or incorrect product, please contact our support team within 48 hours of delivery with clear photos or an unboxing video. Eligible requests will be reviewed for replacement or exchange assistance.",
     icon: <RefreshCw size={14} />,
   },
+
   {
-    q: "How does free sizing work?",
-    a: "Every jewellery purchase comes with one complimentary resizing. For chains and bracelets, we offer up to 2 inch length adjustments. For rings and kadas, we adjust up or down 2 sizes. Just contact us after your order arrives.",
-    icon: <Ruler size={14} />,
+    q: "Can I cancel my order after placing it?",
+    a: "Orders can only be cancelled before they are dispatched. Once an order has been shipped, cancellation requests cannot be accepted. For cancellation support, please contact our customer care team as soon as possible after placing the order.",
+    icon: <Shield size={14} />,
   },
-  // {
-  //   q: "Do you offer custom / personalised pieces?",
-  //   a: "Yes — we offer engraving, custom weight, and fully bespoke designs. Personalised pieces take 7–14 business days. Contact us via WhatsApp or email with your requirements and we will send you a quote within 24 hours.",
-  //   icon: <Star size={14} />,
-  // },
+
   {
     q: "What payment methods do you accept?",
-    a: "We accept all major UPI apps (GPay, PhonePe, Paytm), net banking, all credit and debit cards. Cash on delivery is available for orders up to ₹999.",
+    a: "We accept UPI payments, debit cards, credit cards, net banking, and popular digital wallets. All online payments are processed through secure and encrypted payment gateways for a safe shopping experience.",
     icon: <Shield size={14} />,
+  },
+
+  {
+    q: "Do you provide order tracking?",
+    a: "Absolutely. Once your order is shipped, you will receive tracking details via SMS or email so you can monitor your shipment in real time until delivery.",
+    icon: <Package size={14} />,
+  },
+
+  {
+    q: "Is my jewellery securely packaged?",
+    a: "Yes. Every order is carefully packed in premium, secure packaging to ensure your jewellery arrives safely and in perfect condition. All shipments are handled through trusted delivery partners.",
+    icon: <Star size={14} />,
   },
 ];
 
@@ -116,12 +125,7 @@ const HELP_TOPICS = [
     href: "/track-order",
     icon: <Package size={13} />,
   },
-  // {
-  //   label: "Start a return",
-  //   href: "/account/returns",
-  //   icon: <RefreshCw size={13} />,
-  // },
-  { label: "Size guide", href: "/size-guide", icon: <Ruler size={13} /> },
+
   { label: "Policies", href: "/policies", icon: <Shield size={13} /> },
 ];
 

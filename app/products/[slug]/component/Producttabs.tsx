@@ -7,6 +7,7 @@ import { Product } from "@/app/types/Product.types";
 
 const TABS = [
   { id: "specs", label: "Specifications", icon: <Ruler size={13} /> },
+  { id: "longDesc", label: "More Info", icon: <Info size={13} /> },
   { id: "care", label: "Care Guide", icon: <Shield size={13} /> },
   { id: "shipping", label: "Shipping", icon: <Package size={13} /> },
   { id: "returns", label: "Returns", icon: <RefreshCw size={13} /> },
@@ -62,8 +63,6 @@ const TABS = [
 // }
 
 function Specifications({ specs }: { specs?: Product["specifications"] }) {
-  const fallbackIcon = <Info size={14} />;
-
   if (!specs || specs.length === 0) {
     return (
       <div className="text-sm text-gray-500 px-4 py-6">
@@ -115,55 +114,28 @@ function Specifications({ specs }: { specs?: Product["specifications"] }) {
 }
 
 function CareGuide() {
-  const tipsOld = [
+  const tips = [
     {
       icon: "✦",
-      title: "Daily Cleaning",
-      desc: "Wipe with a soft, lint-free cloth after each use to remove oils and fingerprints. This maintains the mirror finish.",
+      title: "Remove Before Sleep",
+      desc: "Take off your jewellery before sleeping to help preserve its shape, finish, and overall beauty over time.",
     },
     {
       icon: "◈",
-      title: "Deep Cleaning",
-      desc: "Soak in warm (not hot) water with a drop of mild dish soap for 5–10 minutes. Gently brush with a soft toothbrush, rinse, and pat dry.",
+      title: "Keep Away from Water",
+      desc: "Remove jewellery before swimming, bathing, or prolonged exposure to water to maintain its lasting brilliance.",
     },
     {
       icon: "⚜",
-      title: "Storage",
-      desc: "Store separately in the velvet pouch provided. Avoid contact with other jewellery to prevent scratching.",
+      title: "Avoid Beauty Products",
+      desc: "Allow perfumes, lotions, and cosmetics to fully dry before wearing jewellery to prevent residue buildup and dullness.",
     },
     {
       icon: "♾",
-      title: "Avoid Chemicals",
-      desc: "Remove before swimming, bathing, applying perfume, or using cleaning products. Chlorine and harsh chemicals can damage the gold surface.",
-    },
-    {
-      icon: "◉",
-      title: "Professional Care",
-      desc: "Bring it to us every 12–18 months for professional polishing and inspection. Free for life for all Rehnoor purchases.",
+      title: "Proper Storage",
+      desc: "Store jewellery in a soft pouch or dedicated jewellery box when not in use to help prevent scratches and tangling.",
     },
   ];
-  const tips = [
-  {
-    icon: "✦",
-    title: "Remove Before Sleep",
-    desc: "Take off your jewellery before sleeping to help preserve its shape, finish, and overall beauty over time.",
-  },
-  {
-    icon: "◈",
-    title: "Keep Away from Water",
-    desc: "Remove jewellery before swimming, bathing, or prolonged exposure to water to maintain its lasting brilliance.",
-  },
-  {
-    icon: "⚜",
-    title: "Avoid Beauty Products",
-    desc: "Allow perfumes, lotions, and cosmetics to fully dry before wearing jewellery to prevent residue buildup and dullness.",
-  },
-  {
-    icon: "♾",
-    title: "Proper Storage",
-    desc: "Store jewellery in a soft pouch or dedicated jewellery box when not in use to help prevent scratches and tangling.",
-  },
-];
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
       {tips.map((t) => (
@@ -209,18 +181,18 @@ function Shipping() {
       price: "Free",
       note: "On all orders above ₹2,000",
     },
-    {
-      name: "Express Delivery",
-      time: "2–3 business days",
-      price: "₹149",
-      note: "Available for most pin codes",
-    },
-    {
-      name: "Same-Day Delivery",
-      time: "Within 6–8 hours",
-      price: "₹299",
-      note: "Select metros only · Order before 12pm",
-    },
+    // {
+    //   name: "Express Delivery",
+    //   time: "2–3 business days",
+    //   price: "₹149",
+    //   note: "Available for most pin codes",
+    // },
+    // {
+    //   name: "Same-Day Delivery",
+    //   time: "Within 6–8 hours",
+    //   price: "₹299",
+    //   note: "Select metros only · Order before 12pm",
+    // },
     // {
     //   name: "International",
     //   time: "10–15 business days",
@@ -382,12 +354,18 @@ function Returns() {
   );
 }
 
-const TAB_CONTENT: Record<string, React.ReactNode> = {
-  specs: <Specifications />,
-  care: <CareGuide />,
-  shipping: <Shipping />,
-  returns: <Returns />,
-};
+function LongDescription({ longDesc }: { longDesc?: string }) {
+  return (
+    <>
+      {longDesc &&
+        longDesc.split("\n").map((line, i) => (
+          <p key={i} className="mb-2 last:mb-0">
+            {line}
+          </p>
+        ))}
+    </>
+  );
+}
 
 // ─────────────────────────────────────────────────────────────────
 // MAIN EXPORT
@@ -456,6 +434,9 @@ export default function ProductTabs({ product }: { product: Product }) {
           >
             {activeTab === "specs" && (
               <Specifications specs={product.specifications} />
+            )}
+            {activeTab === "longDesc" && (
+              <LongDescription longDesc={product.description} />
             )}
             {activeTab === "care" && <CareGuide />}
             {activeTab === "shipping" && <Shipping />}

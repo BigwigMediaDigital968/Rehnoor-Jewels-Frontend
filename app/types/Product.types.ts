@@ -90,6 +90,7 @@ export interface Product {
    * Keep under ~200 characters for best layout.
    */
   description?: string;
+  shortDescription?: string;
 
   /**
    * Canonical URL for the product page.

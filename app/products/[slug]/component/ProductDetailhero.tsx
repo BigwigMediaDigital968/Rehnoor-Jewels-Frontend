@@ -359,8 +359,8 @@ function Breadcrumb({
 }) {
   const crumbs = [
     { label: "Home", href: "/" },
-    { label: "Products", href: "/products" },
     { label: collectionName, href: `/collections/${collectionSlug}` },
+    { label: "Products", href: "/products" },
     { label: product.name, href: null }, // current page — no link
   ];
 
@@ -507,13 +507,13 @@ export default function ProductDetailHero({
       )} */}
       {zoomed && (
         <ZoomModal
-    images={images} // Full reference objects array [{src, alt}, ...]
-    currentIndex={imgIdx}
-    setCurrentIndex={setImgIdx}
-    onClose={() => setZoomed(false)}
-  />
+          images={images} // Full reference objects array [{src, alt}, ...]
+          currentIndex={imgIdx}
+          setCurrentIndex={setImgIdx}
+          onClose={() => setZoomed(false)}
+        />
       )}
-      
+
       {sizeChartOpen && (
         <SizeChartModal
           imageUrl={product.sizeChartImage || ""}
@@ -975,7 +975,7 @@ export default function ProductDetailHero({
                 Buy It Now
               </button>
 
-              {product.description && (
+              {product.shortDescription && (
                 <p
                   className="text-sm leading-relaxed mb-6"
                   style={{
@@ -983,7 +983,7 @@ export default function ProductDetailHero({
                     fontFamily: "var(--font-body,'DM Sans'),sans-serif",
                   }}
                 >
-                  {product.description}
+                  {product.shortDescription}
                 </p>
               )}
 

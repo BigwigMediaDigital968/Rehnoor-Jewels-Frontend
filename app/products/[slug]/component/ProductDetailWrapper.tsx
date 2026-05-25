@@ -18,9 +18,6 @@ export default function ProductDetailWrapper({ product }: Props) {
   const addItem = useCartStore((s) => s.addItem);
   const resetCheckout = useCheckoutStore((s) => s.reset);
 
-  // Builds the CartItem shape from the product + selection
-  // selectedSize and qty come from inside ProductDetailHero,
-  // so we pass callbacks that accept them (see hero changes below)
   const handleAddToCart = (size: string, qty: number) => {
     addItem({
       productId: product.id,
