@@ -3,6 +3,31 @@
 
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
+export interface ProductImage {
+  src: string;
+  alt: string;
+}
+
+export interface VariantOption {
+  name: string;
+  values: string[];
+}
+
+export interface Variant {
+  _id: string;
+  title?: string;
+  sku?: string;
+  barcode?: string;
+  price: number;
+  originalPrice?: number | null;
+  stock?: number | null;
+  weightGrams?: number;
+  isDefault: boolean;
+  isActive: boolean;
+  options?: Record<string, string>;
+  images?: ProductImage[];
+}
+
 export interface ApiProduct {
   id: any;
   _id: string;
@@ -43,6 +68,9 @@ export interface ApiProduct {
   longDescription?: string;
 
   ourPromise: string;
+
+  options?: VariantOption[];
+  variants?: Variant[];
 
   // ─── Media ────────────────────────────────
   images: {

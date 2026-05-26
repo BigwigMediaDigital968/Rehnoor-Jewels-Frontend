@@ -35,32 +35,73 @@ function extractCollection(collection: any, category?: string) {
   return { slug: "new-arrivals", name: "Collection" };
 }
 
+// function toProduct(p: any): Product {
+//   return {
+//     id: p._id,
+//     name: p.name,
+//     subtitle: p.subtitle,
+//     price: p.priceFormatted ?? `₹${p.price.toLocaleString("en-IN")}`,
+//     originalPrice: p.originalPriceFormatted ?? undefined,
+//     tag: p.tag,
+//     rating: p.rating,
+//     reviewCount: p.reviewCount,
+//     category: p.category,
+//     description: p.longDescription || "",
+//     shortDescription: p.shortDescription || "",
+//     href: `/products/${p.slug}`,
+//     images: p.images,
+//     sizes: p.sizes,
+//     offerBannerImage: p.offerBannerImage,
+//     sizeChartImage: p.sizeChartImage,
+//     ourPromise: p.ourPromise,
+//     specifications: p.specifications || [],
+//   };
+// }
+
+// ─────────────────────────────────────────────────────────────────
+// STATIC PARAMS
+// ─────────────────────────────────────────────────────────────────
+
 function toProduct(p: any): Product {
   return {
     id: p._id,
     name: p.name,
     subtitle: p.subtitle,
+
     price: p.priceFormatted ?? `₹${p.price.toLocaleString("en-IN")}`,
     originalPrice: p.originalPriceFormatted ?? undefined,
+
     tag: p.tag,
     rating: p.rating,
     reviewCount: p.reviewCount,
+
     category: p.category,
+
     description: p.longDescription || "",
     shortDescription: p.shortDescription || "",
+
     href: `/products/${p.slug}`,
-    images: p.images,
-    sizes: p.sizes,
+
+    images: p.images || [],
+
+    // NEW
+    variants: p.variants || [],
+    options: p.options || [],
+
+    // OPTIONAL EXTRA FIELDS
+    sku: p.sku,
+    stock: p.stock,
+    weightGrams: p.weightGrams != null ? Number(p.weightGrams) : undefined,
+
     offerBannerImage: p.offerBannerImage,
     sizeChartImage: p.sizeChartImage,
+
     ourPromise: p.ourPromise,
+
     specifications: p.specifications || [],
   };
 }
 
-// ─────────────────────────────────────────────────────────────────
-// STATIC PARAMS
-// ─────────────────────────────────────────────────────────────────
 export async function generateStaticParams() {
   const slugs = await fetchAllProductSlugs();
   return slugs.map((slug) => ({ slug }));
