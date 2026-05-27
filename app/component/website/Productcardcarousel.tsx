@@ -153,38 +153,79 @@ export default function ProductCardCarousel({ product }: { product: Product }) {
   const handleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
+    const priceNum = parseInt((product.price ?? "0").replace(/[^\d]/g, ""), 10);
+    const originalPriceNum = product.originalPrice
+      ? parseInt(product.originalPrice.replace(/[^\d]/g, ""), 10)
+      : null;
+
+    // Convert raw database Variant models into the strict frontend VariantSnapshot schema
+    const formattedVariants = ((product as any).variants || []).map(
+      (v: any) => ({
+        variantId: v._id,
+        title: v.title,
+        options: v.options || { Size: v.title },
+        price: v.price,
+        originalPrice: v.originalPrice ?? null,
+        image: v.images?.[0]?.src ?? product.images[0]?.src ?? "",
+      }),
+    );
+
     toggleItem({
       id: wishlistId,
       productId: product.id,
       name: product.name,
       subtitle: product.subtitle,
       image: product.images[0]?.src ?? "",
-      price: product.price,
-      priceNum: parseInt(product.price.replace(/[^\d]/g, ""), 10),
-      originalPrice: product.originalPrice,
+      priceNum,
+      originalPriceNum,
       href: product.href,
       category: product.category,
       tag: product.tag,
+      variants: formattedVariants, // Cleanly satisfies VariantSnapshot[]
     });
   };
 
   // ── Add to cart (after size selected) ────────────────────────
   const commitToCart = useCallback(
     (size: string) => {
+      const priceNum = parseInt(
+        (product.price ?? "0").replace(/[^\d]/g, ""),
+        10,
+      );
+      const originalPriceNum = product.originalPrice
+        ? parseInt(product.originalPrice.replace(/[^\d]/g, ""), 10)
+        : null;
+
+      // Find if an explicit configuration variant exists matching the selected string label
+      const matchedVariant = (product as any).variants?.find(
+        (v: any) => v.title === size,
+      );
+
+      const variantSnapshot = {
+        variantId:
+          matchedVariant?._id ?? size.toLowerCase().replace(/\s+/g, "-"),
+        title: size,
+        options: { Size: size },
+        price: matchedVariant?.price ?? priceNum,
+        originalPrice: matchedVariant?.originalPrice ?? originalPriceNum,
+        image: matchedVariant?.images?.[0]?.src ?? product.images[0]?.src ?? "",
+      };
+
       addItem({
         productId: product.id,
         name: product.name,
-        subtitle: product.subtitle,
-        image: product.images[0]?.src ?? "",
-        price: product.price,
-        priceNum: parseInt(product.price.replace(/[^\d]/g, ""), 10),
-        originalPrice: product.originalPrice,
-        size,
+        subtitle: matchedVariant ? matchedVariant.title : product.subtitle,
+        image: matchedVariant?.images?.[0]?.src ?? product.images[0]?.src ?? "",
+        priceNum: matchedVariant?.price ?? priceNum,
+        originalPriceNum: matchedVariant?.originalPrice ?? originalPriceNum,
         qty: 1,
         href: product.href,
         category: product.category,
         tag: product.tag,
+        variant: variantSnapshot, // Structure compliant with VariantSnapshot type rule
       });
+
       setShowSizePicker(false);
       setAddedToCart(true);
       setCartAnim(true);

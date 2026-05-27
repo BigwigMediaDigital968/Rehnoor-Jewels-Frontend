@@ -646,3 +646,15 @@ body {
     transform: rotate(0.5turn);
   }
 }
+/* 
+@media (min-width: 768px) {
+  html,
+  body,
+  a,
+  button,
+  input,
+  select,
+  .cursor-pointer {
+    cursor: none !important;
+  }
+} */

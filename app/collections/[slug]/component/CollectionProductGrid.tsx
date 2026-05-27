@@ -217,9 +217,10 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
         name: product.name,
         subtitle: product.subtitle,
         image: product.images[0].src,
-        price: product.price,
         priceNum: parsePrice(product.price),
-        originalPrice: product.originalPrice,
+        originalPriceNum: product.originalPrice
+          ? parsePrice(product.originalPrice)
+          : null,
         href: product.href,
         category: product.category,
         tag: product.tag,
@@ -227,26 +228,26 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
     },
     [product, toggleItem],
   );
-
   // ── Cart: open size picker, or add directly if only 1 size ──
   const handleCartClick = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
       if (!product.sizes || product.sizes.length === 0) {
-        // No sizes — add directly
+        // No sizes/variants exist — add directly as null variant
         addItem({
           productId: product.id,
           name: product.name,
           subtitle: product.subtitle,
           image: product.images[0].src,
-          price: product.price,
           priceNum: parsePrice(product.price),
-          originalPrice: product.originalPrice,
-          size: "Free",
+          originalPriceNum: product.originalPrice
+            ? parsePrice(product.originalPrice)
+            : null,
           qty: 1,
           href: product.href,
           category: product.category,
           tag: product.tag,
+          variant: null, // <-- Satisfies VariantSnapshot | null requirements
         });
         flashAdded();
       } else {
@@ -258,20 +259,34 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
 
   // ── Confirm after size is chosen ────────────────────────────
   const handleConfirmSize = useCallback(
-    (size: string) => {
+    (sizeLabel: string) => {
+      // Find the corresponding local size object array from your product
+      const foundSize = product.sizes?.find((s) => s.label === sizeLabel);
+
       addItem({
         productId: product.id,
         name: product.name,
         subtitle: product.subtitle,
         image: product.images[0].src,
-        price: product.price,
         priceNum: parsePrice(product.price),
-        originalPrice: product.originalPrice,
-        size,
+        originalPriceNum: product.originalPrice
+          ? parsePrice(product.originalPrice)
+          : null,
         qty: 1,
         href: product.href,
         category: product.category,
         tag: product.tag,
+        // Build the dynamic VariantSnapshot object mapping
+        variant: {
+          variantId: sizeLabel.toLowerCase().replace(/\s+/g, "-"), // Clean fallback slug id
+          title: sizeLabel,
+          options: { Size: sizeLabel },
+          price: parsePrice(product.price),
+          originalPrice: product.originalPrice
+            ? parsePrice(product.originalPrice)
+            : null,
+          image: product.images[0].src,
+        },
       });
       setShowSizePicker(false);
       flashAdded();

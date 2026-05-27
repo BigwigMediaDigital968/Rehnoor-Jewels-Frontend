@@ -132,20 +132,29 @@ function RelatedCard({ product }: { product: Product }) {
       )
     : 0;
 
+  // ── Wishlist toggle ──────────────────────────────────────────
   const handleWishlist = (e: React.MouseEvent) => {
     e.stopPropagation();
+
+    // Parse the baseline prices cleanly
+    const priceNum = parseInt((product.price ?? "0").replace(/[^\d]/g, ""), 10);
+    const originalPriceNum = product.originalPrice
+      ? parseInt(product.originalPrice.replace(/[^\d]/g, ""), 10)
+      : null;
+
     toggleItem({
       id: product.id,
       productId: product.id,
       name: product.name,
       subtitle: product.subtitle,
       image: product.images[0]?.src || "",
-      price: product.price,
-      priceNum: parseInt(product.price.replace(/[^\d]/g, ""), 10),
-      originalPrice: product.originalPrice,
+      priceNum,
+      originalPriceNum,
       href: product.href,
       category: product.category,
       tag: product.tag,
+      // Map variants array to VariantSnapshot[] if your product data schema supports it
+      variants: (product as any).variants || [],
     });
   };
 

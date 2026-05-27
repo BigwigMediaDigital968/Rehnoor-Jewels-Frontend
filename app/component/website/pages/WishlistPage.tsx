@@ -10,13 +10,17 @@ import {
   ShoppingBag,
   ArrowRight,
   ChevronRight,
-  Star,
   Share2,
   Check,
   X,
   Package,
 } from "lucide-react";
-import { useWishlistStore, useCartStore } from "../../../store/cartStore";
+import {
+  useWishlistStore,
+  useCartStore,
+  fmtPrice,
+  type VariantSnapshot,
+} from "../../../store/cartStore";
 
 function fmt(n: number) {
   return "₹" + n.toLocaleString("en-IN");
@@ -72,36 +76,26 @@ function EmptyWishlist() {
 }
 
 // ─────────────────────────────────────────────────────────────────
-// SIZE SELECTOR POPOVER (inline — appears on "Move to Cart")
+// DYNAMIC VARIANT SELECTOR POPOVER
 // ─────────────────────────────────────────────────────────────────
-const COMMON_SIZES = [
-  { label: '16"' },
-  { label: '18"' },
-  { label: '20"' },
-  { label: '22"' },
-  { label: "S" },
-  { label: "M" },
-  { label: "L" },
-  { label: "XL" },
-  { label: "18" },
-  { label: "20" },
-  { label: "Free" },
-];
+interface DynamicVariantPopoverProps {
+  variants: VariantSnapshot[];
+  onSelect: (variant: VariantSnapshot) => void;
+  onClose: () => void;
+}
 
-function SizePopover({
+function DynamicVariantPopover({
+  variants,
   onSelect,
   onClose,
-}: {
-  onSelect: (s: string) => void;
-  onClose: () => void;
-}) {
+}: DynamicVariantPopoverProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 8, scale: 0.96 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 8, scale: 0.96 }}
       transition={{ duration: 0.2 }}
-      className="absolute bottom-full left-0 mb-2 z-30 rounded-xl p-3 w-56"
+      className="absolute bottom-full left-0 mb-2 z-30 rounded-xl p-3 w-64"
       style={{
         background: "#fff",
         border: "1px solid var(--rj-bone)",
@@ -113,26 +107,29 @@ function SizePopover({
           className="font-cinzel text-[9px] tracking-widest uppercase font-bold"
           style={{ color: "var(--rj-charcoal)" }}
         >
-          Select Size
+          Select Option
         </p>
         <button onClick={onClose} style={{ cursor: "pointer" }}>
           <X size={12} style={{ color: "var(--rj-ash)" }} />
         </button>
       </div>
-      <div className="flex flex-wrap gap-1.5">
-        {COMMON_SIZES.map((s) => (
+      <div className="flex flex-col gap-1.5 max-h-48 overflow-y-auto pr-1">
+        {variants.map((v) => (
           <button
-            key={s.label}
-            onClick={() => onSelect(s.label)}
-            className="font-cinzel text-[9px] tracking-wider px-2.5 py-1.5 rounded-full transition-all hover:scale-105"
+            key={v.variantId}
+            onClick={() => onSelect(v)}
+            className="w-full flex justify-between items-center font-cinzel text-[9px] tracking-wider px-3 py-2 rounded-lg transition-all hover:bg-[var(--rj-ivory)] border text-left"
             style={{
-              border: "1px solid var(--rj-bone)",
+              borderColor: "var(--rj-bone)",
               background: "transparent",
               color: "var(--rj-charcoal)",
               cursor: "pointer",
             }}
           >
-            {s.label}
+            <span className="font-semibold truncate mr-2">{v.title}</span>
+            <span style={{ color: "var(--rj-emerald)" }}>
+              {fmtPrice(v.price)}
+            </span>
           </button>
         ))}
       </div>
@@ -150,7 +147,7 @@ function WishlistCard({
 }) {
   const { removeItem, moveToCart } = useWishlistStore();
   const { addItem: addToCart } = useCartStore();
-  const [showSizes, setShowSizes] = useState(false);
+  const [showVariants, setShowVariants] = useState(false);
   const [removing, setRemoving] = useState(false);
   const [movedToCart, setMovedToCart] = useState(false);
   const [hovered, setHovered] = useState(false);
@@ -160,19 +157,29 @@ function WishlistCard({
     setTimeout(() => removeItem(item.id), 300);
   };
 
-  const handleMoveToCart = (size: string) => {
-    setShowSizes(false);
-    moveToCart(item.id, size, addToCart);
+  // Triggered when an item HAS variants and one is selected
+  const handleSelectVariant = (variantSnapshot: VariantSnapshot) => {
+    setShowVariants(false);
+    moveToCart(item.id, variantSnapshot, addToCart);
     setMovedToCart(true);
   };
 
-  const discountPct = item.originalPrice
-    ? Math.round(
-        (1 -
-          item.priceNum /
-            parseInt(item.originalPrice.replace(/[^\d]/g, ""), 10)) *
-          100,
-      )
+  // Triggered when clicking "Move to Cart" button directly
+  const handleCartAction = () => {
+    const availableVariants = item.variants || [];
+
+    if (availableVariants.length > 0) {
+      // Product has variants -> toggle the selection list popover
+      setShowVariants((prev) => !prev);
+    } else {
+      // Product does NOT have variants -> push straight into the cart
+      moveToCart(item.id, null, addToCart);
+      setMovedToCart(true);
+    }
+  };
+
+  const discountPct = item.originalPriceNum
+    ? Math.round((1 - item.priceNum / item.originalPriceNum) * 100)
     : 0;
 
   return (
@@ -292,19 +299,19 @@ function WishlistCard({
 
         {/* Price */}
         <div className="flex items-center gap-2 mb-3 flex-wrap">
-          {item.originalPrice && (
+          {item.originalPriceNum && (
             <span
               className="text-[10px] line-through"
               style={{ color: "var(--rj-ash)" }}
             >
-              {item.originalPrice}
+              {fmtPrice(item.originalPriceNum)}
             </span>
           )}
           <span
             className="font-cinzel font-bold"
             style={{ fontSize: "0.9rem", color: "var(--rj-emerald)" }}
           >
-            {item.price}
+            {fmtPrice(item.priceNum)}
           </span>
           {discountPct > 0 && (
             <span
@@ -319,16 +326,17 @@ function WishlistCard({
         {/* Actions */}
         <div className="relative mt-auto">
           <AnimatePresence>
-            {showSizes && (
-              <SizePopover
-                onSelect={handleMoveToCart}
-                onClose={() => setShowSizes(false)}
+            {showVariants && item.variants && item.variants.length > 0 && (
+              <DynamicVariantPopover
+                variants={item.variants}
+                onSelect={handleSelectVariant}
+                onClose={() => setShowVariants(false)}
               />
             )}
           </AnimatePresence>
 
           <button
-            onClick={() => setShowSizes((s) => !s)}
+            onClick={handleCartAction}
             className="w-full flex items-center justify-center gap-2 py-2.5 rounded-full font-cinzel text-[10px] tracking-widest uppercase font-bold transition-all duration-250 active:scale-95"
             style={{
               background: movedToCart
@@ -395,19 +403,24 @@ function MoveAllToCart() {
 
   const handleMoveAll = () => {
     items.forEach((item) => {
+      // If the individual item has variant configuration models saved, use the first one as default
+      const defaultVariant =
+        item.variants && item.variants.length > 0 ? item.variants[0] : null;
+
       addItem({
         productId: item.productId,
         name: item.name,
-        subtitle: item.subtitle,
-        image: item.image,
-        price: item.price,
-        priceNum: item.priceNum,
-        originalPrice: item.originalPrice,
-        size: "Default",
+        subtitle: defaultVariant ? defaultVariant.title : item.subtitle,
+        image: defaultVariant?.image || item.image,
+        priceNum: defaultVariant?.price || item.priceNum,
+        originalPriceNum: defaultVariant
+          ? defaultVariant.originalPrice
+          : item.originalPriceNum,
         qty: 1,
         href: item.href,
         category: item.category,
         tag: item.tag,
+        variant: defaultVariant,
       });
     });
     clearAll();
@@ -564,7 +577,7 @@ export default function WishlistPage() {
               className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
             >
               <AnimatePresence mode="popLayout">
-                {sorted.map((item, i) => (
+                {sorted.map((item) => (
                   <WishlistCard key={item.id} item={item} />
                 ))}
               </AnimatePresence>

@@ -76,18 +76,35 @@ export default function QuickViewModal({
 
   // ── Wishlist toggle ───────────────────────────────────────────
   const handleWishlist = () => {
+    const priceNum = parseInt((product.price ?? "0").replace(/[^\d]/g, ""), 10);
+    const originalPriceNum = product.originalPrice
+      ? parseInt(product.originalPrice.replace(/[^\d]/g, ""), 10)
+      : null;
+
+    // Convert raw backend variant schemas to frontend-friendly VariantSnapshots
+    const formattedVariants = ((product as any).variants || []).map(
+      (v: any) => ({
+        variantId: v._id,
+        title: v.title,
+        options: v.options || { Size: v.title },
+        price: v.price,
+        originalPrice: v.originalPrice ?? null,
+        image: v.images?.[0]?.src ?? product.images[0]?.src ?? "",
+      }),
+    );
+
     toggleItem({
       id: wishlistId,
       productId: product.id,
       name: product.name,
       subtitle: product.subtitle,
       image: product.images[0]?.src ?? "",
-      price: product.price,
-      priceNum: parseInt(product.price.replace(/[^\d]/g, ""), 10),
-      originalPrice: product.originalPrice,
+      priceNum,
+      originalPriceNum,
       href: product.href,
       category: product.category,
       tag: product.tag,
+      variants: formattedVariants, // Matches VariantSnapshot[] perfectly
     });
   };
 
@@ -99,24 +116,44 @@ export default function QuickViewModal({
       setTimeout(() => setSizeError(false), 820);
       return;
     }
+
+    const priceNum = parseInt((product.price ?? "0").replace(/[^\d]/g, ""), 10);
+    const originalPriceNum = product.originalPrice
+      ? parseInt(product.originalPrice.replace(/[^\d]/g, ""), 10)
+      : null;
+
+    // See if a backend configuration variant is already linked to the selected string size label
+    const matchedVariant = (product as any).variants?.find(
+      (v: any) => v.title === selectedSize,
+    );
+
+    const variantSnapshot = {
+      variantId:
+        matchedVariant?._id ?? selectedSize.toLowerCase().replace(/\s+/g, "-"),
+      title: selectedSize,
+      options: { Size: selectedSize },
+      price: matchedVariant?.price ?? priceNum,
+      originalPrice: matchedVariant?.originalPrice ?? originalPriceNum,
+      image: matchedVariant?.images?.[0]?.src ?? product.images[0]?.src ?? "",
+    };
+
     addItem({
       productId: product.id,
       name: product.name,
-      subtitle: product.subtitle,
-      image: product.images[0]?.src ?? "",
-      price: product.price,
-      priceNum: parseInt(product.price.replace(/[^\d]/g, ""), 10),
-      originalPrice: product.originalPrice,
-      size: selectedSize,
+      subtitle: matchedVariant ? matchedVariant.title : product.subtitle,
+      image: matchedVariant?.images?.[0]?.src ?? product.images[0]?.src ?? "",
+      priceNum: matchedVariant?.price ?? priceNum,
+      originalPriceNum: matchedVariant?.originalPrice ?? originalPriceNum,
       qty,
       href: product.href,
       category: product.category,
       tag: product.tag,
+      variant: variantSnapshot, // Properly satisfies the variant schema expectations
     });
+
     setAddedToCart(true);
     setTimeout(() => setAddedToCart(false), 2200);
   };
-
   const discountPct = product.originalPrice
     ? Math.round(
         (1 -

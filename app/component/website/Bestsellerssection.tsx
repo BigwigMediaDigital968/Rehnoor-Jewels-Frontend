@@ -111,45 +111,75 @@ function QuickViewModal({
     const needsSize =
       product.sizes.length > 1 ||
       (product.sizes.length === 1 && product.sizes[0].label !== "Free");
+
     if (needsSize && !selectedSize) {
       setSizeError(true);
       setTimeout(() => setSizeError(false), 2000);
       return;
     }
+
+    // Determine the size string to use
+    const finalSizeLabel = selectedSize ?? product.sizes[0]?.label ?? "Free";
+
+    // Look up an existing matching variant object if your product details data structure supplies it,
+    // otherwise dynamically generate a snapshot payload for the selected size
+    const matchedVariant = product.variants?.find(
+      (v: any) => v.title === finalSizeLabel,
+    );
+
+    const variantSnapshot = {
+      variantId:
+        matchedVariant?._id ??
+        finalSizeLabel.toLowerCase().replace(/\s+/g, "-"),
+      title: finalSizeLabel,
+      options: { Size: finalSizeLabel },
+      price: matchedVariant?.price ?? product.price,
+      originalPrice:
+        matchedVariant?.originalPrice ?? product.originalPrice ?? null,
+      image: matchedVariant?.images?.[0]?.src ?? product.images[0]?.src ?? "",
+    };
+
     addToCart({
       productId: product._id,
       name: product.name,
       subtitle: product.subtitle,
       image: product.images[0]?.src ?? "",
-      price: fmt(product.price),
-      priceNum: product.price,
-      originalPrice: product.originalPrice
-        ? fmt(product.originalPrice)
-        : undefined,
-      size: selectedSize ?? product.sizes[0]?.label ?? "Free",
+      priceNum: matchedVariant?.price ?? product.price,
+      originalPriceNum:
+        matchedVariant?.originalPrice ?? product.originalPrice ?? null,
       qty,
       href: `/products/${product.slug}`,
       tag: product.tag,
+      variant: variantSnapshot, // Satisfies VariantSnapshot definition model
     });
+
     setAddedToCart(true);
     setTimeout(() => setAddedToCart(false), 2500);
   };
 
   const handleToggleWishlist = () => {
+    // Map your database Variants into the frontend VariantSnapshots
+    const formattedVariants = (product.variants || []).map((v: any) => ({
+      variantId: v._id,
+      title: v.title,
+      options: v.options || { Size: v.title },
+      price: v.price,
+      originalPrice: v.originalPrice ?? null,
+      image: v.images?.[0]?.src ?? product.images[0]?.src ?? "",
+    }));
+
     toggleItem({
       id: product._id,
       productId: product._id,
       name: product.name,
       subtitle: product.subtitle,
       image: product.images[0]?.src ?? "",
-      price: fmt(product.price),
       priceNum: product.price,
-      originalPrice: product.originalPrice
-        ? fmt(product.originalPrice)
-        : undefined,
+      originalPriceNum: product.originalPrice ?? null,
       href: `/products/${product.slug}`,
       category: product.category,
       tag: product.tag,
+      variants: formattedVariants, // Matches VariantSnapshot[] perfectly
     });
   };
 
@@ -638,21 +668,35 @@ function ProductCard({ product }: { product: ApiProduct }) {
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
+    // Map dynamic variant snapshots if product sizes or structural variants exist
+    const defaultSizeLabel = product.sizes?.[0]?.label ?? null;
+    let fallbackVariant = null;
+
+    if (defaultSizeLabel) {
+      fallbackVariant = {
+        variantId: defaultSizeLabel.toLowerCase().replace(/\s+/g, "-"),
+        title: defaultSizeLabel,
+        options: { Size: defaultSizeLabel },
+        price: product.price,
+        originalPrice: product.originalPrice ?? null,
+        image: product.images[0]?.src ?? "",
+      };
+    }
+
     addToCart({
       productId: product._id,
       name: product.name,
       subtitle: product.subtitle,
       image: product.images[0]?.src ?? "",
-      price: fmt(product.price),
       priceNum: product.price,
-      originalPrice: product.originalPrice
-        ? fmt(product.originalPrice)
-        : undefined,
-      size: product.sizes[0]?.label ?? "Free",
+      originalPriceNum: product.originalPrice ?? null,
       qty: 1,
       href: `/products/${product.slug}`,
       tag: product.tag,
+      variant: fallbackVariant, // Satisfies VariantSnapshot | null structure
     });
+
     setAddedToCart(true);
     setTimeout(() => setAddedToCart(false), 2000);
   };
@@ -660,20 +704,29 @@ function ProductCard({ product }: { product: ApiProduct }) {
   const handleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
+    // Map your database Variants into the frontend VariantSnapshots
+    const formattedVariants = (product.variants || []).map((v: any) => ({
+      variantId: v._id, // Maps your database structural _id to variantId
+      title: v.title,
+      options: v.options || { Size: v.title },
+      price: v.price,
+      originalPrice: v.originalPrice ?? null,
+      image: v.images?.[0]?.src ?? product.images[0]?.src ?? "",
+    }));
+
     toggleItem({
       id: product._id,
       productId: product._id,
       name: product.name,
       subtitle: product.subtitle,
       image: product.images[0]?.src ?? "",
-      price: fmt(product.price),
       priceNum: product.price,
-      originalPrice: product.originalPrice
-        ? fmt(product.originalPrice)
-        : undefined,
+      originalPriceNum: product.originalPrice ?? null,
       href: `/products/${product.slug}`,
       category: product.category,
       tag: product.tag,
+      variants: formattedVariants, // Matches VariantSnapshot[] perfectly
     });
   };
 
