@@ -14,6 +14,7 @@ import {
   Check,
   X,
   Package,
+  AlertCircle,
 } from "lucide-react";
 import {
   useWishlistStore,
@@ -157,22 +158,17 @@ function WishlistCard({
     setTimeout(() => removeItem(item.id), 300);
   };
 
-  // Triggered when an item HAS variants and one is selected
   const handleSelectVariant = (variantSnapshot: VariantSnapshot) => {
     setShowVariants(false);
     moveToCart(item.id, variantSnapshot, addToCart);
     setMovedToCart(true);
   };
 
-  // Triggered when clicking "Move to Cart" button directly
   const handleCartAction = () => {
     const availableVariants = item.variants || [];
-
     if (availableVariants.length > 0) {
-      // Product has variants -> toggle the selection list popover
       setShowVariants((prev) => !prev);
     } else {
-      // Product does NOT have variants -> push straight into the cart
       moveToCart(item.id, null, addToCart);
       setMovedToCart(true);
     }
@@ -394,61 +390,219 @@ function ShareWishlist() {
 }
 
 // ─────────────────────────────────────────────────────────────────
-// MOVE ALL TO CART
+// MOVE ALL TO CART WITH VARIANT SELECTOR
 // ─────────────────────────────────────────────────────────────────
 function MoveAllToCart() {
   const { items, clearAll } = useWishlistStore();
   const { addItem } = useCartStore();
   const [done, setDone] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
-  const handleMoveAll = () => {
+  // Map configuration container to remember user selection preferences
+  const [selectedVariants, setSelectedVariants] = useState<
+    Record<string, VariantSnapshot>
+  >({});
+
+  // Filter only pieces that contain multiple purchase tracks
+  const itemsWithVariants = items.filter(
+    (item) => item.variants && item.variants.length > 1,
+  );
+
+  const handleMoveAllClick = () => {
+    if (items.length === 0) return;
+
+    if (itemsWithVariants.length > 0) {
+      // Default populate selections array state with baseline options [0]
+      const baselineDefaults: Record<string, VariantSnapshot> = {};
+      itemsWithVariants.forEach((item) => {
+        if (item.variants && item.variants.length > 0) {
+          baselineDefaults[item.id] = item.variants[0];
+        }
+      });
+      setSelectedVariants(baselineDefaults);
+      setIsOpen(true);
+    } else {
+      executeTransfer();
+    }
+  };
+
+  const executeTransfer = () => {
     items.forEach((item) => {
-      // If the individual item has variant configuration models saved, use the first one as default
-      const defaultVariant =
-        item.variants && item.variants.length > 0 ? item.variants[0] : null;
+      const complexVariants = item.variants && item.variants.length > 1;
+      const chosenVariant = complexVariants
+        ? selectedVariants[item.id]
+        : item.variants && item.variants.length === 1
+          ? item.variants[0]
+          : null;
 
       addItem({
         productId: item.productId,
         name: item.name,
-        subtitle: defaultVariant ? defaultVariant.title : item.subtitle,
-        image: defaultVariant?.image || item.image,
-        priceNum: defaultVariant?.price || item.priceNum,
-        originalPriceNum: defaultVariant
-          ? defaultVariant.originalPrice
+        subtitle: chosenVariant ? chosenVariant.title : item.subtitle,
+        image: chosenVariant?.image || item.image,
+        priceNum: chosenVariant?.price || item.priceNum,
+        originalPriceNum: chosenVariant
+          ? chosenVariant.price
           : item.originalPriceNum,
         qty: 1,
         href: item.href,
         category: item.category,
         tag: item.tag,
-        variant: defaultVariant,
+        variant: chosenVariant,
       });
     });
+
     clearAll();
+    setIsOpen(false);
     setDone(true);
+    setTimeout(() => setDone(false), 2500);
   };
 
   return (
-    <button
-      onClick={handleMoveAll}
-      disabled={done}
-      className="flex items-center gap-2 font-cinzel text-[10px] tracking-widest uppercase px-4 py-2 rounded-full transition-all"
-      style={{
-        border: "1.5px solid var(--rj-emerald)",
-        color: done ? "#fff" : "var(--rj-emerald)",
-        background: done ? "var(--rj-emerald)" : "transparent",
-        cursor: done ? "default" : "pointer",
-      }}
-    >
-      {done ? (
-        <>
-          <Check size={11} /> Moved!
-        </>
-      ) : (
-        <>
-          <Package size={11} /> Move All to Cart
-        </>
-      )}
-    </button>
+    <>
+      <button
+        onClick={handleMoveAllClick}
+        disabled={done || items.length === 0}
+        className="flex items-center gap-2 font-cinzel text-[10px] tracking-widest uppercase px-4 py-2 rounded-full transition-all"
+        style={{
+          border: "1.5px solid var(--rj-emerald)",
+          color: done ? "#fff" : "var(--rj-emerald)",
+          background: done ? "var(--rj-emerald)" : "transparent",
+          cursor: done ? "default" : "pointer",
+        }}
+      >
+        {done ? (
+          <>
+            <Check size={11} /> Moved!
+          </>
+        ) : (
+          <>
+            <Package size={11} /> Move All to Cart
+          </>
+        )}
+      </button>
+
+      {/* Multi-Variant Choice Overlay Layer */}
+      <AnimatePresence>
+        {isOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.97, y: 8 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.97, y: 8 }}
+              className="w-full max-w-md overflow-hidden bg-white rounded-2xl shadow-xl flex flex-col"
+              style={{ border: "1px solid var(--rj-bone)" }}
+            >
+              {/* Overlay Modal Header */}
+              <div
+                className="p-5 border-b"
+                style={{ borderColor: "var(--rj-bone)" }}
+              >
+                <div
+                  className="flex items-center gap-2 mb-1"
+                  style={{ color: "var(--rj-gold)" }}
+                >
+                  <AlertCircle size={14} />
+                  <p className="font-cinzel text-[9px] tracking-widest uppercase font-bold">
+                    Options Selection Required
+                  </p>
+                </div>
+                <h3 className="font-cormorant text-xl font-light text-[var(--rj-charcoal)]">
+                  Choose options for your saved pieces
+                </h3>
+              </div>
+
+              {/* Items Render Queue */}
+              <div className="p-5 overflow-y-auto max-h-[50vh] flex flex-col gap-3.5">
+                {itemsWithVariants.map((item) => {
+                  const verifiedSelection = selectedVariants[item.id];
+                  return (
+                    <div
+                      key={item.id}
+                      className="flex gap-4 p-3 rounded-xl items-center"
+                      style={{
+                        background: "var(--rj-ivory-dark)",
+                        border: "1px solid var(--rj-bone)",
+                      }}
+                    >
+                      <div className="relative w-14 h-14 bg-stone-100 rounded-lg overflow-hidden flex-shrink-0">
+                        <Image
+                          src={verifiedSelection?.image || item.image}
+                          alt={item.name}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-cormorant text-base leading-tight truncate text-[var(--rj-charcoal)]">
+                          {item.name}
+                        </h4>
+                        <p
+                          className="font-cinzel text-[10px] font-bold mt-0.5"
+                          style={{ color: "var(--rj-emerald)" }}
+                        >
+                          {fmtPrice(verifiedSelection?.price || item.priceNum)}
+                        </p>
+
+                        {/* Interactive Picker Select Option */}
+                        <div className="mt-2">
+                          <select
+                            value={verifiedSelection?.variantId || ""}
+                            onChange={(e) => {
+                              const match = item.variants?.find(
+                                (v) => v.variantId === e.target.value,
+                              );
+                              if (match) {
+                                setSelectedVariants((prev) => ({
+                                  ...prev,
+                                  [item.id]: match,
+                                }));
+                              }
+                            }}
+                            className="w-full bg-white font-cinzel text-[9px] tracking-wider px-2.5 py-1.5 rounded-md outline-none border transition-all cursor-pointer"
+                            style={{
+                              borderColor: "var(--rj-bone)",
+                              color: "var(--rj-charcoal)",
+                            }}
+                          >
+                            {item.variants?.map((v) => (
+                              <option key={v.variantId} value={v.variantId}>
+                                {v.title} — {fmtPrice(v.price)}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Action Operations Footer panel */}
+              <div
+                className="p-4 bg-stone-50 border-t flex items-center justify-end gap-2"
+                style={{ borderColor: "var(--rj-bone)" }}
+              >
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="font-cinzel text-[9px] tracking-widest uppercase px-4 py-2.5 rounded-lg hover:opacity-60 transition-opacity"
+                  style={{ color: "var(--rj-ash)" }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={executeTransfer}
+                  className="font-cinzel text-[9px] tracking-widest uppercase px-5 py-2.5 rounded-lg font-bold text-white transition-opacity hover:opacity-90"
+                  style={{ background: "var(--rj-emerald)" }}
+                >
+                  Confirm & Move All
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 
