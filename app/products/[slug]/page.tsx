@@ -35,33 +35,6 @@ function extractCollection(collection: any, category?: string) {
   return { slug: "new-arrivals", name: "Collection" };
 }
 
-// function toProduct(p: any): Product {
-//   return {
-//     id: p._id,
-//     name: p.name,
-//     subtitle: p.subtitle,
-//     price: p.priceFormatted ?? `₹${p.price.toLocaleString("en-IN")}`,
-//     originalPrice: p.originalPriceFormatted ?? undefined,
-//     tag: p.tag,
-//     rating: p.rating,
-//     reviewCount: p.reviewCount,
-//     category: p.category,
-//     description: p.longDescription || "",
-//     shortDescription: p.shortDescription || "",
-//     href: `/products/${p.slug}`,
-//     images: p.images,
-//     sizes: p.sizes,
-//     offerBannerImage: p.offerBannerImage,
-//     sizeChartImage: p.sizeChartImage,
-//     ourPromise: p.ourPromise,
-//     specifications: p.specifications || [],
-//   };
-// }
-
-// ─────────────────────────────────────────────────────────────────
-// STATIC PARAMS
-// ─────────────────────────────────────────────────────────────────
-
 function toProduct(p: any): Product {
   return {
     id: p._id,

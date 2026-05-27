@@ -123,7 +123,7 @@ export default function HomePage() {
         <BrandStorySection />
         <TestimonialsSection />
         <WhyChoose />
-        {/* <HomeBlogSection /> */}
+        <HomeBlogSection />
         {/* <InstagramSection /> */}
         <FAQs {...homeFAQProps} />
         {/* <PopularSearch /> */}

@@ -689,7 +689,7 @@ function BlogCard({
     >
       {/* Image */}
       <Link
-        href={`/blog/${post.slug}`}
+        href={`/blogs/${post.slug}`}
         className="block overflow-hidden flex-shrink-0"
       >
         <div
@@ -763,7 +763,7 @@ function BlogCard({
         </div>
 
         {/* Title */}
-        <Link href={`/blog/${post.slug}`}>
+        <Link href={`/blogs/${post.slug}`}>
           <h2
             className="font-cormorant font-light leading-tight mb-2 transition-colors duration-250 line-clamp-2"
             style={{

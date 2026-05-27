@@ -127,7 +127,7 @@ function processContent(html: string): {
   const slugMap = new Map<string, number>();
 
   const processedHtml = html.replace(
-    /<(h[23])([\s>])(.*?)<\/h[23]>/gi,
+    /<(h[2])([\s>])(.*?)<\/h[2]>/gi,
     (match, tag, rest, inner) => {
       const level = parseInt(tag[1]);
       const text = inner.replace(/<[^>]+>/g, "").trim();
@@ -213,7 +213,7 @@ function TableOfContents({ headings }: { headings: TocHeading[] }) {
             <button
               key={id}
               onClick={() => scrollTo(id)}
-              className="text-left transition-all duration-200 rounded-lg px-3 py-2 group"
+              className="text-left transition-all duration-200 rounded-lg px-3 py-2 group text-inherit"
               style={{
                 paddingLeft: level === 3 ? "1.25rem" : "0.75rem",
                 background: isActive ? "rgba(0,55,32,0.06)" : "transparent",
@@ -221,15 +221,16 @@ function TableOfContents({ headings }: { headings: TocHeading[] }) {
               }}
             >
               <span
-                className="font-cinzel text-[10px] tracking-wide leading-snug block"
+                className="font-cinzel text-[10px] tracking-wide leading-snug block transition-colors duration-200"
                 style={{
-                  color: isActive ? "var(--rj-emerald)" : "var(--rj-ash)",
+                  color: isActive
+                    ? "var(--rj-emerald) !important"
+                    : "var(--rj-ash)",
                   fontWeight: isActive ? 700 : 400,
-                  transition: "color 0.2s",
                 }}
               >
                 {level === 3 && (
-                  <ChevronRight size={9} className="inline mr-1 opacity-40" />
+                  <ChevronRight size={9} className="inline mr-1" />
                 )}
                 {text}
               </span>
@@ -918,7 +919,7 @@ export default function BlogDetailLayout({ slug }: BlogDetailLayoutProps) {
 
       {/* ── Main layout: article + sidebar ── */}
       <div className="container-rj py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-12 items-start">
           {/* ── Article body ── */}
           <motion.div
             ref={contentRef}
@@ -975,8 +976,10 @@ export default function BlogDetailLayout({ slug }: BlogDetailLayoutProps) {
           </motion.div>
 
           {/* ── Sticky Sidebar ── */}
-          <aside className="hidden lg:block">
-            <div className="sticky top-24 flex flex-col">
+          {/* Added h-full to make sure the container occupies the vertical grid lane track layout */}
+          <aside className="hidden lg:block h-full">
+            {/* Added space-y-6 to prevent standard element margins from collapsing while sticky tracks */}
+            <div className="sticky top-24 flex flex-col space-y-6">
               <TableOfContents headings={headings} />
               <SidebarNewsletter />
 
