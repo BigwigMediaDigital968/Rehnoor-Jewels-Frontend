@@ -1,9 +1,7 @@
-// component/website/checkout/shared/OrderSummaryPanel.tsx
 "use client";
 import Image from "next/image";
-import { motion } from "framer-motion";
 import { Tag, X, Check, Lock, ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Tooltip from "../../shared/Tooltip";
 import { useCheckoutStore } from "@/app/store/checkoutStore";
@@ -30,48 +28,55 @@ const SHIPPING_LABEL: Record<string, string> = {
 };
 
 export default function OrderSummaryPanel() {
-  const { items, subtotal, savings } = useCartStore();
+  // 1. Pull current active properties & setters directly from Cart Store
+  const {
+    checkoutItems,
+    subtotal,
+    savings,
+    coupon: cartCoupon,
+    applyCoupon: applyCartCoupon,
+    removeCoupon: removeCartCoupon,
+  } = useCartStore();
+
   const {
     shippingMethod,
-    couponApplied,
-    couponCode,
-    couponDiscount,
-    clearCoupon,
-    setCoupon,
+    setCoupon: setCheckoutCoupon,
+    clearCoupon: clearCheckoutCoupon,
   } = useCheckoutStore();
+
   const [couponInput, setCouponInput] = useState("");
   const [couponErr, setCouponErr] = useState("");
   const [couponLoad, setCouponLoad] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
 
+  // Compute values dynamically
+  const activeItems = checkoutItems();
   const sub = subtotal();
   const save = savings();
   const ship = SHIPPING_COST[shippingMethod] ?? 0;
-  const discount = couponDiscount;
+
+  // Deriving active validation from cart store settings
+  const isCouponApplied = !!cartCoupon?.code;
+  const activeCouponCode = cartCoupon?.code || "";
+  const discount = cartCoupon?.discountAmount ?? 0;
   const total = Math.max(0, sub - discount + ship);
 
-  // const applyCoupon = async () => {
-  //   const code = couponInput.trim().toUpperCase();
-  //   if (!code) return;
-  //   setCouponLoad(true);
-  //   setCouponErr("");
-  //   // Client-side demo — replace with real API call from lib/api/orders.ts
-  //   await new Promise((r) => setTimeout(r, 700));
-  //   const DEMO: Record<string, number> = {
-  //     GOLD10: 500,
-  //     REHNOOR20: 1000,
-  //     FIRST15: 750,
-  //   };
-  //   if (DEMO[code]) {
-  //     setCoupon(code, DEMO[code]);
-  //     setCouponInput("");
-  //   } else {
-  //     setCouponErr("Invalid code. Try GOLD10");
-  //   }
-  //   setCouponLoad(false);
-  // };
+  // Keep CheckoutStore dynamically synchronized with changes originating from the Cart page
+  useEffect(() => {
+    if (isCouponApplied) {
+      setCheckoutCoupon(activeCouponCode, discount);
+    } else {
+      clearCheckoutCoupon();
+    }
+  }, [
+    isCouponApplied,
+    activeCouponCode,
+    discount,
+    setCheckoutCoupon,
+    clearCheckoutCoupon,
+  ]);
 
-  const applyCoupon = async () => {
+  const handleApplyCoupon = async () => {
     const code = couponInput.trim().toUpperCase();
     if (!code) return;
 
@@ -79,7 +84,7 @@ export default function OrderSummaryPanel() {
     setCouponErr("");
 
     try {
-      const res = await validateCoupon(code, sub, items.length);
+      const res = await validateCoupon(code, sub, activeItems.length);
 
       if (!res.success || !res.coupon) {
         setCouponErr(res.message || "Invalid coupon code.");
@@ -87,15 +92,19 @@ export default function OrderSummaryPanel() {
       }
 
       const discountAmount = res.discountAmount ?? 0;
+      const discountType = res.coupon.discountType;
+      const discountValue = res.coupon.discountValue ?? 0;
 
-      // Free shipping coupon: discount is 0 but shipping is waived.
-      // We surface this in the UI as "Free Shipping" rather than ₹0 off.
-      if (res.coupon.discountType === "free_shipping") {
-        setCoupon(code, 0); // no monetary discount
-        // Optionally: setFreeShipping(true) if your store has that flag
-      } else {
-        setCoupon(code, discountAmount);
-      }
+      const finalDiscount =
+        discountType === "free_shipping" ? 0 : discountAmount;
+
+      // Update centralized data store configurations globally
+      applyCartCoupon({
+        code,
+        discountAmount: finalDiscount,
+        discountType: discountType as any,
+        discountValue,
+      });
 
       setCouponInput("");
     } catch {
@@ -103,6 +112,11 @@ export default function OrderSummaryPanel() {
     } finally {
       setCouponLoad(false);
     }
+  };
+
+  const handleClearCoupon = () => {
+    removeCartCoupon();
+    clearCheckoutCoupon();
   };
 
   return (
@@ -120,7 +134,8 @@ export default function OrderSummaryPanel() {
           className="font-cinzel text-xs tracking-widest uppercase font-bold"
           style={{ color: "var(--rj-gold)" }}
         >
-          ✦ Order Summary ({items.length} item{items.length !== 1 ? "s" : ""})
+          ✦ Order Summary ({activeItems.length} item
+          {activeItems.length !== 1 ? "s" : ""})
         </p>
         <div className="flex items-center gap-2">
           <span
@@ -142,9 +157,9 @@ export default function OrderSummaryPanel() {
 
       {!collapsed && (
         <div className="p-5 flex flex-col gap-4">
-          {/* Items */}
+          {/* Items Map */}
           <div className="flex flex-col gap-3">
-            {items.map((item) => (
+            {activeItems.map((item) => (
               <div key={item.id} className="flex items-start gap-3">
                 <div
                   className="relative w-14 h-14 rounded-lg overflow-hidden flex-shrink-0"
@@ -172,12 +187,22 @@ export default function OrderSummaryPanel() {
                   >
                     {item.name}
                   </p>
-                  <p
-                    className="font-cinzel text-[9px] tracking-wider mt-0.5"
-                    style={{ color: "var(--rj-ash)" }}
-                  >
-                    Size: {item.size}
-                  </p>
+
+                  {item.variant ? (
+                    <p
+                      className="font-cinzel text-[9px] tracking-wider mt-0.5"
+                      style={{ color: "var(--rj-ash)" }}
+                    >
+                      {item.variant.title}
+                    </p>
+                  ) : item.subtitle ? (
+                    <p
+                      className="font-cinzel text-[9px] tracking-wider mt-0.5"
+                      style={{ color: "var(--rj-ash)" }}
+                    >
+                      {item.subtitle}
+                    </p>
+                  ) : null}
                 </div>
                 <p
                   className="font-cinzel font-bold text-xs flex-shrink-0"
@@ -191,8 +216,8 @@ export default function OrderSummaryPanel() {
 
           <div className="h-px" style={{ background: "var(--rj-bone)" }} />
 
-          {/* Coupon */}
-          {!couponApplied ? (
+          {/* Coupon Input */}
+          {!isCouponApplied ? (
             <div>
               <div className="flex gap-2">
                 <div className="relative flex-1">
@@ -208,7 +233,7 @@ export default function OrderSummaryPanel() {
                       setCouponInput(e.target.value.toUpperCase());
                       setCouponErr("");
                     }}
-                    onKeyDown={(e) => e.key === "Enter" && applyCoupon()}
+                    onKeyDown={(e) => e.key === "Enter" && handleApplyCoupon()}
                     placeholder="Coupon code"
                     className="w-full pl-8 pr-3 py-2 font-cinzel text-xs tracking-wider outline-none rounded-lg"
                     style={{
@@ -220,7 +245,7 @@ export default function OrderSummaryPanel() {
                 </div>
                 <Tooltip content="Apply coupon code">
                   <button
-                    onClick={applyCoupon}
+                    onClick={handleApplyCoupon}
                     disabled={!couponInput.trim() || couponLoad}
                     className="px-3 py-2 rounded-lg font-cinzel text-[9px] tracking-widest uppercase font-bold transition-all disabled:opacity-40"
                     style={{
@@ -256,11 +281,14 @@ export default function OrderSummaryPanel() {
                   className="font-cinzel text-[10px] font-bold"
                   style={{ color: "var(--rj-emerald)" }}
                 >
-                  {couponCode} — {fmt(discount)} off
+                  {activeCouponCode} — {fmt(discount)} off
                 </span>
               </div>
               <Tooltip content="Remove coupon">
-                <button onClick={clearCoupon} style={{ cursor: "pointer" }}>
+                <button
+                  onClick={handleClearCoupon}
+                  style={{ cursor: "pointer" }}
+                >
                   <X size={12} style={{ color: "var(--rj-ash)" }} />
                 </button>
               </Tooltip>
@@ -284,7 +312,7 @@ export default function OrderSummaryPanel() {
             ...(discount > 0
               ? [
                   {
-                    label: `Coupon (${couponCode})`,
+                    label: `Coupon (${activeCouponCode})`,
                     value: `-${fmt(discount)}`,
                     green: true,
                   },

@@ -73,15 +73,6 @@ export default function ProductDetailWrapper({
   const addItem = useCartStore((s) => s.addItem);
   const resetCheckout = useCheckoutStore((s) => s.reset);
 
-  /**
-   * size   — selected size label (or "" for no-size products)
-   * qty    — quantity
-   * variantId — _id of the chosen variant (undefined for no-variant products)
-   *
-   * Price resolution order:
-   *  1. selectedVariant.price  (number from API)
-   *  2. product.price string   (fallback for no-variant products)
-   */
   const handleAddToCart = (size: string, qty: number, variantId?: string) => {
     // Find the matching variant if one was passed
     const variant = variantId

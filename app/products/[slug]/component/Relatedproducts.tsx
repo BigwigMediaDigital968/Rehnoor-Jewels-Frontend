@@ -201,7 +201,7 @@ function RelatedCard({ product }: { product: Product }) {
 
         <button
           onClick={handleWishlist}
-          className="absolute top-2.5 right-2.5 z-10 w-7 h-7 rounded-full flex items-center justify-center transition-all hover:scale-110"
+          className="absolute top-2.5 right-2.5 z-90 w-7 h-7 rounded-full flex items-center justify-center transition-all hover:scale-110"
           style={{
             background: wishlisted
               ? "rgba(252,193,81,0.15)"

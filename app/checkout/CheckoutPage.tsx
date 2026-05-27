@@ -28,9 +28,8 @@ import {
   StepPayment,
   StepReview,
 } from "../component/steps/CheckoutSteps";
-import { PlaceOrderPayloadV2, PlaceOrderResponse } from "../lib/api/orders";
 
-// ─── Order success screen ─────────────────────────────────────────────────────
+// ─── Order success ─────────────────────────────────────────────────────────────
 
 function OrderSuccess({
   orderNumber,
@@ -58,7 +57,6 @@ function OrderSuccess({
       style={{ background: "var(--rj-ivory)" }}
     >
       <div className="max-w-md w-full flex flex-col items-center text-center">
-        {/* Animated circle */}
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
@@ -104,7 +102,6 @@ function OrderSuccess({
               : "Payment confirmed. Your gold is being prepared with care and will be dispatched soon."}
           </p>
 
-          {/* COD reminder */}
           {isCod && (
             <div
               className="flex items-start gap-3 p-4 rounded-xl mb-4 text-left"
@@ -135,14 +132,12 @@ function OrderSuccess({
                   <strong style={{ color: "var(--rj-charcoal)" }}>
                     ₹{(total ?? 0).toLocaleString("en-IN")}
                   </strong>{" "}
-                  ready at the time of delivery. Payment is collected by the
-                  courier partner.
+                  ready at the time of delivery.
                 </p>
               </div>
             </div>
           )}
 
-          {/* Order number */}
           <div
             className="flex items-center justify-between gap-3 px-5 py-3.5 rounded-xl mb-6"
             style={{
@@ -224,12 +219,10 @@ function OrderSuccess({
   );
 }
 
-// ─── Payment stage overlay ────────────────────────────────────────────────────
-// Shown while Razorpay modal is open or verification is running
+// ─── Payment overlay ───────────────────────────────────────────────────────────
 
 function PaymentStageOverlay({ stage }: { stage: string }) {
   const isVerifying = stage === "verifying";
-
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -268,7 +261,7 @@ function PaymentStageOverlay({ stage }: { stage: string }) {
   );
 }
 
-// ─── Error banner ─────────────────────────────────────────────────────────────
+// ─── Error banner ──────────────────────────────────────────────────────────────
 
 function CheckoutErrorBanner({
   message,
@@ -321,11 +314,18 @@ function CheckoutErrorBanner({
   );
 }
 
-// ─── Main checkout shell ──────────────────────────────────────────────────────
+// ─── Main checkout shell ───────────────────────────────────────────────────────
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { items, clearCart } = useCartStore();
+
+  // ── Cart store ───────────────────────────────────────────────────────────────
+  const items = useCartStore((s) => s.items);
+  const checkoutItems = useCartStore((s) => s.checkoutItems);
+  const clearCart = useCartStore((s) => s.clearCart);
+  const clearBuyNow = useCartStore((s) => s.clearBuyNow);
+
+  // ── Checkout form store ──────────────────────────────────────────────────────
   const {
     step,
     nextStep,
@@ -338,13 +338,13 @@ export default function CheckoutPage() {
     paymentMethod,
     couponApplied,
     couponCode,
-    couponDiscount,
     customerNote,
     giftMessage,
     isGift,
     reset: resetCheckout,
   } = useCheckoutStore();
 
+  // ── Razorpay hook ────────────────────────────────────────────────────────────
   const {
     stage,
     error,
@@ -353,8 +353,6 @@ export default function CheckoutPage() {
     reset: resetPayment,
   } = useRazorpayCheckout();
 
-  console.log(result);
-
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -362,24 +360,25 @@ export default function CheckoutPage() {
     setMounted(true);
   }, []);
 
-  // Redirect if cart is empty (and not just succeeded)
+  // Redirect to cart when cart is empty and no pending success
   useEffect(() => {
     if (mounted && items.length === 0 && !result) {
       router.replace("/cart");
     }
   }, [mounted, items.length, result, router]);
 
-  // Clear cart + store after success
+  // Clear state after successful order
   useEffect(() => {
     if (stage === "success" && result) {
-      clearCart();
+      clearCart(); // clears items + buyNowItems + coupon
+      clearBuyNow(); // safety net — clearCart already does this
       resetCheckout();
     }
-  }, [stage, result, clearCart, resetCheckout]);
+  }, [stage, result, clearCart, clearBuyNow, resetCheckout]);
 
   if (!mounted) return null;
 
-  // ── Success screen ──────────────────────────────────────────────────────────
+  // ── Success screen ───────────────────────────────────────────────────────────
   if (stage === "success" && result) {
     return (
       <OrderSuccess
@@ -390,63 +389,66 @@ export default function CheckoutPage() {
     );
   }
 
-  // ── Place order ─────────────────────────────────────────────────────────────
-  //   const handlePlaceOrder = async (
-  //   payload: PlaceOrderPayloadV2,
-  // ): Promise<PlaceOrderResponse> => {
-  //     await initiate({
-  //       customerName: contact.name,
-  //       customerEmail: contact.email,
-  //       customerPhone: contact.phone,
-  //       items: items.map((i) => ({
-  //         productId: i.productId,
-  //         quantity: i.qty,
-  //         sizeSelected: i.size,
-  //         customNote: i.customNote,
-  //       })),
-  //       shippingAddress: {
-  //         fullName: address.fullName,
-  //         phone: address.phone,
-  //         addressLine1: address.addressLine1,
-  //         addressLine2: address.addressLine2,
-  //         city: address.city,
-  //         state: address.state,
-  //         pincode: address.pincode,
-  //         country: address.country || "India",
-  //         landmark: address.landmark,
-  //       },
-  //       billingAddress: billingDiff
-  //         ? {
-  //             fullName: billingAddress.fullName,
-  //             phone: billingAddress.phone,
-  //             addressLine1: billingAddress.addressLine1,
-  //             addressLine2: billingAddress.addressLine2,
-  //             city: billingAddress.city,
-  //             state: billingAddress.state,
-  //             pincode: billingAddress.pincode,
-  //             country: billingAddress.country || "India",
-  //             landmark: billingAddress.landmark,
-  //           }
-  //         : undefined,
-  //       billingSameAsShipping: !billingDiff,
-  //       paymentMethod: paymentMethod as "cod" | "razorpay",
-  //       couponCode: couponApplied ? couponCode : null,
-  //       customerNote,
-  //       giftMessage,
-  //       isGift,
-  //       source: "website",
-  //     });
-  //   };
+  // ── Place order handler ──────────────────────────────────────────────────────
+  // const handlePlaceOrder = async (): Promise<void> => {
+  //   await initiate({
+  //     customerName: contact.name,
+  //     customerEmail: contact.email,
+  //     customerPhone: contact.phone,
+  //     // checkoutItems() returns buyNowItems when active, else the full cart
+  //     items: checkoutItems().map((i) => ({
+  //       productId: i.productId,
+  //       variantId: i.variant?.variantId, // undefined → server uses base product price
+  //       quantity: i.qty,
+  //       customNote: i.customNote,
+  //     })),
+  //     shippingAddress: {
+  //       fullName: address.fullName,
+  //       phone: address.phone,
+  //       addressLine1: address.addressLine1,
+  //       addressLine2: address.addressLine2,
+  //       city: address.city,
+  //       state: address.state,
+  //       pincode: address.pincode,
+  //       country: address.country || "India",
+  //       landmark: address.landmark,
+  //     },
+  //     billingAddress: billingDiff
+  //       ? {
+  //           fullName: billingAddress.fullName,
+  //           phone: billingAddress.phone,
+  //           addressLine1: billingAddress.addressLine1,
+  //           addressLine2: billingAddress.addressLine2,
+  //           city: billingAddress.city,
+  //           state: billingAddress.state,
+  //           pincode: billingAddress.pincode,
+  //           country: billingAddress.country || "India",
+  //           landmark: billingAddress.landmark,
+  //         }
+  //       : undefined,
+  //     billingSameAsShipping: !billingDiff,
+  //     paymentMethod: paymentMethod as "cod" | "razorpay",
+  //     couponCode: couponApplied ? couponCode : null,
+  //     customerNote,
+  //     giftMessage,
+  //     isGift,
+  //     source: "website",
+  //   });
+  // };
 
+  // Inside CheckoutPage component code:
   const handlePlaceOrder = async (): Promise<void> => {
+    // Grab the coupon code directly from the cart store to ensure it matches the summary panel
+    const activeCartCoupon = useCartStore.getState().coupon.code;
+
     await initiate({
       customerName: contact.name,
       customerEmail: contact.email,
       customerPhone: contact.phone,
-      items: items.map((i) => ({
+      items: checkoutItems().map((i) => ({
         productId: i.productId,
+        variantId: i.variant?.variantId,
         quantity: i.qty,
-        sizeSelected: i.size,
         customNote: i.customNote,
       })),
       shippingAddress: {
@@ -476,8 +478,8 @@ export default function CheckoutPage() {
       billingSameAsShipping: !billingDiff,
       paymentMethod: paymentMethod as "cod" | "razorpay",
 
-      // ✅ correct
-      couponCode: couponApplied ? couponCode : null,
+      // FIX: Read directly from the updated cart state fallback
+      couponCode: activeCartCoupon || null,
 
       customerNote,
       giftMessage,
@@ -501,13 +503,12 @@ export default function CheckoutPage() {
       onBack={prevStep}
       onPlaceOrder={handlePlaceOrder}
       loading={isProcessing}
-      error={""} // we handle error below
+      error=""
     />,
   ];
 
   return (
     <>
-      {/* Overlay during payment processing */}
       <AnimatePresence>
         {(stage === "awaiting_payment" || stage === "verifying") && (
           <PaymentStageOverlay stage={stage} />
@@ -515,7 +516,6 @@ export default function CheckoutPage() {
       </AnimatePresence>
 
       <main style={{ background: "var(--rj-ivory)", minHeight: "100vh" }}>
-        {/* Header */}
         <div
           style={{
             background: "var(--rj-emerald)",
@@ -572,7 +572,6 @@ export default function CheckoutPage() {
                   boxShadow: "0 4px 24px rgba(0,0,0,0.05)",
                 }}
               >
-                {/* Error banner — shown above last step */}
                 <AnimatePresence>
                   {stage === "error" && error && (
                     <CheckoutErrorBanner
@@ -581,7 +580,6 @@ export default function CheckoutPage() {
                     />
                   )}
                 </AnimatePresence>
-
                 <AnimatePresence mode="wait">
                   {stepComponents[step - 1]}
                 </AnimatePresence>
