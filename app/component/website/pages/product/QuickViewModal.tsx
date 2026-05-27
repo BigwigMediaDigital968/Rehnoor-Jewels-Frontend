@@ -233,125 +233,94 @@ export default function QuickViewModal({
           <div className="flex flex-col sm:grid sm:grid-cols-2">
             {/* ── LEFT: Image panel ── */}
             <div
-              className="relative overflow-hidden flex-shrink-0"
+              className="relative w-full h-full min-h-[340px] sm:min-h-[460px] md:min-h-[520px] flex-shrink-0 overflow-hidden"
               style={{
-                height: "min(56vw, 320px)",
-                minHeight: "220px",
                 background: "var(--rj-ivory-dark)",
-                // borderRadius: "20px 20px 0 0",
               }}
             >
-              <style>{`
-                @media (min-width: 640px) {
-                  [data-qv="img-panel"] {
-                    height: 100% !important;
-                    min-height: 420px !important;
-                    
-                  }
-                }
-              `}</style>
-              <div
-                data-qv="img-panel"
-                className="absolute inset-0"
-                style={{
-                  height: "min(56vw, 320px)",
-                  minHeight: "220px",
-                  background: "var(--rj-ivory-dark)",
-                  // borderRadius: "20px 20px 0 0",
-                  overflow: "hidden",
-                }}
-              >
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={imgIdx}
-                    initial={{ opacity: 0, x: 16 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -16 }}
-                    transition={{ duration: 0.26 }}
-                    className="absolute inset-0"
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={imgIdx}
+                  initial={{ opacity: 0, x: 16 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -16 }}
+                  transition={{ duration: 0.26 }}
+                  className="absolute inset-0 w-full h-full"
+                >
+                  <Image
+                    src={product.images[imgIdx].src}
+                    alt={product.images[imgIdx].alt}
+                    fill
+                    className="object-cover object-center"
+                    sizes="(max-width: 640px) 100vw, 50vw"
+                    priority
+                  />
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Tag Label */}
+              {product.tag && (
+                <div className="absolute top-4 left-4 z-10 pointer-events-none">
+                  <span
+                    className="font-cinzel text-[8px] font-bold tracking-widest px-2.5 py-1 rounded-full shadow-md"
+                    style={TAG_STYLES[product.tag] || TAG_STYLES.New}
                   >
-                    <Image
-                      src={product.images[imgIdx].src}
-                      alt={product.images[imgIdx].alt}
-                      fill
-                      className="object-cover object-center"
-                      sizes="(max-width: 640px) 100vw, 50vw"
-                      priority
-                    />
-                  </motion.div>
-                </AnimatePresence>
+                    {product.tag}
+                  </span>
+                </div>
+              )}
 
-                {product.tag && (
-                  <div className="absolute top-3 left-3 z-10">
-                    <span
-                      className="font-cinzel text-[8px] font-bold tracking-widest px-2.5 py-1 rounded-full shadow-sm"
-                      style={TAG_STYLES[product.tag] || TAG_STYLES.New}
-                    >
-                      {product.tag}
-                    </span>
-                  </div>
-                )}
+              {/* Slider Arrow Controls */}
+              {product.images.length > 1 && (
+                <>
+                  <button
+                    onClick={prevImg}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full flex items-center justify-center transition-all bg-white/90 text-[var(--rj-charcoal)] hover:scale-105 active:scale-95 shadow-md"
+                    style={{ cursor: "pointer" }}
+                    aria-label="Previous image"
+                  >
+                    <ChevronLeft size={15} />
+                  </button>
+                  <button
+                    onClick={nextImg}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full flex items-center justify-center transition-all bg-white/90 text-[var(--rj-charcoal)] hover:scale-105 active:scale-95 shadow-md"
+                    style={{ cursor: "pointer" }}
+                    aria-label="Next image"
+                  >
+                    <ChevronRight size={15} />
+                  </button>
+                </>
+              )}
 
-                {product.images.length > 1 && (
-                  <>
+              {/* Bottom Row Miniature Pagination Thumbnails */}
+              {product.images.length > 1 && (
+                <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-10 px-4 drop-shadow-sm">
+                  {product.images.map((img, i) => (
                     <button
-                      onClick={prevImg}
-                      className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-105 active:scale-95"
+                      key={i}
+                      onClick={() => setImgIdx(i)}
+                      className="relative rounded-lg overflow-hidden transition-all duration-200 flex-shrink-0"
                       style={{
-                        background: "rgba(255,255,255,0.92)",
-                        color: "var(--rj-charcoal)",
-                        boxShadow: "0 2px 12px rgba(0,0,0,0.15)",
+                        width: 42,
+                        height: 42,
+                        border: `2px solid ${i === imgIdx ? "var(--rj-emerald)" : "rgba(255, 255, 255, 0.4)"}`,
+                        opacity: i === imgIdx ? 1 : 0.75,
                         cursor: "pointer",
+                        background: "var(--rj-ivory-dark)",
                       }}
-                      aria-label="Previous image"
+                      aria-label={`View image ${i + 1}`}
                     >
-                      <ChevronLeft size={15} />
+                      <Image
+                        src={img.src}
+                        alt={img.alt}
+                        fill
+                        className="object-cover"
+                        sizes="42px"
+                      />
                     </button>
-                    <button
-                      onClick={nextImg}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-105 active:scale-95"
-                      style={{
-                        background: "rgba(255,255,255,0.92)",
-                        color: "var(--rj-charcoal)",
-                        boxShadow: "0 2px 12px rgba(0,0,0,0.15)",
-                        cursor: "pointer",
-                      }}
-                      aria-label="Next image"
-                    >
-                      <ChevronRight size={15} />
-                    </button>
-                  </>
-                )}
-
-                {product.images.length > 1 && (
-                  <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-2 z-10 px-4">
-                    {product.images.map((img, i) => (
-                      <button
-                        key={i}
-                        onClick={() => setImgIdx(i)}
-                        className="relative rounded-lg overflow-hidden transition-all duration-200 flex-shrink-0"
-                        style={{
-                          width: 44,
-                          height: 44,
-                          border: `2px solid ${i === imgIdx ? "var(--rj-emerald)" : "rgba(255,255,255,0.5)"}`,
-                          opacity: i === imgIdx ? 1 : 0.65,
-                          cursor: "pointer",
-                          background: "var(--rj-ivory-dark)",
-                        }}
-                        aria-label={`View image ${i + 1}`}
-                      >
-                        <Image
-                          src={img.src}
-                          alt={img.alt}
-                          fill
-                          className="object-cover"
-                          sizes="44px"
-                        />
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* ── RIGHT: Product details ── */}
