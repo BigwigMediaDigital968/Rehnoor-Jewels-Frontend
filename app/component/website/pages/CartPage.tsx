@@ -687,7 +687,7 @@ function OrderSummary() {
         <button
           onClick={handleCheckout}
           disabled={validating || activeItems.length === 0}
-          className="btn-primary inline-flex"
+          className="btn-primary inline-flex w-full justify-center"
           style={{
             display: "inline-flex",
             background: "var(--gradient-gold)",
@@ -738,7 +738,7 @@ function OrderSummary() {
             {
               icon: <RefreshCw size={12} />,
               label: "Returns",
-              tip: "Free 30-day returns",
+              tip: "Free 07-day returns",
             },
             {
               icon: <Truck size={12} />,

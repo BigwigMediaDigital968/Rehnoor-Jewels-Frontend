@@ -732,21 +732,37 @@ export default function ProductCard({ product }: { product: Product }) {
         {/* ── Card body ── */}
         <Link href={product.href} className="flex flex-col flex-1 p-4">
           <h3
-            className="font-cormorant font-light leading-tight mb-1 line-clamp-2 group-hover:text-[var(--rj-emerald)] transition-colors duration-300"
+            className="font-cormorant font-light leading-tight mb-1 group-hover:text-[var(--rj-emerald)] transition-colors duration-300"
             style={{
               fontSize: "clamp(1rem, 1.8vw, 1.2rem)",
               color: "var(--rj-charcoal)",
               letterSpacing: "-0.01em",
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
             }}
           >
-            {product.name}
+            {product.name.length > 60 ? (
+              <>
+                {product.name.slice(0, 57).trim()}
+                <span
+                  className="font-sans text-[0.8em] tracking-normal font-bold select-none ml-0.5"
+                  style={{ color: "var(--rj-gold)" }}
+                >
+                  ***
+                </span>
+              </>
+            ) : (
+              product.name
+            )}
           </h3>
-          <p
+          {/* <p
             className="hidden md:block font-body text-xs mb-3"
             style={{ color: "var(--rj-ash)" }}
           >
             {product.subtitle}
-          </p>
+          </p> */}
 
           {product.rating && (
             <div className="flex items-center gap-1.5 mb-3">

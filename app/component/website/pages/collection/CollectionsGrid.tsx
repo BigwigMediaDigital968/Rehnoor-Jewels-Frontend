@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -136,7 +136,7 @@ function EmptyState({
         {query ? `No results for "${query}"` : "No collections found"}
       </p>
       <p className="font-cinzel text-white/30 text-[11px] tracking-widest uppercase mb-6">
-        Try a different collection name or tag
+        Try a different collection name, tag, or gender track
       </p>
       <button
         onClick={onClear}
@@ -177,11 +177,10 @@ function CollectionCard({ col, index }: { col: ApiCollection; index: number }) {
       onMouseLeave={() => setHovered(false)}
     >
       <Link
-        href={`/collections/${col.slug}`} // ← uses slug from DB (matches [slug] route)
+        href={`/collections/${col.slug}`}
         className="group relative overflow-hidden flex h-full rounded-xl"
         style={{ background: "#111", display: "flex", cursor: "pointer" }}
       >
-        {/* Background image — heroImage from DB */}
         {col.heroImage ? (
           <Image
             src={col.heroImage}
@@ -195,17 +194,14 @@ function CollectionCard({ col, index }: { col: ApiCollection; index: number }) {
             }}
           />
         ) : (
-          // Fallback gradient when no image
           <div
             className="absolute inset-0"
             style={{ background: col.accentColor || "var(--rj-emerald)" }}
           />
         )}
 
-        {/* Base gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/92 via-black/30 to-black/5" />
 
-        {/* Accentcolor wash from DB */}
         <div
           className="absolute inset-0 transition-opacity duration-500"
           style={{
@@ -214,7 +210,6 @@ function CollectionCard({ col, index }: { col: ApiCollection; index: number }) {
           }}
         />
 
-        {/* Tag badge — from DB tag field */}
         {tag && col.tag && (
           <div className="absolute top-3 left-3 z-10 pointer-events-none">
             <span
@@ -226,13 +221,12 @@ function CollectionCard({ col, index }: { col: ApiCollection; index: number }) {
           </div>
         )}
 
-        {/* Product count — top right */}
         <div className="absolute top-3 right-3 z-10 pointer-events-none">
           <span
             className="font-cinzel text-[8px] tracking-widest px-2.5 py-1 rounded-full"
             style={{
-              background: "rgba(0,0,0,0.5)",
-              color: "rgba(255,255,255,0.6)",
+              background: "#fff/50",
+              color: "#fdd07a",
               backdropFilter: "blur(4px)",
             }}
           >
@@ -240,7 +234,6 @@ function CollectionCard({ col, index }: { col: ApiCollection; index: number }) {
           </span>
         </div>
 
-        {/* Desktop hover: View Collection CTA */}
         <AnimatePresence>
           {hovered && (
             <motion.div
@@ -269,7 +262,6 @@ function CollectionCard({ col, index }: { col: ApiCollection; index: number }) {
           )}
         </AnimatePresence>
 
-        {/* Bottom content — uses DB fields */}
         <div className="absolute bottom-0 inset-x-0 p-4 z-10">
           <p
             className="label-accent mb-0.5"
@@ -290,7 +282,6 @@ function CollectionCard({ col, index }: { col: ApiCollection; index: number }) {
 
           <div className="flex items-end justify-between gap-2">
             <div>
-              {/* productCount from DB */}
               <p
                 className="font-cinzel text-[10px] mt-0.5"
                 style={{ color: "rgba(255,255,255,0.4)" }}
@@ -299,7 +290,6 @@ function CollectionCard({ col, index }: { col: ApiCollection; index: number }) {
               </p>
             </div>
 
-            {/* Mobile: always-visible CTA */}
             <div
               className="md:hidden flex items-center gap-1 font-cinzel text-[9px] tracking-wider uppercase px-3 py-1.5 rounded-full"
               style={{
@@ -311,7 +301,6 @@ function CollectionCard({ col, index }: { col: ApiCollection; index: number }) {
               View <ArrowRight size={9} />
             </div>
 
-            {/* Desktop: slide-up label */}
             <div className="hidden md:block overflow-hidden h-4 flex items-center">
               <span className="flex items-center gap-1 font-cinzel text-white/60 text-[10px] tracking-wider uppercase translate-y-5 group-hover:translate-y-0 transition-transform duration-300 ease-out">
                 Explore <ArrowRight size={9} />
@@ -320,7 +309,6 @@ function CollectionCard({ col, index }: { col: ApiCollection; index: number }) {
           </div>
         </div>
 
-        {/* Gold border on hover */}
         <div
           className="absolute inset-0 rounded-xl pointer-events-none transition-all duration-500"
           style={{
@@ -346,21 +334,44 @@ export default function CollectionsGrid() {
     setCategory,
     sortBy,
     setSortBy,
-    categories,
     clearAll,
     reload,
   } = useCollections();
 
   const [showSort, setShowSort] = useState(false);
+  const [genderFilter, setGenderFilter] = useState<"All" | "Men" | "Women">(
+    "All",
+  );
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Derive unique tags from results for the category chips
+  // 1. Client-Side Sub-Filter matching Gender strings in Title / Labels
+  const filteredAndGenteredResults = useMemo(() => {
+    if (genderFilter === "All") return results;
+
+    return results.filter((col) => {
+      const searchTarget = `${col.label || ""} ${col.name || ""}`.toLowerCase();
+
+      if (genderFilter === "Men") {
+        // Match "men" but exclude cases where "women" accidentally flags it
+        return searchTarget.includes("men") && !searchTarget.includes("women");
+      }
+      if (genderFilter === "Women") {
+        return searchTarget.includes("women");
+      }
+      return true;
+    });
+  }, [results, genderFilter]);
+
+  // Derive unique tags from live data view
   const allTags = [
     "All",
     ...Array.from(new Set(results.map((c) => c.tag).filter(Boolean))),
   ];
 
-  console.log(results);
+  const handleClearFilters = () => {
+    setGenderFilter("All");
+    clearAll();
+  };
 
   return (
     <section
@@ -400,7 +411,7 @@ export default function CollectionsGrid() {
               >
                 {loading
                   ? "Loading…"
-                  : `${results.length} collection${results.length !== 1 ? "s" : ""}`}
+                  : `${filteredAndGenteredResults.length} collection${filteredAndGenteredResults.length !== 1 ? "s" : ""}`}
               </p>
             </div>
           </div>
@@ -414,10 +425,10 @@ export default function CollectionsGrid() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="flex flex-col gap-4 mb-10"
         >
-          {/* Row 1: Search + Sort */}
-          <div className="flex gap-3 items-center">
-            {/* Search */}
-            <div className="relative flex-1 max-w-sm">
+          {/* Row 1: Search + Gender Filters + Sort Toggle */}
+          <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+            {/* Search Input Box */}
+            <div className="relative w-full md:w-80">
               <Search
                 size={14}
                 className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none transition-colors duration-300"
@@ -455,11 +466,42 @@ export default function CollectionsGrid() {
               )}
             </div>
 
-            {/* Sort */}
-            <div className="relative flex-shrink-0">
+            {/* Premium Center-Aligned Gender Selector Tab Row */}
+            <div
+              className="flex items-center p-1 rounded-lg border"
+              style={{
+                background: "rgba(255, 255, 255, 0.02)",
+                borderColor: "rgba(255, 255, 255, 0.08)",
+              }}
+            >
+              {(["All", "Men", "Women"] as const).map((gender) => (
+                <button
+                  key={gender}
+                  onClick={() => setGenderFilter(gender)}
+                  className="relative px-5 py-1.5 font-cinzel text-[10px] tracking-widest uppercase rounded-md transition-all duration-300"
+                  style={{
+                    color:
+                      genderFilter === gender
+                        ? "var(--rj-gold)"
+                        : "rgba(255,255,255,0.4)",
+                    background:
+                      genderFilter === gender
+                        ? "rgba(252,193,81,0.08)"
+                        : "transparent",
+                    fontWeight: genderFilter === gender ? 600 : 400,
+                    cursor: "pointer",
+                  }}
+                >
+                  {gender === "All" ? "All" : `${gender}'s Line`}
+                </button>
+              ))}
+            </div>
+
+            {/* Sort Dropdown */}
+            <div className="relative flex-shrink-0 w-full md:w-auto text-right">
               <button
                 onClick={() => setShowSort((s) => !s)}
-                className="flex items-center gap-2 font-cinzel text-[10px] tracking-widest uppercase px-3.5 py-2.5 rounded-lg transition-all duration-300"
+                className="inline-flex items-center gap-2 font-cinzel text-[10px] tracking-widest uppercase px-3.5 py-2.5 rounded-lg transition-all duration-300"
                 style={{
                   background: showSort
                     ? "rgba(252,193,81,0.12)"
@@ -470,7 +512,7 @@ export default function CollectionsGrid() {
                 }}
               >
                 <SlidersHorizontal size={12} />
-                <span className="hidden sm:inline">
+                <span>
                   {SORT_OPTIONS.find((o) => o.value === sortBy)?.label ||
                     "Sort"}
                 </span>
@@ -483,7 +525,7 @@ export default function CollectionsGrid() {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 8, scale: 0.97 }}
                     transition={{ duration: 0.18 }}
-                    className="absolute right-0 top-full mt-2 z-50 rounded-xl overflow-hidden"
+                    className="absolute right-0 top-full mt-2 z-50 rounded-xl overflow-hidden text-left"
                     style={{
                       background: "#1a1a1a",
                       border: "1px solid rgba(255,255,255,0.1)",
@@ -526,9 +568,9 @@ export default function CollectionsGrid() {
             </div>
           </div>
 
-          {/* Row 2: Tag/category chips (derived from live API data) */}
+          {/* Row 2: Tag/category chips */}
           {!loading && allTags.length > 1 && (
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2 pt-2 border-t border-white/5">
               {allTags.map((tag) => (
                 <button
                   key={tag}
@@ -557,7 +599,6 @@ export default function CollectionsGrid() {
 
         {/* ── Grid / Skeletons / Error / Empty ── */}
         {loading ? (
-          // Skeleton grid while API responds
           <div
             className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
             style={{ gridAutoRows: "clamp(240px, 28vw, 340px)" }}
@@ -568,8 +609,8 @@ export default function CollectionsGrid() {
           </div>
         ) : error ? (
           <ErrorState message={error} onRetry={reload} />
-        ) : results.length === 0 ? (
-          <EmptyState query={query} onClear={clearAll} />
+        ) : filteredAndGenteredResults.length === 0 ? (
+          <EmptyState query={query} onClear={handleClearFilters} />
         ) : (
           <motion.div
             layout
@@ -577,7 +618,7 @@ export default function CollectionsGrid() {
             style={{ gridAutoRows: "clamp(240px, 28vw, 340px)" }}
           >
             <AnimatePresence mode="popLayout">
-              {results.map((col, i) => (
+              {filteredAndGenteredResults.map((col, i) => (
                 <CollectionCard key={col._id} col={col} index={i} />
               ))}
             </AnimatePresence>
@@ -588,8 +629,8 @@ export default function CollectionsGrid() {
         <AnimatePresence>
           {!loading &&
             !error &&
-            (query || category !== "All") &&
-            results.length > 0 && (
+            (query || category !== "All" || genderFilter !== "All") &&
+            filteredAndGenteredResults.length > 0 && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -597,11 +638,11 @@ export default function CollectionsGrid() {
                 className="flex items-center gap-3 mt-6"
               >
                 <p className="font-cinzel text-white/30 text-[10px] tracking-widest uppercase">
-                  Showing {results.length} result
-                  {results.length !== 1 ? "s" : ""}
+                  Showing {filteredAndGenteredResults.length} result
+                  {filteredAndGenteredResults.length !== 1 ? "s" : ""}
                 </p>
                 <button
-                  onClick={clearAll}
+                  onClick={handleClearFilters}
                   className="flex items-center gap-1 font-cinzel text-[10px] tracking-widest uppercase transition-opacity hover:opacity-70"
                   style={{ color: "var(--rj-gold)", cursor: "pointer" }}
                 >

@@ -514,12 +514,12 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
           >
             {product.name}
           </h3>
-          <p
+          {/* <p
             className="text-[10px] mb-2 line-clamp-1"
             style={{ color: "var(--rj-ash)" }}
           >
             {product.subtitle}
-          </p>
+          </p> */}
 
           <div className="flex items-center gap-1.5 flex-wrap mt-auto">
             {product.originalPrice && (
