@@ -8,7 +8,6 @@ import {
   placeOrder,
   verifyRazorpayPayment,
   PlaceOrderPayload,
-  PlaceOrderPayloadV2,
 } from "@/app/lib/api/orders";
 import {
   openRazorpayCheckout,
@@ -34,7 +33,7 @@ interface UseRazorpayCheckoutReturn {
   stage: CheckoutStage;
   error: string;
   result: CheckoutResult | null;
-  initiate: (payload: PlaceOrderPayloadV2) => Promise<void>;
+  initiate: (payload: PlaceOrderPayload) => Promise<void>;
   reset: () => void;
 }
 
