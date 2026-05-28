@@ -172,6 +172,11 @@ function normalizeProducts(raw: ApiProduct[]): Product[] {
         ],
     sizes: p.sizes ?? [],
     ourPromise: p.ourPromise,
+
+    // ── ADDED SEO FIELDS TO SATISFY THE PRODUCT TYPE CONTRACT ──
+    seoTitle: p.seoTitle || p.name || "",
+    seoDescription: p.seoDescription || p.shortDescription || "",
+    seoKeywords: p.seoKeywords || [],
   }));
 }
 
