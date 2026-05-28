@@ -103,6 +103,11 @@ export interface Product {
     value: string;
     icon?: string;
   }[];
+
+  // SEO
+  seoTitle: string;
+  seoDescription: string;
+  seoKeywords: string[];
 }
 
 // ── Lightweight card-only variant ────────────────────────────────
