@@ -105,9 +105,9 @@ export interface Product {
   }[];
 
   // SEO
-  seoTitle: string;
-  seoDescription: string;
-  seoKeywords: string[];
+  seoTitle?: string;
+  seoDescription?: string;
+  seoKeywords?: string[];
 }
 
 // ── Lightweight card-only variant ────────────────────────────────
