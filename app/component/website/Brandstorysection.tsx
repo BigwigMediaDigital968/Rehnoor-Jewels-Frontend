@@ -84,14 +84,14 @@ export default function BrandStorySection() {
           >
             <div className="relative aspect-[4/5] overflow-hidden rounded-2xl">
               <Image
-                src="/assets/brand-story.png"
+                src="/assets/brand-story-1.png"
                 alt="Rehnoor Jewels Craftsmanship"
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover"
               />
               {/* Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[var(--rj-emerald-dark)]/70 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[var(--rj-emerald-dark)]/50 to-transparent" />
             </div>
 
             <motion.div
@@ -165,7 +165,7 @@ export default function BrandStorySection() {
             <div className="stats-row grid grid-cols-3 gap-3 mt-12 pt-8 border-t border-white/10">
               {[
                 {
-                  value: "50K+",
+                  value: "20K+",
                   label: "Orders Delivered",
                   caption: "Across India",
                 },

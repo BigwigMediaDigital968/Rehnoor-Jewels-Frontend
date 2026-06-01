@@ -519,7 +519,7 @@ export default function MenWomen() {
         {/* ══════════════════════════════════════
             WOMEN'S COLLECTION — light / ivory
         ══════════════════════════════════════ */}
-        <section
+        {/* <section
           ref={womenRef}
           className="relative overflow-hidden py-14 px-4 sm:px-6 lg:px-8"
           style={{ background: "#ffefd2" }}
@@ -600,7 +600,7 @@ export default function MenWomen() {
               </button>
             </div>
           </div>
-        </section>
+        </section> */}
       </main>
     </>
   );

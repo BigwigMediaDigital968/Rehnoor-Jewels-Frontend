@@ -3,16 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Play } from "lucide-react";
 
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
-
-const PARTICLES = Array.from({ length: 20 }, (_, i) => ({
+const PARTICLES = Array.from({ length: 6 }, (_, i) => ({
   id: i,
   left: `${((i * 47.3) % 100).toFixed(3)}%`,
   top: `${((i * 61.8) % 100).toFixed(3)}%`,
@@ -59,9 +54,9 @@ export default function HeroSection() {
     offset: ["start start", "end start"],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "90%"]);
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.9], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
+  // const scale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
 
   useEffect(() => {
     if (!headingRef.current || !bgWrapperRef.current || !sectionRef.current)
@@ -119,11 +114,11 @@ export default function HeroSection() {
       className="relative min-h-screen bg-[var(--rj-emerald-dark)] overflow-hidden"
     >
       {/* Parallax — Framer Motion owns y + scale on outer div */}
-      <motion.div className="absolute inset-0" style={{ y, scale }}>
+      <motion.div className="absolute inset-0" style={{ y }}>
         {/* GSAP owns clipPath on this inner div — no FM conflict */}
-        <div ref={bgWrapperRef} className="absolute inset-0">
+        {/* <div ref={bgWrapperRef} className="absolute inset-0">
           <Image
-            src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=1600&q=85"
+            src="/hero-image-1.webp"
             alt="Rehnoor Jewels — gold jewellery"
             fill
             priority
@@ -135,6 +130,36 @@ export default function HeroSection() {
             style={{
               background:
                 "linear-gradient(105deg, rgba(0,36,16,0.92) 0%, rgba(0,55,32,0.7) 45%, rgba(0,55,32,0.3) 100%)",
+            }}
+          />
+        </div> */}
+
+        <div ref={bgWrapperRef} className="absolute inset-0">
+          {/* Desktop Image */}
+          <Image
+            src="/image-2.webp"
+            alt="Rehnoor Jewels — gold jewellery"
+            fill
+            priority
+            sizes="100vw"
+            className="hidden md:block object-cover object-center"
+          />
+
+          {/* Mobile Image */}
+          <Image
+            src="/image-1.webp"
+            alt="Rehnoor Jewels — gold jewellery"
+            fill
+            priority
+            sizes="100vw"
+            className="block md:hidden object-cover object-center"
+          />
+
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(105deg, rgba(0,36,16,0.7) 0%, rgba(0,55,32,0.5) 45%, rgba(0,55,32,0.1) 100%)",
             }}
           />
         </div>
@@ -154,8 +179,13 @@ export default function HeroSection() {
             </h1>
           </div>
 
-          <div ref={headingRef} className="overflow-hidden mb-6">
-            <p
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9 }}
+            className="overflow-hidden mb-6"
+          >
+            {/* <p
               className="heading-xl text-white leading-[0.95]"
               aria-label="Gold Reimagined"
             >
@@ -173,13 +203,22 @@ export default function HeroSection() {
                   {char}
                 </span>
               ))}
+            </p> */}
+
+            <p
+              className="heading-lg text-white leading-[0.95] pb-3"
+              aria-label="Gold Reimagined"
+            >
+              Gold
+              <br />
+              <span className="text-gold-shimmer">Reimagined</span>
             </p>
-          </div>
+          </motion.div>
 
           <p className="hero-sub text-white/70 text-lg md:text-xl leading-relaxed mb-10 max-w-xl font-light">
-            Where timeless craftsmanship meets modern design, every Rehnoor
-            piece is crafted in Gold Plated Jewellery, made to endure and stand
-            out.
+            Crafted in premium 1 Gram Gold Plated tones, every Rehnoor piece
+            blends timeless elegance with modern style perfect for everyday
+            wear, celebrations, weddings, and every occasion in between.
           </p>
 
           <div className="flex flex-wrap gap-4 mb-12">
@@ -220,9 +259,9 @@ export default function HeroSection() {
 
           <div className="hero-sub grid grid-cols-3 gap-6 pt-8 border-t border-white/10 max-w-md">
             {[
-              { value: "100%", label: "Certified Jewellery" },
+              { value: "100%", label: "Authentic Pieces" },
               { value: "500+", label: "Designs" },
-              { value: "50K+", label: "Happy Customers" },
+              { value: "20K+", label: "Happy Customers" },
             ].map((stat) => (
               <div key={stat.label}>
                 <p className="font-cinzel text-[var(--rj-gold)] text-2xl font-bold">

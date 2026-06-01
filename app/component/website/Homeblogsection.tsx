@@ -107,7 +107,7 @@ function FeaturedCard({ post }: { post: BlogCard }) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       className="relative rounded-2xl overflow-hidden group"
-      style={{ aspectRatio: "4/3", cursor: "pointer" }}
+      style={{ aspectRatio: "5/3", cursor: "pointer" }}
     >
       <Link href={`/blogs/${post.slug}`} className="absolute inset-0 z-10" />
 
@@ -419,7 +419,7 @@ export default function HomeBlogSection() {
     <section
       ref={sectionRef}
       className="relative overflow-hidden"
-      style={{ background: "var(--rj-emerald)", padding: "5rem 0" }}
+      style={{ background: "var(--rj-charcoal)", padding: "5rem 0" }}
     >
       {/* ── Decorative background ── */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">

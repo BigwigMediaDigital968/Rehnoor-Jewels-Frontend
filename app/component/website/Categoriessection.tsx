@@ -58,13 +58,13 @@ function CategoryCard({ cat, index }: { cat: ApiCollection; index: number }) {
         )}
 
         {/* Persistent bottom dark gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent" />
+        {/* <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent" /> */}
 
         {/* Accent tint on hover */}
-        <div
+        {/* <div
           className="absolute inset-0 opacity-0 group-hover:opacity-25 transition-opacity duration-500"
           style={{ background: "var(--rj-emerald)" }}
-        />
+        /> */}
 
         {/* Count badge — top left */}
         <div className="absolute top-3 left-3 z-10">
@@ -178,16 +178,16 @@ export default function CategoriesSection() {
               className="label-accent mb-3"
               style={{ color: "var(--rj-emerald)" }}
             >
-              ✦ Crafted for modern style
+              ✦ Style Crafted for Her
             </h2>
             <h3
-              className="heading-lg leading-tight"
+              className="heading-md leading-tight"
               style={{ color: "var(--rj-charcoal)" }}
             >
               Discover Categories Designed
               <br />
               <em className="text-gold-shimmer font-normal pe-2">
-                for Every Style
+                for Every Women
               </em>
             </h3>
           </div>

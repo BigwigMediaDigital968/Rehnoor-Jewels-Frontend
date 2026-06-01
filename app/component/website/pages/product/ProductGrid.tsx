@@ -21,8 +21,8 @@ import { fmt } from "@/app/lib/api/productLive";
 // ─────────────────────────────────────────────────────────────────
 // CONSTANTS
 // ─────────────────────────────────────────────────────────────────
-const PAGE_SIZE = 8;
-const LOAD_MORE_SIZE = 4;
+const PAGE_SIZE = 16;
+const LOAD_MORE_SIZE = 8;
 
 const SORT_OPTIONS = [
   { value: "featured", label: "Featured" },
@@ -42,15 +42,6 @@ const TAG_OPTIONS = [
   "Popular",
   "Exclusive",
 ];
-
-// ─────────────────────────────────────────────────────────────────
-// API → UI ADAPTER
-// Maps ApiProduct (backend shape) → Product (card component shape)
-// ─────────────────────────────────────────────────────────────────
-// ─────────────────────────────────────────────────────────────────
-// PASTE THIS adaptProduct function into ProductGrid.tsx
-// replacing the existing adaptProduct function
-// ─────────────────────────────────────────────────────────────────
 
 function adaptProduct(p: ApiProduct): Product {
   return {
@@ -88,17 +79,6 @@ function adaptProduct(p: ApiProduct): Product {
     ourPromise: (p as any).ourPromise || (p as any).shortDescription || "",
   };
 }
-
-// ─────────────────────────────────────────────────────────────────
-// Also add these fields to ApiProduct interface in lib/api/products.ts
-// ─────────────────────────────────────────────────────────────────
-//
-// export interface ApiProduct {
-//   ...existing fields...
-//   sizeChartImage?: string;
-//   offerBannerImage?: string;
-//   ourPromise?: string;
-// }
 
 // Parse price string/number to number for sorting
 function parsePrice(p: string): number {
@@ -884,7 +864,7 @@ export default function ProductGrid({
                       size={13}
                       className="transition-transform duration-300 group-hover:translate-y-0.5 cursor-pointer"
                     />
-                    Load {remaining} More Product{remaining !== 1 ? "s" : ""}
+                    Load More Product{remaining !== 1 ? "s" : ""}
                   </button>
                 </>
               ) : (

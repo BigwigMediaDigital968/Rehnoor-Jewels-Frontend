@@ -88,78 +88,78 @@ const testimonials = [
     productImage:
       "https://images.unsplash.com/photo-1613053341085-db794820ce43?w=80&q=80",
   },
-  {
-    id: 7,
-    name: "Mohit Sharma",
-    rating: 4,
-    badge: "Good",
-    review:
-      "Good quality at this price, worth buying. Packaging was very premium.",
-    productName: "Cord Bracelet",
-    productHref: "/products/cord-bracelet-gold",
-    productImage:
-      "https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?w=80&q=80",
-  },
-  {
-    id: 8,
-    name: "Bhanu Nama",
-    rating: 4,
-    badge: "Good",
-    review:
-      "फोटो जैसा ही है, पैसे वसूल है। Will definitely recommend to friends and family.",
-    productName: "Cuban Chain",
-    productHref: "/products/cuban-link-chain",
-    productImage:
-      "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=80&q=80",
-  },
-  {
-    id: 9,
-    name: "Harish Purohit",
-    rating: 4,
-    badge: "Good",
-    review:
-      "Very satisfied with this purchase. Quality is solid. Good weight and finish.",
-    productName: "Rope Chain",
-    productHref: "/products/rope-chain-gold",
-    productImage:
-      "https://images.unsplash.com/photo-1602173574767-37ac01994b2a?w=80&q=80",
-  },
-  {
-    id: 10,
-    name: "Subham Shaw",
-    rating: 4,
-    badge: "Good",
-    review:
-      "Good product. Delivery was fast. The gold colour is very consistent throughout.",
-    productName: "Band Ring",
-    productHref: "/products/band-ring-plain",
-    productImage:
-      "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=80&q=80",
-  },
-  {
-    id: 11,
-    name: "Darshana Patel",
-    rating: 4,
-    badge: "Good",
-    review:
-      "Good quality. Very happy with the purchase. Arrived well-packed in a beautiful box.",
-    productName: "Om Pendant",
-    productHref: "/products/om-pendant-22kt",
-    productImage:
-      "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=80&q=80",
-  },
-  {
-    id: 12,
-    name: "Ravi Gupta",
-    rating: 3,
-    badge: "Rated",
-    review:
-      "Very nice product. Shine is too good. Looks exactly like the photo on website.",
-    productName: "Nawabi Chain",
-    productHref: "/products/nawabi-chain-22kt",
-    productImage:
-      "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=80&q=80",
-  },
+  // {
+  //   id: 7,
+  //   name: "Mohit Sharma",
+  //   rating: 4,
+  //   badge: "Good",
+  //   review:
+  //     "Good quality at this price, worth buying. Packaging was very premium.",
+  //   productName: "Cord Bracelet",
+  //   productHref: "/products/cord-bracelet-gold",
+  //   productImage:
+  //     "https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?w=80&q=80",
+  // },
+  // {
+  //   id: 8,
+  //   name: "Bhanu Nama",
+  //   rating: 4,
+  //   badge: "Good",
+  //   review:
+  //     "फोटो जैसा ही है, पैसे वसूल है। Will definitely recommend to friends and family.",
+  //   productName: "Cuban Chain",
+  //   productHref: "/products/cuban-link-chain",
+  //   productImage:
+  //     "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=80&q=80",
+  // },
+  // {
+  //   id: 9,
+  //   name: "Harish Purohit",
+  //   rating: 4,
+  //   badge: "Good",
+  //   review:
+  //     "Very satisfied with this purchase. Quality is solid. Good weight and finish.",
+  //   productName: "Rope Chain",
+  //   productHref: "/products/rope-chain-gold",
+  //   productImage:
+  //     "https://images.unsplash.com/photo-1602173574767-37ac01994b2a?w=80&q=80",
+  // },
+  // {
+  //   id: 10,
+  //   name: "Subham Shaw",
+  //   rating: 4,
+  //   badge: "Good",
+  //   review:
+  //     "Good product. Delivery was fast. The gold colour is very consistent throughout.",
+  //   productName: "Band Ring",
+  //   productHref: "/products/band-ring-plain",
+  //   productImage:
+  //     "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=80&q=80",
+  // },
+  // {
+  //   id: 11,
+  //   name: "Darshana Patel",
+  //   rating: 4,
+  //   badge: "Good",
+  //   review:
+  //     "Good quality. Very happy with the purchase. Arrived well-packed in a beautiful box.",
+  //   productName: "Om Pendant",
+  //   productHref: "/products/om-pendant-22kt",
+  //   productImage:
+  //     "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=80&q=80",
+  // },
+  // {
+  //   id: 12,
+  //   name: "Ravi Gupta",
+  //   rating: 3,
+  //   badge: "Rated",
+  //   review:
+  //     "Very nice product. Shine is too good. Looks exactly like the photo on website.",
+  //   productName: "Nawabi Chain",
+  //   productHref: "/products/nawabi-chain-22kt",
+  //   productImage:
+  //     "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=80&q=80",
+  // },
 ];
 
 // ─────────────────────────────────────────────────────────────────

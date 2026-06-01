@@ -116,9 +116,9 @@ export default function HomePage() {
       <main>
         <HeroSection />
         <CategoriesSection />
-        <Stats />
-        <BestsellersSection />
+        {/* <BestsellersSection /> */}
         <MenWomen />
+        <Stats />
         <ProductGridCarousel />
         <BrandStorySection />
         <TestimonialsSection />

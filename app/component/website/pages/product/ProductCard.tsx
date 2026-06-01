@@ -565,289 +565,281 @@ export default function ProductCard({ product }: { product: Product }) {
 
   return (
     <>
-      <motion.article
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-40px" }}
-        transition={{ duration: 0.55, ease: [0.4, 0, 0.2, 1] }}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        className="flex flex-col group"
-        style={{
-          background: "#fff",
-          borderRadius: "16px",
-          overflow: "hidden",
-          border: "1px solid var(--rj-bone)",
-          boxShadow: hovered
-            ? "0 16px 48px rgba(0,0,0,0.12), 0 2px 8px rgba(252,193,81,0.08)"
-            : "0 2px 12px rgba(0,0,0,0.05)",
-          transition: "box-shadow 0.4s ease, transform 0.4s ease",
-          transform: hovered ? "translateY(-3px)" : "translateY(0)",
-        }}
-      >
-        {/* ── Image area ── */}
-        <div
-          className="relative overflow-hidden"
-          style={{ aspectRatio: "1/1", background: "var(--rj-ivory-dark)" }}
+      <Link href={product.href} className="block" aria-label={product.name}>
+        <motion.article
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.55, ease: [0.4, 0, 0.2, 1] }}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+          className="flex flex-col group"
+          style={{
+            background: "#fff",
+            borderRadius: "16px",
+            overflow: "hidden",
+            border: "1px solid var(--rj-bone)",
+            boxShadow: hovered
+              ? "0 16px 48px rgba(0,0,0,0.12), 0 2px 8px rgba(252,193,81,0.08)"
+              : "0 2px 12px rgba(0,0,0,0.05)",
+            transition: "box-shadow 0.4s ease, transform 0.4s ease",
+            transform: hovered ? "translateY(-3px)" : "translateY(0)",
+          }}
         >
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={imgIdx}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.35 }}
-              className="absolute inset-0"
-            >
-              <Image
-                src={product.images[imgIdx].src}
-                alt={product.images[imgIdx].alt}
-                fill
-                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                className="object-cover transition-transform duration-700"
-                style={{ transform: hovered ? "scale(1.05)" : "scale(1)" }}
-              />
-            </motion.div>
-          </AnimatePresence>
-
-          {tag && product.tag && (
-            <div className="absolute top-3 left-3 z-10">
-              <span
-                className="font-cinzel text-[8px] font-bold tracking-widest px-2.5 py-1 rounded-full"
-                style={{ background: tag.bg, color: tag.color }}
-              >
-                {product.tag}
-              </span>
-            </div>
-          )}
-
-          {/* Wishlist */}
-          <button
-            onClick={handleToggleWishlist}
-            className="absolute top-3 right-3 z-30 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer hover:scale-110"
-            style={{
-              background: "rgba(255,255,255,0.92)",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-            }}
-            aria-label="Toggle wishlist"
+          {/* ── Image area ── */}
+          <div
+            className="relative overflow-hidden"
+            style={{ aspectRatio: "1/1", background: "var(--rj-ivory-dark)" }}
           >
-            <Heart
-              size={13}
-              style={{
-                fill: wishlisted ? "var(--rj-gold)" : "transparent",
-                color: wishlisted ? "var(--rj-gold)" : "var(--rj-ash)",
-                transition: "all 0.3s",
-              }}
-            />
-          </button>
-
-          {/* Quick view — desktop hover */}
-          <AnimatePresence>
-            {hovered && (
-              <motion.button
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                transition={{ duration: 0.22 }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  setQuickView(true);
-                }}
-                className="absolute inset-0 items-center justify-center z-10 hidden md:flex"
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={imgIdx}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.35 }}
+                className="absolute inset-0"
               >
-                <div className="absolute inset-0 bg-[var(--rj-emerald)]/30" />
-                <div
-                  className="relative flex items-center gap-2 px-4 py-2.5 rounded-full font-cinzel text-[10px] tracking-widest uppercase font-bold cursor-pointer hover:scale-105"
-                  style={{
-                    background: "rgba(255,255,255,0.95)",
-                    color: "var(--rj-emerald)",
-                    boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
-                  }}
-                >
-                  <Eye size={13} /> Quick View
-                </div>
-              </motion.button>
-            )}
-          </AnimatePresence>
+                <Image
+                  src={product.images[imgIdx].src}
+                  alt={product.images[imgIdx].alt}
+                  fill
+                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                  className="object-cover transition-transform duration-700"
+                  style={{ transform: hovered ? "scale(1.05)" : "scale(1)" }}
+                />
+              </motion.div>
+            </AnimatePresence>
 
-          {/* Image nav */}
-          {product.images.length > 1 && (
-            <>
-              <AnimatePresence>
-                {hovered && (
-                  <>
-                    <motion.button
-                      initial={{ opacity: 0, x: -4 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -4 }}
-                      onClick={prevImg}
-                      className="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 w-7 h-7 rounded-full flex items-center justify-center cursor-pointer hover:scale-110"
-                      style={{
-                        background: "rgba(255,255,255,0.9)",
-                        boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
-                      }}
-                    >
-                      <ChevronLeft size={12} />
-                    </motion.button>
-                    <motion.button
-                      initial={{ opacity: 0, x: 4 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: 4 }}
-                      onClick={nextImg}
-                      className="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 w-7 h-7 rounded-full flex items-center justify-center cursor-pointer hover:scale-110"
-                      style={{
-                        background: "rgba(255,255,255,0.9)",
-                        boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
-                      }}
-                    >
-                      <ChevronRight size={12} />
-                    </motion.button>
-                  </>
-                )}
-              </AnimatePresence>
-              <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 flex gap-1 z-10">
-                {product.images.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setImgIdx(i);
-                    }}
-                    className="rounded-full transition-all duration-300"
-                    style={{
-                      width: i === imgIdx ? "14px" : "5px",
-                      height: "5px",
-                      background:
-                        i === imgIdx
-                          ? "var(--rj-emerald)"
-                          : "rgba(255,255,255,0.7)",
-                    }}
-                  />
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-
-        {/* ── Card body ── */}
-        <Link href={product.href} className="flex flex-col flex-1 p-4">
-          <h3
-            className="font-cormorant font-light leading-tight mb-1 group-hover:text-[var(--rj-emerald)] transition-colors duration-300"
-            style={{
-              fontSize: "clamp(1rem, 1.8vw, 1.2rem)",
-              color: "var(--rj-charcoal)",
-              letterSpacing: "-0.01em",
-              display: "-webkit-box",
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: "vertical",
-              overflow: "hidden",
-            }}
-          >
-            {product.name.length > 60 ? (
-              <>
-                {product.name.slice(0, 57).trim()}
+            {tag && product.tag && (
+              <div className="absolute top-3 left-3 z-10">
                 <span
-                  className="font-sans text-[0.8em] tracking-normal font-bold select-none ml-0.5"
-                  style={{ color: "var(--rj-gold)" }}
+                  className="font-cinzel text-[8px] font-bold tracking-widest px-2.5 py-1 rounded-full"
+                  style={{ background: tag.bg, color: tag.color }}
                 >
-                  ***
+                  {product.tag}
                 </span>
-              </>
-            ) : (
-              product.name
+              </div>
             )}
-          </h3>
-          {/* <p
+
+            {/* Wishlist */}
+            <button
+              onClick={handleToggleWishlist}
+              className="absolute top-3 right-3 z-30 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer hover:scale-110"
+              style={{
+                background: "rgba(255,255,255,0.92)",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+              }}
+              aria-label="Toggle wishlist"
+            >
+              <Heart
+                size={13}
+                style={{
+                  fill: wishlisted ? "var(--rj-gold)" : "transparent",
+                  color: wishlisted ? "var(--rj-gold)" : "var(--rj-ash)",
+                  transition: "all 0.3s",
+                }}
+              />
+            </button>
+
+            {/* Quick view — desktop hover */}
+            <AnimatePresence>
+              {hovered && (
+                <motion.button
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.22 }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setQuickView(true);
+                  }}
+                  className="absolute inset-0 items-center justify-center z-10 hidden md:flex"
+                >
+                  <div className="absolute inset-0 bg-[var(--rj-emerald)]/30" />
+                  <div
+                    className="relative flex items-center gap-2 px-4 py-2.5 rounded-full font-cinzel text-[10px] tracking-widest uppercase font-bold cursor-pointer hover:scale-105"
+                    style={{
+                      background: "rgba(255,255,255,0.95)",
+                      color: "var(--rj-emerald)",
+                      boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
+                    }}
+                  >
+                    <Eye size={13} /> Quick View
+                  </div>
+                </motion.button>
+              )}
+            </AnimatePresence>
+
+            {/* Image nav */}
+            {product.images.length > 1 && (
+              <>
+                <AnimatePresence>
+                  {hovered && (
+                    <>
+                      <motion.button
+                        initial={{ opacity: 0, x: -4 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -4 }}
+                        onClick={prevImg}
+                        className="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 w-7 h-7 rounded-full flex items-center justify-center cursor-pointer hover:scale-110"
+                        style={{
+                          background: "rgba(255,255,255,0.9)",
+                          boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+                        }}
+                      >
+                        <ChevronLeft size={12} />
+                      </motion.button>
+                      <motion.button
+                        initial={{ opacity: 0, x: 4 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 4 }}
+                        onClick={nextImg}
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 w-7 h-7 rounded-full flex items-center justify-center cursor-pointer hover:scale-110"
+                        style={{
+                          background: "rgba(255,255,255,0.9)",
+                          boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+                        }}
+                      >
+                        <ChevronRight size={12} />
+                      </motion.button>
+                    </>
+                  )}
+                </AnimatePresence>
+                <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 flex gap-1 z-10">
+                  {product.images.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setImgIdx(i);
+                      }}
+                      className="rounded-full transition-all duration-300"
+                      style={{
+                        width: i === imgIdx ? "14px" : "5px",
+                        height: "5px",
+                        background:
+                          i === imgIdx
+                            ? "var(--rj-emerald)"
+                            : "rgba(255,255,255,0.7)",
+                      }}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* ── Card body ── */}
+          <div className="flex flex-col flex-1 p-4">
+            <h3
+              className="font-cormorant font-light leading-tight mb-1 group-hover:text-[var(--rj-emerald)] transition-colors duration-300"
+              style={{
+                fontSize: "clamp(1rem, 1.8vw, 1.2rem)",
+                color: "var(--rj-charcoal)",
+                letterSpacing: "-0.01em",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
+            >
+              {product.name}
+            </h3>
+            {/* <p
             className="hidden md:block font-body text-xs mb-3"
             style={{ color: "var(--rj-ash)" }}
           >
             {product.subtitle}
           </p> */}
 
-          {product.rating && (
-            <div className="flex items-center gap-1.5 mb-3">
-              <div className="flex gap-0.5">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star
-                    key={i}
-                    size={9}
-                    style={{
-                      fill:
-                        i < Math.floor(product.rating!)
-                          ? "var(--rj-gold)"
-                          : "transparent",
-                      color:
-                        i < Math.floor(product.rating!)
-                          ? "var(--rj-gold)"
-                          : "var(--rj-bone)",
-                    }}
-                  />
-                ))}
+            {product.rating && (
+              <div className="flex items-center gap-1.5 mb-3">
+                <div className="flex gap-0.5">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star
+                      key={i}
+                      size={9}
+                      style={{
+                        fill:
+                          i < Math.floor(product.rating!)
+                            ? "var(--rj-gold)"
+                            : "transparent",
+                        color:
+                          i < Math.floor(product.rating!)
+                            ? "var(--rj-gold)"
+                            : "var(--rj-bone)",
+                      }}
+                    />
+                  ))}
+                </div>
+                {product.reviewCount && (
+                  <span
+                    className="font-cinzel text-[9px]"
+                    style={{ color: "var(--rj-ash)" }}
+                  >
+                    ({product.reviewCount})
+                  </span>
+                )}
               </div>
-              {product.reviewCount && (
+            )}
+
+            <div className="flex-1" />
+
+            <div className="flex items-center gap-2 mb-3">
+              <span
+                className="font-cinzel font-bold"
+                style={{ fontSize: "1rem", color: "var(--rj-charcoal)" }}
+              >
+                {product.price}
+              </span>
+              {product.originalPrice && (
                 <span
-                  className="font-cinzel text-[9px]"
+                  className="font-body text-xs line-through"
                   style={{ color: "var(--rj-ash)" }}
                 >
-                  ({product.reviewCount})
+                  {product.originalPrice}
+                </span>
+              )}
+              {product.originalPrice && (
+                <span
+                  className="font-cinzel text-[8px] font-bold px-1.5 py-0.5 rounded-full"
+                  style={{ background: "#fef2f2", color: "#ef4444" }}
+                >
+                  {Math.round(
+                    (1 -
+                      parseInt(product.price.replace(/[^\d]/g, ""), 10) /
+                        parseInt(
+                          product.originalPrice.replace(/[^\d]/g, ""),
+                          10,
+                        )) *
+                      100,
+                  )}
+                  % OFF
                 </span>
               )}
             </div>
-          )}
 
-          <div className="flex-1" />
+            <div
+              className="h-px mb-3"
+              style={{ background: "var(--rj-bone)" }}
+            />
 
-          <div className="flex items-center gap-2 mb-3">
-            <span
-              className="font-cinzel font-bold"
-              style={{ fontSize: "1rem", color: "var(--rj-charcoal)" }}
-            >
-              {product.price}
-            </span>
-            {product.originalPrice && (
-              <span
-                className="font-body text-xs line-through"
-                style={{ color: "var(--rj-ash)" }}
-              >
-                {product.originalPrice}
-              </span>
-            )}
-            {product.originalPrice && (
-              <span
-                className="font-cinzel text-[8px] font-bold px-1.5 py-0.5 rounded-full"
-                style={{ background: "#fef2f2", color: "#ef4444" }}
-              >
-                {Math.round(
-                  (1 -
-                    parseInt(product.price.replace(/[^\d]/g, ""), 10) /
-                      parseInt(
-                        product.originalPrice.replace(/[^\d]/g, ""),
-                        10,
-                      )) *
-                    100,
-                )}
-                % OFF
-              </span>
-            )}
-          </div>
-
-          <div className="h-px mb-3" style={{ background: "var(--rj-bone)" }} />
-
-          <div
-            className="flex items-center justify-center gap-2 py-2.5 rounded-full font-cinzel text-[10px] tracking-widest uppercase font-bold transition-all duration-300 cursor-pointer"
-            style={{
-              background: addedToCart
-                ? "var(--rj-emerald)"
-                : hovered
+            <div
+              className="flex items-center justify-center gap-2 py-2.5 rounded-full font-cinzel text-[10px] tracking-widest uppercase font-bold transition-all duration-300 cursor-pointer"
+              style={{
+                background: addedToCart
                   ? "var(--rj-emerald)"
-                  : "var(--rj-charcoal)",
-              color: "#fff",
-            }}
-          >
-            <Eye size={12} /> View Details
+                  : hovered
+                    ? "var(--rj-emerald)"
+                    : "var(--rj-charcoal)",
+                color: "#fff",
+              }}
+            >
+              <Eye size={12} /> View Details
+            </div>
           </div>
-        </Link>
-      </motion.article>
+        </motion.article>
+      </Link>
 
       <AnimatePresence>
         {quickView && (

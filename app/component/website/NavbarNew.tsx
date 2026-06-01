@@ -112,11 +112,12 @@ function IconWithBadge({
   return (
     <Link
       href={href}
-      className={`relative group p-2 hover:text-[var(--rj-gold)] transition-colors duration-300 ${className}`}
       aria-label={count > 0 ? `${label} (${count})` : label}
+      className={`relative inline-flex items-center justify-center p-2 hover:text-[var(--rj-gold)] transition-colors duration-300 ${className}`}
       style={{ cursor: "pointer" }}
     >
       {icon}
+
       <AnimatePresence>
         {count > 0 && (
           <motion.span
@@ -124,15 +125,35 @@ function IconWithBadge({
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
-            transition={{ type: "spring", stiffness: 400, damping: 22 }}
-            className="absolute -top-1 -right-1 min-w-[16px] h-4 rounded-full flex items-center justify-center font-cinzel font-bold"
+            transition={{
+              type: "spring",
+              stiffness: 400,
+              damping: 22,
+            }}
+            className="
+              absolute
+              top-0
+              right-0
+              translate-x-1/3
+              -translate-y-1/3
+              min-w-[18px]
+              h-[18px]
+              px-1
+              rounded-full
+              flex
+              items-center
+              justify-center
+              font-cinzel
+              font-bold
+              leading-none
+              shadow-sm
+            "
             style={{
               background: "var(--rj-gold)",
               color: "var(--rj-emerald)",
-              fontSize: "9px",
-              padding: "0 3px",
-              lineHeight: 1,
+              fontSize: "10px",
               pointerEvents: "none",
+              zIndex: 10,
             }}
           >
             {count > 99 ? "99+" : count}
@@ -786,6 +807,27 @@ export default function NavbarNew() {
             {/* Right actions */}
             <div className="flex items-center gap-1">
               {/* Search (keep visible on all devices) */}
+              {/* <button
+                onClick={() => setSearchOpen((s) => !s)}
+                className="p-2 hover:text-[var(--rj-gold)] transition-colors duration-300"
+                style={{ color: "var(--rj-gold-light)", cursor: "pointer" }}
+                aria-label="Search"
+              >
+                <Search size={20} />
+              </button> */}
+
+              {/* Mobile Cart */}
+              <div className="lg:hidden">
+                <IconWithBadge
+                  href="/cart"
+                  icon={<ShoppingBag size={20} />}
+                  count={cartCount}
+                  label="Cart"
+                  className="text-[var(--rj-gold-light)]"
+                />
+              </div>
+
+              {/* Desktop Search */}
               <button
                 onClick={() => setSearchOpen((s) => !s)}
                 className="p-2 hover:text-[var(--rj-gold)] transition-colors duration-300"
