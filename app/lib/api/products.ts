@@ -46,6 +46,7 @@ export interface ApiProduct {
     slug: string;
     label?: string;
   } | null;
+
   category: string;
 
   // ─── Pricing ──────────────────────────────

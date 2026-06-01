@@ -42,7 +42,14 @@ export interface ApiProduct {
   sku?: string;
 
   // ─── Collection / Category ────────────────
-  collection?: string | null;
+  // collection?: string | null;
+  collection?: {
+    _id: string;
+    name: string;
+    slug: string;
+    label?: string;
+  } | null;
+
   category: string;
 
   // ─── Pricing ──────────────────────────────
