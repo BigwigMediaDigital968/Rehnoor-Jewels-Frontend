@@ -151,8 +151,8 @@ export default function Footer() {
               },
               {
                 icon: "♾",
-                title: "Lifetime Buyback",
-                sub: "50% buyback guaranteed",
+                title: "Quick Support",
+                sub: "Live chat and email support",
               },
               {
                 icon: "↩",

@@ -251,6 +251,9 @@ export default function ProductGrid({
     categories: apiCategories,
     activeFilter,
     setActiveFilter,
+    genders,
+    activeGender,
+    setActiveGender,
   } = useProducts({
     collection,
     category: categoryProp,
@@ -363,6 +366,13 @@ export default function ProductGrid({
       (t) => t === "All" || inData.has(t as Product["tag"]),
     );
   }, [adaptedProducts]);
+
+  const uniqueCategories = Array.from(
+    new Map(apiCategories.map((cat) => [cat.toLowerCase(), cat])).values(),
+  );
+
+  // console.log(uniqueCategories);
+  console.log(genders);
 
   // ─────────────────────────────────────────────────────────────
   // RENDER
@@ -604,16 +614,53 @@ export default function ProductGrid({
           <div
             className={`flex-col gap-3 ${showFilters ? "flex" : "hidden sm:flex"}`}
           >
-            {/* Category chips — from API */}
-            {apiCategories.length > 1 && (
+            {genders.length > 1 && (
               <div className="flex flex-wrap gap-2">
+                <span
+                  className="font-cinzel text-[9px] tracking-widest uppercase self-center mr-1"
+                  style={{ color: "var(--rj-ash)" }}
+                >
+                  Gender:
+                </span>
+
+                {genders.map((gender) => (
+                  <button
+                    key={gender}
+                    onClick={() => setActiveGender(gender)}
+                    className="font-cinzel text-[9px] tracking-widest uppercase px-3 py-1.5 rounded-full transition-all duration-200 cursor-pointer"
+                    style={{
+                      background:
+                        activeGender === gender
+                          ? "var(--gradient-gold)"
+                          : "#fff",
+                      color:
+                        activeGender === gender
+                          ? "var(--rj-emerald)"
+                          : "var(--rj-ash)",
+                      border: `1px solid ${
+                        activeGender === gender
+                          ? "transparent"
+                          : "var(--rj-bone)"
+                      }`,
+                      fontWeight: activeGender === gender ? 700 : 400,
+                    }}
+                  >
+                    {gender}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Category chips — from API */}
+            {uniqueCategories.length > 1 && (
+              <div className="flex flex-wrap gap-2 overflow-x-auto py-1">
                 <span
                   className="font-cinzel text-[9px] tracking-widest uppercase self-center mr-1"
                   style={{ color: "var(--rj-ash)" }}
                 >
                   Category:
                 </span>
-                {apiCategories.map((cat) => (
+                {uniqueCategories.map((cat) => (
                   <button
                     key={cat}
                     onClick={() => setActiveFilter(cat)}
@@ -678,7 +725,7 @@ export default function ProductGrid({
               className="flex items-center justify-between mb-6 px-4 py-2.5 rounded-lg overflow-hidden"
               style={{
                 background: "rgba(0,55,32,0.05)",
-                border: "1px solid rgba(0,55,32,0.1)",
+                border: "1px solid rgba(0,55,32,0.8)",
               }}
             >
               <div className="flex flex-wrap items-center gap-2">

@@ -22,6 +22,8 @@ export function useProducts(opts: UseProductsOptions = {}) {
   const [error, setError] = useState<string | null>(null);
   const [activeFilter, setActiveFilter] = useState("All");
 
+  const [activeGender, setActiveGender] = useState("All");
+
   // Stable option values to prevent unnecessary re-fetches
   const collection = opts.collection;
   const category = opts.category;
@@ -62,6 +64,7 @@ export function useProducts(opts: UseProductsOptions = {}) {
   // Reset filter when data changes (e.g. after reload with different opts)
   useEffect(() => {
     setActiveFilter("All");
+    setActiveGender("All");
   }, [collection, category, tag, bestseller]);
 
   // Derive category pills from live data (always includes "All")
@@ -74,16 +77,63 @@ export function useProducts(opts: UseProductsOptions = {}) {
     return ["All", ...unique];
   }, [data]);
 
+  function getGender(product: ApiProduct) {
+    const slug = product.collection?.slug?.toLowerCase() ?? "";
+
+    if (slug.includes("-for-women")) return "Women";
+    if (slug.includes("-for-men")) return "Men";
+
+    return "Unisex";
+  }
+
+  const genders = useMemo(() => {
+    const found = new Set<string>();
+
+    data.forEach((p) => {
+      const gender = getGender(p);
+
+      if (gender !== "Unisex") {
+        found.add(gender);
+      }
+    });
+
+    return ["All", ...Array.from(found)];
+  }, [data]);
+
+  console.log(
+    data.map((p) => ({
+      name: p.name,
+      collection: p.collection?.slug,
+      gender: getGender(p),
+    })),
+  );
+
   // console.log(data);
 
+  // console.log(data[0]);
+  // console.log(data[0]?.collection);
+
   // Client-side category filter (instant, no extra round-trip)
-  const filtered = useMemo(
-    () =>
+  // const filtered = useMemo(
+  //   () =>
+  //     activeFilter === "All"
+  //       ? data
+  //       : data.filter((p) => p.category === activeFilter),
+  //   [data, activeFilter],
+  // );
+
+  const filtered = useMemo(() => {
+    let products =
       activeFilter === "All"
         ? data
-        : data.filter((p) => p.category === activeFilter),
-    [data, activeFilter],
-  );
+        : data.filter((p) => p.category === activeFilter);
+
+    if (activeGender !== "All") {
+      products = products.filter((p) => getGender(p) === activeGender);
+    }
+
+    return products;
+  }, [data, activeFilter, activeGender]);
 
   // Derived stats
   const totalCount = data.length;
@@ -100,6 +150,10 @@ export function useProducts(opts: UseProductsOptions = {}) {
     reload: load,
     /** Category pill labels derived from live data */
     categories,
+    /** Gender pill labels derived from live data */
+    genders,
+    activeGender,
+    setActiveGender,
     /** Currently active category filter ("All" by default) */
     activeFilter,
     /** Set the active category filter */

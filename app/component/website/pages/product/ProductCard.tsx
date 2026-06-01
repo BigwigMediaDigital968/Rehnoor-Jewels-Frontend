@@ -168,7 +168,7 @@ function QuickViewModal({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 16 }}
         transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-        className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl"
+        className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl"
         style={{ background: "#fff" }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -197,7 +197,7 @@ function QuickViewModal({
                   src={product.images[imgIdx].src}
                   alt={product.images[imgIdx].alt}
                   fill
-                  className="object-cover"
+                  className="object-cover object-top-left"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </motion.div>

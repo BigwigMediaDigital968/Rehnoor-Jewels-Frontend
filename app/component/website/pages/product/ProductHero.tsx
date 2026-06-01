@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight, Shield, Award, RefreshCw } from "lucide-react";
@@ -157,9 +157,9 @@ export default function ProductsHero() {
         >
           {[
             { value: "500+", label: "Unique Designs" },
-            { value: "15+", label: "Value Partners" },
+            { value: "100%", label: "Authentic Pieces" },
             { value: "20K+", label: "Orders Delivered" },
-            { value: "Free", label: "Care Support" },
+            // { value: "Free", label: "Care Support" },
           ].map((stat) => (
             <div key={stat.label} className="ph-stat">
               <p

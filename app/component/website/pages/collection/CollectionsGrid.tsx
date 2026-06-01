@@ -126,8 +126,8 @@ function EmptyState({
       <div
         className="w-16 h-16 rounded-2xl flex items-center justify-center mb-5"
         style={{
-          background: "rgba(252,193,81,0.08)",
-          border: "1px solid rgba(252,193,81,0.15)",
+          background: "var(--gradient-gold)",
+          color: "var(--rj-emerald)",
         }}
       >
         <Search size={22} style={{ color: "rgba(252,193,81,0.5)" }} />
@@ -284,7 +284,7 @@ function CollectionCard({ col, index }: { col: ApiCollection; index: number }) {
             <div>
               <p
                 className="font-cinzel text-[10px] mt-0.5"
-                style={{ color: "rgba(255,255,255,0.4)" }}
+                style={{ color: "rgba(0,0,0,0.55)" }}
               >
                 {col.productCount} piece{col.productCount !== 1 ? "s" : ""}
               </p>
@@ -377,7 +377,7 @@ export default function CollectionsGrid() {
     <section
       id="collections"
       className="section-padding"
-      style={{ background: "var(--rj-charcoal)" }}
+      style={{ background: "var(--rj-gold-pale)" }}
     >
       <div className="container-rj">
         {/* ── Section heading ── */}
@@ -388,11 +388,14 @@ export default function CollectionsGrid() {
           transition={{ duration: 0.7 }}
           className="mb-10"
         >
-          <p className="label-accent mb-3" style={{ color: "var(--rj-gold)" }}>
+          <p
+            className="label-accent mb-3"
+            style={{ color: "var(--rj-emerald)" }}
+          >
             ✦ Shop by Collection
           </p>
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-            <h2 className="heading-lg text-white">
+            <h2 className="heading-lg text-(--rj-emerald)">
               Every piece,
               <br />
               <em className="text-gold-shimmer font-normal pe-3">pure gold</em>
@@ -405,10 +408,7 @@ export default function CollectionsGrid() {
                   style={{ color: "rgba(255,255,255,0.3)" }}
                 />
               )}
-              <p
-                className="font-cinzel text-xs tracking-widest"
-                style={{ color: "rgba(255,255,255,0.3)" }}
-              >
+              <p className="font-cinzel text-xs tracking-widest text-(var(--rj-emerald)) uppercase">
                 {loading
                   ? "Loading…"
                   : `${filteredAndGenteredResults.length} collection${filteredAndGenteredResults.length !== 1 ? "s" : ""}`}
@@ -433,7 +433,7 @@ export default function CollectionsGrid() {
                 size={14}
                 className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none transition-colors duration-300"
                 style={{
-                  color: query ? "var(--rj-gold)" : "rgba(255,255,255,0.3)",
+                  color: query ? "var(--rj-emerald)" : "rgba(0,0,0,0.35)",
                 }}
               />
               <input
@@ -444,10 +444,10 @@ export default function CollectionsGrid() {
                 placeholder="Search collections…"
                 className="w-full pl-9 pr-9 py-2.5 font-cinzel text-xs tracking-wider outline-none transition-all duration-300"
                 style={{
-                  background: "rgba(255,255,255,0.05)",
-                  border: `1px solid ${query ? "rgba(252,193,81,0.45)" : "rgba(255,255,255,0.1)"}`,
+                  background: "rgba(254,244,220,0.65)",
+                  border: `1px solid ${query ? "rgba(252,193,81,0.45)" : "rgba(0,0,0,0.1)"}`,
                   borderRadius: "8px",
-                  color: "white",
+                  color: "var(--rj-charcoal)",
                   boxShadow: query ? "0 0 0 3px rgba(252,193,81,0.07)" : "none",
                 }}
               />
@@ -468,27 +468,35 @@ export default function CollectionsGrid() {
 
             {/* Premium Center-Aligned Gender Selector Tab Row */}
             <div
-              className="flex items-center p-1 rounded-lg border"
+              className="flex items-center p-1 rounded-xl border"
               style={{
-                background: "rgba(255, 255, 255, 0.02)",
-                borderColor: "rgba(255, 255, 255, 0.08)",
+                background: "var(--rj-gold-pale)",
+                borderColor: "rgba(0,55,32,0.12)",
               }}
             >
               {(["All", "Men", "Women"] as const).map((gender) => (
                 <button
                   key={gender}
                   onClick={() => setGenderFilter(gender)}
-                  className="relative px-5 py-1.5 font-cinzel text-[10px] tracking-widest uppercase rounded-md transition-all duration-300"
+                  className="relative px-5 py-2 font-cinzel text-[10px] tracking-widest uppercase rounded-lg transition-all duration-300"
                   style={{
                     color:
                       genderFilter === gender
-                        ? "var(--rj-gold)"
-                        : "rgba(255,255,255,0.4)",
+                        ? "var(--rj-gold-pale)"
+                        : "var(--rj-charcoal)",
+
                     background:
                       genderFilter === gender
-                        ? "rgba(252,193,81,0.08)"
+                        ? "var(--rj-emerald)"
                         : "transparent",
-                    fontWeight: genderFilter === gender ? 600 : 400,
+
+                    fontWeight: genderFilter === gender ? 700 : 500,
+
+                    boxShadow:
+                      genderFilter === gender
+                        ? "0 4px 12px rgba(0,55,32,0.15)"
+                        : "none",
+
                     cursor: "pointer",
                   }}
                 >
@@ -503,11 +511,9 @@ export default function CollectionsGrid() {
                 onClick={() => setShowSort((s) => !s)}
                 className="inline-flex items-center gap-2 font-cinzel text-[10px] tracking-widest uppercase px-3.5 py-2.5 rounded-lg transition-all duration-300"
                 style={{
-                  background: showSort
-                    ? "rgba(252,193,81,0.12)"
-                    : "rgba(255,255,255,0.05)",
-                  border: `1px solid ${showSort ? "rgba(252,193,81,0.4)" : "rgba(255,255,255,0.1)"}`,
-                  color: showSort ? "var(--rj-gold)" : "rgba(255,255,255,0.5)",
+                  background: showSort ? "var(--gradient-gold)" : "#fff",
+                  border: `1px solid ${showSort ? "transparent" : "rgba(0,0,0,0.08)"}`,
+                  color: showSort ? "var(--rj-emerald)" : "rgba(0,0,0,0.65)",
                   cursor: "pointer",
                 }}
               >
@@ -527,9 +533,9 @@ export default function CollectionsGrid() {
                     transition={{ duration: 0.18 }}
                     className="absolute right-0 top-full mt-2 z-50 rounded-xl overflow-hidden text-left"
                     style={{
-                      background: "#1a1a1a",
-                      border: "1px solid rgba(255,255,255,0.1)",
-                      boxShadow: "0 16px 40px rgba(0,0,0,0.5)",
+                      background: "#ffffff",
+                      border: "1px solid rgba(0,0,0,0.08)",
+                      boxShadow: "0 20px 40px rgba(0,0,0,0.08)",
                       minWidth: "160px",
                     }}
                   >
@@ -544,11 +550,11 @@ export default function CollectionsGrid() {
                         style={{
                           color:
                             sortBy === opt.value
-                              ? "var(--rj-gold)"
-                              : "rgba(255,255,255,0.5)",
+                              ? "var(--rj-emerald)"
+                              : "rgba(0,0,0,0.65)",
                           background:
                             sortBy === opt.value
-                              ? "rgba(252,193,81,0.08)"
+                              ? "rgba(254,244,220,0.08)"
                               : "transparent",
                           cursor: "pointer",
                         }}
@@ -557,7 +563,7 @@ export default function CollectionsGrid() {
                         {sortBy === opt.value && (
                           <div
                             className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-                            style={{ background: "var(--rj-gold)" }}
+                            style={{ background: "var(--rj-emerald)" }}
                           />
                         )}
                       </button>
@@ -570,7 +576,7 @@ export default function CollectionsGrid() {
 
           {/* Row 2: Tag/category chips */}
           {!loading && allTags.length > 1 && (
-            <div className="flex flex-wrap gap-2 pt-2 border-t border-white/5">
+            <div className="flex flex-wrap gap-2 pt-2 border-t border-[rgba(0,55,32,0.08)]">
               {allTags.map((tag) => (
                 <button
                   key={tag}
@@ -580,14 +586,22 @@ export default function CollectionsGrid() {
                     background:
                       category === tag
                         ? "var(--gradient-gold)"
-                        : "rgba(255,255,255,0.05)",
+                        : "rgba(255,255,255,0.7)",
+
                     color:
                       category === tag
                         ? "var(--rj-emerald)"
-                        : "rgba(255,255,255,0.45)",
-                    border: `1px solid ${category === tag ? "transparent" : "rgba(255,255,255,0.08)"}`,
-                    fontWeight: category === tag ? 700 : 400,
+                        : "var(--rj-charcoal)",
+
+                    border: `1px solid ${
+                      category === tag
+                        ? "var(--rj-emerald)"
+                        : "rgba(0,55,32,0.12)"
+                    }`,
+
+                    fontWeight: category === tag ? 700 : 500,
                     cursor: "pointer",
+                    backdropFilter: "blur(10px)",
                   }}
                 >
                   {tag}
