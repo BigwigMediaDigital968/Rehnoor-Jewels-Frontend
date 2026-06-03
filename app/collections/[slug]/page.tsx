@@ -22,6 +22,7 @@ import PendantForWomen from "./custom/Pendantforwomen";
 import RelatedCollection from "./component/RelatedCollection";
 import MangalSutraCollection from "./custom/MangalSutraContent";
 import NecklaceForWomen from "./custom/NecklaceForWomen";
+import BraceletForWomen from "./custom/BraceletForWomen";
 
 const EXTRA_SECTIONS: Record<string, React.FC<{ meta: CollectionMeta }>> = {
   "gold-plated-chains-for-men": ChainForMenPage,
@@ -35,6 +36,7 @@ const EXTRA_SECTIONS: Record<string, React.FC<{ meta: CollectionMeta }>> = {
   "gold-plated-pendants-for-women": PendantForWomen,
   "gold-plated-mangalsutra-for-women": MangalSutraCollection,
   "gold-plated-necklaces-for-women": NecklaceForWomen,
+  "gold-plated-bracelets-for-women": BraceletForWomen,
 };
 
 function toMeta(

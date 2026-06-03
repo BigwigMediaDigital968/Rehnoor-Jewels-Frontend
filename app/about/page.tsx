@@ -10,7 +10,7 @@ import SocialFeed from "../component/website/SocialFeed";
 import Script from "next/script";
 
 export const metadata: Metadata = {
-  title: "About Rehnoor Jewels | Our Story & Craftsmanship",
+  title: "Our Story & Craftsmanship | About",
   description:
     "Learn about Rehnoor Jewels, a brand built on elegance, quality, and craftsmanship. Discover the passion behind every gold plated piece we create.",
   keywords: [

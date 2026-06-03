@@ -103,64 +103,114 @@ const collections = [
 
 const testimonials = [
   {
-    id: 1,
-    name: "Arjun Mehta",
+    id: 13,
+    name: "Aditya Khurana",
+    city: "Pune",
+    rating: 5,
+    collection: "pearl-flower-ring",
+    collectionLabel: "Pearl Flower Ring",
+    text: "The Pearl Flower Ring is simple yet classy. It's perfect for daily wear and gives a subtle, elegant look without being too flashy.",
+    avatar: "AK",
+  },
+  {
+    id: 14,
+    name: "Tanvi Desai",
+    city: "Ahmedabad",
+    rating: 5,
+    collection: "daisy-link-bracelet",
+    collectionLabel: "Daisy Gold Toned Link Bracelet",
+    text: "I really liked the Daisy Gold Toned Link Bracelet. It's minimal, comfortable, and goes well with both casual and formal outfits.",
+    avatar: "TD",
+  },
+  {
+    id: 15,
+    name: "Rahul Arora",
+    city: "Delhi",
+    rating: 5,
+    collection: "evil-eye-bracelet",
+    collectionLabel: "Evil Eye Bracelet",
+    text: "The Evil Eye Bracelet looks trendy and feels well-made. It's a great combination of style and meaning, and I've been wearing it regularly.",
+    avatar: "RA",
+  },
+  {
+    id: 16,
+    name: "Nikita Chawla",
+    city: "Chandigarh",
+    rating: 5,
+    collection: "rose-gold-link-bracelet",
+    collectionLabel: "Rose Gold Link Bracelet",
+    text: "The Rose Gold Link Bracelet has a very classy finish. It looks premium and is perfect for both everyday wear and special occasions.",
+    avatar: "NC",
+  },
+  {
+    id: 17,
+    name: "Siddharth Jain",
+    city: "Jaipur",
+    rating: 5,
+    collection: "butterfly-necklace-set",
+    collectionLabel: "Butterfly Necklace Set",
+    text: "The Butterfly Necklace Set is a great gifting option. The design is cute and elegant, and the quality is impressive for the price.",
+    avatar: "SJ",
+  },
+  {
+    id: 18,
+    name: "Meher Gulati",
     city: "Mumbai",
     rating: 5,
-    collection: "nawabi-chain",
-    collectionLabel: "Nawabi Chain",
-    text: "The finish on this chain is exceptional. Got compliments at every event. Worth every rupee feels like heirloom quality.",
+    collection: "black-crystal-jewelry-set",
+    collectionLabel: "Black Crystal Jewelry Set",
+    text: "I wore the Black Crystal Jewelry Set to an evening event, and it looked stunning. It adds the right amount of sparkle and gives a very polished look.",
+    avatar: "MG",
+  },
+  {
+    id: 19,
+    name: "Devansh Kapoor",
+    city: "Bangalore",
+    rating: 5,
+    collection: "multi-stone-statement-ring",
+    collectionLabel: "Multi Stone Statement Ring",
+    text: "I got the Multi Stone Statement Ring, and it truly stands out. The colors are vibrant, and it adds an instant glam touch to any outfit. Perfect for occasions where you want to make a statement.",
+    avatar: "DK",
+  },
+  {
+    id: 20,
+    name: "Aisha Mirza",
+    city: "Hyderabad",
+    rating: 5,
+    collection: "pastel-cluster-cocktail-ring",
+    collectionLabel: "Pastel Cluster Cocktail Ring",
+    text: "The Pastel Cluster Cocktail Ring is so pretty and trendy. I love how soft the colors are. It's perfect for brunch outings and casual styling.",
     avatar: "AM",
   },
   {
-    id: 2,
-    name: "Rohan Singhania",
-    city: "Delhi",
+    id: 21,
+    name: "Rohan Bansal",
+    city: "Gurugram",
     rating: 5,
-    collection: "royal-kada",
-    collectionLabel: "Royal Kada",
-    text: "Solid weight, perfect thickness. Will definitely be ordering the bracelet next.",
-    avatar: "RS",
+    collection: "clover-gold-plated-bracelet",
+    collectionLabel: "Clover Gold Plated Bracelet",
+    text: "Purchased the Clover Gold Plated Bracelet, and I'm really happy with the quality. It's lightweight, stylish, and comfortable enough for everyday wear.",
+    avatar: "RB",
   },
   {
-    id: 3,
-    name: "Vikram Nair",
-    city: "Bangalore",
+    id: 22,
+    name: "Sana Sheikh",
+    city: "Lucknow",
     rating: 5,
-    collection: "signet-ring",
-    collectionLabel: "Signet Ring",
-    text: "Custom engraving was done perfectly. The ring looks and feels premium. Exactly what I wanted for my anniversary gift.",
-    avatar: "VN",
+    collection: "emerald-leaf-vine-bracelet",
+    collectionLabel: "Emerald Leaf Vine Bracelet",
+    text: "The Emerald Leaf Vine Bracelet looks very elegant and delicate. It pairs beautifully with traditional outfits and adds a graceful finish.",
+    avatar: "SS",
   },
   {
-    id: 4,
-    name: "Karan Oberoi",
-    city: "Jaipur",
+    id: 23,
+    name: "Yashika Tandon",
+    city: "Noida",
     rating: 5,
-    collection: "link-bracelet",
-    collectionLabel: "Link Bracelet",
-    text: "Love the balance between modern design and traditional goldwork. The links are strong and smooth. Exceptional craftsmanship.",
-    avatar: "KO",
-  },
-  {
-    id: 5,
-    name: "Dev Sharma",
-    city: "Hyderabad",
-    rating: 5,
-    collection: "sol-pendant",
-    collectionLabel: "Sol Pendant",
-    text: "Lightweight yet substantial. The pendant sits beautifully on a chain. Customer service was also top notch, very responsive.",
-    avatar: "DS",
-  },
-  {
-    id: 6,
-    name: "Aditya Kapoor",
-    city: "Chennai",
-    rating: 5,
-    collection: "moghul-bangle",
-    collectionLabel: "Moghul Bangle",
-    text: "This bangle is a statement piece. The Moghul detailing is incredibly fine. I've received so many questions about where it's from.",
-    avatar: "AK",
+    collection: "minimalist-bar-pendant",
+    collectionLabel: "Minimalist Bar Pendant",
+    text: "The Minimalist Bar Pendant is simple yet very stylish. It's perfect for layering or even wearing alone for a clean, modern look.",
+    avatar: "YT",
   },
 ];
 
@@ -171,18 +221,21 @@ export default function TestimonialsSection() {
   const [page, setPage] = useState(0);
   const PER_PAGE = 3;
 
-  const filters = [
-    { id: ALL_FILTER, label: "All" },
-    ...collections.slice(0, 6).map((c) => ({ id: c.id, label: c.label })),
-  ];
+  // const filters = [
+  //   { id: ALL_FILTER, label: "All" },
+  //   ...collections.slice(0, 6).map((c) => ({ id: c.id, label: c.label })),
+  // ];
 
-  const filtered =
-    active === ALL_FILTER
-      ? testimonials
-      : testimonials.filter((t) => t.collection === active);
+  // const filtered =
+  //   active === ALL_FILTER
+  //     ? testimonials
+  //     : testimonials.filter((t) => t.collection === active);
 
-  const pages = Math.ceil(filtered.length / PER_PAGE);
-  const visible = filtered.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE);
+  const pages = Math.ceil(testimonials.length / PER_PAGE);
+  const visible = testimonials.slice(
+    page * PER_PAGE,
+    page * PER_PAGE + PER_PAGE,
+  );
 
   useEffect(() => setPage(0), [active]);
 
@@ -212,12 +265,14 @@ export default function TestimonialsSection() {
           >
             Worn with pride,
             <br />
-            <em className="text-gold-shimmer font-normal">loved for life</em>
+            <em className="text-gold-shimmer font-normal pe-2">
+              loved for life
+            </em>
           </h2>
         </motion.div>
 
         {/* Filter pills */}
-        <div className="flex flex-wrap justify-center gap-2 mb-10">
+        {/* <div className="flex flex-wrap justify-center gap-2 mb-10">
           {filters.map((f) => (
             <button
               key={f.id}
@@ -233,7 +288,7 @@ export default function TestimonialsSection() {
               {f.label}
             </button>
           ))}
-        </div>
+        </div> */}
 
         {/* Cards */}
         <AnimatePresence mode="wait">
@@ -339,7 +394,7 @@ export default function TestimonialsSection() {
             <button
               onClick={() => setPage((p) => Math.max(0, p - 1))}
               disabled={page === 0}
-              className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 disabled:opacity-30"
+              className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 disabled:opacity-30 cursor-pointer"
               style={{
                 border: "1px solid var(--rj-bone)",
                 color: "var(--rj-charcoal)",
@@ -351,7 +406,7 @@ export default function TestimonialsSection() {
               <button
                 key={i}
                 onClick={() => setPage(i)}
-                className="w-2 h-2 rounded-full transition-all duration-300"
+                className="w-2 h-2 rounded-full transition-all duration-300 cursor-pointer"
                 style={{
                   background:
                     i === page ? "var(--rj-emerald)" : "var(--rj-bone)",
@@ -362,7 +417,7 @@ export default function TestimonialsSection() {
             <button
               onClick={() => setPage((p) => Math.min(pages - 1, p + 1))}
               disabled={page === pages - 1}
-              className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 disabled:opacity-30"
+              className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 disabled:opacity-30 cursor-pointer"
               style={{
                 border: "1px solid var(--rj-bone)",
                 color: "var(--rj-charcoal)",

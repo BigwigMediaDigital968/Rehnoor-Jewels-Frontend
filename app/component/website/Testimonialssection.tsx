@@ -376,48 +376,75 @@ import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 const testimonials = [
   {
     id: 1,
-    name: "ARJUN MEHTA",
-    product: "Nawabi Chain",
-    avatar:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80",
-    rating: 5,
-    text: "The finish on this chain is exceptional. Got compliments at every event. Worth every rupee — feels like heirloom quality.",
-  },
-  {
-    id: 2,
-    name: "ROHAN SINGHANIA",
-    product: "Royal Kada",
-    avatar:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80",
-    rating: 5,
-    text: "Value for money, premium look. The hallmark certificate gave me confidence. Will definitely order more.",
-  },
-  {
-    id: 3,
-    name: "VIKRAM NAIR",
-    product: "Signet Ring",
-    avatar:
-      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&q=80",
-    rating: 5,
-    text: "Custom engraving was done perfectly. The ring looks and feels premium. Exactly what I wanted.",
-  },
-  {
-    id: 4,
-    name: "ROHIT SHARMA",
-    product: "Rope Chain",
-    avatar:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80",
-    rating: 5,
-    text: "Bought a rope chain for men and it looks amazing. The gold plating is durable and doesn't fade easily.",
-  },
-  {
-    id: 5,
     name: "PRIYA SHARMA",
-    product: "Floral Mangalsutra",
+    product: "Gold-Plated Necklace",
     avatar:
       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80",
     rating: 5,
-    text: "I ordered a gold plated mangalsutra and it's absolutely beautiful. Lightweight, detailed and very comfortable.",
+    text: "Really loved the gold-plated necklace. The shine is beautiful, and it looks very close to real gold. Perfect for both daily wear and small occasions.",
+  },
+  {
+    id: 2,
+    name: "AMAN VERMA",
+    product: "Bracelet",
+    avatar:
+      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80",
+    rating: 5,
+    text: "Bought a bracelet and I’m happy with the quality. It’s stylish, lightweight, and goes well with most outfits.",
+  },
+  {
+    id: 3,
+    name: "NEHA KAPOOR",
+    product: "Earrings",
+    avatar:
+      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80",
+    rating: 5,
+    text: "The earrings I ordered are elegant and comfortable to wear. I received compliments the first time I wore them.",
+  },
+  {
+    id: 4,
+    name: "RAHUL MEHTA",
+    product: "Men's Chain",
+    avatar:
+      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&q=80",
+    rating: 5,
+    text: "Great collection for men. The chain I purchased looks premium, and the finishing is impressive. The jewellery is versatile enough to wear with casual and formal outfits. I especially liked that aspect of it.",
+  },
+  {
+    id: 5,
+    name: "SIMRAN KAUR",
+    product: "Luxury Jewellery Collection",
+    avatar:
+      "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=100&q=80",
+    rating: 5,
+    text: "Affordable yet high-end jewellery with great designs. It makes you feel luxurious when you're wearing it and gives a rich look without being too heavy or uncomfortable.",
+  },
+  {
+    id: 6,
+    name: "KARAN MALHOTRA",
+    product: "Premium Ring",
+    avatar:
+      "https://images.unsplash.com/photo-1504593811423-6dd665756598?w=100&q=80",
+    rating: 5,
+    text: "The ring looks classy and well-made. Even with daily wear, the shine remains. The fitting is also perfect and comfortable for everyday use.",
+  },
+  {
+    id: 7,
+    name: "ANJALI GUPTA",
+    product: "Jewellery Gift Set",
+    avatar:
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&q=80",
+    rating: 5,
+    text: "Ordered a jewellery set for gifting, and it was perfect. Nice packaging and beautiful design. The person I gifted it to absolutely loved it.",
+  },
+  {
+    id: 8,
+    name: "ROHIT SINGH",
+    product: "Ethnic Jewellery Collection",
+    avatar:
+      "https://images.unsplash.com/photo-1504257432389-52343af06ae3?w=100&q=80",
+    rating: 5,
+    text: "Good quality jewellery. Looks great with ethnic wear, and delivery was also quick. The entire process went off without a hitch.",
   },
 ];
 
@@ -464,7 +491,7 @@ export default function TestimonialsSection() {
   const visibleItems = getVisibleItems();
 
   return (
-    <section className="h-[75vh] min-h-[500px] max-h-[650px] bg-[#FBF9F6] flex flex-col justify-center py-14 overflow-hidden select-none">
+    <section className="h-[88vh] md:h-[80vh] bg-[#FBF9F6] flex flex-col justify-center py-14 overflow-hidden select-none">
       <div className="w-full max-w-7xl mx-auto px-4 md:px-8 flex flex-col h-full justify-between">
         {/* Header Layout Block */}
         <div className="text-center pt-2">

@@ -4,7 +4,7 @@ import ProductTestimonials from "../component/website/pages/product/ProductTesti
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Shop All Jewellery – Rehnoor Jewels",
+  title: "Shop All Jewellery",
   description:
     "Browse Rehnoor Jewels' full range of gold plated jewellery. Lightweight, anti-tarnish designs crafted for every style and occasion.",
 

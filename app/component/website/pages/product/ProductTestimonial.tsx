@@ -17,149 +17,77 @@ import {
 // ─────────────────────────────────────────────────────────────────
 const testimonials = [
   {
-    id: 1,
-    name: "Arjun Mehta",
+    id: 7,
+    name: "Pooja Arora",
     rating: 5,
     badge: "Excellent",
     review:
-      "The finish on this chain is exceptional. Got compliments at every event. Worth every rupee — feels like heirloom quality.",
-    productName: "Nawabi Chain",
-    productHref: "/products/nawabi-chain-22kt",
+      "The design of my items was excellent. Excellent craftsmanship makes these earrings go great with both Indian and Western styles of dress. The quality of the final product has an enormous impact on the visual presentation.",
+    productName: "Designer Earrings",
+    productHref: "/collections",
     productImage:
-      "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=80&q=80",
+      "https://images.unsplash.com/photo-1635767798638-3e25273a8236?w=80&q=80",
   },
   {
-    id: 2,
-    name: "Rohan Singhania",
+    id: 8,
+    name: "Vikas Jain",
     rating: 5,
     badge: "Excellent",
     review:
-      "Value for money, premium look. The hallmark certificate gave me confidence. Will definitely order more.",
-    productName: "Royal Kada",
-    productHref: "/products/royal-kada-heavy",
+      "Fashionable and trending jewelry at budget prices, but very nice quality items with a high-end finish. A very good place to buy stylish jewelry without spending too much money.",
+    productName: "Fashion Jewellery Collection",
+    productHref: "/collections",
     productImage:
-      "https://images.unsplash.com/photo-1720528347642-ba00bbf6794d?w=80&q=80",
+      "https://images.unsplash.com/photo-1617038220319-276d3cfab638?w=80&q=80",
   },
   {
-    id: 3,
-    name: "Vikram Nair",
+    id: 9,
+    name: "Aarav Malhotra",
     rating: 5,
     badge: "Excellent",
     review:
-      "Custom engraving was done perfectly. The ring looks and feels premium. Exactly what I wanted.",
-    productName: "Signet Ring",
-    productHref: "/products/signet-ring-gold",
+      "I purchased the Tri Tone Cocktail Ring for gifting, and it turned out to be an amazing choice. The finish looks premium, and the design is very unique. It easily matches with different outfits, making it quite versatile.",
+    productName: "Tri Tone Cocktail Ring",
+    productHref: "/collections",
     productImage:
       "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=80&q=80",
   },
   {
-    id: 4,
-    name: "Karan Oberoi",
+    id: 10,
+    name: "Riya Saxena",
     rating: 5,
     badge: "Excellent",
     review:
-      "गणपति जी का डिज़ाइन बहुत दिव्य है। पैसे वसूल है। बहुत खुश हूँ इस खरीद से।",
-    productName: "Sol Pendant",
-    productHref: "/products/sol-pendant-gold",
+      "The Elegant Green Floral Ring is absolutely beautiful. The detailing is neat, and the color looks even better in real life. It adds a graceful touch to my ethnic outfits.",
+    productName: "Elegant Green Floral Ring",
+    productHref: "/collections",
     productImage:
-      "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=80&q=80",
+      "https://images.unsplash.com/photo-1603561596112-db1d6e83eec6?w=80&q=80",
   },
   {
-    id: 5,
-    name: "Dev Sharma",
+    id: 11,
+    name: "Kunal Mehra",
     rating: 5,
     badge: "Excellent",
     review:
-      "Value for money, looks expensive. Customer service was also top notch — very responsive.",
-    productName: "Link Bracelet",
-    productHref: "/products/link-bracelet-gold",
+      "Bought the Blooming Floral Statement Ring for my sister, and she loved it. The design is bold but still elegant, making it perfect for parties and special occasions.",
+    productName: "Blooming Floral Statement Ring",
+    productHref: "/collections",
     productImage:
-      "https://images.unsplash.com/photo-1574169208507-84376144848b?w=80&q=80",
+      "https://images.unsplash.com/photo-1611085583191-a3b181a88401?w=80&q=80",
   },
   {
-    id: 6,
-    name: "Aditya Kapoor",
+    id: 12,
+    name: "Ishika Bhatia",
     rating: 5,
     badge: "Excellent",
     review:
-      "Good Bracelet. The Moghul detailing is incredibly fine. I've received many questions about where it's from.",
-    productName: "Moghul Bangle",
-    productHref: "/products/moghul-kada-carved",
+      "The Ocean Wave Cocktail Ring has a very modern and stylish design. It’s lightweight and comfortable to wear for long hours, which I really appreciate.",
+    productName: "Ocean Wave Cocktail Ring",
+    productHref: "/collections",
     productImage:
-      "https://images.unsplash.com/photo-1613053341085-db794820ce43?w=80&q=80",
+      "https://images.unsplash.com/photo-1602752275437-4fbab7c9b86c?w=80&q=80",
   },
-  // {
-  //   id: 7,
-  //   name: "Mohit Sharma",
-  //   rating: 4,
-  //   badge: "Good",
-  //   review:
-  //     "Good quality at this price, worth buying. Packaging was very premium.",
-  //   productName: "Cord Bracelet",
-  //   productHref: "/products/cord-bracelet-gold",
-  //   productImage:
-  //     "https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?w=80&q=80",
-  // },
-  // {
-  //   id: 8,
-  //   name: "Bhanu Nama",
-  //   rating: 4,
-  //   badge: "Good",
-  //   review:
-  //     "फोटो जैसा ही है, पैसे वसूल है। Will definitely recommend to friends and family.",
-  //   productName: "Cuban Chain",
-  //   productHref: "/products/cuban-link-chain",
-  //   productImage:
-  //     "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=80&q=80",
-  // },
-  // {
-  //   id: 9,
-  //   name: "Harish Purohit",
-  //   rating: 4,
-  //   badge: "Good",
-  //   review:
-  //     "Very satisfied with this purchase. Quality is solid. Good weight and finish.",
-  //   productName: "Rope Chain",
-  //   productHref: "/products/rope-chain-gold",
-  //   productImage:
-  //     "https://images.unsplash.com/photo-1602173574767-37ac01994b2a?w=80&q=80",
-  // },
-  // {
-  //   id: 10,
-  //   name: "Subham Shaw",
-  //   rating: 4,
-  //   badge: "Good",
-  //   review:
-  //     "Good product. Delivery was fast. The gold colour is very consistent throughout.",
-  //   productName: "Band Ring",
-  //   productHref: "/products/band-ring-plain",
-  //   productImage:
-  //     "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=80&q=80",
-  // },
-  // {
-  //   id: 11,
-  //   name: "Darshana Patel",
-  //   rating: 4,
-  //   badge: "Good",
-  //   review:
-  //     "Good quality. Very happy with the purchase. Arrived well-packed in a beautiful box.",
-  //   productName: "Om Pendant",
-  //   productHref: "/products/om-pendant-22kt",
-  //   productImage:
-  //     "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=80&q=80",
-  // },
-  // {
-  //   id: 12,
-  //   name: "Ravi Gupta",
-  //   rating: 3,
-  //   badge: "Rated",
-  //   review:
-  //     "Very nice product. Shine is too good. Looks exactly like the photo on website.",
-  //   productName: "Nawabi Chain",
-  //   productHref: "/products/nawabi-chain-22kt",
-  //   productImage:
-  //     "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=80&q=80",
-  // },
 ];
 
 // ─────────────────────────────────────────────────────────────────
@@ -254,10 +182,10 @@ function TestimonialCard({ t }: { t: (typeof testimonials)[number] }) {
       </div>
 
       {/* Divider */}
-      <div className="h-px mb-3" style={{ background: "var(--rj-bone)" }} />
+      {/* <div className="h-px mb-3" style={{ background: "var(--rj-bone)" }} /> */}
 
       {/* View product link */}
-      <Link
+      {/* <Link
         href={t.productHref}
         className="inline-flex items-center gap-1 group/link transition-all duration-200"
         style={{ color: "var(--rj-emerald)" }}
@@ -272,7 +200,7 @@ function TestimonialCard({ t }: { t: (typeof testimonials)[number] }) {
           size={9}
           className="transition-transform duration-200 group-hover/link:translate-x-0.5"
         />
-      </Link>
+      </Link> */}
     </div>
   );
 }
@@ -283,7 +211,7 @@ function TestimonialCard({ t }: { t: (typeof testimonials)[number] }) {
 function DesktopGrid() {
   return (
     <div className="hidden md:grid grid-cols-3 gap-4">
-      {testimonials.map((t, i) => (
+      {testimonials.slice(0, 6).map((t, i) => (
         <motion.div
           key={t.id}
           initial={{ opacity: 0, y: 24 }}

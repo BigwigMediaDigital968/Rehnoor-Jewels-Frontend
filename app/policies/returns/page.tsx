@@ -11,6 +11,7 @@ import {
   InfoGrid,
   StepCard,
 } from "../component/PolicyLayout";
+import Link from "next/link";
 
 export default function ReturnsRefundPage() {
   return (
@@ -22,19 +23,19 @@ export default function ReturnsRefundPage() {
       {/* ── Overview ── */}
       <PolicySection title="Overview">
         <PolicyP>
-          At Rehnoor Jewels, we take pride in the quality of every product we
-          deliver. We have a clear and fair return and refund policy to ensure
-          your complete satisfaction. Please read this policy carefully before
-          making a purchase.
+          At Rehnoor Jewels, we want you to love every piece you receive. If for
+          any reason you're not completely satisfied, we've made our return and
+          refund process simple and stress-free. Return requests must be raised
+          within 7 days of delivery.
         </PolicyP>
         <InfoGrid
           items={[
             { label: "Standard Return Window", value: "7 Days from Delivery" },
             {
-              label: "Extended Return Window",
-              value: "6 Months (50% Refund)",
+              label: "Shop with Confidence",
+              value: "Effective & Transparent",
             },
-            { label: "Refund Method", value: "Original Payment Method" },
+            { label: "Refund Method", value: "Provided Payment Method" },
             { label: "Refund Timeline", value: "5–7 Business Days" },
           ]}
         />
@@ -58,11 +59,10 @@ export default function ReturnsRefundPage() {
           conditions:
           <ul className="mt-2 flex flex-col gap-1">
             {[
-              "Product must be in unused, unworn condition",
-              "Original packaging, tags, and authenticity seal must be intact",
-              "Original invoice / bill must be included with the return",
-              "Return request must be raised within 7 days of delivery date",
-              "Clear photos / video of the damage must be shared at the time of request",
+              "Return request must be raised within 7 days of delivery",
+              "Items must be unused, unworn, and with original packaging and tags intact",
+              "An unboxing video is required for missing item claims recorded from the sealed state",
+              "Minimum 2 clear images of the product are required with your return request",
             ].map((item, i) => (
               <li key={i} className="flex items-start gap-2">
                 <span style={{ color: "var(--rj-emerald)" }}>✓</span> {item}
@@ -80,15 +80,14 @@ export default function ReturnsRefundPage() {
         </PolicyP>
         <PolicyList
           items={[
+            "Custom-made or personalised jewellery",
             "Products that have been used, worn, or altered in any way",
             "Products without original packaging, tags, or authenticity seal",
-            "Products returned after 7 days of delivery (standard return window)",
-            "Products damaged due to misuse, improper handling, chemical exposure, or negligence",
-            "Products purchased during special sale or clearance events (unless damaged on delivery)",
-            "Digital downloads, gift cards, or store credits",
+            "Items purchased during clearance or final sale (as noted on the product page)",
+            "Products purchased under Buy 1 Get 1 or promotional offers are eligible for store credit only",
           ]}
         />
-        <HighlightBox
+        {/* <HighlightBox
           icon={<AlertTriangle size={14} />}
           title="No Custom Orders Currently"
           variant="gold"
@@ -96,11 +95,11 @@ export default function ReturnsRefundPage() {
           Rehnoor Jewels does not offer custom-designed jewellery at this time.
           All products listed on our website are standard designs available for
           purchase.
-        </HighlightBox>
+        </HighlightBox> */}
       </PolicySection>
 
       {/* ── Extended Return ── */}
-      <PolicySection title="Extended Return — 6-Month Policy (50% Refund)">
+      {/* <PolicySection title="Extended Return — 6-Month Policy (50% Refund)">
         <PolicyP>
           In addition to our standard 7-day window, Rehnoor Jewels offers an
           extended return program: customers may return any product within{" "}
@@ -117,34 +116,34 @@ export default function ReturnsRefundPage() {
             "Return shipping charges for extended returns are borne by the customer",
           ]}
         />
-      </PolicySection>
+      </PolicySection> */}
 
       {/* ── How to Return ── */}
       <PolicySection title="How to Initiate a Return">
         <PolicyP>
-          Please follow the steps below. Do not ship any product back without
-          prior written approval from our support team.
+          To begin your return, reach out to us via Email or WhatsApp (details
+          at the bottom of this page) with the following information:
         </PolicyP>
         <div className="flex flex-col gap-3 mt-2">
           <StepCard
             step="01"
-            title="Contact Support"
-            desc="Email hello@rehnoorjewels.com or WhatsApp +91 84485 81529 with your order ID and reason for return. Attach clear photos / videos of the damage."
+            title="Share your Order ID &amp; contact number"
+            desc="Provide your Rehnoor Jewels Order ID (beginning with RJ-YYYY) and the contact number used at the time of placing the order."
           />
           <StepCard
             step="02"
-            title="Await Approval"
-            desc="Our team will review your request within 24–48 business hours and confirm eligibility. You will receive a Return Merchandise Authorization (RMA) number."
+            title="Select the items you wish to return"
+            desc="Mention the specific product(s) SKU ID from your order that you&#39;d like to return."
           />
           <StepCard
             step="03"
-            title="Ship the Product"
-            desc="Pack the product securely in its original packaging with the original invoice. Ship to our registered address using a trackable courier. Return shipping for damaged products is borne by Rehnoor Jewels."
+            title="Provide return details"
+            desc="Share your return reason, upload a minimum of 2 clear product images, your pickup address, and your chosen refund method."
           />
           <StepCard
             step="04"
-            title="Quality Inspection"
-            desc="Once received, our team inspects the returned product within 2–3 business days and confirms the refund or replacement decision."
+            title="Await confirmation from our team"
+            desc="Our team will review your request and confirm the pickup schedule and next steps within 1–2 business days."
           />
           <StepCard
             step="05"
@@ -158,21 +157,29 @@ export default function ReturnsRefundPage() {
       <PolicySection title="Refund Information">
         <PolicyP>
           All approved refunds are processed to the{" "}
-          <strong>original payment method</strong> used at the time of purchase.
-          We do not issue store credit or gift card refunds unless specifically
-          requested by the customer.
+          <strong>provided payment method</strong> used at the time of
+          purchase/return request. We do not issue store credit or gift card
+          refunds unless specifically requested by the customer.
         </PolicyP>
         <InfoGrid
           items={[
-            { label: "Refund Method", value: "Original Payment Source" },
-            { label: "Refund Timeline", value: "5–7 Business Days" },
             {
-              label: "Damaged Return Shipping",
-              value: "Paid by Rehnoor Jewels",
+              label: "Refund processing time (post pickup & verification)",
+              value: "7–10 working days",
             },
             {
-              label: "Extended Return Shipping",
-              value: "Paid by Customer",
+              label: "Processed as per RBI guidelines",
+              value: "Regulatory compliance",
+            },
+            {
+              label: "Prepaid Orders",
+              value:
+                "Original Payment Method/Refunded to the card, wallet, or UPI used at the time of checkout.",
+            },
+            {
+              label: "COD Orders",
+              value:
+                "UPI or Bank Transfer/Refunded to the UPI ID or bank account details provided by you during the return process.",
             },
           ]}
         />
@@ -191,12 +198,10 @@ export default function ReturnsRefundPage() {
       {/* ── Warranty ── */}
       <PolicySection title="Product Warranty">
         <PolicyP>
-          All Rehnoor Jewels products come with a{" "}
-          <strong>6-month warranty</strong> against manufacturing defects from
-          the date of purchase. Our products feature pure 24K gold plating with
-          approximately 100–300 mg of 24K gold per piece to ensure durability
-          and longevity.
+          Every Rehnoor Jewels piece is backed by a{" "}
+          <strong>6-month warranty</strong> from the date of delivery.
         </PolicyP>
+        <h3>What's Covered</h3>
         <PolicyList
           items={[
             "6-month warranty covering manufacturing defects from purchase date",
@@ -206,10 +211,71 @@ export default function ReturnsRefundPage() {
             "Gold plating warranty covers significant plating loss under normal wear conditions",
           ]}
         />
+        <h3>What's Not Covered</h3>
+        <PolicyList
+          items={[
+            "Damage caused by mishandling, accidents, or improper storage",
+            "Normal wear and tear, scratches, or tarnishing from everyday use",
+            "Damage resulting from exposure to chemicals, perfumes, or water",
+            "Custom-made or personalised jewellery (covered separately on a case-by-case basis)",
+            "Products that have been repaired or altered by a third party",
+          ]}
+        />
+      </PolicySection>
+
+      {/* ──How to claim Warranty ── */}
+      <PolicySection title="How to Claim Your Warranty">
+        <PolicyP>
+          To raise a warranty claim, contact us via Email or WhatsApp within the
+          6-month warranty period with:
+        </PolicyP>
+
+        <PolicyList
+          items={[
+            "Your Order ID (beginning with RJ-YYYY)",
+            "A clear description of the defect",
+            "Minimum 2 photographs clearly showing the defect",
+            "Proof of purchase or delivery confirmation",
+          ]}
+        />
+
+        <PolicyP>
+          <strong>Warranty Resolution: </strong>Upon verification, we will offer
+          a free repair, replacement, or store credit at our discretion.
+          Warranty claims are processed within 5–7 business days of receiving
+          the item.
+        </PolicyP>
+      </PolicySection>
+
+      {/* ── Contact CTA ── */}
+      <PolicySection title="Need Help? We're Here for You">
+        <PolicyP>
+          For any return, refund, or warranty queries, reach out to our support
+          team via email or WhatsApp. We typically respond within a few hours
+          during business hours.
+        </PolicyP>
+
+        <div className="flex flex-wrap justify-center md:justify-start items-center gap-3 mt-4">
+          <Link
+            href="mailto:hello@rehnoorjewels.com"
+            className="flex items-center justify-center text-center text-[var(--rj-emerald)] rounded-2xl transition-all duration-300 border border-amber-200 px-5 py-4 hover:bg-amber-300 hover:text-[var(--rj-emerald)]"
+          >
+            📧 hello@rehnoorjewels.com
+          </Link>
+
+          <Link
+            href="https://wa.me/918448581529"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center text-center text-[var(--rj-emerald)] rounded-2xl transition-all duration-300 border border-amber-200 px-5 py-4 hover:bg-amber-300 hover:text-[var(--rj-emerald)]"
+          >
+            💬 +91 84485 81529
+          </Link>
+        </div>
       </PolicySection>
 
       {/* ── Product Certification ── */}
-      <PolicySection title="Product Certification">
+      {/* <PolicySection title="Product Certification">
         <PolicyP>
           All Rehnoor Jewels products are crafted with pure 24K gold plating.
           Each piece contains approximately 100–300 mg of 24K gold, ensuring
@@ -223,7 +289,7 @@ export default function ReturnsRefundPage() {
             { label: "Warranty Period", value: "6 Months from Purchase" },
           ]}
         />
-      </PolicySection>
+      </PolicySection> */}
     </PolicyPageShell>
   );
 }
