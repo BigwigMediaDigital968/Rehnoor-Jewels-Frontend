@@ -48,8 +48,8 @@ export default function WhyTrustUs() {
     },
     {
       icon: Truck,
-      title: "Free Insured Shipping",
-      desc: "Every order ships insured, tracked, and sealed. If it doesn't arrive safe, we make it right.",
+      title: "Free Shipping",
+      desc: "Every order ships tracked and sealed. If it doesn't arrive safe, we make it right.",
     },
     {
       icon: RefreshCw,

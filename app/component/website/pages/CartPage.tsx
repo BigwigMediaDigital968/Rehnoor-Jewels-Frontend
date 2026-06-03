@@ -742,8 +742,8 @@ function OrderSummary() {
             },
             {
               icon: <Truck size={12} />,
-              label: "Insured",
-              tip: "All orders fully insured",
+              label: "",
+              tip: "All orders safely packed",
             },
           ].map((t) => (
             <Tip key={t.label} text={t.tip}>

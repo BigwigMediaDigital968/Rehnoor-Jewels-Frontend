@@ -924,8 +924,8 @@ export default function CollectionProductGrid({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [query, setQuery] = useState("");
   // const [visibleCount, setVisibleCount] = useState(9);
-  const INITIAL_COUNT = 9;
-  const PAGE_STEP = 3;
+  const INITIAL_COUNT = 15;
+  const PAGE_STEP = 6;
   const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);
 
   // ── Filter + sort — identical logic, now operates on `products` ─

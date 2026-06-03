@@ -84,7 +84,7 @@ const features = [
   {
     Icon: IconShipping,
     title: "Free Shipping",
-    description: "Enjoy free delivery on orders above ₹1000 across India.",
+    description: "Enjoy free delivery on orders above ₹999 across India.",
   },
   {
     Icon: IconSupport,

@@ -208,7 +208,7 @@ export default async function CollectionDetailPage({
   const ExtraSection = EXTRA_SECTIONS[slug];
 
   // console.log(meta);
-  console.log(products);
+  // console.log(products);
 
   return (
     <main>

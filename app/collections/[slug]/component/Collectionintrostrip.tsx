@@ -100,7 +100,7 @@ const FEATURES = [
       </svg>
     ),
     label: "Free Shipping",
-    desc: "On all orders above ₹5,000",
+    desc: "On all orders above ₹999",
   },
   {
     icon: (
@@ -174,7 +174,7 @@ function GoldOrnament({ className = "" }: { className?: string }) {
 // ─────────────────────────────────────────────────────────────────
 function TickerStrip() {
   const items = [
-    "✦ Free Shipping Above ₹5,000",
+    "✦ Free Shipping Above ₹999",
     "✦ Artisan Crafted",
     "✦ Lifetime Warranty",
     "✦ Same-Day Dispatch",

@@ -107,7 +107,7 @@ function FeaturedCard({ post }: { post: BlogCard }) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       className="relative rounded-2xl overflow-hidden group"
-      style={{ aspectRatio: "5/3", cursor: "pointer" }}
+      style={{ aspectRatio: "4/3", cursor: "pointer" }}
     >
       <Link href={`/blogs/${post.slug}`} className="absolute inset-0 z-10" />
 

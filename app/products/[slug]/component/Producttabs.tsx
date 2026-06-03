@@ -179,7 +179,7 @@ function Shipping() {
       name: "Standard Delivery",
       time: "5–7 business days",
       price: "Free",
-      note: "On all orders above ₹2,000",
+      note: "On all orders above ₹999",
     },
     // {
     //   name: "Express Delivery",
@@ -255,7 +255,7 @@ function Shipping() {
               fontFamily: "var(--font-body,'DM Sans'),sans-serif",
             }}
           >
-            All shipments are <strong>fully insured</strong> and arrive in our
+            All shipments are <strong>fully secured</strong> and arrive in our
             signature velvet-lined gift box with a tamper-evident seal and
             Welcome Note from Rehnoor Jewels 💕.
           </p>

@@ -955,17 +955,26 @@ export default function ProductDetailHero({
                     {breadcrumbCollectionName}
                   </Link>
                 )}
-                {(product as any).purity && (
-                  <span
-                    className="font-cinzel text-[9px] tracking-widest uppercase px-2.5 py-1 rounded-full"
-                    style={{
-                      background: "rgba(252,193,81,0.1)",
-                      color: "#a07800",
-                    }}
-                  >
-                    {(product as any).purity}
-                  </span>
-                )}
+
+                <span
+                  className="relative font-cinzel text-[9px] tracking-widest uppercase px-2.5 py-1 rounded-full"
+                  style={{
+                    background: "rgba(252,193,81,0.1)",
+                    color: "#a07800",
+                  }}
+                >
+                  Rehnoor Jewels{" "}
+                  {/* {product.tag && (
+                    <div className="absolute top-0 left-27 z-10 pointer-events-none">
+                      <span
+                        className="font-cinzel text-[5px] font-bold tracking-widest px-3 py-1 rounded-full"
+                        style={{ background: "var(--rj-gold)", color: "#000" }}
+                      >
+                        {product.tag}
+                      </span>
+                    </div>
+                  )} */}
+                </span>
               </div>
 
               <h1

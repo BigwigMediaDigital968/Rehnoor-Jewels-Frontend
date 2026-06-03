@@ -46,10 +46,10 @@ const trustPoints = [
   },
   {
     icon: "◉",
-    title: "Secure Packaging",
+    title: "Premium Packaging",
     desc: "Each piece is packed safely in tamper-proof packaging to ensure it reaches you in perfect condition.",
     stat: "100%",
-    statLabel: "Safe & Insured Delivery",
+    statLabel: "Safe & Secure Delivery",
   },
 ];
 

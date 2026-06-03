@@ -761,7 +761,7 @@ export function StepShipping({
         className="font-cinzel text-[9px] tracking-wider mt-3"
         style={{ color: "var(--rj-ash)" }}
       >
-        All orders are fully insured and arrive in our signature gift box with
+        All orders are fully secured and arrive in our signature gift box with
         tamper-evident seal.
       </p>
       <NavButtons
