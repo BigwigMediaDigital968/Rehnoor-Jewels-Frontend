@@ -570,7 +570,7 @@ export function PolicyPageShell({
               </div>
 
               {/* Trust Badges */}
-              <div
+              {/* <div
                 className="rounded-2xl p-5"
                 style={{
                   background: "rgba(252,193,81,0.06)",
@@ -608,7 +608,7 @@ export function PolicyPageShell({
                     </span>
                   </div>
                 ))}
-              </div>
+              </div> */}
             </div>
           </aside>
         </div>
@@ -647,7 +647,7 @@ export function PolicyPageShell({
               ))}
             </div>
           </div>
-          <div
+          {/* <div
             className="mt-4 pt-4"
             style={{ borderTop: "1px solid rgba(255,255,255,0.1)" }}
           >
@@ -659,7 +659,7 @@ export function PolicyPageShell({
               · 10722, Pratap Nagar, Delhi 110007 · All Rights Reserved ·
               Governed by Laws of India
             </p>
-          </div>
+          </div> */}
         </div>
       </div>
     </main>

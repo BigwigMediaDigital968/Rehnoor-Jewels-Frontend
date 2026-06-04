@@ -2,33 +2,32 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { MapPin, Phone, Mail, ArrowRight, Loader2 } from "lucide-react";
 import {
-  Instagram,
-  Youtube,
-  Facebook,
-  Twitter,
-  MapPin,
-  Phone,
-  Mail,
-  ArrowRight,
-  Linkedin,
-  Loader2,
-} from "lucide-react";
+  FaFacebook,
+  FaInstagram,
+  FaLinkedin,
+  FaPinterestP,
+} from "react-icons/fa6";
+
 import { useState } from "react";
 import Image from "next/image";
 
 const footerLinks = {
   collectionsMen: [
     { label: "Chains", href: "/collections/gold-plated-chains-for-men" },
-    { label: "Kadas", href: "/collections/kada-for-men" },
-    { label: "Rings", href: "/collections/rings-for-men" },
     { label: "Bracelets", href: "/collections/gold-plated-bracelets-for-men" },
+    { label: "Rings", href: "/collections/rings-for-men" },
     { label: "Pendants", href: "/collections/pendants-for-men" },
-    { label: "New Arrivals", href: "/collections/new-arrivals" },
+    { label: "Kadas", href: "/collections/kada-for-men" },
   ],
 
   collectionsWomen: [
     { label: "Chains", href: "/collections/gold-plated-chains-for-women" },
+    {
+      label: "Bracelets",
+      href: "/collections/gold-plated-bracelets-for-women",
+    },
 
     { label: "Rings", href: "/collections/gold-plated-rings-for-women" },
 
@@ -36,10 +35,6 @@ const footerLinks = {
     {
       label: "Mangalsutra",
       href: "/collections/gold-plated-mangalsutra-for-women",
-    },
-    {
-      label: "Rani Haar",
-      href: "/collections/rani-haar-designed-for-every-women",
     },
   ],
 
@@ -64,15 +59,19 @@ const footerLinks = {
 
 const socials = [
   {
-    icon: Instagram,
+    icon: FaInstagram,
     label: "Instagram",
     href: "https://www.instagram.com/rehnoorjewels",
   },
-  { icon: Youtube, label: "YouTube", href: "https://youtube.com" },
-  { icon: Facebook, label: "Facebook", href: "https://facebook.com" },
-  { icon: Twitter, label: "Twitter / X", href: "https://x.com" },
+
+  { icon: FaFacebook, label: "Facebook", href: "https://facebook.com" },
   {
-    icon: Linkedin,
+    icon: FaPinterestP,
+    label: "Pinterest",
+    href: "https://in.pinterest.com/rehnoorjewels/",
+  },
+  {
+    icon: FaLinkedin,
     label: "LinkedIn",
     href: "https://www.linkedin.com/company/rehnoor-jewels/",
   },
@@ -152,7 +151,7 @@ export default function Footer() {
               {
                 icon: "♾",
                 title: "Quick Support",
-                sub: "Live chat and email support",
+                sub: "Whatsapp and email support",
               },
               {
                 icon: "↩",
@@ -184,16 +183,6 @@ export default function Footer() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           {/* Brand column */}
           <div className="lg:col-span-4">
-            {/* <Link href="/" className="block mb-6">
-              <span className="font-cinzel font-black text-white text-2xl tracking-[0.3em]">
-                REHNOOR
-              </span>
-              <br />
-              <span className="font-cinzel text-[var(--rj-gold)] text-[9px] tracking-[0.4em]">
-                JEWELS
-              </span>
-            </Link> */}
-
             <Link
               href="/"
               className="flex-shrink-0 flex items-start"
@@ -210,9 +199,9 @@ export default function Footer() {
             </Link>
 
             <p className="text-white/60 text-sm leading-relaxed mb-6 max-w-sm">
-              Rehnoor Jewels redefines 1-gram gold jewellery - a fusion of
-              heritage artistry and contemporary boldness. Every creation
-              reflects enduring quality and refined craftsmanship.
+              Crafted in premium 1 Gram Gold Plated tones, every Rehnoor piece
+              blends timeless elegance with modern style perfect for everyday
+              wear, celebrations, weddings, and every occasion in between.
             </p>
 
             {/* Newsletter */}
@@ -398,7 +387,15 @@ export default function Footer() {
             <p className="text-white/30 text-xs font-cinzel tracking-widest">
               © {new Date().getFullYear()} REHNOOR JEWELS. ALL RIGHTS RESERVED.
             </p>
-            <p className="text-white/20 text-xs">Crafted with ✦ in India</p>
+            <p className="text-white/30 text-xs font-cinzel">
+              Developed and Market by{" "}
+              <a
+                className="underline"
+                href="https://www.bigwigmediadigital.com/"
+              >
+                Bigwig Media Degital
+              </a>
+            </p>
           </div>
         </div>
       </div>

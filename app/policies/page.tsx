@@ -343,7 +343,7 @@ export default function PoliciesIndexPage() {
               ))}
             </div>
           </div>
-          <div
+          {/* <div
             className="mt-4 pt-4"
             style={{ borderTop: "1px solid rgba(255,255,255,0.1)" }}
           >
@@ -355,7 +355,7 @@ export default function PoliciesIndexPage() {
               · 10722, Pratap Nagar, Delhi 110007 · All Rights Reserved ·
               Governed by Laws of India
             </p>
-          </div>
+          </div> */}
         </div>
       </div>
     </main>

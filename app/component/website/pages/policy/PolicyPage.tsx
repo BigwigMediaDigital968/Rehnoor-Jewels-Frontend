@@ -1604,7 +1604,7 @@ export default function PolicyPages() {
               </div>
 
               {/* Trust Badges */}
-              <div
+              {/* <div
                 className="rounded-2xl p-5"
                 style={{
                   background: "rgba(252,193,81,0.06)",
@@ -1642,7 +1642,7 @@ export default function PolicyPages() {
                     </span>
                   </div>
                 ))}
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -1682,7 +1682,7 @@ export default function PolicyPages() {
               ))}
             </div>
           </div>
-          <div
+          {/* <div
             className="mt-4 pt-4"
             style={{ borderTop: "1px solid rgba(255,255,255,0.1)" }}
           >
@@ -1694,7 +1694,7 @@ export default function PolicyPages() {
               · 10722, Pratap Nagar, Delhi 110007 · All Rights Reserved ·
               Governed by Laws of India
             </p>
-          </div>
+          </div> */}
         </div>
       </div>
     </main>

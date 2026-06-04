@@ -196,7 +196,7 @@ function CollectionCard({ col, index }: { col: ApiCollection; index: number }) {
         ) : (
           <div
             className="absolute inset-0"
-            style={{ background: col.accentColor || "var(--rj-emerald)" }}
+            style={{ background: "var(--rj-emerald)" }}
           />
         )}
 
@@ -205,7 +205,7 @@ function CollectionCard({ col, index }: { col: ApiCollection; index: number }) {
         <div
           className="absolute inset-0 transition-opacity duration-500"
           style={{
-            background: col.accentColor || "var(--rj-emerald)",
+            background: "var(--rj-emerald)",
             opacity: hovered ? 0.18 : 0,
           }}
         />

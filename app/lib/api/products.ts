@@ -29,6 +29,8 @@ export interface Variant {
 }
 
 export interface ApiProduct {
+  rating: any;
+  reviewCount: any;
   id: any;
   _id: string;
   slug: string;

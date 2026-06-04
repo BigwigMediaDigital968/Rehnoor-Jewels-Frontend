@@ -2,6 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import { ApiCollection } from "@/app/lib/api/collections";
 
 /**
  * RelatedCollection Component
@@ -13,16 +14,16 @@ import { motion } from "framer-motion";
  * - Premium Typography (Cinzel/Serif)
  */
 
-interface Collection {
-  slug: string;
-  name: string;
-  heroImage: string;
-  label?: string;
-}
+// interface Collection {
+//   slug: string;
+//   name: string;
+//   heroImage: string;
+//   label?: string;
+// }
 
 interface RelatedCollectionProps {
   currentSlug: string;
-  allCollections: Collection[];
+  allCollections: ApiCollection[];
 }
 
 export default function RelatedCollection({

@@ -100,13 +100,13 @@ export function useProducts(opts: UseProductsOptions = {}) {
     return ["All", ...Array.from(found)];
   }, [data]);
 
-  console.log(
-    data.map((p) => ({
-      name: p.name,
-      collection: p.collection?.slug,
-      gender: getGender(p),
-    })),
-  );
+  // console.log(
+  //   data.map((p) => ({
+  //     name: p.name,
+  //     collection: p.collection?.slug,
+  //     gender: getGender(p),
+  //   })),
+  // );
 
   // console.log(data);
 
@@ -114,13 +114,6 @@ export function useProducts(opts: UseProductsOptions = {}) {
   // console.log(data[0]?.collection);
 
   // Client-side category filter (instant, no extra round-trip)
-  // const filtered = useMemo(
-  //   () =>
-  //     activeFilter === "All"
-  //       ? data
-  //       : data.filter((p) => p.category === activeFilter),
-  //   [data, activeFilter],
-  // );
 
   const filtered = useMemo(() => {
     let products =

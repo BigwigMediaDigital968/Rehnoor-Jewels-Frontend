@@ -5,17 +5,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Search,
-  ShoppingBag,
-  Heart,
-  Menu,
-  X,
-  ChevronDown,
-  Phone,
-  Gem,
-} from "lucide-react";
+import { Search, ShoppingBag, Heart, Menu, X, ChevronDown } from "lucide-react";
 import { useCartStore, useWishlistStore } from "@/app/store/cartStore";
+import SearchModal from "../search/SearchModal";
 
 // ─────────────────────────────────────────────────────────────────
 // COLLECTIONS DATA
@@ -619,13 +611,369 @@ function MobileMenu({
 // ─────────────────────────────────────────────────────────────────
 // MAIN NAVBAR
 // ─────────────────────────────────────────────────────────────────
+// export default function NavbarNew() {
+//   const pathname = usePathname();
+//   const [scrolled, setScrolled] = useState(false);
+//   const [collectionsOpen, setCollectionsOpen] = useState(false);
+//   const [mobileOpen, setMobileOpen] = useState(false);
+//   const [searchOpen, setSearchOpen] = useState(false);
+//   const [searchQuery, setSearchQuery] = useState("");
+//   const [mounted, setMounted] = useState(false);
+
+//   const timeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
+
+//   useEffect(() => {
+//     setMounted(true);
+//   }, []);
+
+//   const _cartCount = useCartStore((s) => s.totalItems());
+//   const _wishlistCount = useWishlistStore((s) => s.items.length);
+//   const cartCount = mounted ? _cartCount : 0;
+//   const wishlistCount = mounted ? _wishlistCount : 0;
+
+//   useEffect(() => {
+//     const handleScroll = () => setScrolled(window.scrollY > 50);
+//     window.addEventListener("scroll", handleScroll, { passive: true });
+//     return () => window.removeEventListener("scroll", handleScroll);
+//   }, []);
+
+//   const openDropdown = useCallback(() => {
+//     if (timeoutRef.current) clearTimeout(timeoutRef.current);
+//     setCollectionsOpen(true);
+//   }, []);
+
+//   const closeDropdown = useCallback(() => {
+//     timeoutRef.current = setTimeout(() => setCollectionsOpen(false), 150);
+//   }, []);
+
+//   const handleSearchOpen = useCallback(() => {
+//     setCollectionsOpen(false);
+//     setSearchOpen(true);
+//   }, []);
+
+//   return (
+//     <>
+//       <header
+//         className="sticky top-0 z-[100] transition-all duration-500"
+//         style={{ background: "var(--rj-emerald)" }}
+//       >
+//         {/* Shadow line at bottom on scroll */}
+//         {scrolled && (
+//           <div
+//             className="absolute bottom-0 left-0 right-0 h-px"
+//             style={{
+//               background:
+//                 "linear-gradient(90deg, transparent, var(--rj-gold), transparent)",
+//             }}
+//           />
+//         )}
+
+//         <nav className="container-rj">
+//           <div className="flex items-center justify-between h-[100px] gap-4 sm:gap-6">
+//             {/* Mobile hamburger */}
+//             <button
+//               onClick={() => setMobileOpen(true)}
+//               className="lg:hidden p-2 hover:text-[var(--rj-gold)] transition-colors"
+//               style={{ color: "var(--rj-gold-light)", cursor: "pointer" }}
+//               aria-label="Open menu"
+//             >
+//               <Menu size={22} />
+//             </button>
+
+//             {/* Logo */}
+//             <Link
+//               href="/"
+//               className="flex-shrink-0 flex items-center pt-2"
+//               style={{ cursor: "pointer" }}
+//             >
+//               <Image
+//                 src="/rehnoor-jewels-svg-logo.svg"
+//                 alt="Rehnoor Jewels logo image"
+//                 width={130}
+//                 height={80}
+//                 priority
+//                 className="object-contain"
+//               />
+//             </Link>
+
+//             {/* Desktop nav */}
+//             <div className="hidden lg:flex items-center gap-1 flex-1 justify-center">
+//               {navLinks.map((item) => {
+//                 const isActive =
+//                   pathname === item.href ||
+//                   (item.href !== "/" && pathname.startsWith(item.href));
+
+//                 if (item.dropdown) {
+//                   return (
+//                     <div
+//                       key={item.label}
+//                       className="relative"
+//                       onMouseEnter={openDropdown}
+//                       onMouseLeave={closeDropdown}
+//                     >
+//                       <button
+//                         className="relative flex items-center gap-1 px-4 py-2 font-cinzel text-[12px] tracking-[0.2em] uppercase transition-all duration-300"
+//                         style={{
+//                           color:
+//                             isActive || collectionsOpen
+//                               ? "var(--rj-gold)"
+//                               : "var(--rj-gold-light)",
+//                           cursor: "pointer",
+//                         }}
+//                       >
+//                         {item.label}
+//                         <motion.span
+//                           animate={{ rotate: collectionsOpen ? 180 : 0 }}
+//                           transition={{ duration: 0.2 }}
+//                         >
+//                           <ChevronDown size={12} />
+//                         </motion.span>
+//                         {/* Active / hover underline */}
+//                         <span
+//                           className="absolute bottom-0 left-4 right-4 h-[2px] rounded-full transition-all duration-500 ease-out"
+//                           style={{
+//                             background: `linear-gradient(90deg, transparent, #d4af37, #f9e27d, #d4af37, transparent)`,
+//                             boxShadow:
+//                               isActive || collectionsOpen
+//                                 ? "0 0 8px rgba(212, 175, 55, 0.6), 0 0 16px rgba(212, 175, 55, 0.4)"
+//                                 : "none",
+//                             opacity: isActive || collectionsOpen ? 1 : 0,
+//                             transform:
+//                               isActive || collectionsOpen
+//                                 ? "scaleX(1)"
+//                                 : "scaleX(0)",
+//                             transformOrigin: "center",
+//                             filter:
+//                               isActive || collectionsOpen
+//                                 ? "blur(0.3px)"
+//                                 : "blur(1px)",
+//                           }}
+//                         />
+//                       </button>
+
+//                       <AnimatePresence>
+//                         {collectionsOpen && (
+//                           <CollectionsDropdown
+//                             onClose={() => setCollectionsOpen(false)}
+//                           />
+//                         )}
+//                       </AnimatePresence>
+//                     </div>
+//                   );
+//                 }
+
+//                 return (
+//                   <Link
+//                     key={item.label}
+//                     href={item.href}
+//                     className="relative flex items-center gap-1.5 px-4 py-2 font-cinzel text-[12px] tracking-[0.2em] uppercase transition-colors duration-300"
+//                     style={{
+//                       color: isActive
+//                         ? "var(--rj-gold)"
+//                         : "var(--rj-gold-light)",
+//                       cursor: "pointer",
+//                     }}
+//                   >
+//                     {item.label}
+//                     {/* Active indicator */}
+//                     <span
+//                       className="absolute bottom-0 left-4 right-4 h-[2px] rounded-full transition-all duration-500 ease-out"
+//                       style={{
+//                         background: `linear-gradient(90deg, transparent, #d4af37, #f9e27d, #d4af37, transparent)`,
+//                         boxShadow:
+//                           isActive || collectionsOpen
+//                             ? "0 0 8px rgba(212, 175, 55, 0.6), 0 0 16px rgba(212, 175, 55, 0.4)"
+//                             : "none",
+//                         opacity: isActive || collectionsOpen ? 1 : 0,
+//                         transform:
+//                           isActive || collectionsOpen
+//                             ? "scaleX(1)"
+//                             : "scaleX(0)",
+//                         transformOrigin: "center",
+//                         filter:
+//                           isActive || collectionsOpen
+//                             ? "blur(0.3px)"
+//                             : "blur(1px)",
+//                       }}
+//                     />
+//                   </Link>
+//                 );
+//               })}
+//             </div>
+
+//             {/* Right actions */}
+//             <div className="flex items-center gap-1">
+//               {/* Search (keep visible on all devices) */}
+//               {/* <button
+//                 onClick={() => setSearchOpen((s) => !s)}
+//                 className="p-2 hover:text-[var(--rj-gold)] transition-colors duration-300"
+//                 style={{ color: "var(--rj-gold-light)", cursor: "pointer" }}
+//                 aria-label="Search"
+//               >
+//                 <Search size={20} />
+//               </button> */}
+
+//               {/* Mobile Cart */}
+//               <div className="lg:hidden">
+//                 <IconWithBadge
+//                   href="/cart"
+//                   icon={<ShoppingBag size={20} />}
+//                   count={cartCount}
+//                   label="Cart"
+//                   className="text-[var(--rj-gold-light)]"
+//                 />
+//               </div>
+
+//               {/* Desktop Search */}
+//               <button
+//                 onClick={handleSearchOpen}
+//                 className="p-2 hover:text-[var(--rj-gold)] transition-colors duration-300"
+//                 style={{ color: "var(--rj-gold-light)", cursor: "pointer" }}
+//                 aria-label="Search"
+//               >
+//                 <Search size={20} />
+//               </button>
+
+//               {/* Desktop ONLY icons */}
+//               <div className="hidden lg:flex items-center gap-1">
+//                 <IconWithBadge
+//                   href="/wishlist"
+//                   icon={
+//                     <Heart
+//                       size={20}
+//                       style={{
+//                         fill:
+//                           wishlistCount > 0 ? "var(--rj-gold)" : "transparent",
+//                         color:
+//                           wishlistCount > 0 ? "var(--rj-gold)" : "currentColor",
+//                         transition: "all 0.3s",
+//                       }}
+//                     />
+//                   }
+//                   count={wishlistCount}
+//                   label="Wishlist"
+//                   className="text-[var(--rj-gold-light)]"
+//                 />
+
+//                 <IconWithBadge
+//                   href="/cart"
+//                   icon={<ShoppingBag size={20} />}
+//                   count={cartCount}
+//                   label="Cart"
+//                   className="text-[var(--rj-gold-light)]"
+//                 />
+//               </div>
+//             </div>
+//           </div>
+//         </nav>
+
+//         {/* Search bar */}
+//         <AnimatePresence>
+//           {searchOpen && (
+//             <motion.div
+//               initial={{ height: 0, opacity: 0 }}
+//               animate={{ height: "auto", opacity: 1 }}
+//               exit={{ height: 0, opacity: 0 }}
+//               className="overflow-hidden bg-white relative"
+//               style={{ borderTop: "1px solid rgba(0,55,32,0.1)" }}
+//             >
+//               {/* 🔥 CLOSE BUTTON */}
+//               <button
+//                 onClick={() => setSearchOpen(false)}
+//                 className="absolute top-8 right-52 p-2 rounded-full transition-all duration-300 group cursor-pointer"
+//                 style={{
+//                   background: "rgba(0,0,0,0.04)",
+//                 }}
+//               >
+//                 <X
+//                   size={18}
+//                   className="transition-transform duration-300 group-hover:rotate-90"
+//                   style={{ color: "var(--rj-ash)" }}
+//                 />
+//               </button>
+
+//               <div className="container-rj py-4">
+//                 <div className="relative max-w-2xl mx-auto">
+//                   <Search
+//                     size={18}
+//                     className="absolute left-4 top-1/2 -translate-y-1/2"
+//                     style={{ color: "var(--rj-ash)" }}
+//                   />
+
+//                   <input
+//                     autoFocus
+//                     type="text"
+//                     value={searchQuery}
+//                     onChange={(e) => setSearchQuery(e.target.value)}
+//                     placeholder="Search for chains, rings, kadas…"
+//                     className="input-rj pl-12 pr-12"
+//                   />
+
+//                   {searchQuery && (
+//                     <button
+//                       onClick={() => setSearchQuery("")}
+//                       className="absolute right-4 top-1/2 -translate-y-1/2"
+//                       style={{ color: "var(--rj-ash)", cursor: "pointer" }}
+//                     >
+//                       <X size={16} />
+//                     </button>
+//                   )}
+//                 </div>
+
+//                 {/* Tags */}
+//                 <div className="mt-3 flex flex-wrap gap-2 max-w-2xl mx-auto">
+//                   {["Nawabi Chain", "Gold Ring", "Kada", "Bracelet"].map(
+//                     (tag) => (
+//                       <button
+//                         key={tag}
+//                         onClick={() => setSearchQuery(tag)}
+//                         className="px-3 py-1 text-xs rounded-full transition-all duration-200"
+//                         style={{
+//                           background: "var(--rj-ivory-dark)",
+//                           border: "1px solid var(--rj-bone)",
+//                           cursor: "pointer",
+//                         }}
+//                         onMouseEnter={(e) => {
+//                           e.currentTarget.style.background =
+//                             "var(--rj-gold-pale)";
+//                           e.currentTarget.style.borderColor = "var(--rj-gold)";
+//                         }}
+//                         onMouseLeave={(e) => {
+//                           e.currentTarget.style.background =
+//                             "var(--rj-ivory-dark)";
+//                           e.currentTarget.style.borderColor = "var(--rj-bone)";
+//                         }}
+//                       >
+//                         {tag}
+//                       </button>
+//                     ),
+//                   )}
+//                 </div>
+//               </div>
+//             </motion.div>
+//           )}
+//         </AnimatePresence>
+//       </header>
+
+//       <MobileMenu
+//         isOpen={mobileOpen}
+//         onClose={() => setMobileOpen(false)}
+//         cartCount={cartCount}
+//         wishlistCount={wishlistCount}
+//       />
+
+//       <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
+//     </>
+//   );
+// }
+
 export default function NavbarNew() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [collectionsOpen, setCollectionsOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  // ✅ CHANGED: searchOpen now opens SearchModal instead of inline input
   const [searchOpen, setSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
   const [mounted, setMounted] = useState(false);
 
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
@@ -645,6 +993,7 @@ export default function NavbarNew() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // ✅ Close collections dropdown when search opens
   const openDropdown = useCallback(() => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setCollectionsOpen(true);
@@ -654,13 +1003,17 @@ export default function NavbarNew() {
     timeoutRef.current = setTimeout(() => setCollectionsOpen(false), 150);
   }, []);
 
+  const handleSearchOpen = useCallback(() => {
+    setCollectionsOpen(false);
+    setSearchOpen(true);
+  }, []);
+
   return (
     <>
       <header
         className="sticky top-0 z-[100] transition-all duration-500"
         style={{ background: "var(--rj-emerald)" }}
       >
-        {/* Shadow line at bottom on scroll */}
         {scrolled && (
           <div
             className="absolute bottom-0 left-0 right-0 h-px"
@@ -731,14 +1084,14 @@ export default function NavbarNew() {
                         >
                           <ChevronDown size={12} />
                         </motion.span>
-                        {/* Active / hover underline */}
                         <span
                           className="absolute bottom-0 left-4 right-4 h-[2px] rounded-full transition-all duration-500 ease-out"
                           style={{
-                            background: `linear-gradient(90deg, transparent, #d4af37, #f9e27d, #d4af37, transparent)`,
+                            background:
+                              "linear-gradient(90deg, transparent, #d4af37, #f9e27d, #d4af37, transparent)",
                             boxShadow:
                               isActive || collectionsOpen
-                                ? "0 0 8px rgba(212, 175, 55, 0.6), 0 0 16px rgba(212, 175, 55, 0.4)"
+                                ? "0 0 8px rgba(212,175,55,0.6), 0 0 16px rgba(212,175,55,0.4)"
                                 : "none",
                             opacity: isActive || collectionsOpen ? 1 : 0,
                             transform:
@@ -753,7 +1106,6 @@ export default function NavbarNew() {
                           }}
                         />
                       </button>
-
                       <AnimatePresence>
                         {collectionsOpen && (
                           <CollectionsDropdown
@@ -778,25 +1130,18 @@ export default function NavbarNew() {
                     }}
                   >
                     {item.label}
-                    {/* Active indicator */}
                     <span
                       className="absolute bottom-0 left-4 right-4 h-[2px] rounded-full transition-all duration-500 ease-out"
                       style={{
-                        background: `linear-gradient(90deg, transparent, #d4af37, #f9e27d, #d4af37, transparent)`,
-                        boxShadow:
-                          isActive || collectionsOpen
-                            ? "0 0 8px rgba(212, 175, 55, 0.6), 0 0 16px rgba(212, 175, 55, 0.4)"
-                            : "none",
-                        opacity: isActive || collectionsOpen ? 1 : 0,
-                        transform:
-                          isActive || collectionsOpen
-                            ? "scaleX(1)"
-                            : "scaleX(0)",
+                        background:
+                          "linear-gradient(90deg, transparent, #d4af37, #f9e27d, #d4af37, transparent)",
+                        boxShadow: isActive
+                          ? "0 0 8px rgba(212,175,55,0.6), 0 0 16px rgba(212,175,55,0.4)"
+                          : "none",
+                        opacity: isActive ? 1 : 0,
+                        transform: isActive ? "scaleX(1)" : "scaleX(0)",
                         transformOrigin: "center",
-                        filter:
-                          isActive || collectionsOpen
-                            ? "blur(0.3px)"
-                            : "blur(1px)",
+                        filter: isActive ? "blur(0.3px)" : "blur(1px)",
                       }}
                     />
                   </Link>
@@ -806,17 +1151,7 @@ export default function NavbarNew() {
 
             {/* Right actions */}
             <div className="flex items-center gap-1">
-              {/* Search (keep visible on all devices) */}
-              {/* <button
-                onClick={() => setSearchOpen((s) => !s)}
-                className="p-2 hover:text-[var(--rj-gold)] transition-colors duration-300"
-                style={{ color: "var(--rj-gold-light)", cursor: "pointer" }}
-                aria-label="Search"
-              >
-                <Search size={20} />
-              </button> */}
-
-              {/* Mobile Cart */}
+              {/* Mobile cart */}
               <div className="lg:hidden">
                 <IconWithBadge
                   href="/cart"
@@ -827,9 +1162,9 @@ export default function NavbarNew() {
                 />
               </div>
 
-              {/* Desktop Search */}
+              {/* ✅ Search button — opens SearchModal on ALL screen sizes */}
               <button
-                onClick={() => setSearchOpen((s) => !s)}
+                onClick={handleSearchOpen}
                 className="p-2 hover:text-[var(--rj-gold)] transition-colors duration-300"
                 style={{ color: "var(--rj-gold-light)", cursor: "pointer" }}
                 aria-label="Search"
@@ -837,7 +1172,7 @@ export default function NavbarNew() {
                 <Search size={20} />
               </button>
 
-              {/* Desktop ONLY icons */}
+              {/* Desktop-only wishlist + cart */}
               <div className="hidden lg:flex items-center gap-1">
                 <IconWithBadge
                   href="/wishlist"
@@ -857,7 +1192,6 @@ export default function NavbarNew() {
                   label="Wishlist"
                   className="text-[var(--rj-gold-light)]"
                 />
-
                 <IconWithBadge
                   href="/cart"
                   icon={<ShoppingBag size={20} />}
@@ -870,100 +1204,19 @@ export default function NavbarNew() {
           </div>
         </nav>
 
-        {/* Search bar */}
-        <AnimatePresence>
-          {searchOpen && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="overflow-hidden bg-white relative"
-              style={{ borderTop: "1px solid rgba(0,55,32,0.1)" }}
-            >
-              {/* 🔥 CLOSE BUTTON */}
-              <button
-                onClick={() => setSearchOpen(false)}
-                className="absolute top-8 right-52 p-2 rounded-full transition-all duration-300 group cursor-pointer"
-                style={{
-                  background: "rgba(0,0,0,0.04)",
-                }}
-              >
-                <X
-                  size={18}
-                  className="transition-transform duration-300 group-hover:rotate-90"
-                  style={{ color: "var(--rj-ash)" }}
-                />
-              </button>
-
-              <div className="container-rj py-4">
-                <div className="relative max-w-2xl mx-auto">
-                  <Search
-                    size={18}
-                    className="absolute left-4 top-1/2 -translate-y-1/2"
-                    style={{ color: "var(--rj-ash)" }}
-                  />
-
-                  <input
-                    autoFocus
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search for chains, rings, kadas…"
-                    className="input-rj pl-12 pr-12"
-                  />
-
-                  {searchQuery && (
-                    <button
-                      onClick={() => setSearchQuery("")}
-                      className="absolute right-4 top-1/2 -translate-y-1/2"
-                      style={{ color: "var(--rj-ash)", cursor: "pointer" }}
-                    >
-                      <X size={16} />
-                    </button>
-                  )}
-                </div>
-
-                {/* Tags */}
-                <div className="mt-3 flex flex-wrap gap-2 max-w-2xl mx-auto">
-                  {["Nawabi Chain", "Gold Ring", "Kada", "Bracelet"].map(
-                    (tag) => (
-                      <button
-                        key={tag}
-                        onClick={() => setSearchQuery(tag)}
-                        className="px-3 py-1 text-xs rounded-full transition-all duration-200"
-                        style={{
-                          background: "var(--rj-ivory-dark)",
-                          border: "1px solid var(--rj-bone)",
-                          cursor: "pointer",
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.background =
-                            "var(--rj-gold-pale)";
-                          e.currentTarget.style.borderColor = "var(--rj-gold)";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.background =
-                            "var(--rj-ivory-dark)";
-                          e.currentTarget.style.borderColor = "var(--rj-bone)";
-                        }}
-                      >
-                        {tag}
-                      </button>
-                    ),
-                  )}
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {/* ✅ REMOVED: old inline search bar — replaced by SearchModal */}
       </header>
 
+      {/* Mobile menu */}
       <MobileMenu
         isOpen={mobileOpen}
         onClose={() => setMobileOpen(false)}
         cartCount={cartCount}
         wishlistCount={wishlistCount}
       />
+
+      {/* ✅ NEW: Search Modal — renders outside header, above everything */}
+      <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   );
 }

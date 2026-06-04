@@ -52,7 +52,7 @@ function toMeta(
     seoTitle: col.seoTitle,
     seoDescription: col.seoDescription,
     seoKeywords: Array.isArray(col.seoKeywords) ? col.seoKeywords : [],
-    heroImage: col.heroImage,
+    heroImage: col.heroImage ?? "",
     accentColor: col.accentColor || "rgba(0,36,16,0.88)",
     productCount: col.productCount,
     purity: "22kt",
