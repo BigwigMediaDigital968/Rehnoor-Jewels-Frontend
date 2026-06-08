@@ -664,7 +664,7 @@ export default function ProductDetailHero({
   });
 
   const [imgIdx, setImgIdx] = useState(0);
-    const images = galleryImages;
+    const images = galleryImages.length > 0 ? galleryImages : product.images;
 
   // Reset image index when the image source set changes
   // useEffect(() => setImgIdx(0), [activeVariant?._id]);
@@ -794,7 +794,7 @@ export default function ProductDetailHero({
     <>
       {zoomed && (
         <ZoomModal
-          images={galleryImages}
+          images={images}
           currentIndex={imgIdx}
           setCurrentIndex={setImgIdx}
           onClose={() => setZoomed(false)}
@@ -841,8 +841,8 @@ export default function ProductDetailHero({
                     className="absolute inset-0"
                   >
                     <Image
-                      src={galleryImages[imgIdx]?.src}
-                      alt={galleryImages[imgIdx]?.alt ?? product.name}
+                      src={images[imgIdx]?.src}
+                      alt={images[imgIdx]?.alt ?? product.name}
                       fill
                       className="object-cover"
                       sizes="(max-width:1024px) 100vw, 50vw"
@@ -934,9 +934,9 @@ export default function ProductDetailHero({
                 )}
               </div>
 
-              {galleryImages.length > 1 && (
+              {images.length > 1 && (
                 <div className="flex gap-2 overflow-x-auto no-scrollbar">
-                  {galleryImages.map((img, i) => (
+                  {images.map((img, i) => (
                     <button
                       key={i}
                       onClick={() => setImgIdx(i)}
