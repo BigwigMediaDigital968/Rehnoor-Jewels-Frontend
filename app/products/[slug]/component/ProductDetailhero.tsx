@@ -20,6 +20,8 @@ import {
   Ruler,
   X,
   Info,
+  ChevronUp,
+  ChevronDown,
 } from "lucide-react";
 import type {
   Product,
@@ -514,10 +516,10 @@ function VariantSelector({
                       borderRadius: isShort ? "50%" : "2rem",
                       width: isShort ? "3rem" : undefined,
                       border: `2px solid ${selected
-                          ? "var(--rj-emerald)"
-                          : selectionError && !selections[option.name]
-                            ? "#fca5a5"
-                            : "var(--rj-bone)"
+                        ? "var(--rj-emerald)"
+                        : selectionError && !selections[option.name]
+                          ? "#fca5a5"
+                          : "var(--rj-bone)"
                         }`,
                       background: selected
                         ? "var(--rj-emerald)"
@@ -617,6 +619,10 @@ export default function ProductDetailHero({
   onAddToCart,
   onBuyNow,
 }: Props) {
+  const thumbnailContainerRef = useRef<HTMLDivElement>(null);
+  const [showTopArrow, setShowTopArrow] = useState(false);
+  const [showBottomArrow, setShowBottomArrow] = useState(false);
+
   const hasVariants =
     Array.isArray(product.variants) && product.variants.length > 0;
   const hasOptions =
@@ -652,7 +658,7 @@ export default function ProductDetailHero({
       : null;
 
 
-  const galleryImages : any[] = [];
+  const galleryImages: any[] = [];
   const variantImageMap = new Map<string, number>();
 
   product.variants?.forEach((variant) => {
@@ -664,21 +670,21 @@ export default function ProductDetailHero({
   });
 
   const [imgIdx, setImgIdx] = useState(0);
-    const images = galleryImages.length > 0 ? galleryImages : product.images;
+  const images = galleryImages.length > 0 ? galleryImages : product.images;
 
   // Reset image index when the image source set changes
   // useEffect(() => setImgIdx(0), [activeVariant?._id]);
 
 
   useEffect(() => {
-  if (!activeVariant?._id) return;
+    if (!activeVariant?._id) return;
 
-  const index = variantImageMap.get(activeVariant._id);
+    const index = variantImageMap.get(activeVariant._id);
 
-  if (index !== undefined) {
-    setImgIdx(index);
-  }
-}, [activeVariant?._id]);
+    if (index !== undefined) {
+      setImgIdx(index);
+    }
+  }, [activeVariant?._id]);
 
   // ── UI state ──
   const [qty, setQty] = useState(1);
@@ -790,6 +796,37 @@ export default function ProductDetailHero({
 
   // console.log(product);
 
+
+
+
+  // Handle checking if custom scroll indicators are needed
+  const checkScroll = () => {
+    const el = thumbnailContainerRef.current;
+    if (el) {
+      const canScrollUp = el.scrollTop > 5;
+      const canScrollDown = el.scrollHeight - el.scrollTop - el.clientHeight > 5;
+      setShowTopArrow(canScrollUp);
+      setShowBottomArrow(canScrollDown);
+    }
+  };
+
+  useEffect(() => {
+    const el = thumbnailContainerRef.current;
+    if (el) {
+      el.addEventListener('scroll', checkScroll);
+      // Run once on mount/image change to evaluate state
+      checkScroll();
+
+      // Optional: ResizeObserver to watch for layout shifts
+      const ro = new ResizeObserver(checkScroll);
+      ro.observe(el);
+      return () => {
+        el.removeEventListener('scroll', checkScroll);
+        ro.disconnect();
+      };
+    }
+  }, [images]);
+
   return (
     <>
       {zoomed && (
@@ -819,152 +856,195 @@ export default function ProductDetailHero({
             collectionName={breadcrumbCollectionName}
           />
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 xl:gap-16 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 xl:gap-16 items-start">
             {/* ══ LEFT: Image Gallery ══ */}
-            <div className="flex flex-col gap-3 lg:sticky lg:top-24">
-              <div
-                className="relative overflow-hidden rounded-2xl group"
-                style={{
-                  aspectRatio: "1/1",
-                  background: "var(--rj-ivory-dark)",
-                  cursor: "zoom-in",
-                }}
-                onClick={() => setZoomed(true)}
-              >
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={`${activeVariant?._id ?? "base"}-${imgIdx}`}
-                    initial={{ opacity: 0, x: 16 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -16 }}
-                    transition={{ duration: 0.28 }}
-                    className="absolute inset-0"
-                  >
-                    <Image
-                      src={images[imgIdx]?.src}
-                      alt={images[imgIdx]?.alt ?? product.name}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width:1024px) 100vw, 50vw"
-                      priority
-                    />
-                  </motion.div>
-                </AnimatePresence>
+            <div className="lg:col-span-7 flex flex-col gap-3 lg:sticky lg:top-24">
+              {/* Main Wrapper: Sidebar Layout for Large Screens, Column for Mobile */}
+              <div className="flex flex-col-reverse md:flex-row gap-4 h-full items-start">
 
-                <div className="absolute bottom-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div
-                    className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full font-cinzel text-[9px] tracking-wider"
-                    style={{ background: "rgba(0,0,0,0.6)", color: "#fff" }}
-                  >
-                    <ZoomIn size={11} /> Zoom
-                  </div>
-                </div>
-
-                {product.tag && (
-                  <div className="absolute top-3 left-3 z-10 pointer-events-none">
-                    <span
-                      className="font-cinzel text-[9px] font-bold tracking-widest px-3 py-1 rounded-full"
-                      style={{ background: "var(--rj-gold)", color: "#000" }}
-                    >
-                      {product.tag}
-                    </span>
-                  </div>
-                )}
-
-                <button
-                  onClick={handleToggleWishlist}
-                  className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
-                  style={{
-                    background: wishlisted
-                      ? "rgba(252,193,81,0.15)"
-                      : "rgba(255,255,255,0.92)",
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
-                    cursor: "pointer",
-                    border: wishlisted
-                      ? "1.5px solid rgba(252,193,81,0.4)"
-                      : "1.5px solid transparent",
-                  }}
-                  aria-label={
-                    wishlisted ? "Remove from wishlist" : "Add to wishlist"
-                  }
-                >
-                  <Heart
-                    size={15}
-                    style={{
-                      fill: wishlisted ? "var(--rj-gold)" : "transparent",
-                      color: wishlisted ? "var(--rj-gold)" : "var(--rj-ash)",
-                      transition: "all 0.25s",
-                    }}
-                  />
-                </button>
-
+                {/* Left Thumbnail Carousel (Hidden native scrollbar) */}
                 {images.length > 1 && (
-                  <>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        prevImg();
-                      }}
-                      className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-105 active:scale-95"
-                      style={{
-                        background: "rgba(255,255,255,0.92)",
-                        color: "var(--rj-charcoal)",
-                        boxShadow: "0 2px 12px rgba(0,0,0,0.15)",
-                        cursor: "pointer",
-                      }}
-                    >
-                      <ChevronLeft size={16} />
-                    </button>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        nextImg();
-                      }}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-105 active:scale-95"
-                      style={{
-                        background: "rgba(255,255,255,0.92)",
-                        color: "var(--rj-charcoal)",
-                        boxShadow: "0 2px 12px rgba(0,0,0,0.15)",
-                        cursor: "pointer",
-                      }}
-                    >
-                      <ChevronRight size={16} />
-                    </button>
-                  </>
-                )}
-              </div>
+                  <div className="relative flex flex-col items-center w-full md:w-[72px] h-auto md:h-full max-h-[500px]">
+                    {/* Custom Scroll Indicator: Up */}
+                    <AnimatePresence>
+                      {showTopArrow && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 5 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 5 }}
+                          className="absolute top-0 left-0 right-0 z-20 hidden md:flex items-center justify-center bg-gradient-to-b from-[var(--rj-ivory-dark)] to-transparent py-1 pointer-events-none"
+                        >
+                          <ChevronUp size={14} className="text-[var(--rj-charcoal)] animate-bounce" />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
 
-              {images.length > 1 && (
-                <div className="flex gap-2 overflow-x-auto no-scrollbar">
-                  {images.map((img, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setImgIdx(i)}
-                      className="relative flex-shrink-0 rounded-xl overflow-hidden transition-all duration-200"
+                    {/* Vertical Scroll Container */}
+                    <div
+                      ref={thumbnailContainerRef}
+                      className="flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-y-auto w-full h-full max-h-[400px] no-scrollbar scroll-smooth"
                       style={{
-                        width: 72,
-                        height: 72,
-                        border: `2px solid ${i === imgIdx ? "var(--rj-emerald)" : "transparent"}`,
-                        background: "var(--rj-ivory-dark)",
-                        cursor: "pointer",
-                        opacity: i === imgIdx ? 1 : 0.6,
+                        scrollbarWidth: 'none', /* Firefox */
+                        msOverflowStyle: 'none', /* IE 10+ */
                       }}
+                    >
+                      {images.map((img, i) => (
+                        <button
+                          key={i}
+                          onClick={() => setImgIdx(i)}
+                          className="relative flex-shrink-0 rounded-xl overflow-hidden transition-all duration-200"
+                          style={{
+                            width: 72,
+                            height: 72,
+                            border: `2px solid ${i === imgIdx ? "var(--rj-emerald)" : "transparent"}`,
+                            background: "var(--rj-ivory-dark)",
+                            cursor: "pointer",
+                            opacity: i === imgIdx ? 1 : 0.7,
+                          }}
+                        >
+                          <Image
+                            src={img.src}
+                            alt={img.alt ?? ""}
+                            fill
+                            className="object-cover"
+                            sizes="72px"
+                          />
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Custom Scroll Indicator: Down */}
+                    <AnimatePresence>
+                      {showBottomArrow && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -5 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -5 }}
+                          className="absolute bottom-0 left-0 right-0 z-20 hidden md:flex items-center justify-center bg-gradient-to-t from-[var(--rj-ivory-dark)] to-transparent py-1 pointer-events-none"
+                        >
+                          <ChevronDown size={14} className="text-[var(--rj-charcoal)] animate-bounce" />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                )}
+
+                {/* Right Side: Main Display Showcase */}
+                <div
+                  className="relative overflow-hidden rounded-2xl group flex-1 w-full"
+                  style={{
+                    aspectRatio: "1/1",
+                    background: "var(--rj-ivory-dark)",
+                    cursor: "zoom-in",
+                  }}
+                  onClick={() => setZoomed(true)}
+                >
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={`${activeVariant?._id ?? "base"}-${imgIdx}`}
+                      initial={{ opacity: 0, x: 16 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -16 }}
+                      transition={{ duration: 0.28 }}
+                      className="absolute inset-0"
                     >
                       <Image
-                        src={img.src}
-                        alt={img.alt ?? ""}
+                        src={images[imgIdx]?.src}
+                        alt={images[imgIdx]?.alt ?? product.name}
                         fill
                         className="object-cover"
-                        sizes="72px"
+                        sizes="(max-width:1024px) 100vw, 50vw"
+                        priority
                       />
-                    </button>
-                  ))}
+                    </motion.div>
+                  </AnimatePresence>
+
+                  {/* Zoom Indicator overlay */}
+                  <div className="absolute bottom-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div
+                      className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full font-cinzel text-[9px] tracking-wider"
+                      style={{ background: "rgba(0,0,0,0.6)", color: "#fff" }}
+                    >
+                      <ZoomIn size={11} /> Zoom
+                    </div>
+                  </div>
+
+                  {/* Product Tag */}
+                  {product.tag && (
+                    <div className="absolute top-3 left-3 z-10 pointer-events-none">
+                      <span
+                        className="font-cinzel text-[9px] font-bold tracking-widest px-3 py-1 rounded-full"
+                        style={{ background: "var(--rj-gold)", color: "#000" }}
+                      >
+                        {product.tag}
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Wishlist Button */}
+                  <button
+                    onClick={handleToggleWishlist}
+                    className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
+                    style={{
+                      background: wishlisted ? "rgba(252,193,81,0.15)" : "rgba(255,255,255,0.92)",
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
+                      cursor: "pointer",
+                      border: wishlisted ? "1.5px solid rgba(252,193,81,0.4)" : "1.5px solid transparent",
+                    }}
+                    aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
+                  >
+                    <Heart
+                      size={15}
+                      style={{
+                        fill: wishlisted ? "var(--rj-gold)" : "transparent",
+                        color: wishlisted ? "var(--rj-gold)" : "var(--rj-ash)",
+                        transition: "all 0.25s",
+                      }}
+                    />
+                  </button>
+
+                  {/* Main Desktop Navigation Arrows */}
+                  {images.length > 1 && (
+                    <>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          prevImg();
+                        }}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-105 active:scale-95"
+                        style={{
+                          background: "rgba(255,255,255,0.92)",
+                          color: "var(--rj-charcoal)",
+                          boxShadow: "0 2px 12px rgba(0,0,0,0.15)",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <ChevronLeft size={16} />
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          nextImg();
+                        }}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-105 active:scale-95"
+                        style={{
+                          background: "rgba(255,255,255,0.92)",
+                          color: "var(--rj-charcoal)",
+                          boxShadow: "0 2px 12px rgba(0,0,0,0.15)",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <ChevronRight size={16} />
+                      </button>
+                    </>
+                  )}
                 </div>
-              )}
+
+              </div>
             </div>
 
             {/* ══ RIGHT: Product Details ══ */}
-            <div className="flex flex-col">
+            <div className="lg:col-span-5 flex flex-col">
               {/* Category + purity pills */}
               <div className="flex items-center gap-3 mb-3">
                 {product.category && (
