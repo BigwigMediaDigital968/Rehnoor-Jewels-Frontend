@@ -778,8 +778,8 @@ export default function ProductDetailHero({
   const breadcrumbCollectionName =
     collectionName || product.category || "Collection";
 
-  console.log("Active variant:", activeVariant);
-  console.log("Variant images:", activeVariant?.images ?? product.images);
+  // console.log("Active variant:", activeVariant);
+  // console.log("Variant images:", activeVariant?.images ?? product.images);
 
   // Stock check for CTA disable
   const outOfStock =
@@ -788,7 +788,7 @@ export default function ProductDetailHero({
     activeVariant.stock !== undefined &&
     activeVariant.stock <= 0;
 
-  console.log(product);
+  // console.log(product);
 
   return (
     <>
