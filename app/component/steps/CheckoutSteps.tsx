@@ -2,7 +2,7 @@
 // Split into separate files per the folder structure guide.
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   ChevronRight,
@@ -301,12 +301,14 @@ const INDIAN_STATES = [
 ];
 
 function AddressForm({
+  contact,
   addr,
   setAddr,
   prefix,
   errs,
   setErrs,
 }: {
+  contact?: any;
   addr: Address;
   setAddr: (a: Partial<Address>) => void;
   prefix?: string;
@@ -329,6 +331,15 @@ function AddressForm({
   const inp = (field: keyof Address, err: boolean): React.CSSProperties => ({
     ...inputCls(err),
   });
+
+  useEffect(() => {
+  if (!contact) return;
+
+  setAddr({
+    fullName: contact.name ?? "",
+    phone: contact.phone ?? "",
+  });
+}, [contact]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -484,6 +495,7 @@ export function StepAddress({
 }) {
   const {
     address,
+    contact,
     setAddress,
     billingDiff,
     setBillingDiff,
@@ -530,6 +542,7 @@ export function StepAddress({
         Shipping address
       </h2>
       <AddressForm
+      contact={contact}
         addr={address}
         setAddr={setAddress}
         errs={errs}
