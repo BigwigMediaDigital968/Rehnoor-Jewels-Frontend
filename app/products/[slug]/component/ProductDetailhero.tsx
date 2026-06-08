@@ -513,13 +513,12 @@ function VariantSelector({
                       padding: isShort ? "0" : "0 1rem",
                       borderRadius: isShort ? "50%" : "2rem",
                       width: isShort ? "3rem" : undefined,
-                      border: `2px solid ${
-                        selected
+                      border: `2px solid ${selected
                           ? "var(--rj-emerald)"
                           : selectionError && !selections[option.name]
                             ? "#fca5a5"
                             : "var(--rj-bone)"
-                      }`,
+                        }`,
                       background: selected
                         ? "var(--rj-emerald)"
                         : "transparent",
@@ -652,11 +651,34 @@ export default function ProductDetailHero({
       ? activeVariant.images
       : null;
 
-  const images = product.images;
+
+  const galleryImages : any[] = [];
+  const variantImageMap = new Map<string, number>();
+
+  product.variants?.forEach((variant) => {
+    if (variant.images?.length) {
+      variantImageMap.set(variant._id, galleryImages.length);
+
+      galleryImages.push(...variant.images);
+    }
+  });
 
   const [imgIdx, setImgIdx] = useState(0);
+    const images = galleryImages;
+
   // Reset image index when the image source set changes
-  useEffect(() => setImgIdx(0), [activeVariant?._id]);
+  // useEffect(() => setImgIdx(0), [activeVariant?._id]);
+
+
+  useEffect(() => {
+  if (!activeVariant?._id) return;
+
+  const index = variantImageMap.get(activeVariant._id);
+
+  if (index !== undefined) {
+    setImgIdx(index);
+  }
+}, [activeVariant?._id]);
 
   // ── UI state ──
   const [qty, setQty] = useState(1);
@@ -747,7 +769,7 @@ export default function ProductDetailHero({
       await navigator.clipboard.writeText(window.location.href);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch {}
+    } catch { }
   };
 
   const breadcrumbCollectionSlug =
@@ -755,6 +777,9 @@ export default function ProductDetailHero({
     (product.category ?? "").toLowerCase().replace(/\s+/g, "-");
   const breadcrumbCollectionName =
     collectionName || product.category || "Collection";
+
+  console.log("Active variant:", activeVariant);
+  console.log("Variant images:", activeVariant?.images ?? product.images);
 
   // Stock check for CTA disable
   const outOfStock =
@@ -769,7 +794,7 @@ export default function ProductDetailHero({
     <>
       {zoomed && (
         <ZoomModal
-          images={images}
+          images={galleryImages}
           currentIndex={imgIdx}
           setCurrentIndex={setImgIdx}
           onClose={() => setZoomed(false)}
@@ -816,8 +841,8 @@ export default function ProductDetailHero({
                     className="absolute inset-0"
                   >
                     <Image
-                      src={images[imgIdx]?.src}
-                      alt={images[imgIdx]?.alt ?? product.name}
+                      src={galleryImages[imgIdx]?.src}
+                      alt={galleryImages[imgIdx]?.alt ?? product.name}
                       fill
                       className="object-cover"
                       sizes="(max-width:1024px) 100vw, 50vw"
@@ -909,9 +934,9 @@ export default function ProductDetailHero({
                 )}
               </div>
 
-              {images.length > 1 && (
+              {galleryImages.length > 1 && (
                 <div className="flex gap-2 overflow-x-auto no-scrollbar">
-                  {images.map((img, i) => (
+                  {galleryImages.map((img, i) => (
                     <button
                       key={i}
                       onClick={() => setImgIdx(i)}
