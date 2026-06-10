@@ -389,53 +389,6 @@ export default function CheckoutPage() {
     );
   }
 
-  // ── Place order handler ──────────────────────────────────────────────────────
-  // const handlePlaceOrder = async (): Promise<void> => {
-  //   await initiate({
-  //     customerName: contact.name,
-  //     customerEmail: contact.email,
-  //     customerPhone: contact.phone,
-  //     // checkoutItems() returns buyNowItems when active, else the full cart
-  //     items: checkoutItems().map((i) => ({
-  //       productId: i.productId,
-  //       variantId: i.variant?.variantId, // undefined → server uses base product price
-  //       quantity: i.qty,
-  //       customNote: i.customNote,
-  //     })),
-  //     shippingAddress: {
-  //       fullName: address.fullName,
-  //       phone: address.phone,
-  //       addressLine1: address.addressLine1,
-  //       addressLine2: address.addressLine2,
-  //       city: address.city,
-  //       state: address.state,
-  //       pincode: address.pincode,
-  //       country: address.country || "India",
-  //       landmark: address.landmark,
-  //     },
-  //     billingAddress: billingDiff
-  //       ? {
-  //           fullName: billingAddress.fullName,
-  //           phone: billingAddress.phone,
-  //           addressLine1: billingAddress.addressLine1,
-  //           addressLine2: billingAddress.addressLine2,
-  //           city: billingAddress.city,
-  //           state: billingAddress.state,
-  //           pincode: billingAddress.pincode,
-  //           country: billingAddress.country || "India",
-  //           landmark: billingAddress.landmark,
-  //         }
-  //       : undefined,
-  //     billingSameAsShipping: !billingDiff,
-  //     paymentMethod: paymentMethod as "cod" | "razorpay",
-  //     couponCode: couponApplied ? couponCode : null,
-  //     customerNote,
-  //     giftMessage,
-  //     isGift,
-  //     source: "website",
-  //   });
-  // };
-
   // Inside CheckoutPage component code:
   const handlePlaceOrder = async (): Promise<void> => {
     // Grab the coupon code directly from the cart store to ensure it matches the summary panel

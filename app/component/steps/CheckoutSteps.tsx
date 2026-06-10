@@ -17,6 +17,20 @@ import {
 } from "lucide-react";
 
 import {
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
+  ConfirmationResult,
+} from "firebase/auth";
+import { auth } from "@/app/lib/firebase";
+
+declare global {
+  interface Window {
+    recaptchaVerifier: RecaptchaVerifier;
+    confirmationResult: ConfirmationResult;
+  }
+}
+
+import {
   useCheckoutStore,
   type Address,
   type ShippingMethod,
@@ -138,6 +152,73 @@ export function StepContact({ onNext }: { onNext: () => void }) {
   const { contact, setContact } = useCheckoutStore();
   const [errs, setErrs] = useState<Record<string, string>>({});
 
+  const [otp, setOtp] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [phoneVerified, setPhoneVerified] = useState(false);
+  const [otpLoading, setOtpLoading] = useState(false);
+
+  const setupRecaptcha = () => {
+    if (!window.recaptchaVerifier) {
+      window.recaptchaVerifier = new RecaptchaVerifier(
+        auth,
+        "recaptcha-container",
+        {
+          size: "invisible",
+        },
+      );
+    }
+  };
+
+  const sendOtp = async () => {
+    try {
+      const phone = contact.phone.replace(/\D/g, "");
+
+      if (!/^[6-9]\d{9}$/.test(phone)) {
+        setErrs((prev) => ({
+          ...prev,
+          phone: "Enter a valid 10-digit mobile number",
+        }));
+        return;
+      }
+
+      setOtpLoading(true);
+
+      setupRecaptcha();
+
+      const confirmationResult = await signInWithPhoneNumber(
+        auth,
+        `+91${phone}`,
+        window.recaptchaVerifier,
+      );
+
+      window.confirmationResult = confirmationResult;
+
+      setOtpSent(true);
+    } catch (error) {
+      console.error(error);
+      alert("Failed to send OTP");
+    } finally {
+      setOtpLoading(false);
+    }
+  };
+
+  const verifyOtp = async () => {
+    try {
+      setOtpLoading(true);
+
+      const result = await window.confirmationResult.confirm(otp);
+
+      if (result.user) {
+        setPhoneVerified(true);
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Invalid OTP");
+    } finally {
+      setOtpLoading(false);
+    }
+  };
+
   const validate = () => {
     const e: Record<string, string> = {};
     if (!contact.name.trim()) e.name = "Full name is required";
@@ -152,10 +233,16 @@ export function StepContact({ onNext }: { onNext: () => void }) {
 
   const handleNext = () => {
     const e = validate();
+
+    if (!phoneVerified) {
+      e.phone = "Please verify your mobile number";
+    }
+
     if (Object.keys(e).length) {
       setErrs(e);
       return;
     }
+
     onNext();
   };
 
@@ -233,7 +320,7 @@ export function StepContact({ onNext }: { onNext: () => void }) {
             />
             <ErrMsg msg={errs.email} />
           </div>
-          <div>
+          {/* <div>
             <FieldLabel
               text="Mobile Number"
               required
@@ -257,6 +344,122 @@ export function StepContact({ onNext }: { onNext: () => void }) {
               }}
             />
             <ErrMsg msg={errs.phone} />
+          </div> */}
+
+          <div>
+            <FieldLabel
+              text="Mobile Number"
+              required
+              tip="We'll use this number for order updates and delivery notifications."
+            />
+
+            <div className="space-y-3">
+              <div className="flex items-stretch gap-2">
+                {/* Phone Input */}
+                <div className="flex flex-1 items-center overflow-hidden rounded-xl border border-[var(--rj-bone)] bg-white transition-all duration-200 focus-within:border-[var(--rj-emerald)] focus-within:shadow-[0_0_0_3px_rgba(0,55,32,0.06)]">
+                  <div className="flex h-12 items-center border-r border-[var(--rj-bone)] px-4 text-sm font-medium text-slate-600">
+                    +91
+                  </div>
+
+                  <input
+                    type="tel"
+                    value={contact.phone}
+                    onChange={(e) => {
+                      const value = e.target.value
+                        .replace(/\D/g, "")
+                        .slice(0, 10);
+
+                      setContact({
+                        phone: value,
+                      });
+
+                      if (errs.phone) {
+                        setErrs((p) => {
+                          const n = { ...p };
+                          delete n.phone;
+                          return n;
+                        });
+                      }
+                    }}
+                    placeholder="98765 43210"
+                    maxLength={10}
+                    className="h-12 flex-1 bg-transparent px-4 text-sm outline-none"
+                  />
+                </div>
+
+                {/* OTP Button */}
+                {!phoneVerified && (
+                  <button
+                    type="button"
+                    onClick={sendOtp}
+                    disabled={otpLoading || contact.phone.length !== 10}
+                    className="h-12 min-w-[110px] rounded-xl px-4 text-sm font-medium text-white transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+                    style={{
+                      background: "var(--rj-emerald)",
+                    }}
+                  >
+                    {otpLoading
+                      ? "Sending..."
+                      : otpSent
+                        ? "Resend"
+                        : "Send OTP"}
+                  </button>
+                )}
+              </div>
+
+              <ErrMsg msg={errs.phone} />
+
+              {/* OTP Verification */}
+              {otpSent && !phoneVerified && (
+                <div className="flex items-stretch gap-2">
+                  <input
+                    value={otp}
+                    onChange={(e) =>
+                      setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))
+                    }
+                    placeholder="Enter 6-digit OTP"
+                    className="h-12 flex-1 rounded-xl border border-[var(--rj-bone)] px-4 text-sm outline-none transition-all duration-200 focus:border-[var(--rj-emerald)] focus:shadow-[0_0_0_3px_rgba(0,55,32,0.06)]"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={verifyOtp}
+                    disabled={otp.length < 6}
+                    className="h-12 min-w-[110px] rounded-xl px-4 text-sm font-medium text-white transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+                    style={{
+                      background: "var(--rj-charcoal)",
+                    }}
+                  >
+                    Verify
+                  </button>
+                </div>
+              )}
+
+              {/* Success State */}
+              {phoneVerified && (
+                <div className="flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3">
+                  <svg
+                    className="h-5 w-5 text-emerald-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+
+                  <span className="text-sm font-medium text-emerald-700">
+                    Mobile number verified successfully
+                  </span>
+                </div>
+              )}
+
+              <div id="recaptcha-container" />
+            </div>
           </div>
         </div>
         <NavButtons onNext={handleNext} nextLabel="Continue to Address" />
@@ -333,13 +536,13 @@ function AddressForm({
   });
 
   useEffect(() => {
-  if (!contact) return;
+    if (!contact) return;
 
-  setAddr({
-    fullName: contact.name ?? "",
-    phone: contact.phone ?? "",
-  });
-}, [contact]);
+    setAddr({
+      fullName: contact.name ?? "",
+      phone: contact.phone ?? "",
+    });
+  }, [contact]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -542,7 +745,7 @@ export function StepAddress({
         Shipping address
       </h2>
       <AddressForm
-      contact={contact}
+        contact={contact}
         addr={address}
         setAddr={setAddress}
         errs={errs}
