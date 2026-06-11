@@ -331,7 +331,7 @@ export default function ProductGridCarousel() {
   console.log(SlicedProduct);
 
   return (
-    <section className="py-14 md:py-24" style={{ overflow: "hidden" }}>
+    <section className="py-14" style={{ overflow: "hidden" }}>
       <div className="container-rj">
         {/* ── Heading ── */}
         <motion.div

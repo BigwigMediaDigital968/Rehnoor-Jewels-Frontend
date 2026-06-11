@@ -23,6 +23,8 @@ import RelatedCollection from "./component/RelatedCollection";
 import MangalSutraCollection from "./custom/MangalSutraContent";
 import NecklaceForWomen from "./custom/NecklaceForWomen";
 import BraceletForWomen from "./custom/BraceletForWomen";
+import EarringsForWomen from "./custom/EarringsForWomen";
+import NecklaceSet from "./custom/NecklaceSet";
 
 const EXTRA_SECTIONS: Record<string, React.FC<{ meta: CollectionMeta }>> = {
   "gold-plated-chains-for-men": ChainForMenPage,
@@ -37,6 +39,8 @@ const EXTRA_SECTIONS: Record<string, React.FC<{ meta: CollectionMeta }>> = {
   "gold-plated-mangalsutra-for-women": MangalSutraCollection,
   "gold-plated-necklaces-for-women": NecklaceForWomen,
   "gold-plated-bracelets-for-women": BraceletForWomen,
+  "gold-plated-earrings-for-women": EarringsForWomen,
+  "gold-plated-necklace-with-earrings": NecklaceSet,
 };
 
 function toMeta(
