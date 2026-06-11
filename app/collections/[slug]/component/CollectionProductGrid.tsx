@@ -27,24 +27,12 @@ const TAG_STYLES: Record<string, { bg: string; color: string }> = {
   Trending: { bg: "#fb923c", color: "#000" },
 };
 
-const SORT_OPTIONS = [
-  { value: "featured", label: "Featured" },
-  { value: "price-asc", label: "Price: Low → High" },
-  { value: "price-desc", label: "Price: High → Low" },
-  { value: "rating", label: "Top Rated" },
-  { value: "newest", label: "New Arrivals" },
-];
-
 function parsePrice(s: string | number): number {
   if (typeof s === "number") return s;
   return parseInt(s.replace(/[^\d]/g, ""), 10);
 }
 
-// ─────────────────────────────────────────────────────────────────
 // SIZE PICKER MODAL
-// Shown when user clicks "Add to Cart" — lets them pick a size
-// before the item lands in the Zustand store.
-// ─────────────────────────────────────────────────────────────────
 function SizePickerModal({
   product,
   onConfirm,
@@ -183,9 +171,7 @@ function SkeletonCard() {
   );
 }
 
-// ─────────────────────────────────────────────────────────────────
 // PRODUCT CARD (inline — links to product detail page)
-// ─────────────────────────────────────────────────────────────────
 
 function ProductCard({ product, index }: { product: Product; index: number }) {
   const [hovered, setHovered] = useState(false);
@@ -576,9 +562,7 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
   );
 }
 
-// ─────────────────────────────────────────────────────────────────
 // SIDEBAR FILTERS
-// ─────────────────────────────────────────────────────────────────
 interface Filters {
   priceMin: number;
   priceMax: number;
@@ -596,7 +580,7 @@ const ALL_TAGS = [
   "Trending",
 ];
 
-const PRICE_MAX = 20000;
+const PRICE_MAX = 10000;
 
 function Sidebar({
   filters,
@@ -611,19 +595,10 @@ function Sidebar({
   mobileOpen: boolean;
   usedSizes: string[];
 }) {
-  const [localPriceMax, setLocalPriceMax] = useState(filters.priceMax);
+  // const [localPriceMax, setLocalPriceMax] = useState(filters.priceMax);
 
   const toggle = <T,>(arr: T[], val: T): T[] =>
     arr.includes(val) ? arr.filter((x) => x !== val) : [...arr, val];
-
-  // Get all sizes that actually appear in sample data
-  // const usedSizes = Array.from(
-  //   new Set(
-  //     sampleProducts.flatMap(
-  //       (p) => p.sizes?.map((s: { label: any }) => s.label) ?? [],
-  //     ),
-  //   ),
-  // );
 
   return (
     <>
@@ -718,7 +693,7 @@ function Sidebar({
               className="font-cinzel text-[10px] font-bold"
               style={{ color: "var(--rj-emerald)" }}
             >
-              ₹{localPriceMax.toLocaleString("en-IN")}
+              ₹{filters.priceMax.toLocaleString("en-IN")}
             </span>
           </div>
           <input
@@ -726,10 +701,15 @@ function Sidebar({
             min={0}
             max={PRICE_MAX}
             step={500}
-            value={localPriceMax}
-            onChange={(e) => setLocalPriceMax(+e.target.value)}
-            onMouseUp={() => onChange({ ...filters, priceMax: localPriceMax })}
-            onTouchEnd={() => onChange({ ...filters, priceMax: localPriceMax })}
+            value={filters.priceMax}
+            onChange={(e) =>
+              onChange({
+                ...filters,
+                priceMax: +e.target.value,
+              })
+            }
+            // onMouseUp={() => onChange({ ...filters, priceMax: localPriceMax })}
+            // onTouchEnd={() => onChange({ ...filters, priceMax: localPriceMax })}
             className="w-full"
             style={{
               accentColor: "var(--rj-emerald)",
@@ -748,7 +728,7 @@ function Sidebar({
               className="font-cinzel text-[8px]"
               style={{ color: "var(--rj-bone)" }}
             >
-              ₹20,000
+              ₹10,000
             </span>
           </div>
         </div>
@@ -793,7 +773,7 @@ function Sidebar({
         </div>
 
         {/* ── Sizes ── */}
-        <div
+        {/* <div
           className="mb-6 pb-6"
           style={{ borderBottom: "1px solid var(--rj-bone)" }}
         >
@@ -826,7 +806,7 @@ function Sidebar({
               );
             })}
           </div>
-        </div>
+        </div> */}
 
         {/* ── Rating ── */}
         <div className="mb-6">

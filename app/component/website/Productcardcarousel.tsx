@@ -295,7 +295,7 @@ export default function ProductCardCarousel({ product }: { product: Product }) {
         {/* Image Area */}
         <div
           className="relative overflow-hidden"
-          style={{ aspectRatio: "3/4", background: "var(--rj-ivory-dark)" }}
+          style={{ aspectRatio: "1/1", background: "var(--rj-ivory-dark)" }}
         >
           <AnimatePresence mode="wait">
             <motion.div

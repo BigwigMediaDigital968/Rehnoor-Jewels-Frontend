@@ -326,6 +326,10 @@ export default function ProductGridCarousel() {
   } = useProducts({ tag: "New", limit: 20 });
   const cardWidth = useCardWidth();
 
+  const SlicedProduct = products.slice(0, 10);
+
+  console.log(SlicedProduct);
+
   return (
     <section className="py-14 md:py-24" style={{ overflow: "hidden" }}>
       <div className="container-rj">
@@ -371,20 +375,6 @@ export default function ProductGridCarousel() {
             />
           </Link>
         </motion.div>
-
-        {/* ── Hint text ── */}
-        {!loading && !error && (
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3, duration: 0.5 }}
-            className="font-cinzel text-[9px] tracking-[0.2em] uppercase text-center mb-6"
-            style={{ color: "rgba(0,55,32,0.35)" }}
-          >
-            Hover to pause · Drag to explore
-          </motion.p>
-        )}
       </div>
 
       {/* ── Error state ── */}
@@ -418,11 +408,25 @@ export default function ProductGridCarousel() {
           transition={{ duration: 0.5, delay: 0.1 }}
         >
           <MarqueeTrack
-            products={products}
+            products={SlicedProduct}
             loading={loading}
             cardWidth={cardWidth}
           />
         </motion.div>
+      )}
+
+      {/* ── Hint text ── */}
+      {!loading && !error && (
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+          className="font-cinzel text-[9px] tracking-[0.2em] uppercase text-center mt-6"
+          style={{ color: "rgba(0,55,32,0.35)" }}
+        >
+          Hover to pause · Drag to explore
+        </motion.p>
       )}
     </section>
   );

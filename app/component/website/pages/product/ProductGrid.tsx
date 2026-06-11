@@ -479,7 +479,7 @@ export default function ProductGrid({
                     setQuery("");
                     inputRef.current?.focus();
                   }}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 hover:opacity-70"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 hover:opacity-70 cursor-pointer"
                   aria-label="Clear search"
                 >
                   <X size={13} style={{ color: "var(--rj-ash)" }} />
@@ -738,7 +738,10 @@ export default function ProductGrid({
                     }}
                   >
                     "{query}"
-                    <button onClick={() => setQuery("")}>
+                    <button
+                      className="cursor-pointer"
+                      onClick={() => setQuery("")}
+                    >
                       <X size={9} />
                     </button>
                   </span>
@@ -752,7 +755,10 @@ export default function ProductGrid({
                     }}
                   >
                     {activeFilter}
-                    <button onClick={() => setActiveFilter("All")}>
+                    <button
+                      className="cursor-pointer"
+                      onClick={() => setActiveFilter("All")}
+                    >
                       <X size={9} />
                     </button>
                   </span>
@@ -780,7 +786,10 @@ export default function ProductGrid({
                     }}
                   >
                     {SORT_OPTIONS.find((o) => o.value === sortBy)?.label}
-                    <button onClick={() => setSortBy("featured")}>
+                    <button
+                      className="cursor-pointer"
+                      onClick={() => setSortBy("featured")}
+                    >
                       <X size={9} />
                     </button>
                   </span>
