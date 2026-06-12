@@ -60,7 +60,7 @@ export default function OurStory() {
               style={{ aspectRatio: "4/5", background: "var(--rj-ivory-dark)" }}
             >
               <Image
-                src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&q=85"
+                src="/assets/brand-story-1.png"
                 alt="Rehnoor Jewels craftsmanship"
                 fill
                 className="object-cover"
@@ -114,7 +114,7 @@ export default function OurStory() {
               }}
             >
               <Image
-                src="https://images.unsplash.com/photo-1602173574767-37ac01994b2a?w=300&q=85"
+                src="/products/ring-image-1.jpg"
                 alt="Rehnoor detail"
                 fill
                 className="object-cover"

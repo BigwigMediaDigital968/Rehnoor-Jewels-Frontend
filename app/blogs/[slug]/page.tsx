@@ -4,6 +4,7 @@ import BlogDetailLayout from "./BlogDetails";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
+const SITE_URL = "https://www.rehnoorjewels.com";
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
@@ -44,7 +45,7 @@ export async function generateMetadata({
       },
       alternates: data.canonicalUrl
         ? { canonical: data.canonicalUrl }
-        : undefined,
+        : { canonical: `${SITE_URL}/blogs/${slug}` },
     };
   } catch {
     return { title: "Blog | Rehnoor Jewels" };

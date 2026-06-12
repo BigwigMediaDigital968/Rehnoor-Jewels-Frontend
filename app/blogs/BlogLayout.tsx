@@ -158,9 +158,7 @@ function SkeletonCard({ large = false }: { large?: boolean }) {
   );
 }
 
-// ─────────────────────────────────────────────────────────────────
 // BLOG CARD
-// ─────────────────────────────────────────────────────────────────
 
 function BlogCard({
   post,
@@ -289,10 +287,14 @@ function BlogCard({
         {/* Excerpt */}
         {post.excerpt && (
           <p
-            className="text-sm leading-relaxed mb-4 flex-1 line-clamp-2"
+            className="text-sm leading-relaxed mb-4 flex-1 overflow-hidden"
             style={{
               color: "var(--rj-ash)",
               fontFamily: "var(--font-body,'DM Sans'),sans-serif",
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+              textOverflow: "ellipsis",
             }}
           >
             {post.excerpt}
@@ -544,7 +546,7 @@ export default function BlogPage() {
               Stories of gold,
               <br />
               <em className="text-gold-shimmer font-normal pe-5">
-                craft &amp; culture
+                craft & culture
               </em>
             </h1>
             <p

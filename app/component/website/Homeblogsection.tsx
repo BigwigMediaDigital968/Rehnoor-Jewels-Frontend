@@ -265,120 +265,130 @@ function SideCard({ post, index }: { post: BlogCard; index: number }) {
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="relative rounded-xl overflow-hidden flex-1 group"
-      style={{
-        minHeight: 90,
-        cursor: "pointer",
-        background: hovered
-          ? "rgba(255,255,255,0.055)"
-          : "rgba(255,255,255,0.03)",
-        border: `1px solid ${hovered ? "rgba(252,193,81,0.25)" : "rgba(255,255,255,0.07)"}`,
-        transition: "all 0.3s ease",
-      }}
+      className="relative overflow-hidden rounded-xl flex-1 group min-h-[140px]"
     >
-      <Link href={`/blogs/${post.slug}`} className="absolute inset-0 z-10" />
+      <Link href={`/blogs/${post.slug}`} className="absolute inset-0 z-30" />
 
-      <div className="flex h-full">
-        {/* Thumbnail */}
-        <div
-          className="relative flex-shrink-0 overflow-hidden"
-          style={{ width: "36%", minHeight: "100%" }}
-        >
-          <Image
-            src={post.coverImage || FALLBACK}
-            alt={post.coverImageAlt || post.title}
-            fill
-            sizes="120px"
-            className="object-cover"
+      {/* Background Image */}
+      <Image
+        src={post.coverImage || FALLBACK}
+        alt={post.coverImageAlt || post.title}
+        fill
+        priority={false}
+        className="object-cover"
+        style={{
+          transform: hovered ? "scale(1.08)" : "scale(1)",
+          transition: "transform 0.7s ease",
+        }}
+      />
+
+      {/* Dark Overlay */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: hovered
+            ? "linear-gradient(to top, rgba(0,0,0,0.92), rgba(0,0,0,0.2))"
+            : "linear-gradient(to top, rgba(0,0,0,0.88), rgba(0,0,0,0.4))",
+          transition: "all 0.3s ease",
+        }}
+      />
+
+      {/* Gold Glow */}
+      <div
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        style={{
+          background:
+            "radial-gradient(circle at top right, rgba(252,193,81,0.15), transparent 50%)",
+        }}
+      />
+
+      {/* Content */}
+      <div className="relative z-20 h-full flex flex-col justify-between p-4">
+        <div>
+          {post.category && (
+            <span
+              className="font-cinzel text-[9px] font-bold tracking-[0.25em] uppercase"
+              style={{
+                color: "var(--rj-gold,#FCC151)",
+              }}
+            >
+              {post.category}
+            </span>
+          )}
+
+          <h4
+            className="font-cormorant mt-2 leading-tight line-clamp-2"
             style={{
-              transform: hovered ? "scale(1.08)" : "scale(1)",
-              transition: "transform 0.6s ease",
+              fontSize: "clamp(1rem,1.4vw,1.2rem)",
+              color: "#fff",
             }}
-          />
-          <div
-            className="absolute inset-0"
+          >
+            {post.title}
+          </h4>
+          <p
+            className="text-sm leading-relaxed line-clamp-2"
             style={{
-              background: "linear-gradient(90deg,transparent,rgba(0,0,0,0.1))",
+              color: "rgba(255,255,255,0.6)",
+              fontFamily: "var(--font-body,'DM Sans'),sans-serif",
+              maxWidth: "48ch",
+              opacity: hovered ? 1 : 0.75,
+              transition: "opacity 0.3s",
             }}
-          />
+          >
+            {post.excerpt}
+          </p>
         </div>
 
-        {/* Text */}
-        <div className="flex flex-col justify-between p-3.5 sm:p-4 flex-1 min-w-0">
-          <div>
-            {post.category && (
+        <div className="flex items-center justify-between mt-4">
+          <div className="flex items-center gap-2">
+            {post.readingTimeMinutes && (
               <span
-                className="font-cinzel text-[8px] font-bold tracking-widest uppercase"
-                style={{
-                  color: "var(--rj-gold,#FCC151)",
-                  opacity: 0.85,
-                }}
+                className="flex items-center gap-1 text-[9px] tracking-widest"
+                style={{ color: "rgba(255,255,255,0.75)" }}
               >
-                {post.category}
+                <Clock size={10} />
+                {post.readingTimeMinutes}m
               </span>
             )}
-            <h4
-              className="font-cormorant font-light leading-snug line-clamp-2 mt-0.5 transition-colors duration-200"
-              style={{
-                fontSize: "clamp(0.88rem, 1.3vw, 1.05rem)",
-                color: hovered ? "#fff" : "rgba(255,255,255,0.85)",
-              }}
-            >
-              {post.title}
-            </h4>
+
+            {post.views > 0 && (
+              <>
+                <span style={{ color: "rgba(255,255,255,0.4)" }}>•</span>
+
+                <span
+                  className="flex items-center gap-1 text-[9px] tracking-widest"
+                  style={{ color: "rgba(255,255,255,0.75)" }}
+                >
+                  <Eye size={10} />
+                  {post.views > 999
+                    ? `${(post.views / 1000).toFixed(1)}k`
+                    : post.views}
+                </span>
+              </>
+            )}
           </div>
 
-          <div className="flex items-center justify-between mt-2">
-            <div className="flex items-center gap-2">
-              {post.readingTimeMinutes && (
-                <span
-                  className="flex items-center gap-1 font-cinzel text-[8px] tracking-widest"
-                  style={{ color: "rgba(255,255,255,0.35)" }}
-                >
-                  <Clock size={8} />
-                  {post.readingTimeMinutes}m
-                </span>
-              )}
-              {post.views > 0 && (
-                <>
-                  <span style={{ color: "rgba(255,255,255,0.2)" }}>·</span>
-                  <span
-                    className="flex items-center gap-1 font-cinzel text-[8px] tracking-widest"
-                    style={{ color: "rgba(255,255,255,0.35)" }}
-                  >
-                    <Eye size={8} />
-                    {post.views > 999
-                      ? `${(post.views / 1000).toFixed(1)}k`
-                      : post.views}
-                  </span>
-                </>
-              )}
-            </div>
-
-            <div
-              className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-200"
+          <div
+            className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300"
+            style={{
+              background: hovered
+                ? "var(--rj-gold,#FCC151)"
+                : "rgba(255,255,255,0.15)",
+            }}
+          >
+            <ArrowUpRight
+              size={14}
               style={{
-                background: hovered
-                  ? "var(--rj-gold,#FCC151)"
-                  : "rgba(255,255,255,0.08)",
+                color: hovered ? "var(--rj-emerald,#003720)" : "#fff",
               }}
-            >
-              <ArrowUpRight
-                size={9}
-                style={{
-                  color: hovered
-                    ? "var(--rj-emerald,#003720)"
-                    : "rgba(255,255,255,0.5)",
-                }}
-              />
-            </div>
+            />
           </div>
         </div>
       </div>
 
-      {/* Left accent bar on hover */}
+      {/* Left Gold Accent */}
       <div
-        className="absolute left-0 top-0 w-0.5 transition-all duration-500"
+        className="absolute left-0 top-0 w-[2px] transition-all duration-500 z-20"
         style={{
           height: hovered ? "100%" : "0%",
           background: "var(--rj-gold,#FCC151)",

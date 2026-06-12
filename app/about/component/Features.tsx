@@ -34,7 +34,7 @@ export default function Features() {
       quote:
         "Looks like 50 grams. Costs like 1gm. That's the quiet confidence of patra.",
       body: "You don't need heavy gold to carry heavy style. 1g can outshine the real thing.",
-      img: "/assets/about-feature-1.jpg",
+      img: "/assets/store-image.png",
     },
     {
       tag: "Smart Style",
