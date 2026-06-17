@@ -82,7 +82,7 @@ const navLinks = [
     ],
   },
   { label: "About", href: "/about" },
-  { label: "Customization", href: "/customized-jewellery" },
+  // { label: "Customization", href: "/customized-jewellery" },
   { label: "Contact", href: "/contact" },
 ];
 
