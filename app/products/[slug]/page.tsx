@@ -9,6 +9,7 @@ import {
   fetchAllProductSlugs,
 } from "@/app/lib/api/productLive";
 import type { Product } from "../../types/Product.types";
+import RecentlyViewedTracker from "./component/RecentlyViewedTracker";
 
 // ─────────────────────────────────────────────────────────────────
 // HELPERS
@@ -89,12 +90,7 @@ export async function generateStaticParams() {
   return slugs.map((slug) => ({ slug }));
 }
 
-// ─────────────────────────────────────────────────────────────────
 // SEO METADATA & OPEN GRAPH / TWITTER CARDS
-// ─────────────────────────────────────────────────────────────────
-// ─────────────────────────────────────────────────────────────────
-// SEO METADATA & OPEN GRAPH / TWITTER CARDS
-// ─────────────────────────────────────────────────────────────────
 export async function generateMetadata({
   params,
 }: {
@@ -280,6 +276,17 @@ export default async function ProductDetailPage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+      />
+
+      <RecentlyViewedTracker
+        product={{
+          id: rawProductId,
+          slug: rawSlug,
+          name: product.name,
+          image: product.images?.[0]?.src || "",
+          price: product.price,
+          viewedAt: Date.now(),
+        }}
       />
 
       <ProductDetailWrapper

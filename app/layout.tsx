@@ -8,6 +8,7 @@ import DiscountPopup, {
 } from "./component/shared/DiscountPopup";
 import NavbarNew from "./component/website/NavbarNew";
 import Script from "next/script";
+import RecentlyViewedFloating from "./products/[slug]/component/RecentlyViewedFloating";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -111,6 +112,8 @@ export default function RootLayout({
         <FloatingOfferBadge offerKey="welcome" />
         <NavbarNew />
         {children}
+
+        <RecentlyViewedFloating />
         <Footer />
         <Toaster
           position="bottom-center"
