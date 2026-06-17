@@ -267,3 +267,95 @@ export const aboutFAQProps: FAQsProps = {
     },
   ],
 };
+
+export const customizedJewelleryFAQProps: FAQsProps = {
+  tagline: "Customized Jewellery",
+  title: "Frequently Asked Questions",
+  subtitle:
+    "Everything you need to know before beginning your Customized Jewellery journey with Rehnoor Jewels.",
+  theme: "light",
+  items: [
+    {
+      question: "What is Customized Jewellery at Rehnoor Jewels?",
+      answer:
+        "Customized Jewellery at Rehnoor Jewels means taking a design from our exclusive catalog and tailoring it entirely to your preferences, including gold purity, weight, finish, diamond quality, and sizing. Every piece is crafted specifically for you; nothing is mass-produced or off-the-shelf.",
+    },
+    {
+      question: "Do you offer designs outside your catalog?",
+      answer:
+        "No. All our Customized Jewellery is created by modifying designs within our exclusive catalog. This ensures that every base design already meets our strict quality and craftsmanship standards before personalization begins.",
+    },
+    {
+      question: "What gold purity options are available?",
+      answer:
+        "We offer Customized Gold Jewellery in 18K to 22K gold. The gold weight in grams is calculated based on your chosen design and size, and is disclosed to you transparently before production begins.",
+    },
+    {
+      question: "Do you use natural or lab-grown diamonds?",
+      answer:
+        "We use only 100% certified natural diamonds. Our Customized Natural Diamond Jewellery is crafted exclusively with ethically sourced diamonds in VS/SI clarity and G–H color range. We do not use lab-grown, synthetic, or simulated alternatives under any circumstances.",
+    },
+    {
+      question: "How is the price of Customized Jewellery calculated?",
+      answer: [
+        t(
+          "Pricing depends on several real-time factors, including the current gold rate, gold weight, diamond weight, diamond clarity and color, design complexity, and size requirements. Because these variables fluctuate, we operate on a Price on Request basis. Connect with us via ",
+        ),
+        l("WhatsApp", "/contact"),
+        t(" to receive an accurate quotation based on today's market rates."),
+      ],
+    },
+    {
+      question: "Why don't you show fixed prices on the website?",
+      answer:
+        "Gold rates change daily, and diamond weights vary by design and size. A fixed price would either be misleading or outdated. Our dynamic pricing model ensures you always receive a fair, real-time quote based on actual market values, with complete transparency and no hidden charges.",
+    },
+    {
+      question: "How does the WhatsApp consultation work?",
+      answer:
+        "When you click 'Customize This Design', a short inquiry form opens. Submit your name, contact number, selected design, size, and customization preferences. Our team will then provide personalized guidance, pricing, and recommendations tailored to your requirements.",
+    },
+    {
+      question: "What is the booking and payment structure?",
+      answer:
+        "We require a 70% advance payment at the time of booking to begin production. The remaining 30% is payable after order confirmation. The gold rate applicable on your booking date is locked in, ensuring complete price stability throughout the customization process.",
+    },
+    {
+      question: "How do I find my correct size?",
+      answer: [
+        t("You can enter your size during the inquiry process, use our "),
+        l("Find Your Size Guide", "/size-guide"),
+        t(
+          ", or request sizing assistance through WhatsApp. Our team will help ensure a perfect fit before production begins.",
+        ),
+      ],
+    },
+    {
+      question: "What diamond specifications will I receive with my order?",
+      answer:
+        "Every piece of Customized Diamond Jewellery comes with complete diamond transparency, including natural diamond clarity (VS/SI range), color grading (G–H near-colorless), diamond weight in carats or cents, and net diamond weight calculations specific to your design.",
+    },
+    {
+      question: "How long does customization take?",
+      answer:
+        "Production timelines vary depending on the design complexity and level of customization required. Our team will provide an estimated completion timeline during your consultation once all specifications have been finalized.",
+    },
+    {
+      question: "Is my jewellery made exclusively for me?",
+      answer:
+        "Yes. Every piece of Customized Jewellery at Rehnoor Jewels is crafted specifically for you based on your selected design and personal specifications. It is not a ready-made item from inventory but is created exclusively for your order.",
+    },
+    {
+      question: "How do I get started?",
+      answer: [
+        t(
+          "Browse our design catalog and select a piece that inspires you. Click ",
+        ),
+        t("'Know More', 'Customize This Design', or 'Get Price'"),
+        t(
+          " to connect directly with our team via WhatsApp and begin your customized jewellery journey.",
+        ),
+      ],
+    },
+  ],
+};

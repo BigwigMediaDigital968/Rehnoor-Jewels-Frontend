@@ -333,7 +333,7 @@ export default function FAQs({
 
       <section
         ref={sectionRef}
-        className="relative overflow-hidden py-14 px-4 sm:px-6 lg:px-8"
+        className="relative overflow-hidden py-10 md:py-16 px-4 sm:px-6 lg:px-8"
         style={{ background: sectionBg }}
       >
         {/* ── Subtle texture ── */}
