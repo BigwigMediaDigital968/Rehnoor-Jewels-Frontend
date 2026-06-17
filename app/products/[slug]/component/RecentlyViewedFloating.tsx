@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Eye, ArrowUpRight } from "lucide-react";
@@ -53,18 +53,17 @@ export default function RecentlyViewedFloating() {
     let timer: NodeJS.Timeout;
 
     if (!visible) {
-      // When hidden, wait 20 seconds, reset to the first product, then show it again
+      // Handles 20-second downtime after sliding away or on user click
       timer = setTimeout(() => {
         setCurrentIndex(0);
         setVisible(true);
       }, HIDE_DURATION);
     } else {
-      // When visible, step through products every 4 seconds
+      // Standard 4-second carousel display
       timer = setTimeout(() => {
         if (currentIndex < products.length - 1) {
           setCurrentIndex((prev) => prev + 1);
         } else {
-          // All 5 items viewed -> hide the card for 20 seconds
           setVisible(false);
         }
       }, SHOW_INTERVAL);
@@ -72,6 +71,12 @@ export default function RecentlyViewedFloating() {
 
     return () => clearTimeout(timer);
   }, [visible, currentIndex, products, isHovered]);
+
+  // Force-dismisses the card on user selection
+  const handleCardClick = () => {
+    setIsHovered(false); // Breaks hover lock instantly
+    setVisible(false); // Disappears immediately and fires the 20s delay loop
+  };
 
   const product = products[currentIndex];
 
@@ -107,7 +112,7 @@ export default function RecentlyViewedFloating() {
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
-          <Link href={`/products/${product.slug}`}>
+          <Link href={`/products/${product.slug}`} onClick={handleCardClick}>
             <motion.div
               whileHover={{
                 scale: 1.03,
