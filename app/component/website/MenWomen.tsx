@@ -12,13 +12,13 @@ const menItems = [
   {
     id: 1,
     name: "Chanins of Distinction",
-    subtitle: "Gold Plated Chain for Men",
+    subtitle: "Gold Plated Kada for Men",
     tag: "Bestseller",
     price: "₹999",
     gradient: "from-[#1a1a1a] via-[#2a2208] to-[#1a1a1a]",
     accent: "#fcc151",
-    image: "/men-collection/chains.png",
-    link: "/collections/gold-plated-chains-for-men",
+    image: "/men-collection/kada.webp",
+    link: "/collections/kada-for-men",
   },
   {
     id: 2,
@@ -28,7 +28,7 @@ const menItems = [
     price: "₹999",
     gradient: "from-[#0a1f12] via-[#003720] to-[#0a1f12]",
     accent: "#fdd07a",
-    image: "/men-collection/pendants.png",
+    image: "/men-collection/pendant.webp",
     link: "/collections/pendants-for-men",
   },
   {
@@ -39,7 +39,7 @@ const menItems = [
     price: "₹999",
     gradient: "from-[#1a1108] via-[#2e1f00] to-[#1a1108]",
     accent: "#f5a623",
-    image: "/men-collection/bracelets.png",
+    image: "/men-collection/bracelet.webp",
     link: "/collections/gold-plated-bracelets-for-men",
   },
   {
@@ -50,7 +50,7 @@ const menItems = [
     price: "₹999",
     gradient: "from-[#1a1a1a] via-[#002410] to-[#1a1a1a]",
     accent: "#fcc151",
-    image: "/men-collection/rings.png",
+    image: "/men-collection/ring.webp",
     link: "/collections/rings-for-men",
   },
 ];

@@ -651,8 +651,7 @@ export default function ProductGrid({
               </div>
             )}
 
-            {/* Category chips — from API */}
-            {uniqueCategories.length > 1 && (
+            {/* {uniqueCategories.length > 1 && (
               <div className="flex flex-wrap gap-2 overflow-x-auto py-1">
                 <span
                   className="font-cinzel text-[9px] tracking-widest uppercase self-center mr-1"
@@ -680,9 +679,8 @@ export default function ProductGrid({
                   </button>
                 ))}
               </div>
-            )}
+            )} */}
 
-            {/* Tag chips — only show tags that exist in current data */}
             {availableTags.length > 1 && (
               <div className="flex flex-wrap gap-2">
                 <span
