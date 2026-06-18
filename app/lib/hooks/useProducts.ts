@@ -24,6 +24,8 @@ export function useProducts(opts: UseProductsOptions = {}) {
 
   const [activeGender, setActiveGender] = useState("All");
 
+  const [activeCollection, setActiveCollection] = useState("All");
+
   // Stable option values to prevent unnecessary re-fetches
   const collection = opts.collection;
   const category = opts.category;
@@ -65,6 +67,7 @@ export function useProducts(opts: UseProductsOptions = {}) {
   useEffect(() => {
     setActiveFilter("All");
     setActiveGender("All");
+    setActiveCollection("All");
   }, [collection, category, tag, bestseller]);
 
   // Derive category pills from live data (always includes "All")
@@ -74,6 +77,18 @@ export function useProducts(opts: UseProductsOptions = {}) {
         data.map((p) => p.category).filter((c): c is string => Boolean(c)),
       ),
     ).sort();
+    return ["All", ...unique];
+  }, [data]);
+
+  const collections = useMemo(() => {
+    const unique = Array.from(
+      new Set(
+        data
+          .map((p) => p.collection?.name)
+          .filter((c): c is string => Boolean(c)),
+      ),
+    ).sort();
+
     return ["All", ...unique];
   }, [data]);
 
@@ -115,18 +130,41 @@ export function useProducts(opts: UseProductsOptions = {}) {
 
   // Client-side category filter (instant, no extra round-trip)
 
-  const filtered = useMemo(() => {
-    let products =
-      activeFilter === "All"
-        ? data
-        : data.filter((p) => p.category === activeFilter);
+  // const filtered = useMemo(() => {
+  //   let products =
+  //     activeFilter === "All"
+  //       ? data
+  //       : data.filter((p) => p.category === activeFilter);
 
+  //   if (activeGender !== "All") {
+  //     products = products.filter((p) => getGender(p) === activeGender);
+  //   }
+
+  //   return products;
+  // }, [data, activeFilter, activeGender]);
+
+  const filtered = useMemo(() => {
+    let products = data;
+
+    // Category Filter
+    if (activeFilter !== "All") {
+      products = products.filter((p) => p.category === activeFilter);
+    }
+
+    // Collection Filter
+    if (activeCollection !== "All") {
+      products = products.filter(
+        (p) => p.collection?.name === activeCollection,
+      );
+    }
+
+    // Gender Filter
     if (activeGender !== "All") {
       products = products.filter((p) => getGender(p) === activeGender);
     }
 
     return products;
-  }, [data, activeFilter, activeGender]);
+  }, [data, activeFilter, activeCollection, activeGender]);
 
   // Derived stats
   const totalCount = data.length;
@@ -155,5 +193,8 @@ export function useProducts(opts: UseProductsOptions = {}) {
     totalCount,
     /** Products matching current category filter */
     filteredCount,
+    collections,
+    activeCollection,
+    setActiveCollection,
   };
 }

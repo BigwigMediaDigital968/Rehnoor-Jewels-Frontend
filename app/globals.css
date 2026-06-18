@@ -646,15 +646,13 @@ body {
     transform: rotate(0.5turn);
   }
 }
-/* 
-@media (min-width: 768px) {
-  html,
-  body,
-  a,
-  button,
-  input,
-  select,
-  .cursor-pointer {
-    cursor: none !important;
-  }
-} */
+
+/* Hide scrollbar but allow scrolling */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE & Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}

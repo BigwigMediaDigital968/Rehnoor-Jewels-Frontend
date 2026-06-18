@@ -18,9 +18,7 @@ import type { Product } from "@/app/types/Product.types";
 import { useProducts } from "@/app/lib/hooks/useProducts";
 import { fmt } from "@/app/lib/api/productLive";
 
-// ─────────────────────────────────────────────────────────────────
 // CONSTANTS
-// ─────────────────────────────────────────────────────────────────
 const PAGE_SIZE = 500;
 const LOAD_MORE_SIZE = 8;
 
@@ -254,6 +252,9 @@ export default function ProductGrid({
     genders,
     activeGender,
     setActiveGender,
+    collections, // <-- Add this
+    activeCollection, // <-- Add this
+    setActiveCollection, // <-- Add this
   } = useProducts({
     collection,
     category: categoryProp,
@@ -262,7 +263,7 @@ export default function ProductGrid({
     limit: 500, // load all, filter client-side for instant UX
   });
 
-  // ── Local UI state ──────────────────────────────────────────────
+  // Local UI state
   const [query, setQuery] = useState("");
   const [activeTag, setActiveTag] = useState("All");
   const [sortBy, setSortBy] = useState("featured");
@@ -348,6 +349,8 @@ export default function ProductGrid({
   const clearAll = () => {
     setQuery("");
     setActiveFilter("All");
+    setActiveCollection("All"); // <-- Resets collection row
+    setActiveGender("All"); // <-- Resets gender row
     setActiveTag("All");
     setSortBy("featured");
   };
@@ -610,104 +613,122 @@ export default function ProductGrid({
             </button>
           </div>
 
-          {/* Row 2: Category + Tag chips */}
+          {/* Row 2: Upgraded Luxury Multi-Dropdown Segment */}
           <div
-            className={`flex-col gap-3 ${showFilters ? "flex" : "hidden sm:flex"}`}
+            className={`grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 mt-2 rounded-xl border border-neutral-200/60 bg-white shadow-[0_4px_20px_rgba(0,0,0,0.01)] transition-all duration-300 ${
+              showFilters ? "flex flex-col" : "hidden sm:grid"
+            }`}
           >
+            {/* ── 1. GENDER DROPDOWN SELECTION MODULE ── */}
             {genders.length > 1 && (
-              <div className="flex flex-wrap gap-2">
-                <span
-                  className="font-cinzel text-[9px] tracking-widest uppercase self-center mr-1"
-                  style={{ color: "var(--rj-ash)" }}
-                >
-                  Gender:
-                </span>
-
-                {genders.map((gender) => (
-                  <button
-                    key={gender}
-                    onClick={() => setActiveGender(gender)}
-                    className="font-cinzel text-[9px] tracking-widest uppercase px-3 py-1.5 rounded-full transition-all duration-200 cursor-pointer"
+              <div className="relative group/filter flex flex-col gap-1.5">
+                <label className="font-cinzel text-[10px] tracking-widest text-[#9B7A47] font-bold uppercase pl-1">
+                  Select Gender
+                </label>
+                <div className="relative">
+                  <select
+                    value={activeGender}
+                    onChange={(e) => setActiveGender(e.target.value)}
+                    className="w-full appearance-none bg-[#faf9f6] text-neutral-800 font-cinzel text-xs tracking-wider border border-neutral-200 hover:border-[#9B7A47] px-4 py-3 pr-10 rounded-xl cursor-pointer transition-all duration-300 outline-none focus:border-[#9B7A47] focus:ring-2 focus:ring-[#9B7A47]/10"
                     style={{
                       background:
-                        activeGender === gender
-                          ? "var(--gradient-gold)"
-                          : "#fff",
-                      color:
-                        activeGender === gender
-                          ? "var(--rj-emerald)"
-                          : "var(--rj-ash)",
-                      border: `1px solid ${
-                        activeGender === gender
-                          ? "transparent"
-                          : "var(--rj-bone)"
-                      }`,
-                      fontWeight: activeGender === gender ? 700 : 400,
+                        activeGender !== "All"
+                          ? "rgba(155,122,71,0.04)"
+                          : "#faf9f6",
+                      borderColor:
+                        activeGender !== "All" ? "#9B7A47" : "var(--rj-bone)",
                     }}
                   >
-                    {gender}
-                  </button>
-                ))}
+                    {genders.map((gender) => (
+                      <option
+                        key={gender}
+                        value={gender}
+                        className="text-neutral-800"
+                      >
+                        {gender === "All" ? "All Genders" : gender}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-neutral-400 group-hover/filter:text-[#9B7A47] transition-colors">
+                    <ChevronDown size={14} strokeWidth={2.5} />
+                  </div>
+                </div>
               </div>
             )}
 
-            {/* {uniqueCategories.length > 1 && (
-              <div className="flex flex-wrap gap-2 overflow-x-auto py-1">
-                <span
-                  className="font-cinzel text-[9px] tracking-widest uppercase self-center mr-1"
-                  style={{ color: "var(--rj-ash)" }}
-                >
-                  Category:
-                </span>
-                {uniqueCategories.map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => setActiveFilter(cat)}
-                    className="font-cinzel text-[9px] tracking-widest uppercase px-3 py-1.5 rounded-full transition-all duration-200 cursor-pointer"
+            {/* ── 2. COLLECTION DROPDOWN SELECTION MODULE ── */}
+            {collections.length > 1 && (
+              <div className="relative group/filter flex flex-col gap-1.5">
+                <label className="font-cinzel text-[10px] tracking-widest text-[#9B7A47] font-bold uppercase pl-1">
+                  Curated Collection
+                </label>
+                <div className="relative">
+                  <select
+                    value={activeCollection}
+                    onChange={(e) => setActiveCollection(e.target.value)}
+                    className="w-full appearance-none bg-[#faf9f6] text-neutral-800 font-cinzel text-xs tracking-wider border border-neutral-200 hover:border-[#9B7A47] px-4 py-3 pr-10 rounded-xl cursor-pointer transition-all duration-300 outline-none focus:border-[#9B7A47] focus:ring-2 focus:ring-[#9B7A47]/10"
                     style={{
                       background:
-                        activeFilter === cat ? "var(--rj-emerald)" : "#fff",
-                      color:
-                        activeFilter === cat
-                          ? "var(--rj-gold)"
-                          : "var(--rj-ash)",
-                      border: `1px solid ${activeFilter === cat ? "var(--rj-emerald)" : "var(--rj-bone)"}`,
-                      fontWeight: activeFilter === cat ? 700 : 400,
+                        activeCollection !== "All"
+                          ? "rgba(155,122,71,0.04)"
+                          : "#faf9f6",
+                      borderColor:
+                        activeCollection !== "All"
+                          ? "#9B7A47"
+                          : "var(--rj-bone)",
                     }}
                   >
-                    {cat}
-                  </button>
-                ))}
+                    {collections.map((col) => (
+                      <option
+                        key={col}
+                        value={col}
+                        className="text-neutral-800"
+                      >
+                        {col === "All" ? "All Collections" : col}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-neutral-400 group-hover/filter:text-[#9B7A47] transition-colors">
+                    <ChevronDown size={14} strokeWidth={2.5} />
+                  </div>
+                </div>
               </div>
-            )} */}
+            )}
 
+            {/* ── 3. TAGS DROPDOWN SELECTION MODULE ── */}
             {availableTags.length > 1 && (
-              <div className="flex flex-wrap gap-2">
-                <span
-                  className="font-cinzel text-[9px] tracking-widest uppercase self-center mr-1"
-                  style={{ color: "var(--rj-ash)" }}
-                >
-                  Filter:
-                </span>
-                {availableTags.map((tag) => (
-                  <button
-                    key={tag}
-                    onClick={() => setActiveTag(tag)}
-                    className="font-cinzel text-[9px] tracking-widest uppercase px-3 py-1.5 rounded-full transition-all duration-200 cursor-pointer"
+              <div className="relative group/filter flex flex-col gap-1.5">
+                <label className="font-cinzel text-[10px] tracking-widest text-[#9B7A47] font-bold uppercase pl-1">
+                  Product Label Tag
+                </label>
+                <div className="relative">
+                  <select
+                    value={activeTag}
+                    onChange={(e) => setActiveTag(e.target.value)}
+                    className="w-full appearance-none bg-[#faf9f6] text-neutral-800 font-cinzel text-xs tracking-wider border border-neutral-200 hover:border-[#9B7A47] px-4 py-3 pr-10 rounded-xl cursor-pointer transition-all duration-300 outline-none focus:border-[#9B7A47] focus:ring-2 focus:ring-[#9B7A47]/10"
                     style={{
                       background:
-                        activeTag === tag ? "var(--gradient-gold)" : "#fff",
-                      color:
-                        activeTag === tag
-                          ? "var(--rj-emerald)"
-                          : "var(--rj-ash)",
-                      border: `1px solid ${activeTag === tag ? "transparent" : "var(--rj-bone)"}`,
-                      fontWeight: activeTag === tag ? 700 : 400,
+                        activeTag !== "All"
+                          ? "rgba(155,122,71,0.04)"
+                          : "#faf9f6",
+                      borderColor:
+                        activeTag !== "All" ? "#9B7A47" : "var(--rj-bone)",
                     }}
                   >
-                    {tag}
-                  </button>
-                ))}
+                    {availableTags.map((tag) => (
+                      <option
+                        key={tag}
+                        value={tag}
+                        className="text-neutral-800"
+                      >
+                        {tag === "All" ? "All Status Tags" : tag}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-neutral-400 group-hover/filter:text-[#9B7A47] transition-colors">
+                    <ChevronDown size={14} strokeWidth={2.5} />
+                  </div>
+                </div>
               </div>
             )}
           </div>
