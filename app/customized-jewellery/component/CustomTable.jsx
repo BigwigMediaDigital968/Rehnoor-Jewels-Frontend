@@ -7,7 +7,7 @@ export default function CustomTable() {
   const goldSpecs = [
     {
       label: "Gold Purity",
-      value: "18K / 22K chosen based on your design requirement",
+      value: "14K / 22K chosen based on your design requirement",
     },
     {
       label: "Gold Weight",

@@ -288,7 +288,7 @@ export const customizedJewelleryFAQProps: FAQsProps = {
     {
       question: "What gold purity options are available?",
       answer:
-        "We offer Customized Gold Jewellery in 18K to 22K gold. The gold weight in grams is calculated based on your chosen design and size, and is disclosed to you transparently before production begins.",
+        "We offer Customized Gold Jewellery in 14K to 22K gold. The gold weight in grams is calculated based on your chosen design and size, and is disclosed to you transparently before production begins.",
     },
     {
       question: "Do you use natural or lab-grown diamonds?",

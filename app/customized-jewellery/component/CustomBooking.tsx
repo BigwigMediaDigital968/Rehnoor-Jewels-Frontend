@@ -18,7 +18,7 @@ export default function CustomBooking() {
     },
     {
       label: "Gold Purity Guaranteed",
-      desc: "18K and 22K gold disclosed in full before production",
+      desc: "14K and 22K gold disclosed in full before production",
     },
     {
       label: "Transparent Specifications",

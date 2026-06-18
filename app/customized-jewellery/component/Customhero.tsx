@@ -100,7 +100,7 @@ export default function CustomHero() {
                     Premium Gold
                   </h4>
                   <p className="text-[11px] text-neutral-400 font-light mt-0.5">
-                    18K - 22K Purity Gold
+                    14K - 22K Purity Gold
                   </p>
                 </div>
               </div>

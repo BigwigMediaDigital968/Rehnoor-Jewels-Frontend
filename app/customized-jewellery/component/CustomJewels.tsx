@@ -84,7 +84,7 @@ export default function CustomJewel() {
                     <strong className="font-cinzel text-[11px] font-bold tracking-wider text-neutral-800 uppercase mr-1">
                       Gold Purity:
                     </strong>{" "}
-                    18K to 22K, durable, valuable, and timeless
+                    14K to 22K, durable, valuable, and timeless
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
@@ -140,7 +140,7 @@ export default function CustomJewel() {
             >
               <Image
                 src="/customize/jewels-wide.png"
-                alt="Premium 18K and 22K Customized Gold Jewellery collection"
+                alt="Premium 14K and 22K Customized Gold Jewellery collection"
                 fill
                 sizes="(max-width: 1024px) 100vw, 45vw"
                 className="object-cover object-center transition-transform duration-[5000ms] hover:scale-105"

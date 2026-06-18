@@ -40,8 +40,8 @@ export default function CustomAbout() {
     },
     {
       icon: <Award size={18} className="text-amber-700" />,
-      title: "18K & 22K Purity",
-      desc: "Crafted exclusively with real 18K or 22K gold, upholding luxury benchmarks with zero compromises.",
+      title: "14K & 22K Purity",
+      desc: "Crafted exclusively with real 14K or 22K gold, upholding luxury benchmarks with zero compromises.",
     },
     {
       icon: <Gem size={18} className="text-amber-700" />,

@@ -12,13 +12,11 @@ import CustomProcess from "./component/CustomProcess";
 import Customtable from "./component/CustomTable";
 import CustomTestimonial from "./component/CustomTestimonial";
 
-// ─────────────────────────────────────────────────────────────────
 // Next.js App Router Metadata Configuration
-// ─────────────────────────────────────────────────────────────────
 export async function generateMetadata(): Promise<Metadata> {
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL || "https://rehnoorjewels.com";
-  const title = "Customized Jewellery in Gold & Diamonds | Rehnoor Jewels";
+  const title = "Customized Jewellery in Gold & Diamonds";
   const description =
     "Customized Jewellery in 14K–22K gold & natural diamonds. Transparent pricing, WhatsApp consultation. Only at Rehnoor Jewels.";
 
