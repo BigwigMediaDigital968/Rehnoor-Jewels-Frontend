@@ -10,6 +10,7 @@ import NavbarNew from "./component/website/NavbarNew";
 import Script from "next/script";
 import RecentlyViewedFloating from "./products/[slug]/component/RecentlyViewedFloating";
 import ScrollToTop from "./component/ScrollToTop";
+import { Suspense } from "react";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -109,7 +110,9 @@ export default function RootLayout({
   `}
         </Script>
 
-        <ScrollToTop />
+        <Suspense fallback={null}>
+          <ScrollToTop />
+        </Suspense>
 
         {/* <DiscountPopup offerKey="welcome" /> */}
         <FloatingOfferBadge offerKey="welcome" />
