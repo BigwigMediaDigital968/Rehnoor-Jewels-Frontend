@@ -11,7 +11,7 @@ import React, { useRef, useEffect, useState } from "react";
 const menItems = [
   {
     id: 1,
-    name: "Chanins of Distinction",
+    name: "Kadas of Distinction",
     subtitle: "Gold Plated Kada for Men",
     tag: "Bestseller",
     price: "₹999",
