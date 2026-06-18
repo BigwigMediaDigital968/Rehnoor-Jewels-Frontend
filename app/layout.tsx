@@ -9,6 +9,7 @@ import DiscountPopup, {
 import NavbarNew from "./component/website/NavbarNew";
 import Script from "next/script";
 import RecentlyViewedFloating from "./products/[slug]/component/RecentlyViewedFloating";
+import ScrollToTop from "./component/ScrollToTop";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -107,6 +108,8 @@ export default function RootLayout({
     })(window, document, "clarity", "script", "wios29204d");
   `}
         </Script>
+
+        <ScrollToTop />
 
         {/* <DiscountPopup offerKey="welcome" /> */}
         <FloatingOfferBadge offerKey="welcome" />

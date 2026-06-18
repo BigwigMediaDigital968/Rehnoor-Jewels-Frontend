@@ -21,7 +21,7 @@ import { fmt } from "@/app/lib/api/productLive";
 // ─────────────────────────────────────────────────────────────────
 // CONSTANTS
 // ─────────────────────────────────────────────────────────────────
-const PAGE_SIZE = 16;
+const PAGE_SIZE = 500;
 const LOAD_MORE_SIZE = 8;
 
 const SORT_OPTIONS = [
@@ -259,7 +259,7 @@ export default function ProductGrid({
     category: categoryProp,
     tag: tagProp,
     bestseller,
-    limit: 100, // load all, filter client-side for instant UX
+    limit: 500, // load all, filter client-side for instant UX
   });
 
   // ── Local UI state ──────────────────────────────────────────────
@@ -372,7 +372,7 @@ export default function ProductGrid({
   );
 
   // console.log(uniqueCategories);
-  console.log(genders);
+  // console.log(genders);
 
   // ─────────────────────────────────────────────────────────────
   // RENDER
