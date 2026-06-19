@@ -98,9 +98,9 @@ export default function RecentlyViewedFloating() {
           onMouseLeave={() => setIsHovered(false)}
           // Fixed positioning: safely placed at the bottom-right.
           // max-w-[calc(100vw-32px)] ensures it stays cleanly inside small mobile viewports without overflowing.
-          className="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-[9999] p-2 w-[340px] max-w-[calc(100vw-32px)]"
+          className="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-[9999] p-2 w-auto max-w-[calc(100vw-32px)]"
         >
-          <div className="relative group w-full rounded-2xl border border-neutral-200 bg-white/95 backdrop-blur-md shadow-[0_12px_40px_rgba(0,0,0,0.12)] transition-all duration-300 hover:shadow-[0_20px_50px_rgba(155,122,71,0.15)] hover:border-[#9B7A47]/40">
+          <div className="relative group w-full rounded-md border border-neutral-200 bg-white/95 backdrop-blur-md shadow-[0_12px_40px_rgba(0,0,0,0.12)] transition-all duration-300 hover:shadow-[0_20px_50px_rgba(155,122,71,0.15)] hover:border-[#9B7A47]/40">
             {/* ── UPGRADED SAFELY OVERLAID CLOSE BUTTON ── */}
             <button
               onClick={handleCut}
@@ -114,11 +114,11 @@ export default function RecentlyViewedFloating() {
             <Link
               href={`/products/${product.slug}`}
               onClick={handleCardClick}
-              className="block overflow-hidden rounded-2xl no-underline"
+              className="block overflow-hidden rounded-md no-underline"
             >
               <div className="flex items-stretch">
                 {/* Left Side: Product Thumbnail */}
-                <div className="relative w-[105px] h-[105px] sm:w-[115px] sm:h-[115px] bg-neutral-50 flex-shrink-0 overflow-hidden">
+                <div className="relative w-[105px] h-[105px] bg-neutral-50 flex-shrink-0 overflow-hidden">
                   <img
                     src={product.image}
                     alt={product.name}
@@ -131,7 +131,7 @@ export default function RecentlyViewedFloating() {
                 </div>
 
                 {/* Right Side: Details Content */}
-                <div className="flex flex-1 flex-col justify-between p-3 sm:p-3.5 min-w-0">
+                {/* <div className="flex flex-1 flex-col justify-between p-3 sm:p-3.5 min-w-0">
                   <div>
                     <span className="font-cinzel text-[9px] font-bold tracking-[0.2em] text-[#9B7A47] uppercase block truncate">
                       Recently Viewed
@@ -149,7 +149,7 @@ export default function RecentlyViewedFloating() {
                       <ArrowUpRight size={15} strokeWidth={2.5} />
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
 
               {/* Bottom Animation Carousel Auto Timer Progress Metric */}

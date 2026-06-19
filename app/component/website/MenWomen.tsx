@@ -6,41 +6,39 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useRef, useEffect, useState } from "react";
 
-/* ─────────────────────────────────────────────
-   DATA
-───────────────────────────────────────────── */
+// Data
 const menItems = [
   {
     id: 1,
     name: "Kadas of Distinction",
     subtitle: "Gold Plated Kada for Men",
     tag: "Bestseller",
-    price: "₹999",
+    price: "Starting Rs. 1499/-",
     gradient: "from-[#1a1a1a] via-[#2a2208] to-[#1a1a1a]",
     accent: "#fcc151",
-    image: "/men-collection/kada.webp",
-    link: "/collections/kada-for-men",
+    image: "/men-collection/kada.png",
+    link: "/collections/gold-plated-kada-for-men",
   },
   {
     id: 2,
     name: "Pendants of Prestige",
     subtitle: "Gold Plated Pendants for Men",
     tag: "New",
-    price: "₹999",
+    price: "Starting Rs. 1999/-",
     gradient: "from-[#0a1f12] via-[#003720] to-[#0a1f12]",
     accent: "#fdd07a",
-    image: "/men-collection/pendant.webp",
-    link: "/collections/pendants-for-men",
+    image: "/men-collection/pendant.png",
+    link: "/collections/gold-plated-pendants-for-men",
   },
   {
     id: 3,
     name: "Bracelets of Strength",
     subtitle: "Design Link Bracelet for Men",
     tag: "Limited",
-    price: "₹999",
+    price: "Starting Rs. 1999/-",
     gradient: "from-[#1a1108] via-[#2e1f00] to-[#1a1108]",
     accent: "#f5a623",
-    image: "/men-collection/bracelet.webp",
+    image: "/men-collection/bracelet.png",
     link: "/collections/gold-plated-bracelets-for-men",
   },
   {
@@ -48,11 +46,11 @@ const menItems = [
     name: "Rings of Power",
     subtitle: "Gold Plated Rings for Men",
     tag: "Trending",
-    price: "₹999",
+    price: "Starting Rs. 1499/-",
     gradient: "from-[#1a1a1a] via-[#002410] to-[#1a1a1a]",
     accent: "#fcc151",
-    image: "/men-collection/ring.webp",
-    link: "/collections/rings-for-men",
+    image: "/men-collection/ring.png",
+    link: "/collections/gold-plated-rings-for-men",
   },
 
   {
@@ -60,10 +58,10 @@ const menItems = [
     name: "Chain of Royality",
     subtitle: "Gold Plated Chains for Men",
     tag: "Limited",
-    price: "₹999",
+    price: "Starting Rs. 1499/-",
     gradient: "from-[#1a1a1a] via-[#002410] to-[#1a1a1a]",
     accent: "#fcc151",
-    image: "/men-collection/ring.webp",
+    image: "/men-collection/chains.png",
     link: "/collections/gold-plated-chains-for-men",
   },
 ];
@@ -71,7 +69,7 @@ const menItems = [
 const womenItems = [
   {
     id: 1,
-    name: "Women's Jewellery Set",
+    name: "Jewellery Sets For Women",
     subtitle: "Timeless Elegance, Perfectly Paired",
     tag: "Featured",
     price: "Stating Rs. 599/-",
@@ -82,7 +80,7 @@ const womenItems = [
   },
   {
     id: 2,
-    name: "Women Earrings",
+    name: "Earrings For Women",
     subtitle: "Your Everyday Statement of Elegance",
     tag: "Popular",
     price: "Stating Rs. 599/-",
@@ -748,7 +746,7 @@ export default function MenWomen() {
               {canScrollLeft && (
                 <button
                   onClick={() => handleScroll("left")}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 z-30 hidden md:flex h-11 w-11 items-center justify-center rounded-full border border-[#fcc151]/30 bg-[#003720]/80 text-[#fcc151] shadow-xl backdrop-blur-sm transition-all duration-300 hover:bg-[#fcc151] hover:text-[#003720] hover:scale-105 opacity-0 group-hover/section:opacity-100 curp"
+                  className="absolute -left-8 top-1/2 -translate-y-1/2 z-30 hidden md:flex h-11 w-11 items-center justify-center rounded-full border border-[#fcc151]/30 bg-[#003720]/80 text-[#fcc151] shadow-xl backdrop-blur-sm transition-all duration-300 hover:bg-[#fcc151] hover:text-[#003720] hover:scale-105 opacity-0 group-hover/section:opacity-100 cursor-pointer"
                   aria-label="Scroll Carousel Left"
                 >
                   <ChevronLeft size={20} strokeWidth={2.5} />
@@ -758,7 +756,7 @@ export default function MenWomen() {
               {canScrollRight && (
                 <button
                   onClick={() => handleScroll("right")}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 z-30 hidden md:flex h-11 w-11 items-center justify-center rounded-full border border-[#fcc151]/30 bg-[#003720]/80 text-[#fcc151] shadow-xl backdrop-blur-sm transition-all duration-300 hover:bg-[#fcc151] hover:text-[#003720] hover:scale-105 opacity-0 group-hover/section:opacity-100 cursor-pointer"
+                  className="absolute -right-8 top-1/2 -translate-y-1/2 z-30 hidden md:flex h-11 w-11 items-center justify-center rounded-full border border-[#fcc151]/30 bg-[#003720]/80 text-[#fcc151] shadow-xl backdrop-blur-sm transition-all duration-300 hover:bg-[#fcc151] hover:text-[#003720] hover:scale-105 opacity-0 group-hover/section:opacity-100 cursor-pointer"
                   aria-label="Scroll Carousel Right"
                 >
                   <ChevronRight size={20} strokeWidth={2.5} />

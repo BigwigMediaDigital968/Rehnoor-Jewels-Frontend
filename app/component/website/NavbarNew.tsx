@@ -58,18 +58,18 @@ const navLinks = [
             icon: "✨",
           },
           {
-            label: "Rings for Women",
-            href: "/collections/gold-plated-rings-for-women",
-            icon: "✨",
-          },
-          {
-            label: "Exclusive Bracelets",
+            label: "Bracelet For Women",
             href: "/collections/gold-plated-bracelets-for-women",
             icon: "✨",
           },
           {
             label: "Pendant for Women",
             href: "/collections/gold-plated-pendants-for-women",
+            icon: "✨",
+          },
+          {
+            label: "Rings for Women",
+            href: "/collections/gold-plated-rings-for-women",
             icon: "✨",
           },
           {

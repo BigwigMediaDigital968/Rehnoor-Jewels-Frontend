@@ -112,7 +112,7 @@ export default function HomePage() {
       />
 
       {/* Page Component */}
-      {/* <GoldPriceScroll /> */}
+      <GoldPriceScroll />
       <main>
         <HeroSection />
         {/* <CategoriesSection /> */}
