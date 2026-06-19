@@ -136,7 +136,7 @@ export default function AboutHero() {
         {/* ── GSAP owns clipPath on this inner div — no FM conflict ── */}
         <div ref={bgWrapperRef} className="absolute inset-0">
           <Image
-            src="/assets/about-hero.jpg"
+            src="/assets/about-hero.png"
             alt="Rehnoor Jewels — crafted with gold"
             fill
             priority
@@ -318,7 +318,7 @@ export default function AboutHero() {
             style={{ borderTop: "1px solid rgba(255,255,255,0.1)" }}
           >
             {[
-              { value: "50K+", label: "Happy Customers" },
+              { value: "20K+", label: "Happy Customers" },
               { value: "500+", label: "Unique Designs" },
               { value: "6+", label: "Years of Authenticity" },
               { value: "4.9★", label: "Avg. Rating" },
@@ -361,7 +361,7 @@ export default function AboutHero() {
           Rehnoor Jewels
         </p>
         <p className="text-white/50 text-xs mt-0.5">
-          Premium Designs · 50K+ customers
+          Premium Designs · 20K+ customers
         </p>
         <a
           href="#story"

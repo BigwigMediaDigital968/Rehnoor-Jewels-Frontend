@@ -137,7 +137,7 @@ function Label({
 // ─────────────────────────────────────────────────────────────────
 const HERO_STATS = [
   { value: "Free", label: "Size Adjustment" },
-  { value: "50K+", label: "Happy Customers" },
+  { value: "20K+", label: "Happy Customers" },
   { value: "Anti-Tarnish", label: "Coating" },
   { value: "Skin", label: "Friendly & Safe" },
 ];

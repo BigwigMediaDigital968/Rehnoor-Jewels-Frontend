@@ -147,7 +147,7 @@ const HERO_STATS = [
   { value: "6+", label: "Earring Styles" },
   { value: "Anti-Tarnish", label: "Coating" },
   { value: "Skin-Safe", label: "Hypoallergenic" },
-  { value: "50K+", label: "Happy Customers" },
+  { value: "20K+", label: "Happy Customers" },
 ];
 
 const TRENDING_NOW = [

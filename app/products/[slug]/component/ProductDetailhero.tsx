@@ -80,7 +80,7 @@ interface ExtendedProduct extends Product {
 // ─────────────────────────────────────────────────────────────────
 const TRUST = [
   { icon: <Shield size={14} />, label: "Anti-Tarnish & Water Proof" },
-  { icon: <Heart size={14} />, label: "50K+ Satisfied Customers" },
+  { icon: <Heart size={14} />, label: "20K+ Satisfied Customers" },
   { icon: <RefreshCw size={14} />, label: "07-Day Returns" },
   { icon: <Truck size={14} />, label: "Free Shipping" },
 ];
@@ -515,12 +515,13 @@ function VariantSelector({
                       padding: isShort ? "0" : "0 1rem",
                       borderRadius: isShort ? "50%" : "2rem",
                       width: isShort ? "3rem" : undefined,
-                      border: `2px solid ${selected
-                        ? "var(--rj-emerald)"
-                        : selectionError && !selections[option.name]
-                          ? "#fca5a5"
-                          : "var(--rj-bone)"
-                        }`,
+                      border: `2px solid ${
+                        selected
+                          ? "var(--rj-emerald)"
+                          : selectionError && !selections[option.name]
+                            ? "#fca5a5"
+                            : "var(--rj-bone)"
+                      }`,
                       background: selected
                         ? "var(--rj-emerald)"
                         : "transparent",
@@ -657,7 +658,6 @@ export default function ProductDetailHero({
       ? activeVariant.images
       : null;
 
-
   const galleryImages: any[] = [];
   const variantImageMap = new Map<string, number>();
 
@@ -674,7 +674,6 @@ export default function ProductDetailHero({
 
   // Reset image index when the image source set changes
   // useEffect(() => setImgIdx(0), [activeVariant?._id]);
-
 
   useEffect(() => {
     if (!activeVariant?._id) return;
@@ -775,7 +774,7 @@ export default function ProductDetailHero({
       await navigator.clipboard.writeText(window.location.href);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch { }
+    } catch {}
   };
 
   const breadcrumbCollectionSlug =
@@ -796,15 +795,13 @@ export default function ProductDetailHero({
 
   // console.log(product);
 
-
-
-
   // Handle checking if custom scroll indicators are needed
   const checkScroll = () => {
     const el = thumbnailContainerRef.current;
     if (el) {
       const canScrollUp = el.scrollTop > 5;
-      const canScrollDown = el.scrollHeight - el.scrollTop - el.clientHeight > 5;
+      const canScrollDown =
+        el.scrollHeight - el.scrollTop - el.clientHeight > 5;
       setShowTopArrow(canScrollUp);
       setShowBottomArrow(canScrollDown);
     }
@@ -813,7 +810,7 @@ export default function ProductDetailHero({
   useEffect(() => {
     const el = thumbnailContainerRef.current;
     if (el) {
-      el.addEventListener('scroll', checkScroll);
+      el.addEventListener("scroll", checkScroll);
       // Run once on mount/image change to evaluate state
       checkScroll();
 
@@ -821,7 +818,7 @@ export default function ProductDetailHero({
       const ro = new ResizeObserver(checkScroll);
       ro.observe(el);
       return () => {
-        el.removeEventListener('scroll', checkScroll);
+        el.removeEventListener("scroll", checkScroll);
         ro.disconnect();
       };
     }
@@ -861,7 +858,6 @@ export default function ProductDetailHero({
             <div className="lg:col-span-7 flex flex-col gap-3 lg:sticky lg:top-24">
               {/* Main Wrapper: Sidebar Layout for Large Screens, Column for Mobile */}
               <div className="flex flex-col-reverse md:flex-row gap-4 h-full items-start">
-
                 {/* Left Thumbnail Carousel (Hidden native scrollbar) */}
                 {images.length > 1 && (
                   <div className="relative flex flex-col items-center w-full md:w-[72px] h-auto md:h-full max-h-[500px]">
@@ -874,7 +870,10 @@ export default function ProductDetailHero({
                           exit={{ opacity: 0, y: 5 }}
                           className="absolute top-0 left-0 right-0 z-20 hidden md:flex items-center justify-center bg-gradient-to-b from-[var(--rj-ivory-dark)] to-transparent py-1 pointer-events-none"
                         >
-                          <ChevronUp size={14} className="text-[var(--rj-charcoal)] animate-bounce" />
+                          <ChevronUp
+                            size={14}
+                            className="text-[var(--rj-charcoal)] animate-bounce"
+                          />
                         </motion.div>
                       )}
                     </AnimatePresence>
@@ -884,8 +883,8 @@ export default function ProductDetailHero({
                       ref={thumbnailContainerRef}
                       className="flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-y-auto w-full h-full max-h-[400px] no-scrollbar scroll-smooth"
                       style={{
-                        scrollbarWidth: 'none', /* Firefox */
-                        msOverflowStyle: 'none', /* IE 10+ */
+                        scrollbarWidth: "none" /* Firefox */,
+                        msOverflowStyle: "none" /* IE 10+ */,
                       }}
                     >
                       {images.map((img, i) => (
@@ -922,7 +921,10 @@ export default function ProductDetailHero({
                           exit={{ opacity: 0, y: -5 }}
                           className="absolute bottom-0 left-0 right-0 z-20 hidden md:flex items-center justify-center bg-gradient-to-t from-[var(--rj-ivory-dark)] to-transparent py-1 pointer-events-none"
                         >
-                          <ChevronDown size={14} className="text-[var(--rj-charcoal)] animate-bounce" />
+                          <ChevronDown
+                            size={14}
+                            className="text-[var(--rj-charcoal)] animate-bounce"
+                          />
                         </motion.div>
                       )}
                     </AnimatePresence>
@@ -986,12 +988,18 @@ export default function ProductDetailHero({
                     onClick={handleToggleWishlist}
                     className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
                     style={{
-                      background: wishlisted ? "rgba(252,193,81,0.15)" : "rgba(255,255,255,0.92)",
+                      background: wishlisted
+                        ? "rgba(252,193,81,0.15)"
+                        : "rgba(255,255,255,0.92)",
                       boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
                       cursor: "pointer",
-                      border: wishlisted ? "1.5px solid rgba(252,193,81,0.4)" : "1.5px solid transparent",
+                      border: wishlisted
+                        ? "1.5px solid rgba(252,193,81,0.4)"
+                        : "1.5px solid transparent",
                     }}
-                    aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
+                    aria-label={
+                      wishlisted ? "Remove from wishlist" : "Add to wishlist"
+                    }
                   >
                     <Heart
                       size={15}
@@ -1039,7 +1047,6 @@ export default function ProductDetailHero({
                     </>
                   )}
                 </div>
-
               </div>
             </div>
 

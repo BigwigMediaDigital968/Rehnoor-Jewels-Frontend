@@ -161,7 +161,7 @@ const HERO_STATS = [
   { value: "Sacred", label: "Craftsmanship" },
   { value: "1 Gram", label: "Gold Polish" },
   { value: "Anti-Tarnish", label: "Coating" },
-  { value: "50K+", label: "Women Who Wear Us" },
+  { value: "20K+", label: "Women Who Wear Us" },
 ];
 
 const WOMAN_TYPES: WomanType[] = [

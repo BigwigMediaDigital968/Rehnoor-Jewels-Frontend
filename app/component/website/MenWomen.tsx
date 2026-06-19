@@ -1,5 +1,6 @@
 "use client";
 
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -53,52 +54,108 @@ const menItems = [
     image: "/men-collection/ring.webp",
     link: "/collections/rings-for-men",
   },
+
+  {
+    id: 5,
+    name: "Chain of Royality",
+    subtitle: "Gold Plated Chains for Men",
+    tag: "Limited",
+    price: "₹999",
+    gradient: "from-[#1a1a1a] via-[#002410] to-[#1a1a1a]",
+    accent: "#fcc151",
+    image: "/men-collection/ring.webp",
+    link: "/collections/gold-plated-chains-for-men",
+  },
 ];
 
 const womenItems = [
   {
     id: 1,
-    name: "Earrings of Elegance",
-    subtitle: "Tear-drop gemstone earrings",
-    tag: "Bestseller",
-    price: "₹599",
+    name: "Women's Jewellery Set",
+    subtitle: "Timeless Elegance, Perfectly Paired",
+    tag: "Featured",
+    price: "Stating Rs. 599/-",
     gradient: "from-[#fef4dc] via-[#fdf0d0] to-[#fef4dc]",
     accent: "#003720",
+    image: "/women-collection/jewellery-set.png",
+    link: "/collections/gold-plated-necklace-with-earrings",
+  },
+  {
+    id: 2,
+    name: "Women Earrings",
+    subtitle: "Your Everyday Statement of Elegance",
+    tag: "Popular",
+    price: "Stating Rs. 599/-",
+    gradient: "from-[#faf8f3] via-[#fef4dc] to-[#faf8f3]",
+    accent: "#004d2d",
     image: "/women-collection/earrings.png",
     link: "/collections/gold-plated-earrings-for-women",
   },
   {
-    id: 2,
-    name: "Elegant Bracelets",
-    subtitle: "Delicate gold-plated bracelets",
+    id: 3,
+    name: "Bracelets For Women",
+    subtitle: "Wrap Your Wrist In Daily Luxury",
     tag: "New",
-    price: "₹5,199",
-    gradient: "from-[#faf8f3] via-[#fef4dc] to-[#faf8f3]",
-    accent: "#004d2d",
-    image: "/women-collection/bracelets.png",
+    price: "Stating Rs. 599/-",
+    gradient: "from-[#fef4dc] via-[#fdf5e0] to-[#fef4dc]",
+    accent: "#003720",
+    image: "/women-collection/bracelet.png",
     link: "/collections/gold-plated-bracelets-for-women",
   },
   {
-    id: 3,
-    name: "Pendants",
-    subtitle: "Elegant gold-plated pendants",
-    tag: "Limited",
-    price: "₹2,499",
-    gradient: "from-[#fef4dc] via-[#fdf5e0] to-[#fef4dc]",
-    accent: "#003720",
-    image: "/women-collection/pendants.png",
-    link: "/collections/gold-plated-pendants-for-women",
-  },
-  {
     id: 4,
-    name: "Ring of Grace",
-    subtitle: "Stackable minimalist ring",
-    tag: "Trending",
-    price: "₹599",
+    name: "Rings For Women",
+    subtitle: "A Ring For Every Version Of You",
+    tag: "Popular",
+    price: "Stating Rs. 599/-",
     gradient: "from-[#faf8f3] via-[#f2ede2] to-[#faf8f3]",
     accent: "#002410",
     image: "/women-collection/rings.png",
     link: "/collections/gold-plated-rings-for-women",
+  },
+  {
+    id: 5,
+    name: "Necklace For Women",
+    subtitle: "Statement Pieces That Speak Luxury",
+    tag: "Trending",
+    price: "Stating Rs. 1499/-",
+    gradient: "from-[#fef4dc] via-[#fdf0d0] to-[#fef4dc]",
+    accent: "#003720",
+    image: "/women-collection/necklace.png",
+    link: "/collections/gold-plated-necklaces-for-women",
+  },
+  {
+    id: 6,
+    name: "Chains For Women",
+    subtitle: "The Quiet Power Of A Gold Chain",
+    tag: "Exclusive",
+    price: "Stating Rs. 599/-",
+    gradient: "from-[#faf8f3] via-[#fef4dc] to-[#faf8f3]",
+    accent: "#004d2d",
+    image: "/women-collection/chains.png",
+    link: "/collections/gold-plated-chains-for-women",
+  },
+  {
+    id: 7,
+    name: "Mangalsutra For Women",
+    subtitle: "Love That Stays Close To Your Heart",
+    tag: "New",
+    price: "Stating Rs. 599/-",
+    gradient: "from-[#fef4dc] via-[#fdf5e0] to-[#fef4dc]",
+    accent: "#003720",
+    image: "/women-collection/mangalsutra.png",
+    link: "/collections/gold-plated-mangalsutra-for-women",
+  },
+  {
+    id: 8,
+    name: "Pendants For Women",
+    subtitle: "Luxury That Speaks Without Words",
+    tag: "Exclusive",
+    price: "Stating Rs. 599/-",
+    gradient: "from-[#faf8f3] via-[#f2ede2] to-[#faf8f3]",
+    accent: "#002410",
+    image: "/women-collection/pendant.png",
+    link: "/collections/gold-plated-pendants-for-women",
   },
 ];
 
@@ -210,104 +267,107 @@ const CollectionCard: React.FC<CardProps> = ({
         transition: `opacity 0.65s cubic-bezier(0.4,0,0.2,1) ${index * 0.12}s, transform 0.65s cubic-bezier(0.4,0,0.2,1) ${index * 0.12}s`,
       }}
     >
-      {/* Card */}
-      <div
-        className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${gradient}`}
-        style={{
-          boxShadow: hovered
-            ? `0 24px 60px ${accent}33, 0 4px 20px rgba(0,0,0,0.2)`
-            : `0 8px 30px rgba(0,0,0,0.12)`,
-          transform: hovered
-            ? "translateY(-6px) scale(1.02)"
-            : "translateY(0) scale(1)",
-          transition:
-            "box-shadow 0.4s ease, transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275)",
-          border: `1px solid ${accent}22`,
-        }}
-      >
-        {/* Top visual area */}
-        <div className="relative h-62 flex items-center justify-center overflow-hidden">
-          {/* ── Background image ── */}
-          <Image
-            src={image}
-            alt={name}
-            fill
-            className="object-cover object-center"
-            style={{
-              transform: hovered ? "scale(1.08)" : "scale(1)",
-              transition: "transform 0.7s cubic-bezier(0.4,0,0.2,1)",
-            }}
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-          />
-
-          {/* ── Radial accent glow (kept from original) ── */}
-          <div
-            className="absolute inset-0 opacity-20"
-            style={{
-              backgroundImage: `radial-gradient(circle at 30% 40%, ${accent} 0%, transparent 60%),
-                radial-gradient(circle at 75% 70%, ${accent} 0%, transparent 55%)`,
-            }}
-          />
-
-          {/* Badge */}
-          <div className="absolute top-4 left-4">
-            <Badge label={tag} dark={dark} />
-          </div>
-        </div>
-
-        {/* Content area */}
-        <div className="px-5 pb-5 pt-1">
-          <LineSeparator color={accent} />
-          <div className="mt-4 space-y-1">
-            <h3
-              className="text-base font-bold tracking-wide leading-tight heading-md"
-              style={{
-                color: dark ? "#faf8f3" : "#1a1a1a",
-                // fontFamily: "Georgia, 'Times New Roman', serif",
-              }}
-            >
-              {name}
-            </h3>
-            <p
-              className="text-xs tracking-wide"
-              style={{ color: dark ? "#fcc15199" : "#003720aa" }}
-            >
-              {subtitle}
-            </p>
-          </div>
-          {/* Price & CTA */}
-          <div className="flex items-center justify-between mt-4">
-            <span
-              className="text-sm font-bold tracking-wider"
-              style={{ color: accent }}
-            >
-              {price}
-            </span>
-            <Link
-              href={link}
-              className="text-[10px] tracking-[0.18em] uppercase font-semibold px-3 py-1.5 rounded-full transition-all duration-300"
-              style={{
-                background: hovered ? accent : "transparent",
-                color: hovered ? (dark ? "#1a1a1a" : "#fff") : accent,
-                border: `1px solid ${accent}`,
-                transform: hovered ? "scale(1.05)" : "scale(1)",
-              }}
-            >
-              Explore
-            </Link>
-          </div>
-        </div>
-
-        {/* Hover shimmer sweep */}
+      {/* Whole Card Wrapped in Link */}
+      <Link href={link} className="block no-underline">
         <div
-          className="absolute inset-0 pointer-events-none"
+          className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${gradient}`}
           style={{
-            background: `linear-gradient(115deg, transparent 40%, ${accent}10 50%, transparent 60%)`,
-            transform: hovered ? "translateX(100%)" : "translateX(-100%)",
-            transition: "transform 0.7s ease",
+            boxShadow: hovered
+              ? `0 24px 60px ${accent}33, 0 4px 20px rgba(0,0,0,0.2)`
+              : `0 8px 30px rgba(0,0,0,0.12)`,
+            transform: hovered
+              ? "translateY(-6px) scale(1.02)"
+              : "translateY(0) scale(1)",
+            transition:
+              "box-shadow 0.4s ease, transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275)",
+            border: `1px solid ${accent}22`,
           }}
-        />
-      </div>
+        >
+          {/* Top visual area */}
+          <div className="relative h-72 md:h-62 flex items-center justify-center overflow-hidden">
+            {/* ── Background image ── */}
+            <Image
+              src={image}
+              alt={name}
+              fill
+              className="object-cover object-center"
+              style={{
+                transform: hovered ? "scale(1.08)" : "scale(1)",
+                transition: "transform 0.7s cubic-bezier(0.4,0,0.2,1)",
+              }}
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            />
+
+            {/* ── Radial accent glow ── */}
+            <div
+              className="absolute inset-0 opacity-20"
+              style={{
+                backgroundImage: `radial-gradient(circle at 30% 40%, ${accent} 0%, transparent 60%),
+                  radial-gradient(circle at 75% 70%, ${accent} 0%, transparent 55%)`,
+              }}
+            />
+
+            {/* Badge */}
+            <div className="absolute top-4 left-4">
+              <Badge label={tag} dark={dark} />
+            </div>
+          </div>
+
+          {/* Content area */}
+          <div className="px-5 pb-5 pt-1">
+            <LineSeparator color={accent} />
+            <div className="mt-4 space-y-1">
+              <h3
+                className="text-base font-bold tracking-wide leading-tight heading-md"
+                style={{
+                  color: dark ? "#faf8f3" : "#1a1a1a",
+                }}
+              >
+                {name}
+              </h3>
+              <p
+                className="text-xs tracking-wide"
+                style={{ color: dark ? "#fcc15199" : "#003720aa" }}
+              >
+                {subtitle}
+              </p>
+            </div>
+
+            {/* Price & CTA */}
+            <div className="flex items-center justify-between mt-4">
+              <span
+                className="text-xs font-bold tracking-wider"
+                style={{ color: accent }}
+              >
+                {price}
+              </span>
+
+              {/* Converted to a semantic span element to avoid breaking nested anchor tag rules */}
+              <span
+                className="text-[10px] tracking-[0.18em] uppercase font-semibold px-3 py-1.5 rounded-full transition-all duration-300 inline-block text-center"
+                style={{
+                  background: hovered ? accent : "transparent",
+                  color: hovered ? (dark ? "#1a1a1a" : "#fff") : accent,
+                  border: `1px solid ${accent}`,
+                  transform: hovered ? "scale(1.05)" : "scale(1)",
+                }}
+              >
+                Explore
+              </span>
+            </div>
+          </div>
+
+          {/* Hover shimmer sweep */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: `linear-gradient(115deg, transparent 40%, ${accent}10 50%, transparent 60%)`,
+              transform: hovered ? "translateX(100%)" : "translateX(-100%)",
+              transition: "transform 0.7s ease",
+            }}
+          />
+        </div>
+      </Link>
     </div>
   );
 };
@@ -385,6 +445,48 @@ export default function MenWomen() {
   const [menVisible, setMenVisible] = useState(false);
   const [womenVisible, setWomenVisible] = useState(false);
 
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  // Check scroll positions to show/hide control arrows dynamically
+  const checkScrollPosition = () => {
+    const container = scrollContainerRef.current;
+    if (container) {
+      const { scrollLeft, scrollWidth, clientWidth } = container;
+      // Use 2px buffer room for subpixel calculations
+      setCanScrollLeft(scrollLeft > 2);
+      setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 2);
+    }
+  };
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (container) {
+      container.addEventListener("scroll", checkScrollPosition);
+      // Run initial check once items render
+      checkScrollPosition();
+
+      // Trigger a recalculation on window resize
+      window.addEventListener("resize", checkScrollPosition);
+    }
+    return () => {
+      container?.removeEventListener("scroll", checkScrollPosition);
+      window.removeEventListener("resize", checkScrollPosition);
+    };
+  }, [menItems]);
+
+  const handleScroll = (direction: "left" | "right") => {
+    const container = scrollContainerRef.current;
+    if (container) {
+      const scrollAmount = container.clientWidth * 0.75; // Scroll 75% of view width
+      container.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -425,104 +527,12 @@ export default function MenWomen() {
         style={{ background: "var(--rj-ivory)", color: "var(--rj-charcoal)" }}
       >
         {/* ══════════════════════════════════════
-            MEN'S COLLECTION — dark / emerald
-        ══════════════════════════════════════ */}
-        <section
-          ref={menRef}
-          className="relative overflow-hidden py-14 px-4 sm:px-6 lg:px-8"
-          style={{ background: "var(--gradient-emerald)" }}
-        >
-          {/* Background texture */}
-          <div
-            className="absolute inset-0 opacity-[0.04] pointer-events-none"
-            style={{
-              backgroundImage: `repeating-linear-gradient(
-                45deg,
-                #fcc151 0px, #fcc151 1px,
-                transparent 1px, transparent 60px
-              )`,
-            }}
-          />
-          {/* Glow orbs */}
-          <div
-            className="absolute -top-24 -right-24 w-96 h-96 rounded-full pointer-events-none"
-            style={{
-              background:
-                "radial-gradient(circle, rgba(252,193,81,0.07) 0%, transparent 70%)",
-            }}
-          />
-          <div
-            className="absolute -bottom-24 -left-24 w-80 h-80 rounded-full pointer-events-none"
-            style={{
-              background:
-                "radial-gradient(circle, rgba(252,193,81,0.05) 0%, transparent 70%)",
-            }}
-          />
-
-          <div className="relative max-w-7xl mx-auto">
-            <SectionHeader
-              title="Men's Collection"
-              subtitle="Strong, modern designs with a refined gold-like finish. Designed to add a touch of elegance to every look, every day."
-              tagline="Crafted for him"
-              dark={true}
-              visible={menVisible}
-            />
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
-              {menItems.map((item, i) => (
-                <CollectionCard
-                  key={item.id}
-                  {...item}
-                  dark={true}
-                  index={i}
-                  visible={menVisible}
-                />
-              ))}
-            </div>
-
-            {/* View all CTA */}
-            <div
-              className="text-center mt-12"
-              style={{
-                opacity: menVisible ? 1 : 0,
-                transition: "opacity 0.7s ease 0.55s",
-              }}
-            >
-              <button
-                onClick={() => router.push("/collections")}
-                className="group relative overflow-hidden text-xs tracking-[0.22em] uppercase font-semibold px-8 py-3.5 rounded-full cursor-pointer"
-                style={{
-                  border: "1px solid rgba(252,193,81,0.5)",
-                  color: "#fcc151",
-                  background: "rgba(252,193,81,0.06)",
-                  transition: "all 0.35s ease",
-                }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLButtonElement).style.background =
-                    "#fcc151";
-                  (e.currentTarget as HTMLButtonElement).style.color =
-                    "#003720";
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLButtonElement).style.background =
-                    "rgba(252,193,81,0.06)";
-                  (e.currentTarget as HTMLButtonElement).style.color =
-                    "#fcc151";
-                }}
-              >
-                View All Men's Pieces
-              </button>
-            </div>
-          </div>
-        </section>
-
-        {/* ══════════════════════════════════════
             WOMEN'S COLLECTION — light / ivory
         ══════════════════════════════════════ */}
-        {/* <section
+        <section
           ref={womenRef}
           className="relative overflow-hidden py-14 px-4 sm:px-6 lg:px-8"
-          style={{ background: "#ffefd2" }}
+          style={{ background: "#ffffff" }}
         >
           <div
             className="absolute inset-0 opacity-[0.06] pointer-events-none"
@@ -567,7 +577,7 @@ export default function MenWomen() {
               ))}
             </div>
 
-            <div
+            {/* <div
               className="text-center mt-12"
               style={{
                 opacity: womenVisible ? 1 : 0,
@@ -598,9 +608,219 @@ export default function MenWomen() {
               >
                 View All Women's Pieces
               </button>
+            </div> */}
+          </div>
+        </section>
+
+        {/* ══════════════════════════════════════
+            MEN'S COLLECTION — dark / emerald
+        ══════════════════════════════════════ */}
+        {/* <section
+          ref={menRef}
+          className="relative overflow-hidden py-14 px-4 sm:px-6 lg:px-8"
+          style={{ background: "var(--gradient-emerald)" }}
+        >
+          <div
+            className="absolute inset-0 opacity-[0.04] pointer-events-none"
+            style={{
+              backgroundImage: `repeating-linear-gradient(
+                45deg,
+                #fcc151 0px, #fcc151 1px,
+                transparent 1px, transparent 60px
+              )`,
+            }}
+          />
+          <div
+            className="absolute -top-24 -right-24 w-96 h-96 rounded-full pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(circle, rgba(252,193,81,0.07) 0%, transparent 70%)",
+            }}
+          />
+          <div
+            className="absolute -bottom-24 -left-24 w-80 h-80 rounded-full pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(circle, rgba(252,193,81,0.05) 0%, transparent 70%)",
+            }}
+          />
+
+          <div className="relative max-w-7xl mx-auto">
+            <SectionHeader
+              title="Men's Collection"
+              subtitle="Strong, modern designs with a refined gold-like finish. Designed to add a touch of elegance to every look, every day."
+              tagline="Crafted for him"
+              dark={true}
+              visible={menVisible}
+            />
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
+              {menItems.map((item, i) => (
+                <CollectionCard
+                  key={item.id}
+                  {...item}
+                  dark={true}
+                  index={i}
+                  visible={menVisible}
+                />
+              ))}
+            </div>
+
+            <div
+              className="text-center mt-12"
+              style={{
+                opacity: menVisible ? 1 : 0,
+                transition: "opacity 0.7s ease 0.55s",
+              }}
+            >
+              <button
+                onClick={() => router.push("/collections")}
+                className="group relative overflow-hidden text-xs tracking-[0.22em] uppercase font-semibold px-8 py-3.5 rounded-full cursor-pointer"
+                style={{
+                  border: "1px solid rgba(252,193,81,0.5)",
+                  color: "#fcc151",
+                  background: "rgba(252,193,81,0.06)",
+                  transition: "all 0.35s ease",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.background =
+                    "#fcc151";
+                  (e.currentTarget as HTMLButtonElement).style.color =
+                    "#003720";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.background =
+                    "rgba(252,193,81,0.06)";
+                  (e.currentTarget as HTMLButtonElement).style.color =
+                    "#fcc151";
+                }}
+              >
+                View All Men's Pieces
+              </button>
             </div>
           </div>
         </section> */}
+
+        <section
+          ref={menRef}
+          className="relative overflow-hidden py-16 px-4 sm:px-6 lg:px-8 group/section"
+          style={{ background: "var(--gradient-emerald)" }}
+        >
+          {/* Background texture */}
+          <div
+            className="absolute inset-0 opacity-[0.04] pointer-events-none"
+            style={{
+              backgroundImage: `repeating-linear-gradient(
+            45deg,
+            #fcc151 0px, #fcc151 1px,
+            transparent 1px, transparent 60px
+          )`,
+            }}
+          />
+          {/* Glow orbs */}
+          <div
+            className="absolute -top-24 -right-24 w-96 h-96 rounded-full pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(circle, rgba(252,193,81,0.07) 0%, transparent 70%)",
+            }}
+          />
+          <div
+            className="absolute -bottom-24 -left-24 w-80 h-80 rounded-full pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(circle, rgba(252,193,81,0.05) 0%, transparent 70%)",
+            }}
+          />
+
+          <div className="relative max-w-7xl mx-auto">
+            <SectionHeader
+              title="Men's Collection"
+              subtitle="Strong, modern designs with a refined gold-like finish. Designed to add a touch of elegance to every look, every day."
+              tagline="Crafted for him"
+              dark={true}
+              visible={menVisible}
+            />
+
+            {/* Carousel Container Wrapper Frame */}
+            <div className="relative mt-8">
+              {/* Desktop Navigation Arrows (Hidden completely on native touch surfaces) */}
+              {canScrollLeft && (
+                <button
+                  onClick={() => handleScroll("left")}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 z-30 hidden md:flex h-11 w-11 items-center justify-center rounded-full border border-[#fcc151]/30 bg-[#003720]/80 text-[#fcc151] shadow-xl backdrop-blur-sm transition-all duration-300 hover:bg-[#fcc151] hover:text-[#003720] hover:scale-105 opacity-0 group-hover/section:opacity-100 curp"
+                  aria-label="Scroll Carousel Left"
+                >
+                  <ChevronLeft size={20} strokeWidth={2.5} />
+                </button>
+              )}
+
+              {canScrollRight && (
+                <button
+                  onClick={() => handleScroll("right")}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 z-30 hidden md:flex h-11 w-11 items-center justify-center rounded-full border border-[#fcc151]/30 bg-[#003720]/80 text-[#fcc151] shadow-xl backdrop-blur-sm transition-all duration-300 hover:bg-[#fcc151] hover:text-[#003720] hover:scale-105 opacity-0 group-hover/section:opacity-100 cursor-pointer"
+                  aria-label="Scroll Carousel Right"
+                >
+                  <ChevronRight size={20} strokeWidth={2.5} />
+                </button>
+              )}
+
+              {/* ── NATIVE FLUID SWIPE SLIDER TRACK ── */}
+              <div
+                ref={scrollContainerRef}
+                className="flex gap-5 md:gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth scrollbar-none pb-6 pt-2 px-1"
+                style={{
+                  scrollbarWidth: "none", // For Firefox
+                  WebkitOverflowScrolling: "touch", // Smooth iOS momentum physics
+                }}
+              >
+                {menItems.map((item: any, i: number) => (
+                  <div
+                    key={item.id}
+                    className="w-[280px] sm:w-[320px] md:w-[300px] lg:w-[calc(25%-18px)] flex-shrink-0 snap-start snap-always"
+                  >
+                    <CollectionCard
+                      {...item}
+                      dark={true}
+                      index={i}
+                      visible={menVisible}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* View all CTA */}
+            {/* <div
+              className="text-center mt-8"
+              style={{
+                opacity: menVisible ? 1 : 0,
+                transition: "opacity 0.7s ease 0.55s",
+              }}
+            >
+              <button
+                onClick={() => router.push("/collections")}
+                className="group relative overflow-hidden text-xs tracking-[0.22em] uppercase font-semibold px-8 py-3.5 rounded-full cursor-pointer"
+                style={{
+                  border: "1px solid rgba(252,193,81,0.5)",
+                  color: "#fcc151",
+                  background: "rgba(252,193,81,0.06)",
+                  transition: "all 0.35s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "#fcc151";
+                  e.currentTarget.style.color = "#003720";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "rgba(252,193,81,0.06)";
+                  e.currentTarget.style.color = "#fcc151";
+                }}
+              >
+                View All Men's Pieces
+              </button>
+            </div> */}
+          </div>
+        </section>
       </main>
     </>
   );

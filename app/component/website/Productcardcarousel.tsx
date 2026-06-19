@@ -424,7 +424,7 @@ export default function ProductCardCarousel({ product }: { product: Product }) {
                   <Eye size={12} /> Quick View
                 </motion.button>
 
-                <motion.button
+                {/* <motion.button
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
@@ -453,7 +453,7 @@ export default function ProductCardCarousel({ product }: { product: Product }) {
                       <ShoppingBag size={12} /> Add to Cart
                     </>
                   )}
-                </motion.button>
+                </motion.button> */}
               </motion.div>
             )}
           </AnimatePresence>

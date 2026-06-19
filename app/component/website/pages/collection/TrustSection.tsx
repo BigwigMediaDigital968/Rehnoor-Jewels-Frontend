@@ -232,7 +232,7 @@ export default function TrustSection() {
           {[
             ["06+", "Years in Business"],
             ["100%", "Quality Assured"],
-            ["50K+", "Happy Customers"],
+            ["20K+", "Happy Customers"],
             ["500+", "Unique Designs"],
           ].map(([v, l]) => (
             <div key={l} className="text-center">

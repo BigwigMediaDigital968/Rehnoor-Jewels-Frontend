@@ -34,17 +34,17 @@ const navLinks = [
           },
           {
             label: "Pendants for Men",
-            href: "/collections/pendants-for-men",
+            href: "/collections/gold-plated-pendants-for-men",
             icon: "✨",
           },
           {
             label: "Rings for Men",
-            href: "/collections/rings-for-men",
+            href: "/collections/gold-plated-rings-for-men",
             icon: "✨",
           },
           {
             label: "Kada for Men",
-            href: "/collections/kada-for-men",
+            href: "/collections/gold-plated-kada-for-men",
             icon: "✨",
           },
         ],
@@ -82,7 +82,7 @@ const navLinks = [
     ],
   },
   { label: "About", href: "/about" },
-  // { label: "Customization", href: "/customized-jewellery" },
+  { label: "Customization", href: "/customized-jewellery" },
   { label: "Contact", href: "/contact" },
 ];
 

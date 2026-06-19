@@ -296,11 +296,11 @@ export default function HeroSection() {
           Bestseller
         </p>
         <p className="font-cormorant text-white text-lg font-medium">
-          Nawabi Chain
+          Ruby Royale Necklace
         </p>
-        <p className="text-white/50 text-xs mt-0.5">Starting ₹599</p>
+        <p className="text-white/50 text-xs mt-0.5">Starting ₹3,499</p>
         <Link
-          href="/collections/gold-plated-chains-for-men"
+          href="/products/ruby-royale-necklace-earring-set"
           className="mt-3 flex items-center gap-1.5 text-[var(--rj-gold)] text-xs hover:gap-3 transition-all duration-300"
         >
           View <ArrowRight size={12} />

@@ -138,7 +138,7 @@ const HERO_STATS = [
   { value: "Royal", label: "Craftsmanship" },
   { value: "Anti-Tarnish", label: "Coating" },
   { value: "Bridal", label: "Grade Quality" },
-  { value: "50K+", label: "Happy Customers" },
+  { value: "20K+", label: "Happy Customers" },
 ];
 
 const SPECIAL_FEATURES: Feature[] = [

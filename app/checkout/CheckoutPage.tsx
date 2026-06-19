@@ -392,7 +392,7 @@ export default function CheckoutPage() {
   // Inside CheckoutPage component code:
   const handlePlaceOrder = async (): Promise<void> => {
     // Grab the coupon code directly from the cart store to ensure it matches the summary panel
-    const activeCartCoupon = useCartStore.getState().coupon.code;
+    const activeCartCoupon = useCartStore.getState().coupon?.code;
 
     await initiate({
       customerName: contact.name,

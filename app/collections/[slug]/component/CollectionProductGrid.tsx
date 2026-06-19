@@ -904,7 +904,7 @@ export default function CollectionProductGrid({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [query, setQuery] = useState("");
   // const [visibleCount, setVisibleCount] = useState(9);
-  const INITIAL_COUNT = 15;
+  const INITIAL_COUNT = 100;
   const PAGE_STEP = 6;
   const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);
 

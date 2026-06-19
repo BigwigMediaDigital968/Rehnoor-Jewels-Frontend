@@ -145,7 +145,7 @@ const HERO_STATS = [
   { value: "5+", label: "Necklace Styles" },
   { value: "Anti-Tarnish", label: "Coating" },
   { value: "Skin-Safe", label: "Materials" },
-  { value: "50K+", label: "Happy Customers" },
+  { value: "20K+", label: "Happy Customers" },
 ];
 
 const COLLECTION_STYLES: CollectionStyle[] = [

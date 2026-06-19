@@ -149,7 +149,7 @@ function TestimonialCard({ t }: { t: (typeof testimonials)[number] }) {
 
       {/* Product thumbnail + reviewer */}
       <div className="flex items-center gap-2.5 mb-3">
-        <div
+        {/* <div
           className="relative flex-shrink-0 rounded-lg overflow-hidden"
           style={{ width: 36, height: 36, background: "var(--rj-ivory-dark)" }}
         >
@@ -160,7 +160,7 @@ function TestimonialCard({ t }: { t: (typeof testimonials)[number] }) {
             sizes="36px"
             className="object-cover"
           />
-        </div>
+        </div> */}
         <div>
           <p
             className="font-cinzel font-bold"

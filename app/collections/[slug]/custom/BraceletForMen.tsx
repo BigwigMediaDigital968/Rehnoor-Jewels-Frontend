@@ -125,7 +125,7 @@ function Label({ children }: { children: React.ReactNode }) {
 // ─────────────────────────────────────────────────────────────────
 const STAT_BADGES = [
   { value: "5+", label: "Bracelet Styles" },
-  { value: "50K+", label: "Happy Customers" },
+  { value: "20K+", label: "Happy Customers" },
   { value: "1 Gram", label: "Gold Polish" },
   { value: "Free", label: "Pan-India Delivery" },
 ];

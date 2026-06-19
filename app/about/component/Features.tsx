@@ -40,20 +40,20 @@ export default function Features() {
       tag: "Smart Style",
       quote:
         "Real talk: it's not real gold. But it's real style, real confidence, real savings.",
-      body: "Patra isn't a shortcut. It's a strategy. We don't fake it — we style it smart.",
-      img: "/assets/about-feature-2.jpg",
+      body: "Patra isn't a shortcut. It's a strategy. We don't fake it, we style it smart.",
+      img: "/assets/store-image-1.png",
     },
     {
       tag: "Royal Vibe",
-      quote: "Why spend like a queen when you can look like one — for less?",
+      quote: "Why spend like a queen when you can look like one for less?",
       body: "Our patra pieces give you the royal vibe, not the royal expense. Claim your throne.",
-      img: "/assets/about-feature-3.jpg",
+      img: "/assets/store-image-2.png",
     },
     {
       tag: "Power in Patra",
       quote: "They'll assume it's 22k. You don't need to correct them.",
       body: "Patra that passes the gold test from 3 feet or 3 inches away. Confidence isn't measured in grams.",
-      img: "/assets/about-feature-4.jpg",
+      img: "/assets/store-image-3.png",
     },
   ];
 

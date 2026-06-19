@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Eye, ArrowUpRight } from "lucide-react";
+import { Eye, ArrowUpRight, X } from "lucide-react";
 
 interface RecentProduct {
   id: string;
@@ -19,6 +19,7 @@ export default function RecentlyViewedFloating() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [visible, setVisible] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
 
   // Initial delayed show
   useEffect(() => {
@@ -48,18 +49,16 @@ export default function RecentlyViewedFloating() {
   const HIDE_DURATION = 20000;
 
   useEffect(() => {
-    if (!products.length || isHovered) return;
+    if (!products.length || isHovered || dismissed) return;
 
     let timer: NodeJS.Timeout;
 
     if (!visible) {
-      // Handles 20-second downtime after sliding away or on user click
       timer = setTimeout(() => {
         setCurrentIndex(0);
         setVisible(true);
       }, HIDE_DURATION);
     } else {
-      // Standard 4-second carousel display
       timer = setTimeout(() => {
         if (currentIndex < products.length - 1) {
           setCurrentIndex((prev) => prev + 1);
@@ -70,162 +69,106 @@ export default function RecentlyViewedFloating() {
     }
 
     return () => clearTimeout(timer);
-  }, [visible, currentIndex, products, isHovered]);
+  }, [visible, currentIndex, products, isHovered, dismissed]);
 
-  // Force-dismisses the card on user selection
   const handleCardClick = () => {
-    setIsHovered(false); // Breaks hover lock instantly
-    setVisible(false); // Disappears immediately and fires the 20s delay loop
+    setIsHovered(false);
+    setVisible(false);
+  };
+
+  const handleCut = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDismissed(true);
+    setVisible(false);
   };
 
   const product = products[currentIndex];
-
   if (!product) return null;
 
   return (
     <AnimatePresence>
       {visible && (
         <motion.div
-          initial={{
-            opacity: 0,
-            x: -100,
-            y: 50,
-            scale: 0.9,
-          }}
-          animate={{
-            opacity: 1,
-            x: 0,
-            y: 0,
-            scale: 1,
-          }}
-          exit={{
-            opacity: 0,
-            x: -100,
-            y: 50,
-            scale: 0.9,
-          }}
-          transition={{
-            duration: 0.6,
-            ease: "easeOut",
-          }}
-          className="fixed bottom-6 left-6 z-[9999]"
+          initial={{ opacity: 0, y: 50, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 20, scale: 0.95 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
+          // Fixed positioning: safely placed at the bottom-right.
+          // max-w-[calc(100vw-32px)] ensures it stays cleanly inside small mobile viewports without overflowing.
+          className="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-[9999] p-2 w-[340px] max-w-[calc(100vw-32px)]"
         >
-          <Link href={`/products/${product.slug}`} onClick={handleCardClick}>
-            <motion.div
-              whileHover={{
-                scale: 1.03,
-              }}
-              className="
-                group
-                w-[320px]
-                overflow-hidden
-                rounded-2xl
-                border border-[#E8DCC3]
-                bg-white/95
-                backdrop-blur-xl
-                shadow-[0_20px_60px_rgba(0,0,0,0.15)]
-              "
+          <div className="relative group w-full rounded-2xl border border-neutral-200 bg-white/95 backdrop-blur-md shadow-[0_12px_40px_rgba(0,0,0,0.12)] transition-all duration-300 hover:shadow-[0_20px_50px_rgba(155,122,71,0.15)] hover:border-[#9B7A47]/40">
+            {/* ── UPGRADED SAFELY OVERLAID CLOSE BUTTON ── */}
+            <button
+              onClick={handleCut}
+              className="absolute -top-2.5 -right-2.5 z-[100] flex h-7 w-7 items-center justify-center rounded-full border border-neutral-200 bg-white text-neutral-500 shadow-md transition-all duration-200 hover:bg-neutral-50 hover:text-neutral-900 hover:scale-105 cursor-pointer"
+              aria-label="Dismiss recent products"
             >
-              <div className="flex">
-                <div className="relative">
+              <X size={14} strokeWidth={2.5} />
+            </button>
+
+            {/* Clickable Card Link Container (Directly styled, no nested <a>) */}
+            <Link
+              href={`/products/${product.slug}`}
+              onClick={handleCardClick}
+              className="block overflow-hidden rounded-2xl no-underline"
+            >
+              <div className="flex items-stretch">
+                {/* Left Side: Product Thumbnail */}
+                <div className="relative w-[105px] h-[105px] sm:w-[115px] sm:h-[115px] bg-neutral-50 flex-shrink-0 overflow-hidden">
                   <img
                     src={product.image}
                     alt={product.name}
-                    className="
-                      h-[110px]
-                      w-[110px]
-                      object-cover
-                    "
+                    className="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
                   />
-
-                  <div
-                    className="
-                      absolute
-                      top-2
-                      left-2
-                      flex
-                      items-center
-                      gap-1
-                      rounded-full
-                      bg-black/75
-                      px-2
-                      py-1
-                      text-[10px]
-                      text-white
-                    "
-                  >
-                    <Eye size={12} />
-                    Viewed
+                  <div className="absolute top-2 left-2 flex items-center gap-1 rounded-full bg-neutral-900/80 px-2 py-0.5 text-[9px] font-medium tracking-wider text-white backdrop-blur-[2px]">
+                    <Eye size={10} strokeWidth={2.5} />
+                    VIEWED
                   </div>
                 </div>
 
-                <div className="flex flex-1 flex-col justify-between p-4">
+                {/* Right Side: Details Content */}
+                <div className="flex flex-1 flex-col justify-between p-3 sm:p-3.5 min-w-0">
                   <div>
-                    <p
-                      className="
-                        text-[11px]
-                        uppercase
-                        tracking-[0.2em]
-                        text-[#9B7A47]
-                      "
-                    >
+                    <span className="font-cinzel text-[9px] font-bold tracking-[0.2em] text-[#9B7A47] uppercase block truncate">
                       Recently Viewed
-                    </p>
-
-                    <h4
-                      className="
-                        mt-1
-                        line-clamp-2
-                        text-sm
-                        font-medium
-                        text-gray-900
-                      "
-                    >
+                    </span>
+                    <h4 className="mt-0.5 sm:mt-1 line-clamp-2 font-cinzel text-[11px] sm:text-xs tracking-wide font-medium leading-relaxed text-neutral-800 transition-colors group-hover:text-neutral-900">
                       {product.name}
                     </h4>
                   </div>
 
-                  <div className="flex items-center justify-between">
-                    <span
-                      className="
-                        text-base
-                        font-semibold
-                        text-[#9B7A47]
-                      "
-                    >
+                  <div className="flex items-center justify-between mt-1 sm:mt-2">
+                    <span className="text-xs font-bold font-sans tracking-wide text-neutral-900">
                       {product.price}
                     </span>
-
-                    <ArrowUpRight
-                      size={18}
-                      className="
-                        transition-transform
-                        duration-300
-                        group-hover:translate-x-1
-                        group-hover:-translate-y-1
-                      "
-                    />
+                    <div className="text-[#9B7A47] transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+                      <ArrowUpRight size={15} strokeWidth={2.5} />
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* Progress bar */}
+              {/* Bottom Animation Carousel Auto Timer Progress Metric */}
               {!isHovered && (
-                <motion.div
-                  key={currentIndex}
-                  initial={{ width: "100%" }}
-                  animate={{ width: "0%" }}
-                  transition={{
-                    duration: 4,
-                    ease: "linear",
-                  }}
-                  className="h-[2px] bg-[#B08D57]"
-                />
+                <div className="w-full bg-neutral-100 h-[2px] overflow-hidden">
+                  <motion.div
+                    key={currentIndex}
+                    initial={{ x: "0%" }}
+                    animate={{ x: "-100%" }}
+                    transition={{
+                      duration: SHOW_INTERVAL / 1000,
+                      ease: "linear",
+                    }}
+                    className="h-full bg-gradient-to-r from-[#9B7A47] to-[#C5A880] origin-left"
+                  />
+                </div>
               )}
-            </motion.div>
-          </Link>
+            </Link>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>

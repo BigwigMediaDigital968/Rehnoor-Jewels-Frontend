@@ -328,7 +328,7 @@ export default function ProductGridCarousel() {
 
   const SlicedProduct = products.slice(0, 10);
 
-  console.log(SlicedProduct);
+  // console.log(SlicedProduct);
 
   return (
     <section className="py-14" style={{ overflow: "hidden" }}>

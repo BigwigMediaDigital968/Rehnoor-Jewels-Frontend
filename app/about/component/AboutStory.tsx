@@ -95,13 +95,13 @@ export default function OurStory() {
                 className="font-cormorant text-3xl font-semibold"
                 style={{ color: "var(--rj-gold)" }}
               >
-                50K+
+                20K+
               </p>
               <p
                 className="font-cinzel text-[8px] tracking-widest uppercase mt-1"
                 style={{ color: "rgba(255,255,255,0.6)" }}
               >
-                Women who chose smart gold
+                Customers who chose smart gold
               </p>
             </div>
 

@@ -72,7 +72,7 @@ export default function CollectionsHero() {
       <motion.div className="absolute inset-0" style={{ y }}>
         <div ref={bgRef} className="absolute inset-0">
           <Image
-            src="/assets/collection-hero.jpg"
+            src="/assets/collection-hero-1.png"
             alt="Collections"
             fill
             priority
@@ -180,7 +180,7 @@ export default function CollectionsHero() {
           {[
             ["500+", "Designs"],
             ["Precision Crafted", "Timeless Style"],
-            ["50K+", "Orders Delivered"],
+            ["20K+", "Orders Delivered"],
           ].map(([v, l]) => (
             <div key={l}>
               <p
