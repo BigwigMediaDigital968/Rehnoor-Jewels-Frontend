@@ -693,9 +693,9 @@ interface TickerItem {
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-// const API_KEY = "564b1c15f0eb271be0df89b7607ed3d5"; // Rehnoor
-const GOLD_API_KEY = "4470e2bb5b101efa0ac6e708a7cdb08e"; // Anshu
-const API_URL = `https://api.metalpriceapi.com/v1/latest?api_key=${GOLD_API_KEY}&base=USD&currencies=XAU,INR`;
+const API_KEY = "564b1c15f0eb271be0df89b7607ed3d5"; // Rehnoor
+// const GOLD_API_KEY = "4470e2bb5b101efa0ac6e708a7cdb08e"; // Anshu
+const API_URL = `https://api.metalpriceapi.com/v1/latest?api_key=${API_KEY}&base=USD&currencies=XAU,INR`;
 
 const TROY_OZ_TO_GRAM = 31.1034768;
 const TOLA_GRAMS = 11.6638;
