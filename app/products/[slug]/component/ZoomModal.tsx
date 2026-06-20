@@ -167,7 +167,7 @@ export default function ZoomModal({
       className="fixed inset-0 z-[200] flex items-center justify-center p-3 md:p-6 select-none overflow-hidden"
       style={{ fontFamily: "inherit" }}
     >
-       {/* ── 📱 MOBILE VIEW (Hidden on Desktop) ── */}
+       {/* ── MOBILE VIEW (Hidden on Desktop) ── */}
       <div
         className="fixed inset-0 z-50 flex flex-col bg-black/95 md:hidden"
         onClick={onClose}
@@ -233,6 +233,7 @@ export default function ZoomModal({
         )}
       </div>
 
+      {/* ── DESKTOP VIEW (Hidden on Mobile) ── */}
       {/* Backdrop */}
       <motion.div
         initial={{ opacity: 0 }}
