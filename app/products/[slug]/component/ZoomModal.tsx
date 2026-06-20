@@ -167,13 +167,79 @@ export default function ZoomModal({
       className="fixed inset-0 z-[200] flex items-center justify-center p-3 md:p-6 select-none overflow-hidden"
       style={{ fontFamily: "inherit" }}
     >
+       {/* ── 📱 MOBILE VIEW (Hidden on Desktop) ── */}
+      <div
+        className="fixed inset-0 z-50 flex flex-col bg-black/95 md:hidden"
+        onClick={onClose}
+      >
+        {/* Mobile Top Header */}
+        <div className="flex items-center justify-between w-full p-4 z-10 bg-gradient-to-b from-black/80 to-transparent">
+          <span className="text-white/70 text-xs font-mono tracking-widest">
+            {currentIndex + 1} / {images.length}
+          </span>
+          <button
+            onClick={onClose}
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 active:bg-white/20 border border-white/10 text-white"
+            aria-label="Close gallery"
+          >
+            <X size={20} />
+          </button>
+        </div>
+
+        {/* Mobile Image Stage: Pure wrapper to allow native touch zooming */}
+        <div
+          className="flex-grow flex items-center justify-center p-4 overflow-auto"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <AnimatePresence mode="wait">
+            <motion.img
+              key={currentIndex}
+              src={current.src}
+              alt={current.alt || title}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="max-w-full max-h-[75dvh] object-contain select-text"
+              style={{
+                pointerEvents: "auto", // Essential: unlocks native browser zoom engines
+                touchAction: "auto"    // Essential: tells mobile safari/chrome to handle normal interactions
+              }}
+            />
+          </AnimatePresence>
+        </div>
+
+        {/* Mobile Bottom Navigation Layout */}
+        {images.length > 1 && (
+          <div
+            className="flex items-center justify-center gap-12 p-6 bg-gradient-to-t from-black/80 to-transparent"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={handlePrev}
+              className="p-3.5 rounded-full bg-white/10 text-white active:scale-90 transition-transform"
+              aria-label="Previous item"
+            >
+              <ChevronLeft size={24} />
+            </button>
+            <button
+              onClick={handleNext}
+              className="p-3.5 rounded-full bg-white/10 text-white active:scale-90 transition-transform"
+              aria-label="Next item"
+            >
+              <ChevronRight size={24} />
+            </button>
+          </div>
+        )}
+      </div>
+
       {/* Backdrop */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.25 }}
-        className="absolute inset-0"
+        className="absolute inset-0 md:block"
         style={{
           background: "rgba(0,24,10,0.75)",
           backdropFilter: "blur(10px)",
