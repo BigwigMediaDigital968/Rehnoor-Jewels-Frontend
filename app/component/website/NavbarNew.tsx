@@ -72,9 +72,14 @@ const navLinks = [
             href: "/collections/gold-plated-rings-for-women",
             icon: "✨",
           },
+          // {
+          //   label: "Trending Mangalsutras",
+          //   href: "/collections/gold-plated-mangalsutra-for-women",
+          //   icon: "✨",
+          // },
           {
-            label: "Trending Mangalsutras",
-            href: "/collections/gold-plated-mangalsutra-for-women",
+            label: "Earrings for Women",
+            href: "/collections/gold-plated-earrings-for-women",
             icon: "✨",
           },
         ],
