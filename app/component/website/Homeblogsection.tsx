@@ -428,8 +428,8 @@ export default function HomeBlogSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden"
-      style={{ background: "var(--rj-charcoal)", padding: "5rem 0" }}
+      className="relative overflow-hidden bg-[#ffefd2]"
+      style={{padding: "5rem 0" }}
     >
       {/* ── Decorative background ── */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -466,26 +466,23 @@ export default function HomeBlogSection() {
         >
           <div>
             <p
-              className="label-accent mb-2"
-              style={{ color: "var(--rj-gold,#FCC151)" }}
+              className="label-accent mb-2 text-(--rj-gold)"
             >
               ✦ The Gold Edit
             </p>
             <h2
-              className="font-cormorant font-light text-white leading-tight"
+              className="font-cormorant font-light text-rj-emerald leading-tight"
               style={{ fontSize: "clamp(2rem,4vw,2.8rem)" }}
             >
               Stories of gold,{" "}
               <em
-                className="font-normal pe-2"
-                style={{
-                  background:
-                    "linear-gradient(90deg,#FCC151 0%,#E8A830 50%,#FCC151 100%)",
-                  backgroundClip: "text",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundSize: "200% auto",
-                }}
+                className="font-normal pe-2 text-(--rj-gold)"
+                // style={{
+                //   backgroundClip: "text",
+                //   WebkitBackgroundClip: "text",
+                //   WebkitTextFillColor: "transparent",
+                //   backgroundSize: "200% auto",
+                // }}
               >
                 craft &amp; culture
               </em>
@@ -494,8 +491,7 @@ export default function HomeBlogSection() {
 
           <Link
             href="/blogs"
-            className="flex items-center gap-2 font-cinzel text-[10px] tracking-widest uppercase font-bold flex-shrink-0 group/link"
-            style={{ color: "var(--rj-gold,#FCC151)" }}
+            className="flex items-center gap-2 font-cinzel text-(--rj-gold) text-[10px] tracking-widest uppercase font-bold flex-shrink-0 group/link"
           >
             All Articles
             <span
