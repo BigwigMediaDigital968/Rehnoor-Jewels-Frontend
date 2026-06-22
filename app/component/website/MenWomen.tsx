@@ -75,7 +75,7 @@ const womenItems = [
     price: "Stating Rs. 599/-",
     gradient: "from-[#fef4dc] via-[#fdf0d0] to-[#fef4dc]",
     accent: "#003720",
-    image: "/women-collection/jewellery-set.png",
+    image: "/women-collection/gold-plated-necklace-with-earrings.png",
     link: "/collections/gold-plated-necklace-with-earrings",
   },
   {
@@ -97,7 +97,7 @@ const womenItems = [
     price: "Stating Rs. 599/-",
     gradient: "from-[#fef4dc] via-[#fdf5e0] to-[#fef4dc]",
     accent: "#003720",
-    image: "/women-collection/bracelet.png",
+    image: "/women-collection/gold-plated-bracelets-for-women.png",
     link: "/collections/gold-plated-bracelets-for-women",
   },
   {
@@ -152,7 +152,7 @@ const womenItems = [
     price: "Stating Rs. 599/-",
     gradient: "from-[#faf8f3] via-[#f2ede2] to-[#faf8f3]",
     accent: "#002410",
-    image: "/women-collection/pendant.png",
+    image: "/women-collection/gold-plated-pendants-for-women.png",
     link: "/collections/gold-plated-pendants-for-women",
   },
 ];
