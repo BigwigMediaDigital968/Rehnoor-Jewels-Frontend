@@ -162,7 +162,7 @@ export default function CollectionsHero() {
               className="transition-transform duration-300 group-hover:translate-x-1"
             />
           </a>
-          <Link
+          {/* <Link
             href="/collections/new-arrivals"
             className="hero-col-cta btn-outline group"
             style={{
@@ -172,7 +172,7 @@ export default function CollectionsHero() {
             }}
           >
             New Arrivals
-          </Link>
+          </Link> */}
         </div>
 
         {/* Stat strip */}

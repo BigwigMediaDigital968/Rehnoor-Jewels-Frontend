@@ -255,7 +255,7 @@ export default function ProductsHero() {
           >
             20+ new pieces this week
           </p>
-          <div
+          {/* <div
             className="flex items-center gap-1 mt-2.5"
             style={{ color: "var(--rj-gold)", fontSize: "0.6rem" }}
           >
@@ -266,7 +266,7 @@ export default function ProductsHero() {
               Explore
             </Link>
             <ArrowRight size={10} />
-          </div>
+          </div> */}
         </div>
       </motion.div>
     </section>

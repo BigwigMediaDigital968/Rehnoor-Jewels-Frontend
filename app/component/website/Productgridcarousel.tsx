@@ -363,7 +363,7 @@ export default function ProductGridCarousel() {
             </div>
           </div>
 
-          <Link
+          {/* <Link
             href="/collections/new-arrivals"
             className="group flex items-center gap-1.5 font-cinzel text-[11px] tracking-widest uppercase transition-opacity hover:opacity-70 self-start sm:self-auto"
             style={{ color: "var(--rj-emerald)" }}
@@ -373,7 +373,7 @@ export default function ProductGridCarousel() {
               size={12}
               className="transition-transform duration-300 group-hover:translate-x-1"
             />
-          </Link>
+          </Link> */}
         </motion.div>
       </div>
 

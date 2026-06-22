@@ -23,11 +23,11 @@ export interface NavItem {
 }
 
 export const navItems: NavItem[] = [
-  {
-    label: "New Arrivals",
-    href: "/collections/new-arrivals",
-    badge: "New",
-  },
+  // {
+  //   label: "New Arrivals",
+  //   href: "/collections/new-arrivals",
+  //   badge: "New",
+  // },
   // {
   //   label: "Collections",
   //   hasMegaMenu: true,

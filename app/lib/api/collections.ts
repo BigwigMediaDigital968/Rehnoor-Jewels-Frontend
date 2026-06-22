@@ -311,10 +311,15 @@ export async function fetchCollectionBySlug(
     headers: { "Content-Type": "application/json" },
   });
 
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.message ?? `Collection not found (${res.status})`);
+   if (res.status === 404) {
+    return {
+      success: false,
+      data: null,
+    };
   }
 
+  if (!res.ok) {
+    throw new Error(`Request failed (${res.status})`);
+  }
   return res.json();
 }

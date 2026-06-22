@@ -94,12 +94,12 @@ export default function CollectionsPage() {
                   name: "Pendants for Men",
                   url: "https://www.rehnoorjewels.com/collections/pendants-for-men",
                 },
-                {
-                  "@type": "ListItem",
-                  position: 6,
-                  name: "New Arrivals",
-                  url: "https://www.rehnoorjewels.com/collections/new-arrivals",
-                },
+                // {
+                //   "@type": "ListItem",
+                //   position: 6,
+                //   name: "New Arrivals",
+                //   url: "https://www.rehnoorjewels.com/collections/new-arrivals",
+                // },
                 {
                   "@type": "ListItem",
                   position: 7,
