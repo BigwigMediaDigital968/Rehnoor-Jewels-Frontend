@@ -86,7 +86,7 @@ const womenItems = [
     price: "Stating Rs. 599/-",
     gradient: "from-[#faf8f3] via-[#fef4dc] to-[#faf8f3]",
     accent: "#004d2d",
-    image: "/women-collection/earrings.png",
+    image: "/women-collection/gold-plated-earrings-for-women.png",
     link: "/collections/gold-plated-earrings-for-women",
   },
   {
@@ -130,7 +130,7 @@ const womenItems = [
     price: "Stating Rs. 599/-",
     gradient: "from-[#faf8f3] via-[#fef4dc] to-[#faf8f3]",
     accent: "#004d2d",
-    image: "/women-collection/chains.png",
+    image: "/women-collection/gold-plated-chains-for-women.png",
     link: "/collections/gold-plated-chains-for-women",
   },
   {
