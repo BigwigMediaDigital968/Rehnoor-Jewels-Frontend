@@ -824,6 +824,11 @@ export default function GoldMarqueeScroll() {
   // Triple items list to provide seamless infinite loop continuity overhead lengths
   const repeatedItems = [...items, ...items, ...items];
 
+
+  if(!loading && error){
+    return null
+  }
+
   return (
     <>
       <style>{`
