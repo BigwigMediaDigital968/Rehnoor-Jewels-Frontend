@@ -216,7 +216,7 @@ export async function fetchProductBySlug(
   slug: string,
 ): Promise<SingleProductResponse> {
   const res = await fetch(`${BASE}/api/products/${slug}`, {
-    next: { revalidate: 60 },
+    next: { revalidate: 20 },
     headers: { "Content-Type": "application/json" },
   });
 
