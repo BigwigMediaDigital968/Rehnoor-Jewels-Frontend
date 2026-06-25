@@ -653,37 +653,51 @@ export default function ProductDetailHero({
 
   // ── Image gallery ──
   // If the active variant has its own images, show those; else fall back to product images
-  const variantImages =
-    activeVariant?.images && activeVariant.images.length > 0
-      ? activeVariant.images
-      : null;
 
-  const galleryImages: any[] = [];
+const galleryImages: any[] = [...(product.images || [])];
   const variantImageMap = new Map<string, number>();
 
   product.variants?.forEach((variant) => {
-    if (variant.images?.length) {
-      variantImageMap.set(variant._id, galleryImages.length);
+  if (variant.images?.length) {
+    // Store the starting index of this variant's images
+    variantImageMap.set(variant._id, galleryImages.length);
 
-      galleryImages.push(...variant.images);
-    }
-  });
+    galleryImages.push(...variant.images);
+  }
+});
 
   const [imgIdx, setImgIdx] = useState(0);
-  const images = galleryImages.length > 0 ? galleryImages : product.images;
+  const images = galleryImages;
 
   // Reset image index when the image source set changes
   // useEffect(() => setImgIdx(0), [activeVariant?._id]);
 
-  useEffect(() => {
-    if (!activeVariant?._id) return;
+useEffect(() => {
+  if (!activeVariant?._id) return;
 
-    const index = variantImageMap.get(activeVariant._id);
+  const index = variantImageMap.get(activeVariant._id);
 
-    if (index !== undefined) {
-      setImgIdx(index);
-    }
-  }, [activeVariant?._id]);
+  if (index !== undefined) {
+    setImgIdx(index);
+  }
+}, [selections]);
+
+// const isFirstRender = useRef(true);
+
+// useEffect(() => {
+//   if (isFirstRender.current) {
+//     isFirstRender.current = false;
+//     return; // keep imgIdx = 0 on initial load
+//   }
+
+//   if (!activeVariant?._id) return;
+
+//   const index = variantImageMap.get(activeVariant._id);
+
+//   if (index !== undefined) {
+//     setImgIdx(index);
+//   }
+// }, [activeVariant?._id, selections]);
 
   // ── UI state ──
   const [qty, setQty] = useState(1);
