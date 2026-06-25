@@ -680,7 +680,7 @@ useEffect(() => {
   if (index !== undefined) {
     setImgIdx(index);
   }
-}, [selections]);
+}, [activeVariant]);
 
 // const isFirstRender = useRef(true);
 
