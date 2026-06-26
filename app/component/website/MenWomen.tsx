@@ -18,6 +18,7 @@ const menItems = [
     accent: "#fcc151",
     image: "/men-collection/kada.png",
     link: "/collections/gold-plated-kada-for-men",
+    productImage: "/men-collection/mens-kada.webp"
   },
   {
     id: 2,
@@ -27,8 +28,9 @@ const menItems = [
     price: "Starting Rs. 1999/-",
     gradient: "from-[#0a1f12] via-[#003720] to-[#0a1f12]",
     accent: "#fdd07a",
-    image: "/men-collection/pendant.png",
+    image: "/men-collection/mens-pendant-main.png",
     link: "/collections/gold-plated-pendants-for-men",
+    productImage: "/men-collection/mens-pendant.webp"
   },
   {
     id: 3,
@@ -38,7 +40,8 @@ const menItems = [
     price: "Starting Rs. 1999/-",
     gradient: "from-[#1a1108] via-[#2e1f00] to-[#1a1108]",
     accent: "#f5a623",
-    image: "/men-collection/bracelet.png",
+    image: "/men-collection/mens-bracelet.webp",
+    productImage: "/men-collection/mens-bracelet-product.webp",
     link: "/collections/gold-plated-bracelets-for-men",
   },
   {
@@ -50,6 +53,7 @@ const menItems = [
     gradient: "from-[#1a1a1a] via-[#002410] to-[#1a1a1a]",
     accent: "#fcc151",
     image: "/men-collection/ring.png",
+    productImage: "/men-collection/mens-ring.webp",
     link: "/collections/gold-plated-rings-for-men",
   },
 
@@ -63,6 +67,7 @@ const menItems = [
     accent: "#fcc151",
     image: "/men-collection/chains.png",
     link: "/collections/gold-plated-chains-for-men",
+    productImage: "/men-collection/mens-chains.webp"
   },
 ];
 
@@ -76,6 +81,7 @@ const womenItems = [
     gradient: "from-[#fef4dc] via-[#fdf0d0] to-[#fef4dc]",
     accent: "#003720",
     image: "/women-collection/gold-plated-necklace-with-earrings.png",
+    productImage: "/women-collection/necklace-set.webp",
     link: "/collections/gold-plated-necklace-with-earrings",
   },
   {
@@ -87,6 +93,8 @@ const womenItems = [
     gradient: "from-[#faf8f3] via-[#fef4dc] to-[#faf8f3]",
     accent: "#004d2d",
     image: "/women-collection/gold-plated-earrings-for-women.png",
+    productImage: "/women-collection/gold-plated-earrings.png",
+
     link: "/collections/gold-plated-earrings-for-women",
   },
   {
@@ -98,6 +106,8 @@ const womenItems = [
     gradient: "from-[#fef4dc] via-[#fdf5e0] to-[#fef4dc]",
     accent: "#003720",
     image: "/women-collection/gold-plated-bracelets-for-women.png",
+    productImage: "/women-collection/gold-plated-bracelet.png",
+
     link: "/collections/gold-plated-bracelets-for-women",
   },
   {
@@ -109,6 +119,7 @@ const womenItems = [
     gradient: "from-[#faf8f3] via-[#f2ede2] to-[#faf8f3]",
     accent: "#002410",
     image: "/women-collection/gold-plated-rings-for-women.png",
+    productImage: "/women-collection/gold-plated-ring.webp",
     link: "/collections/gold-plated-rings-for-women",
   },
   {
@@ -120,6 +131,8 @@ const womenItems = [
     gradient: "from-[#fef4dc] via-[#fdf0d0] to-[#fef4dc]",
     accent: "#003720",
     image: "/women-collection/gold-plated-necklaces-for-women.png",
+    productImage: "/women-collection/gold-plated-necklaces.webp",
+
     link: "/collections/gold-plated-necklaces-for-women",
   },
   {
@@ -131,6 +144,8 @@ const womenItems = [
     gradient: "from-[#faf8f3] via-[#fef4dc] to-[#faf8f3]",
     accent: "#004d2d",
     image: "/women-collection/gold-plated-chains-for-women.png",
+    productImage: "/women-collection/signature-link-gold-plated-chain.webp",
+
     link: "/collections/gold-plated-chains-for-women",
   },
   {
@@ -142,6 +157,8 @@ const womenItems = [
     gradient: "from-[#fef4dc] via-[#fdf5e0] to-[#fef4dc]",
     accent: "#003720",
     image: "/women-collection/gold-plated-mangalsutra-for-women.png",
+    productImage: "/women-collection/gold-plated-mangalsutra.webp",
+
     link: "/collections/gold-plated-mangalsutra-for-women",
   },
   {
@@ -153,6 +170,7 @@ const womenItems = [
     gradient: "from-[#faf8f3] via-[#f2ede2] to-[#faf8f3]",
     accent: "#002410",
     image: "/women-collection/gold-plated-pendants-for-women.png",
+    productImage: "/women-collection/gold-plated-pendant.webp",
     link: "/collections/gold-plated-pendants-for-women",
   },
 ];
@@ -235,6 +253,7 @@ interface CardProps {
   visible: boolean;
   image: string;
   link: string;
+  productImage?: string;
 }
 
 const CollectionCard: React.FC<CardProps> = ({
@@ -248,6 +267,7 @@ const CollectionCard: React.FC<CardProps> = ({
   index,
   visible,
   image,
+  productImage,
   link,
 }) => {
   const [hovered, setHovered] = useState(false);
@@ -288,13 +308,28 @@ const CollectionCard: React.FC<CardProps> = ({
               src={image}
               alt={name}
               fill
-              className="object-cover object-center"
+              className="object-cover object-center bg-white"
               style={{
                 transform: hovered ? "scale(1.08)" : "scale(1)",
                 transition: "transform 0.7s cubic-bezier(0.4,0,0.2,1)",
               }}
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
             />
+            {productImage &&
+              (
+                <Image
+                  src={productImage}
+                  alt={name}
+                  fill
+                  className="object-cover object-center absolute"
+                  style={{
+                    opacity: hovered ? 1 : 0,
+                    transition: "all 0.7s cubic-bezier(0.4,0,0.2,1)",
+                  }}
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                />
+              )
+            }
 
             {/* ── Radial accent glow ── */}
             <div
