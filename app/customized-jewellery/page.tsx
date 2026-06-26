@@ -11,6 +11,8 @@ import CustomPricing from "./component/CustomPricing";
 import CustomProcess from "./component/CustomProcess";
 import Customtable from "./component/CustomTable";
 import CustomTestimonial from "./component/CustomTestimonial";
+import CustomGallery from "./component/CustomGallery";
+import CertificationMarquee from "./component/Certification";
 
 // Next.js App Router Metadata Configuration
 export async function generateMetadata(): Promise<Metadata> {
@@ -168,9 +170,11 @@ export default function CustomJewelleryPage() {
       {/* Structural Page Elements Layout Flow */}
       <CustomHero />
       <CustomAbout />
+      {/* <CertificationMarquee /> */}
       <Customtable />
       <CustomJewel />
       <CustomProcess />
+      <CustomGallery />
       <CustomPricing />
       <CustomTestimonial />
       <CustomBooking />

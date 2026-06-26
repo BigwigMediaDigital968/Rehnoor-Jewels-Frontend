@@ -48,7 +48,7 @@ export default function CustomHero() {
             >
               <Sparkles size={12} className="text-amber-500 animate-pulse" />
               <span className="font-cinzel text-[10px] tracking-[0.2em] uppercase font-bold text-neutral-600">
-                Bespoke Experience
+                My jewellery, My Choice
               </span>
             </motion.div>
 
@@ -100,7 +100,7 @@ export default function CustomHero() {
                     Premium Gold
                   </h4>
                   <p className="text-[11px] text-neutral-400 font-light mt-0.5">
-                    14K - 22K Purity Gold
+                    BIS Certified
                   </p>
                 </div>
               </div>
@@ -114,7 +114,7 @@ export default function CustomHero() {
                     Natural Diamonds
                   </h4>
                   <p className="text-[11px] text-neutral-400 font-light mt-0.5">
-                    Eqisite & Conflict-Free
+                    IGI Certified
                   </p>
                 </div>
               </div>

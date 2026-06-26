@@ -66,12 +66,18 @@ export default function CustomJewel() {
                 Our Customized Gold Jewellery service is built on a foundation
                 of material integrity. We source high-purity gold and craft each
                 piece to exacting standards, ensuring the design you choose
-                holds its value, beauty, and structure for years to come. <br />
+                holds its value, beauty, and structure for years to come. Every
+                creation is <b className="font-medium">BIS Certified</b> and
+                carries a unique <b className="font-medium">HUID Hallmark</b>,
+                giving you complete assurance of authenticity, purity, and
+                trust.
+                <br />
                 <br />
                 Each piece of Customized Gold Jewellery is shaped to your exact
                 measurements and finishes. From the weight of the gold to the
                 surface texture, every element is fine-tuned to your
-                specifications with zero compromise on quality.
+                specifications with zero compromise on quality, delivering a
+                timeless masterpiece that is uniquely yours.
               </p>
 
               {/* Gold Specifications List */}
@@ -84,7 +90,8 @@ export default function CustomJewel() {
                     <strong className="font-cinzel text-[11px] font-bold tracking-wider text-neutral-800 uppercase mr-1">
                       Gold Purity:
                     </strong>{" "}
-                    14K to 22K, durable, valuable, and timeless
+                    BIS Hallmarked 14K to 22K gold plated, durable, valuable,
+                    and timeless
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
@@ -113,8 +120,9 @@ export default function CustomJewel() {
               </ul>
 
               <p className="text-xs italic text-neutral-400 font-light mb-6">
-                Our Customized Gold Jewellery is ideal for those who appreciate
-                lasting craftsmanship and demand authenticity in every detail.
+                Every creation is BIS Certified and adorned with a unique HUID
+                Hallmark, ensuring uncompromising purity, authenticity, and
+                lifelong confidence in your investment.
               </p>
 
               {/* Action Button */}
@@ -188,10 +196,10 @@ export default function CustomJewel() {
 
               <p className="text-neutral-500 font-light text-sm sm:text-base leading-relaxed mb-8">
                 In a world where alternatives are everywhere, we hold firm to
-                one principle: only natural is good enough. Our Customized
-                Natural Diamond Jewellery is crafted exclusively with diamonds
-                that formed over billions of years beneath the earth, not in a
-                laboratory. <br />
+                one principle: only <b className="font-medium">IGI certified</b>{" "}
+                natural is good enough. Our Customized Natural Diamond Jewellery
+                is crafted exclusively with diamonds that formed over billions
+                of years beneath the earth, not in a laboratory. <br />
                 <br />
                 This is not just a product choice; it is a values statement.
                 Choosing Customized Natural Diamond Jewellery from Rehnoor
@@ -206,7 +214,8 @@ export default function CustomJewel() {
                     <ShieldCheck size={14} />
                   </div>
                   <span className="text-xs sm:text-sm font-light text-neutral-600 leading-snug">
-                    Every diamond is naturally formed and ethically sourced
+                    Every diamond is BIS certified and naturally formed and
+                    ethically sourced
                   </span>
                 </li>
                 <li className="flex items-start gap-2.5">
@@ -236,9 +245,9 @@ export default function CustomJewel() {
               </ul>
 
               <p className="text-xs italic text-neutral-400 font-light mb-6">
-                Our Customized Diamond Jewellery is crafted for those who
-                understand that the finest things in life are authentic and who
-                refuse to settle for less.
+                Our Customized Diamond Jewellery is IGI Certified & crafted for
+                those who understand that the finest things in life are
+                authentic and who refuse to settle for less.
               </p>
 
               {/* Action Button */}

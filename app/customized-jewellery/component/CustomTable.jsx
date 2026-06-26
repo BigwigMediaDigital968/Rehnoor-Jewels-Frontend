@@ -7,7 +7,8 @@ export default function CustomTable() {
   const goldSpecs = [
     {
       label: "Gold Purity",
-      value: "14K / 22K chosen based on your design requirement",
+      value:
+        "BIS Hallmarked 14K / 22K Gold with uniqe HUID chosen based on your design requirement",
     },
     {
       label: "Gold Weight",
@@ -23,7 +24,8 @@ export default function CustomTable() {
   const diamondSpecs = [
     {
       label: "Diamond Type",
-      value: "100% Natural Diamonds, no lab-grown or artificial alternatives",
+      value:
+        "100% Natural & IGI Certified Diamonds, no lab-grown or artificial alternatives",
     },
     {
       label: "Clarity",
