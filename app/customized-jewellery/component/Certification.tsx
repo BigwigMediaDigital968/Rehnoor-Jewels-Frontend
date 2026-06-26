@@ -27,7 +27,7 @@ const CERTIFICATE_LOGOS: CertificateLogo[] = [
     name: "IGI Certified",
     altText:
       "International Gemological Institute Diamond Laboratory Verification",
-    imageSrc: "/igi-logo.jpg",
+    imageSrc: "/bis-logo.jpg",
   },
   {
     id: "cert-4",
@@ -40,6 +40,13 @@ const CERTIFICATE_LOGOS: CertificateLogo[] = [
     id: "cert-5",
     name: "100% Conflict-Free",
     altText: "Ethically Sourced Responsibly Mined Natural Diamond Guarantee",
+    imageSrc: "/bis-logo.jpg",
+  },
+   {
+    id: "cert-4",
+    name: "GIA Standards",
+    altText:
+      "Gemological Institute of America Natural Diamond Evaluation Authority",
     imageSrc: "/igi-logo.jpg",
   },
 ];
@@ -74,42 +81,47 @@ export default function CertificationMarquee() {
 
       {/* Main Marquee Scroller Frame */}
       <div
-        className="w-full overflow-hidden relative bg-black/[0.03] border-y border-black/10 h-[90px] flex items-center"
+        className="w-full overflow-hidden relative h-[100px] flex items-center"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
         onTouchStart={() => setPaused(true)}
         onTouchEnd={() => setPaused(false)}
       >
         {/* Left & Right Ambient Blurring Vignettes */}
-        <div className="absolute inset-y-0 left-0 w-[60px] sm:w-[140px] bg-gradient-to-r from-[#fcc151] to-transparent z-10 pointer-events-none" />
-        <div className="absolute inset-y-0 right-0 w-[60px] sm:w-[140px] bg-gradient-to-l from-[#fcc151] to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-y-0 left-0 w-[80px] sm:w-[200px] bg-gradient-to-r from-[#fcc151] via-[#fcc151]/80 to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-y-0 right-0 w-[80px] sm:w-[200px] bg-gradient-to-l from-[#fcc151] via-[#fcc151]/80 to-transparent z-10 pointer-events-none" />
 
         {/* Scrolling Track */}
         <div
-          className={`inline-flex items-center whitespace-nowrap will-change-transform animate-twMarquee ${
+          className={`inline-flex gap-10 items-center whitespace-nowrap will-change-transform animate-twMarquee ${
             paused ? "[animation-play-state:paused]" : ""
           }`}
         >
           {repeatedLogos.map((logo, i) => (
             <div
               key={`${logo.id}-${i}`}
-              className="inline-flex items-center justify-center px-9 sm:px-16 h-[90px] border-r border-black/[0.06] group cursor-pointer"
+              className="inline-flex items-center justify-center w-[200px] aspect-square group cursor-pointer"
               title={logo.altText}
             >
               <img
                 src={logo.imageSrc}
                 alt={logo.altText}
-                className="h-[42px] w-auto object-contain opacity-75 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300 ease-out"
-                loading={i > 5 ? "lazy" : "eager"}
+                className="h-[48px] sm:h-[84px] w-auto object-contain opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300 ease-out filter contrast-[0.95]"
+                loading={i > 4 ? "lazy" : "eager"}
                 onError={(e) => {
-                  // Fallback to show text if a local file is missing or disconnected
+                  // Completely remove image from rendering tree on break
                   e.currentTarget.style.display = "none";
+                  
+                  // Query fallback badge and forcefully replace Tailwind's utility hidden rule
                   const fallback = e.currentTarget.nextSibling as HTMLElement;
-                  if (fallback) fallback.style.display = "block";
+                  if (fallback) {
+                    fallback.style.setProperty("display", "inline-block", "important");
+                  }
                 }}
               />
-              {/* Fallback Text Badge */}
-              <span className="hidden text-xs font-mono font-bold tracking-wider text-[#00140a]/40 uppercase bg-black/[0.05] px-3 py-1.5 rounded border border-black/5">
+              
+              {/* Premium Typography Fallback Badge (Becomes active instantly if image breaks) */}
+              <span className="hidden text-[11px] font-sans font-bold tracking-widest text-[#00140a]/70 uppercase bg-black/5 px-4 py-2 rounded border border-black/10 backdrop-blur-sm transition-all group-hover:bg-black/10">
                 {logo.name}
               </span>
             </div>

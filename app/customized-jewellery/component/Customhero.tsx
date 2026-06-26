@@ -172,7 +172,7 @@ export default function CustomHero() {
               className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl bg-neutral-200"
             >
               <Image
-                src="/customize/hero-image.png" // Replace with your luxury editorial asset path
+                src="/customize/customized-hero.png" // Replace with your luxury editorial asset path
                 alt="Custom Luxury Jewelry Showcase"
                 fill
                 priority

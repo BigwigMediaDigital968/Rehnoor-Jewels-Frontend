@@ -54,6 +54,20 @@ export default function CustomAbout() {
       desc: "Secure your order with an upfront allocation. Live gold market rates are completely locked right at booking.",
     },
   ];
+  const logos = [
+    {
+      id: "cert-1",
+      name: "BIS Hallmark",
+      altText: "Bureau of Indian Standards Government Authenticated Gold Seal",
+      imageSrc: "/bis-logo.jpg",
+    },
+    {
+      id: "cert-2",
+      name: "HUID Unique ID",
+      altText: "Government Traceable 6-digit HUID Code Certification",
+      imageSrc: "/igi-logo.jpg",
+    },]
+
 
   return (
     <section className="w-full bg-[#faf9f6] py-10 md:py-16 overflow-hidden">
@@ -100,7 +114,7 @@ export default function CustomAbout() {
             </motion.div>
 
             {/* Decorative Floating Seal */}
-            <motion.div
+            {/* <motion.div
               variants={itemVariants}
               className="absolute top-8 right-4 bg-white/80 backdrop-blur-md px-4 py-3 rounded-xl border shadow-lg flex items-center gap-2.5 max-w-[170px]"
               style={{ borderColor: "var(--rj-bone, #e5e5e5)" }}
@@ -112,7 +126,39 @@ export default function CustomAbout() {
               <span className="font-cinzel text-[9px] font-bold tracking-wider leading-tight text-neutral-800">
                 100% Authentic Designs
               </span>
-            </motion.div>
+            </motion.div> */}
+            <div className="absolute top-6 sm:top-8 right-12 flex flex-col gap-4">
+                {
+                  logos.map((logo, i)=>(
+                    <div
+                  key={`${logo.id}`}
+                  className=" inline-flex items-center rounded-full overflow-hidden justify-center shadow-2xs aspect-square group cursor-pointer"
+                  title={logo.altText}
+                >
+                  <img
+                    src={logo.imageSrc}
+                    alt={logo.altText}
+                    className="h-[48px] sm:h-[88px] aspect-square object-contain group-hover:scale-105 transition-all duration-300 ease-out filter contrast-[0.95]"
+                    onError={(e) => {
+                      // Completely remove image from rendering tree on break
+                      e.currentTarget.style.display = "none";
+
+                      // Query fallback badge and forcefully replace Tailwind's utility hidden rule
+                      const fallback = e.currentTarget.nextSibling as HTMLElement;
+                      if (fallback) {
+                        fallback.style.setProperty("display", "inline-block", "important");
+                      }
+                    }}
+                  />
+
+                  {/* Premium Typography Fallback Badge (Becomes active instantly if image breaks) */}
+                  <span className="hidden text-[11px] font-sans font-bold tracking-widest text-[#00140a]/70 uppercase bg-black/5 px-4 py-2 rounded border border-black/10 backdrop-blur-sm transition-all group-hover:bg-black/10">
+                    {logo.name}
+                  </span>
+                </div>
+                  ))
+                }
+              </div>
           </div>
 
           {/* ── RIGHT COLUMN: MANIFESTO & CAPABILITIES ── */}
