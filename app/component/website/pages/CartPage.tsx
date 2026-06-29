@@ -921,7 +921,7 @@ export default function CartPage() {
               </motion.div>
             </div>
 
-            <div className="hidden lg:block">
+            <div className="block">
               <OrderSummary />
             </div>
           </div>

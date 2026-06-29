@@ -100,16 +100,19 @@ function IconWithBadge({
   count,
   label,
   className = "",
+  onclick
 }: {
   href: string;
   icon: React.ReactNode;
   count: number;
   label: string;
   className?: string;
+  onclick?:()=>void;
 }) {
   return (
     <Link
       href={href}
+      onClick={onclick}
       aria-label={count > 0 ? `${label} (${count})` : label}
       className={`relative inline-flex items-center justify-center p-2 hover:text-[var(--rj-gold)] transition-colors duration-300 ${className}`}
       style={{ cursor: "pointer" }}
@@ -336,6 +339,8 @@ function MobileMenu({
 }) {
   const pathname = usePathname();
   const [collectionsOpen, setCollectionsOpen] = useState(false);
+    const { openDrawer } = useCartStore();
+
 
   return (
     <AnimatePresence>
@@ -504,8 +509,8 @@ function MobileMenu({
               style={{ borderTop: "1px solid rgba(0,55,32,0.08)" }}
             >
               <Link
-                href="/cart"
-                onClick={onClose}
+              href={"/#"}
+                onClick={()=>{onClose(); openDrawer();}}
                 className="flex items-center justify-between py-3 px-4 rounded-xl transition-all"
                 style={{
                   background: "rgba(0,55,32,0.05)",
@@ -624,6 +629,8 @@ export default function NavbarNew() {
   const [mounted, setMounted] = useState(false);
 
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
+  const { openDrawer } = useCartStore();
+
 
   useEffect(() => {
     setMounted(true);
@@ -801,7 +808,8 @@ export default function NavbarNew() {
               {/* Mobile cart */}
               <div className="lg:hidden">
                 <IconWithBadge
-                  href="/cart"
+                  href="/#"
+                  onclick={openDrawer}
                   icon={<ShoppingBag size={20} />}
                   count={cartCount}
                   label="Cart"
@@ -840,7 +848,8 @@ export default function NavbarNew() {
                   className="text-[var(--rj-gold-light)]"
                 />
                 <IconWithBadge
-                  href="/cart"
+                  href="/#"
+                  onclick={openDrawer}
                   icon={<ShoppingBag size={20} />}
                   count={cartCount}
                   label="Cart"

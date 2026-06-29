@@ -137,7 +137,7 @@ export default function HeroSection() {
         <div ref={bgWrapperRef} className="absolute inset-0">
           {/* Desktop Image */}
           <Image
-            src="/image-2.webp"
+            src="/rehnoor-hero-image.webp"
             alt="Rehnoor Jewels — gold jewellery"
             fill
             priority
@@ -147,7 +147,7 @@ export default function HeroSection() {
 
           {/* Mobile Image */}
           <Image
-            src="/image-1.webp"
+            src="/rehnoor-hero-image-2.webp"
             alt="Rehnoor Jewels — gold jewellery"
             fill
             priority

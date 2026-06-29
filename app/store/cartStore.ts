@@ -96,6 +96,10 @@ interface CartState {
   buyNowSubtotal: () => number;
   savings: () => number;
   grandTotal: () => number;
+  isDrawerOpen: boolean;
+  openDrawer: () => void;
+  closeDrawer: () => void;
+  toggleDrawer: () => void;
 }
 
 export const useCartStore = create<CartState>()(
@@ -200,7 +204,13 @@ export const useCartStore = create<CartState>()(
           }, 0),
       grandTotal: () =>
         Math.max(0, get().subtotal() - (get().coupon?.discountAmount ?? 0)),
+
+      isDrawerOpen: false,
+      openDrawer: () => set({ isDrawerOpen: true }),
+      closeDrawer: () => set({ isDrawerOpen: false }),
+      toggleDrawer: () => set((s) => ({ isDrawerOpen: !s.isDrawerOpen })),
     }),
+
     { name: "rj-cart" },
   ),
 );

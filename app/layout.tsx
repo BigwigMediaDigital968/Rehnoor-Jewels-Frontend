@@ -11,6 +11,7 @@ import Script from "next/script";
 import RecentlyViewedFloating from "./products/[slug]/component/RecentlyViewedFloating";
 import ScrollToTop from "./component/ScrollToTop";
 import { Suspense } from "react";
+import { CartDrawerWrapper } from "./component/website/cart/Cartdrawerwrapper";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -116,6 +117,9 @@ export default function RootLayout({
 
         {/* <DiscountPopup offerKey="welcome" /> */}
         <FloatingOfferBadge offerKey="welcome" />
+
+        <CartDrawerWrapper />
+
         <NavbarNew />
         {children}
 
