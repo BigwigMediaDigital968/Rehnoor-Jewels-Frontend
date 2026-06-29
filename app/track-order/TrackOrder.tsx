@@ -224,7 +224,7 @@ function TrackingTimeline({
 }) {
   return (
     <div className="relative flex flex-col gap-0">
-      {events.map((ev, i) => (
+      {events?.map((ev, i) => (
         <motion.div
           key={i}
           initial={{ opacity: 0, x: -12 }}
@@ -593,7 +593,7 @@ function OrderResult({
                   className="font-cinzel text-xs font-bold mb-0.5"
                   style={{ color: "var(--rj-charcoal)" }}
                 >
-                  {data.shippingAddress.fullName}
+                  {data.shippingAddress?.fullName}
                 </p>
                 <p
                   className="text-xs leading-relaxed"
@@ -602,9 +602,9 @@ function OrderResult({
                     fontFamily: "var(--font-body,'DM Sans'),sans-serif",
                   }}
                 >
-                  {data.shippingAddress.addressLine1},{" "}
-                  {data.shippingAddress.city}, {data.shippingAddress.state} —{" "}
-                  {data.shippingAddress.pincode}
+                  {data.shippingAddress?.addressLine1},{" "}
+                  {data.shippingAddress?.city}, {data.shippingAddress?.state} —{" "}
+                  {data.shippingAddress?.pincode}
                 </p>
               </div>
             </div>
