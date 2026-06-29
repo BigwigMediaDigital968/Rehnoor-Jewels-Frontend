@@ -537,7 +537,9 @@ export default function RelatedProducts({
               onTouchStart={onTouchStart}
               onTouchEnd={onTouchEnd}
             >
-              <div
+              <div className="overflow-x-scroll scrollbar-hide"
+             >
+                <div
                 className="flex"
                 style={{
                   gap: `${GAP}px`,
@@ -557,6 +559,7 @@ export default function RelatedProducts({
                     <RelatedCard product={p} />
                   </div>
                 ))}
+              </div>
               </div>
             </div>
 

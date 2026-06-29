@@ -515,13 +515,12 @@ function VariantSelector({
                       padding: isShort ? "0" : "0 1rem",
                       borderRadius: isShort ? "50%" : "2rem",
                       width: isShort ? "3rem" : undefined,
-                      border: `2px solid ${
-                        selected
+                      border: `2px solid ${selected
                           ? "var(--rj-emerald)"
                           : selectionError && !selections[option.name]
                             ? "#fca5a5"
                             : "var(--rj-bone)"
-                      }`,
+                        }`,
                       background: selected
                         ? "var(--rj-emerald)"
                         : "transparent",
@@ -654,17 +653,17 @@ export default function ProductDetailHero({
   // ── Image gallery ──
   // If the active variant has its own images, show those; else fall back to product images
 
-const galleryImages: any[] = [...(product.images || [])];
+  const galleryImages: any[] = [...(product.images || [])];
   const variantImageMap = new Map<string, number>();
 
   product.variants?.forEach((variant) => {
-  if (variant.images?.length) {
-    // Store the starting index of this variant's images
-    variantImageMap.set(variant._id, galleryImages.length);
+    if (variant.images?.length) {
+      // Store the starting index of this variant's images
+      variantImageMap.set(variant._id, galleryImages.length);
 
-    galleryImages.push(...variant.images);
-  }
-});
+      galleryImages.push(...variant.images);
+    }
+  });
 
   const [imgIdx, setImgIdx] = useState(0);
   const images = galleryImages;
@@ -672,32 +671,32 @@ const galleryImages: any[] = [...(product.images || [])];
   // Reset image index when the image source set changes
   // useEffect(() => setImgIdx(0), [activeVariant?._id]);
 
-useEffect(() => {
-  if (!activeVariant?._id) return;
+  useEffect(() => {
+    if (!activeVariant?._id) return;
 
-  const index = variantImageMap.get(activeVariant._id);
+    const index = variantImageMap.get(activeVariant._id);
 
-  if (index !== undefined) {
-    setImgIdx(index);
-  }
-}, [activeVariant]);
+    if (index !== undefined) {
+      setImgIdx(index);
+    }
+  }, [activeVariant]);
 
-// const isFirstRender = useRef(true);
+  // const isFirstRender = useRef(true);
 
-// useEffect(() => {
-//   if (isFirstRender.current) {
-//     isFirstRender.current = false;
-//     return; // keep imgIdx = 0 on initial load
-//   }
+  // useEffect(() => {
+  //   if (isFirstRender.current) {
+  //     isFirstRender.current = false;
+  //     return; // keep imgIdx = 0 on initial load
+  //   }
 
-//   if (!activeVariant?._id) return;
+  //   if (!activeVariant?._id) return;
 
-//   const index = variantImageMap.get(activeVariant._id);
+  //   const index = variantImageMap.get(activeVariant._id);
 
-//   if (index !== undefined) {
-//     setImgIdx(index);
-//   }
-// }, [activeVariant?._id, selections]);
+  //   if (index !== undefined) {
+  //     setImgIdx(index);
+  //   }
+  // }, [activeVariant?._id, selections]);
 
   // ── UI state ──
   const [qty, setQty] = useState(1);
@@ -788,7 +787,7 @@ useEffect(() => {
       await navigator.clipboard.writeText(window.location.href);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch {}
+    } catch { }
   };
 
   const breadcrumbCollectionSlug =
@@ -1299,7 +1298,7 @@ useEffect(() => {
                 <button
                   onClick={handleAddToCart}
                   disabled={outOfStock}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 font-cinzel text-[11px] tracking-widest uppercase font-bold rounded-full transition-all duration-300 active:scale-95"
+                  className="flex-1 hidden lg:flex items-center justify-center gap-2 py-3 font-cinzel text-[11px] tracking-widest uppercase font-bold rounded-full transition-all duration-300 active:scale-95"
                   style={{
                     background: outOfStock
                       ? "var(--rj-bone)"
@@ -1376,6 +1375,43 @@ useEffect(() => {
                 </button>
               </div>
 
+             <div className="space-y-2 max-w-xl w-full mx-auto">
+               <button
+                onClick={handleAddToCart}
+                disabled={outOfStock}
+                className="w-full flex lg:hidden items-center justify-center gap-2 py-3 font-cinzel text-[11px] tracking-widest uppercase font-bold rounded-full transition-all duration-300 active:scale-95"
+                style={{
+                  background: outOfStock
+                    ? "var(--rj-bone)"
+                    : addedToCart
+                      ? "var(--rj-emerald)"
+                      : "var(--gradient-gold)",
+                  color: outOfStock
+                    ? "var(--rj-ash)"
+                    : addedToCart
+                      ? "#fff"
+                      : "var(--rj-emerald)",
+                  boxShadow: outOfStock
+                    ? "none"
+                    : addedToCart
+                      ? "0 4px 20px rgba(0,55,32,0.25)"
+                      : "0 4px 20px rgba(252,193,81,0.3)",
+                  cursor: outOfStock ? "not-allowed" : "pointer",
+                }}
+              >
+                {outOfStock ? (
+                  "Out of Stock"
+                ) : addedToCart ? (
+                  <>
+                    <Check size={14} /> Added!
+                  </>
+                ) : (
+                  <>
+                    {/* <ShoppingBag size={14} />{" "} */}
+                    <span className="inline">Add to Cart</span>
+                  </>
+                )}
+              </button>
               <button
                 onClick={handleBuyNow}
                 disabled={outOfStock}
@@ -1390,6 +1426,7 @@ useEffect(() => {
               >
                 {outOfStock ? "Currently Unavailable" : "Buy It Now"}
               </button>
+             </div>
 
               {product.shortDescription && (
                 <p
