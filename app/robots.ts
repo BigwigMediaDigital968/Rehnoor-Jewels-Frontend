@@ -27,7 +27,7 @@ export default function robots(): MetadataRoute.Robots {
           "/cart",
           "/checkout",
           // "/products",
-          "/products/*", // 🔥 blocks ALL product pages
+          // "/products/*", // 🔥 blocks ALL product pages
         ],
       },
     ],
