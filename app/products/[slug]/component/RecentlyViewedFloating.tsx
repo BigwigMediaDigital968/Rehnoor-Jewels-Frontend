@@ -98,7 +98,7 @@ export default function RecentlyViewedFloating() {
           onMouseLeave={() => setIsHovered(false)}
           // Fixed positioning: safely placed at the bottom-right.
           // max-w-[calc(100vw-32px)] ensures it stays cleanly inside small mobile viewports without overflowing.
-          className="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-[9999] p-2 w-auto max-w-[calc(100vw-32px)]"
+          className="fixed bottom-16 left-4 lg:bottom-6 sm:left-6 z-[9999] p-2 w-auto max-w-[calc(100vw-32px)]"
         >
           <div className="relative group w-full rounded-md border border-neutral-200 bg-white/95 backdrop-blur-md shadow-[0_12px_40px_rgba(0,0,0,0.12)] transition-all duration-300 hover:shadow-[0_20px_50px_rgba(155,122,71,0.15)] hover:border-[#9B7A47]/40">
             {/* ── UPGRADED SAFELY OVERLAID CLOSE BUTTON ── */}

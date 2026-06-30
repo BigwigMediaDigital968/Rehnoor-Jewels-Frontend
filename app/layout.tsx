@@ -116,7 +116,7 @@ export default function RootLayout({
         </Suspense>
 
         {/* <DiscountPopup offerKey="welcome" /> */}
-        <FloatingOfferBadge offerKey="welcome" />
+        {/* <FloatingOfferBadge offerKey="welcome" /> */}
 
         <CartDrawerWrapper />
 

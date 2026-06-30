@@ -516,10 +516,10 @@ function VariantSelector({
                       borderRadius: isShort ? "50%" : "2rem",
                       width: isShort ? "3rem" : undefined,
                       border: `2px solid ${selected
-                          ? "var(--rj-emerald)"
-                          : selectionError && !selections[option.name]
-                            ? "#fca5a5"
-                            : "var(--rj-bone)"
+                        ? "var(--rj-emerald)"
+                        : selectionError && !selections[option.name]
+                          ? "#fca5a5"
+                          : "var(--rj-bone)"
                         }`,
                       background: selected
                         ? "var(--rj-emerald)"
@@ -705,6 +705,8 @@ export default function ProductDetailHero({
   const [copied, setCopied] = useState(false);
   const [selectionError, setSelectionError] = useState(false);
   const [sizeChartOpen, setSizeChartOpen] = useState(false);
+  const ctaSectionRef = useRef(null);
+  const [showStickyCTA, setShowStickyCTA] = useState(false);
 
   const { toggleItem, isWishlisted } = useWishlistStore();
   const wishlisted = isWishlisted(product.id);
@@ -837,6 +839,20 @@ export default function ProductDetailHero({
     }
   }, [images]);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setShowStickyCTA(!entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+
+    if (ctaSectionRef.current) {
+      observer.observe(ctaSectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
   return (
     <>
       {zoomed && (
@@ -1375,59 +1391,118 @@ export default function ProductDetailHero({
                 </button>
               </div>
 
-             <div className="space-y-2 max-w-xl w-full mx-auto">
-               <button
-                onClick={handleAddToCart}
-                disabled={outOfStock}
-                className="w-full flex lg:hidden items-center justify-center gap-2 py-3 font-cinzel text-[11px] tracking-widest uppercase font-bold rounded-full transition-all duration-300 active:scale-95"
-                style={{
-                  background: outOfStock
-                    ? "var(--rj-bone)"
-                    : addedToCart
-                      ? "var(--rj-emerald)"
-                      : "var(--gradient-gold)",
-                  color: outOfStock
-                    ? "var(--rj-ash)"
-                    : addedToCart
-                      ? "#fff"
-                      : "var(--rj-emerald)",
-                  boxShadow: outOfStock
-                    ? "none"
-                    : addedToCart
-                      ? "0 4px 20px rgba(0,55,32,0.25)"
-                      : "0 4px 20px rgba(252,193,81,0.3)",
-                  cursor: outOfStock ? "not-allowed" : "pointer",
-                }}
-              >
-                {outOfStock ? (
-                  "Out of Stock"
-                ) : addedToCart ? (
-                  <>
-                    <Check size={14} /> Added!
-                  </>
-                ) : (
-                  <>
-                    {/* <ShoppingBag size={14} />{" "} */}
-                    <span className="inline">Add to Cart</span>
-                  </>
-                )}
-              </button>
-              <button
-                onClick={handleBuyNow}
-                disabled={outOfStock}
-                className="w-full py-3 font-cinzel text-[11px] tracking-widest uppercase font-bold rounded-full transition-all duration-300 hover:opacity-90 active:scale-95 mb-6"
-                style={{
-                  background: outOfStock
-                    ? "var(--rj-bone)"
-                    : "var(--rj-charcoal)",
-                  color: outOfStock ? "var(--rj-ash)" : "#fff",
-                  cursor: outOfStock ? "not-allowed" : "pointer",
-                }}
-              >
-                {outOfStock ? "Currently Unavailable" : "Buy It Now"}
-              </button>
-             </div>
 
+              <div ref={ctaSectionRef} className="space-y-2 max-w-xl w-full mx-auto">
+                <button
+                  onClick={handleAddToCart}
+                  disabled={outOfStock}
+                  className="w-full flex lg:hidden items-center justify-center gap-2 py-3 font-cinzel text-[11px] tracking-widest uppercase font-bold rounded-full transition-all duration-300 active:scale-95"
+                  style={{
+                    background: outOfStock
+                      ? "var(--rj-bone)"
+                      : addedToCart
+                        ? "var(--rj-emerald)"
+                        : "var(--gradient-gold)",
+                    color: outOfStock
+                      ? "var(--rj-ash)"
+                      : addedToCart
+                        ? "#fff"
+                        : "var(--rj-emerald)",
+                    boxShadow: outOfStock
+                      ? "none"
+                      : addedToCart
+                        ? "0 4px 20px rgba(0,55,32,0.25)"
+                        : "0 4px 20px rgba(252,193,81,0.3)",
+                    cursor: outOfStock ? "not-allowed" : "pointer",
+                  }}
+                >
+                  {outOfStock ? (
+                    "Out of Stock"
+                  ) : addedToCart ? (
+                    <>
+                      <Check size={14} /> Added!
+                    </>
+                  ) : (
+                    <>
+                      {/* <ShoppingBag size={14} />{" "} */}
+                      <span className="inline">Add to Cart</span>
+                    </>
+                  )}
+                </button>
+                <button
+                  onClick={handleBuyNow}
+                  disabled={outOfStock}
+                  className="w-full py-3 font-cinzel text-[11px] tracking-widest uppercase font-bold rounded-full transition-all duration-300 hover:opacity-90 active:scale-95 mb-6"
+                  style={{
+                    background: outOfStock
+                      ? "var(--rj-bone)"
+                      : "var(--rj-charcoal)",
+                    color: outOfStock ? "var(--rj-ash)" : "#fff",
+                    cursor: outOfStock ? "not-allowed" : "pointer",
+                  }}
+                >
+                  {outOfStock ? "Currently Unavailable" : "Buy It Now"}
+                </button>
+              </div>
+
+
+              {showStickyCTA && (
+                <div
+                  className="fixed lg:hidden -bottom-2 left-0 right-0 z-50 border-t bg-white/95 backdrop-blur-sm px-4 py-3 pb-4"
+
+                >
+                  <div className="mx-auto max-w-screen-sm grid grid-cols-2 gap-4">
+                    <button
+                      onClick={handleAddToCart}
+                      disabled={outOfStock}
+                      className="w-full flex items-center justify-center gap-2 py-3 font-cinzel text-[11px] tracking-widest uppercase font-bold rounded-full transition-all duration-300 active:scale-95"
+                      style={{
+                        background: outOfStock
+                          ? "var(--rj-bone)"
+                          : addedToCart
+                            ? "var(--rj-emerald)"
+                            : "var(--gradient-gold)",
+                        color: outOfStock
+                          ? "var(--rj-ash)"
+                          : addedToCart
+                            ? "#fff"
+                            : "var(--rj-emerald)",
+                        boxShadow: outOfStock
+                          ? "none"
+                          : addedToCart
+                            ? "0 4px 20px rgba(0,55,32,0.25)"
+                            : "0 4px 20px rgba(252,193,81,0.3)",
+                        cursor: outOfStock ? "not-allowed" : "pointer",
+                      }}
+                    >
+                      {outOfStock ? (
+                        "Out of Stock"
+                      ) : addedToCart ? (
+                        <>
+                          <Check size={14} /> Added!
+                        </>
+                      ) : (
+                        <span>Add to Cart</span>
+                      )}
+                    </button>
+
+                    <button
+                      onClick={handleBuyNow}
+                      disabled={outOfStock}
+                      className="w-full py-3 font-cinzel text-[11px] tracking-widest uppercase font-bold rounded-full transition-all duration-300 hover:opacity-90 active:scale-95"
+                      style={{
+                        background: outOfStock
+                          ? "var(--rj-bone)"
+                          : "var(--rj-charcoal)",
+                        color: outOfStock ? "var(--rj-ash)" : "#fff",
+                        cursor: outOfStock ? "not-allowed" : "pointer",
+                      }}
+                    >
+                      {outOfStock ? "Currently Unavailable" : "Buy It Now"}
+                    </button>
+                  </div>
+                </div>
+              )}
               {product.shortDescription && (
                 <p
                   className="text-sm leading-relaxed mb-6"
