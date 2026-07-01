@@ -112,7 +112,7 @@ export default function RootLayout({
         </Script>
         {/* <!-- Meta Pixel Code --> */}
 
-        <script>
+<Script id="facebook-pixel" strategy="afterInteractive">
           {`
           !function(f,b,e,v,n,t,s)
           {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -125,7 +125,7 @@ export default function RootLayout({
           fbq('init', '1037782932526589');
           fbq('track', 'PageView');
           `}
-        </script>
+        </Script>
         <noscript>
           <img
             height="1"
