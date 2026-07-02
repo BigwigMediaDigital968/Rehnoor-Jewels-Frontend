@@ -107,7 +107,7 @@ function IconWithBadge({
   count: number;
   label: string;
   className?: string;
-  onclick?:()=>void;
+  onclick?: () => void;
 }) {
   return (
     <Link
@@ -339,7 +339,7 @@ function MobileMenu({
 }) {
   const pathname = usePathname();
   const [collectionsOpen, setCollectionsOpen] = useState(false);
-    const { openDrawer } = useCartStore();
+  const { openDrawer } = useCartStore();
 
 
   return (
@@ -472,6 +472,24 @@ function MobileMenu({
                                     })}
                                   </div>
                                 ))}
+                                <div className="ml-6">
+                                  <Link
+                                    href="/collections"
+                                    onClick={onClose}
+                                    className="inline-flex items-center gap-2 transition-all duration-200 hover:opacity-80"
+                                    style={{ cursor: "pointer" }}
+                                  >
+                                    <span
+                                      className="font-cinzel text-[9px] tracking-[0.2em] uppercase font-bold"
+                                      style={{
+                                        color: "var(--rj-emerald)",
+                                      }}
+                                    >
+                                      Explore All Collections
+                                    </span>
+                                    <span className="text-xs" style={{ color: "var(--rj-gold)" }}>→</span>
+                                  </Link>
+                                </div>
                               </div>
                             </motion.div>
                           )}
@@ -509,8 +527,8 @@ function MobileMenu({
               style={{ borderTop: "1px solid rgba(0,55,32,0.08)" }}
             >
               <Link
-              href={"/#"}
-                onClick={()=>{onClose(); openDrawer();}}
+                href={"/#"}
+                onClick={() => { onClose(); openDrawer(); }}
                 className="flex items-center justify-between py-3 px-4 rounded-xl transition-all"
                 style={{
                   background: "rgba(0,55,32,0.05)",
