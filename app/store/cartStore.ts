@@ -130,6 +130,7 @@ export const useCartStore = create<CartState>()(
           }
           return { items: [...state.items, { ...incoming, id }] };
         });
+        set({ isDrawerOpen: true });
       },
 
       removeItem: (id) =>
