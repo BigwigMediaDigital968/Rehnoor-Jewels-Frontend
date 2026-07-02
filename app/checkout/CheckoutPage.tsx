@@ -325,6 +325,7 @@ export default function CheckoutPage() {
   const clearCart = useCartStore((s) => s.clearCart);
   const clearBuyNow = useCartStore((s) => s.clearBuyNow);
 
+  // console.log("CheckoutPage rendered. Items in cart:", items);
   // ── Checkout form store ──────────────────────────────────────────────────────
   const {
     step,
