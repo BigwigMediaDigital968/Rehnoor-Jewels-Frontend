@@ -265,7 +265,7 @@ export default async function ProductDetailPage({
       },
     },
   };
-  console.log("product",product );
+  // console.log("product",product );
 
   return (
     <main>
