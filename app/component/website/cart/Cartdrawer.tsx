@@ -444,6 +444,7 @@ function DrawerSummary({ onClose }: { onClose: () => void }) {
         items,
         checkoutItems,
         buyNowItems,
+        clearBuyNow
     } = useCartStore();
     const { reset: resetCheckout } = useCheckoutStore();
 
@@ -470,16 +471,17 @@ function DrawerSummary({ onClose }: { onClose: () => void }) {
     const shipping = grand >= FREE_SHIP ? 0 : 149;
     const final = grand + shipping;
 
-    const handleCheckout = async () => {
-        if (activeItems.length === 0) return;
-        setValidating(true);
-        setCheckoutErr("");
-        await new Promise((r) => setTimeout(r, 300));
-        setValidating(false);
-        resetCheckout();
-        onClose();
-        router.push("/checkout");
-    };
+   const handleCheckout = async () => {
+  if (activeItems.length === 0) return;
+  setValidating(true);
+  setCheckoutErr("");
+  await new Promise((r) => setTimeout(r, 300));
+  setValidating(false);
+  clearBuyNow();       // ← force cart-checkout mode, discard any leftover buy-now selection
+  resetCheckout();
+  onClose();
+  router.push("/checkout");
+};
 
     return (
         <>
@@ -700,21 +702,21 @@ function DrawerSummary({ onClose }: { onClose: () => void }) {
 // ─── Cart Drawer (main export) ──────────────────────────────────────────────────
 
 export function CartDrawer() {
-    const { items, clearCart, totalItems, isDrawerOpen, closeDrawer } =
-        useCartStore();
+    const { items, clearCart, totalItems, isDrawerOpen, closeDrawer, buyNowItems, clearBuyNow } =
+  useCartStore();
 
     // Lock background scroll while drawer is open
-    useEffect(() => {
-        if (isDrawerOpen) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "";
-        }
-
-        return () => {
-            document.body.style.overflow = "";
-        };
-    }, [isDrawerOpen]);
+   useEffect(() => {
+  if (isDrawerOpen) {
+    document.body.style.overflow = "hidden";
+  } else {
+    document.body.style.overflow = "";
+    // Drawer just closed without completing checkout — don't let a stale
+    // buy-now selection linger into the next time the drawer opens.
+    if (buyNowItems) clearBuyNow();
+  }
+  return () => { document.body.style.overflow = ""; };
+}, [isDrawerOpen]);
 
     const handleNavigate = () => closeDrawer();
 
@@ -732,7 +734,7 @@ export function CartDrawer() {
                             ease: [0.215, 0.610, 0.355, 1.000] // Custom cubic-bezier (easeOutCubic) for ultra-smooth easing
                         }}
                         onClick={closeDrawer}
-                        className="fixed inset-0 z-[90] backdrop-blur-[2px]" // Optional: added a tiny backdrop-blur for luxury feel
+                        className={`fixed inset-0 z-[90] backdrop-blur-[2px] ${isDrawerOpen ? 'block' : 'hidden'}`} // Optional: added a tiny backdrop-blur for luxury feel
                         style={{ background: "rgba(0, 20, 12, 0.45)" }}
                     />
 

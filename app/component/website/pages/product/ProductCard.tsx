@@ -18,6 +18,7 @@ import {
 import { useCartStore } from "@/app/store/cartStore";
 import { useWishlistStore } from "@/app/store/cartStore";
 import type { Product } from "@/app/types/Product.types";
+import QuickViewModal from "./QuickViewModal";
 
 // ─── Tag colour map ───────────────────────────────────────────────
 const TAG_STYLES: Record<string, { bg: string; color: string }> = {
@@ -33,7 +34,7 @@ const TAG_STYLES: Record<string, { bg: string; color: string }> = {
 // ─────────────────────────────────────────────────────────────────
 // QUICK VIEW MODAL
 // ─────────────────────────────────────────────────────────────────
-function QuickViewModal({
+function QuickViewModal_v2({
   product,
   onClose,
 }: {
@@ -643,7 +644,7 @@ export default function ProductCard({ product }: { product: Product }) {
             </button>
 
             {/* Quick view — desktop hover */}
-            <AnimatePresence>
+            {/* <AnimatePresence>
               {hovered && (
                 <motion.button
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -669,7 +670,7 @@ export default function ProductCard({ product }: { product: Product }) {
                   </div>
                 </motion.button>
               )}
-            </AnimatePresence>
+            </AnimatePresence> */}
 
             {/* Image nav */}
             {product.images.length > 1 && (

@@ -325,6 +325,9 @@ export default function CheckoutPage() {
   const clearCart = useCartStore((s) => s.clearCart);
   const clearBuyNow = useCartStore((s) => s.clearBuyNow);
 
+  console.log("checkoutItems", checkoutItems());
+  console.log("items", items);
+
   // console.log("CheckoutPage rendered. Items in cart:", items);
   // ── Checkout form store ──────────────────────────────────────────────────────
   const {
@@ -361,18 +364,26 @@ export default function CheckoutPage() {
     setMounted(true);
   }, []);
 
+
   // Redirect to cart when cart is empty and no pending success
+  // Redirect to cart when there's nothing to check out (cart OR buy-now) and no pending success
   useEffect(() => {
-    if (mounted && items.length === 0 && !result) {
+    if (mounted && checkoutItems().length === 0 && !result) {
       router.replace("/cart");
     }
-  }, [mounted, items.length, result, router]);
+  }, [mounted, checkoutItems, result, router]);
 
-  // Clear state after successful order
+  // Clear state after successful order.
+  // Only wipe the full cart if this was a normal cart checkout — a Buy Now
+  // purchase should leave unrelated cart items untouched.
   useEffect(() => {
     if (stage === "success" && result) {
-      clearCart(); // clears items + buyNowItems + coupon
-      clearBuyNow(); // safety net — clearCart already does this
+      const wasBuyNow = !!useCartStore.getState().buyNowItems;
+      if (wasBuyNow) {
+        clearBuyNow();
+      } else {
+        clearCart();
+      }
       resetCheckout();
     }
   }, [stage, result, clearCart, clearBuyNow, resetCheckout]);

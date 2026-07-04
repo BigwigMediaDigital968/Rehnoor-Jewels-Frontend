@@ -267,6 +267,8 @@ export default function ProductCardCarousel({ product }: { product: Product }) {
 
   return (
     <>
+          <Link href={product.href} className="block cursor-pointer" aria-label={product.name}>
+
       <motion.article
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -289,7 +291,6 @@ export default function ProductCardCarousel({ product }: { product: Product }) {
           transition:
             "box-shadow 0.35s ease, border-color 0.35s ease, transform 0.35s ease",
           transform: hovered ? "translateY(-4px)" : "translateY(0)",
-          cursor: "default",
         }}
       >
         {/* Image Area */}
@@ -389,7 +390,7 @@ export default function ProductCardCarousel({ product }: { product: Product }) {
 
           {/* Desktop Overlay Controls */}
           <AnimatePresence>
-            {hovered && (
+            {false && hovered && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -686,6 +687,7 @@ export default function ProductCardCarousel({ product }: { product: Product }) {
           </AnimatePresence>
         </div>
       </motion.article>
+      </Link>
 
       {/* Quick View Modal */}
       {quickView && isMounted && (

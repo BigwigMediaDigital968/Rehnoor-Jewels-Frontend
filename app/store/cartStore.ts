@@ -10,7 +10,7 @@ import { persist } from "zustand/middleware";
 
 export interface VariantSnapshot {
   variantId: string;
-  title: string; // "18\" / Rose Gold"
+  title: string | null; // "18\" / Rose Gold"
   options: Record<string, string>; // { Size: "18\"", Metal: "Rose Gold" }
   price: number;
   originalPrice?: number | null;
@@ -130,11 +130,14 @@ export const useCartStore = create<CartState>()(
           }
           return { items: [...state.items, { ...incoming, id }] };
         });
-        set({ isDrawerOpen: true });
       },
 
       removeItem: (id) =>
-        set((state) => ({ items: state.items.filter((i) => i.id !== id) })),
+        set((state) => ({
+          items: state.items.filter((i) => i.id !== id),
+          // if the removed item was the active buy-now selection, clear that too
+          buyNowItems: state.buyNowItems?.[0]?.id === id ? null : state.buyNowItems,
+        })),
 
       updateQty: (id, qty) => {
         if (qty < 1) {
@@ -170,8 +173,9 @@ export const useCartStore = create<CartState>()(
         const id = incoming.variant
           ? `${incoming.productId}-${incoming.variant.variantId}`
           : incoming.productId;
-        set({ buyNowItems: [{ ...incoming, id, qty: 1 }] });
+        set({ buyNowItems: [{ ...incoming, id }] }); // preserve incoming.qty, don't force 1
       },
+
 
       clearBuyNow: () => set({ buyNowItems: null }),
 

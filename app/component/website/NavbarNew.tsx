@@ -102,7 +102,7 @@ function IconWithBadge({
   className = "",
   onclick
 }: {
-  href: string;
+  href?: string;
   icon: React.ReactNode;
   count: number;
   label: string;
@@ -110,7 +110,8 @@ function IconWithBadge({
   onclick?: () => void;
 }) {
   return (
-    <Link
+    href ? (
+      <Link
       href={href}
       onClick={onclick}
       aria-label={count > 0 ? `${label} (${count})` : label}
@@ -162,6 +163,61 @@ function IconWithBadge({
         )}
       </AnimatePresence>
     </Link>
+    ):(
+<>
+<button
+      onClick={onclick}
+      aria-label={count > 0 ? `${label} (${count})` : label}
+      className={`relative inline-flex items-center justify-center p-2 hover:text-[var(--rj-gold)] transition-colors duration-300 ${className}`}
+      style={{ cursor: "pointer" }}
+    >
+      {icon}
+
+      <AnimatePresence>
+        {count > 0 && (
+          <motion.span
+            key="badge"
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            transition={{
+              type: "spring",
+              stiffness: 400,
+              damping: 22,
+            }}
+            className="
+              absolute
+              top-0
+              right-0
+              translate-x-1/3
+              -translate-y-1/3
+              min-w-[18px]
+              h-[18px]
+              px-1
+              rounded-full
+              flex
+              items-center
+              justify-center
+              font-cinzel
+              font-bold
+              leading-none
+              shadow-sm
+            "
+            style={{
+              background: "var(--rj-gold)",
+              color: "var(--rj-emerald)",
+              fontSize: "10px",
+              pointerEvents: "none",
+              zIndex: 10,
+            }}
+          >
+            {count > 99 ? "99+" : count}
+          </motion.span>
+        )}
+      </AnimatePresence>
+    </button>
+    </>
+    )
   );
 }
 
@@ -526,8 +582,7 @@ function MobileMenu({
               className="px-6 py-6 space-y-3 mt-auto"
               style={{ borderTop: "1px solid rgba(0,55,32,0.08)" }}
             >
-              <Link
-                href={"/#"}
+              <button
                 onClick={() => { onClose(); openDrawer(); }}
                 className="flex items-center justify-between py-3 px-4 rounded-xl transition-all"
                 style={{
@@ -569,7 +624,7 @@ function MobileMenu({
                     Empty
                   </span>
                 )}
-              </Link>
+              </button>
 
               <Link
                 href="/wishlist"
@@ -866,7 +921,6 @@ export default function NavbarNew() {
                   className="text-[var(--rj-gold-light)]"
                 />
                 <IconWithBadge
-                  href="/#"
                   onclick={openDrawer}
                   icon={<ShoppingBag size={20} />}
                   count={cartCount}
