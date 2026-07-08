@@ -438,7 +438,7 @@ function MoveAllToCart() {
       addItem({
         productId: item.productId,
         name: item.name,
-        subtitle: chosenVariant ? chosenVariant.title : item.subtitle,
+        subtitle: chosenVariant ? chosenVariant.title|| "" : item.subtitle || "",
         image: chosenVariant?.image || item.image,
         priceNum: chosenVariant?.price || item.priceNum,
         originalPriceNum: chosenVariant
