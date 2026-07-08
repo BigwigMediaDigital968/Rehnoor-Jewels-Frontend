@@ -177,6 +177,8 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
   const [hovered, setHovered] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
   const [showSizePicker, setShowSizePicker] = useState(false);
+    const { openDrawer } = useCartStore();
+
 
   // ── Zustand ──────────────────────────────────────────────────
   const addItem = useCartStore((s) => s.addItem);
@@ -235,6 +237,7 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
           tag: product.tag,
           variant: null, // <-- Satisfies VariantSnapshot | null requirements
         });
+        openDrawer();
         flashAdded();
       } else {
         setShowSizePicker(true);

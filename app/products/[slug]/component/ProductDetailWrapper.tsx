@@ -18,7 +18,7 @@ export default function ProductDetailWrapper({
   collectionName,
 }: Props) {
   const router = useRouter();
-  const { addItem, setBuyNow } = useCartStore();
+  const { addItem, setBuyNow, openDrawer } = useCartStore();
   const resetCheckout = useCheckoutStore((s) => s.reset);
   function buildCartPayload(size: string, qty: number, variantId?: string) {
     const variant = variantId
@@ -66,6 +66,7 @@ export default function ProductDetailWrapper({
 
   const handleAddToCart = (size: string, qty: number, variantId?: string) => {
     addItem(buildCartPayload(size, qty, variantId));
+    openDrawer();
   };
 
   const handleBuyNow = (size: string, qty: number, variantId?: string) => {
