@@ -139,14 +139,13 @@ export interface OrderItemResponse {
   customNote: string;
 }
 
-// ─── Tracking ─────────────────────────────────────────────────────────────────
+// ─── Tracking Types (Updated for Shiprocket & Dynamic JSON Payload) ───────────
 
 export interface TrackingEvent {
   status: string;
   location: string;
   timestamp: string;
-  done: boolean;
-  description?: string;
+  comment?: string; // Maps to Shiprocket scan activities / milestones
 }
 
 export interface TrackOrderResponse {
@@ -156,32 +155,39 @@ export interface TrackOrderResponse {
     orderNumber: string;
     status: string;
     placedAt: string;
-    estimatedDeliveryDate?: string;
-    customerName: string;
-    items: OrderItemResponse[];
+    shippedAt?: string | null;
+    deliveredAt?: string | null;
+    expectedDeliveryDate?: string | null; // Unified SLA delivery commitment date
+    statusHistory: TrackingEvent[];       // Updated to use standard statusHistory array from DB
+    customer: {
+      name: string;
+      phone: string;
+    };
     shipping: {
-      carrier?: string;
-      courierName?: string;
-      trackingNumber?: string;
-      awbCode?: string;
-      trackingUrl?: string;
-      method: string;
-      shippedAt?: string;
-      deliveredAt?: string;
-      estimatedDeliveryDate?: string;
+      address: {
+        fullName: string;
+        phone: string;
+        addressLine1: string;
+        addressLine2?: string;
+        city: string;
+        state: string;
+        pincode: string;
+      };
+      courier: string;             // Maps to dynamic courier metrics ("Delhivery", "Processing Package", etc.)
+      trackingNumber?: string | null;
+      trackingUrl?: string | null;
     };
-    shippingAddress: {
-      fullName: string;
-      addressLine1: string;
-      city: string;
-      state: string;
-      pincode: string;
-    };
-    timeline: TrackingEvent[];
     pricing: {
       total: number;
-      currency: string;
     };
+    items: Array<{
+      title: string;               // Unified naming scheme used by client layout
+      quantity: number;
+      image: string;
+      variant?: {
+        title: string;
+      } | null;
+    }>;
   };
 }
 
@@ -233,20 +239,28 @@ export async function verifyRazorpayPayment(
   }
 }
 
+
 export async function trackOrder(
   orderNumber: string,
   email?: string,
 ): Promise<TrackOrderResponse> {
   try {
     const params = new URLSearchParams();
-    if (email) params.set("email", email);
+    if (email) params.set("email", email.trim());
+    
     return await api<TrackOrderResponse>(
-      `/api/orders/track/${encodeURIComponent(orderNumber)}${email ? `?${params}` : ""}`,
+      `/api/orders/track/${encodeURIComponent(orderNumber.trim())}${
+        email ? `?${params}` : ""
+      }`,
+      {
+        // Prevent browsers from aggressively caching dynamic package status transitions
+        cache: "no-store",
+      }
     );
   } catch (err) {
     if (err instanceof ApiError)
       return { success: false, message: err.message };
-    return { success: false, message: "Could not fetch order. Try again." };
+    return { success: false, message: "Could not fetch active delivery tracking status. Please try again." };
   }
 }
 

@@ -217,95 +217,125 @@ function StatusProgressBar({ status }: { status: string }) {
 
 // ─── Timeline ─────────────────────────────────────────────────────────────────
 
-function TrackingTimeline({
-  events,
-}: {
-  events: NonNullable<TrackOrderResponse["data"]>["timeline"];
-}) {
+
+// Explicitly type the component props using your updated tracking layout structures
+interface TrackingEvent {
+  status: string;
+  location: string;
+  timestamp: string;
+  comment?: string; // Maps to Shiprocket activity records
+}
+
+function TrackingTimeline({ events }: { events: TrackingEvent[] }) {
+  // Gracefully handle empty or processing timeline pipelines
+  if (!events || events.length === 0) {
+    return (
+      <div 
+        className="text-xs py-4 font-cinzel text-center"
+        style={{ color: "var(--rj-ash)" }}
+      >
+        Awaiting package scans from fulfillment facility...
+      </div>
+    );
+  }
+
   return (
     <div className="relative flex flex-col gap-0">
-      {events?.map((ev, i) => (
-        <motion.div
-          key={i}
-          initial={{ opacity: 0, x: -12 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.4, delay: i * 0.07 }}
-          className="flex gap-4 relative"
-        >
-          {i < events.length - 1 && (
-            <div
-              className="absolute left-[11px] top-8 bottom-0 w-px"
-              style={{
-                background: ev.done ? "var(--rj-emerald)" : "var(--rj-bone)",
-                opacity: ev.done ? 0.3 : 0.5,
-              }}
-            />
-          )}
-          <div className="flex-shrink-0 mt-1 relative z-10">
-            <div
-              className="w-6 h-6 rounded-full flex items-center justify-center"
-              style={{
-                background: ev.done ? "var(--rj-emerald)" : "#fff",
-                border: `1.5px solid ${ev.done ? "var(--rj-emerald)" : "var(--rj-bone)"}`,
-              }}
-            >
-              {ev.done ? (
-                <Check size={11} style={{ color: "#fff" }} />
-              ) : (
-                <div
-                  className="w-1.5 h-1.5 rounded-full"
-                  style={{ background: "var(--rj-bone)" }}
-                />
-              )}
-            </div>
-          </div>
-          <div className="pb-5 flex-1">
-            <p
-              className="font-cinzel text-xs font-bold"
-              style={{
-                color: ev.done ? "var(--rj-charcoal)" : "var(--rj-bone)",
-              }}
-            >
-              {ev.status}
-            </p>
-            {ev.description && (
-              <p
-                className="text-xs mt-0.5"
+      {events.map((ev, i) => {
+        // Parse the dynamic backend ISO date cleanly
+        const formattedTime = ev.timestamp
+          ? new Date(ev.timestamp).toLocaleString("en-IN", {
+              day: "2-digit",
+              month: "short",
+              hour: "2-digit",
+              minute: "2-digit",
+            })
+          : null;
+
+        return (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, x: -12 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4, delay: i * 0.07 }}
+            className="flex gap-4 relative"
+          >
+            {/* Connector Line (Styles as solid if there are subsequent elements down the stack) */}
+            {i < events.length - 1 && (
+              <div
+                className="absolute left-[11px] top-8 bottom-0 w-px"
                 style={{
-                  color: ev.done ? "var(--rj-ash)" : "var(--rj-bone)",
-                  fontFamily: "var(--font-body,'DM Sans'),sans-serif",
+                  background: "var(--rj-emerald)",
+                  opacity: 0.3,
+                }}
+              />
+            )}
+
+            {/* Status Timeline Milestone Node Ring Indicator */}
+            <div className="flex-shrink-0 mt-1 relative z-10">
+              <div
+                className="w-6 h-6 rounded-full flex items-center justify-center"
+                style={{
+                  background: "var(--rj-emerald)",
+                  border: "1.5px solid var(--rj-emerald)",
                 }}
               >
-                {ev.description}
+                <Check size={11} style={{ color: "#fff" }} />
+              </div>
+            </div>
+
+            {/* Event Content Cards */}
+            <div className="pb-5 flex-1">
+              <p
+                className="font-cinzel text-xs font-bold capitalize"
+                style={{ color: "var(--rj-charcoal)" }}
+              >
+                {ev.status?.replace(/_/g, " ")}
               </p>
-            )}
-            <div className="flex items-center gap-3 mt-0.5 flex-wrap">
-              {ev.location && (
-                <span
-                  className="text-xs flex items-center gap-1"
-                  style={{
-                    color: ev.done ? "var(--rj-ash)" : "var(--rj-bone)",
-                    fontFamily: "var(--font-body,'DM Sans'),sans-serif",
-                  }}
-                >
-                  <MapPin size={10} /> {ev.location}
-                </span>
-              )}
-              {ev.done && ev.timestamp && ev.timestamp !== "—" && (
-                <span
-                  className="text-xs flex items-center gap-1"
+              
+              {/* Dynamic Comment Field (Replaced ev.description) */}
+              {ev.comment && (
+                <p
+                  className="text-xs mt-0.5"
                   style={{
                     color: "var(--rj-ash)",
                     fontFamily: "var(--font-body,'DM Sans'),sans-serif",
                   }}
                 >
-                  <Clock size={10} /> {ev.timestamp}
-                </span>
+                  {ev.comment}
+                </p>
               )}
+
+              {/* Location & Time Stamp Layout Grid */}
+              <div className="flex items-center gap-3 mt-1 flex-wrap">
+                {ev.location && (
+                  <span
+                    className="text-xs flex items-center gap-1"
+                    style={{
+                      color: "var(--rj-ash)",
+                      fontFamily: "var(--font-body,'DM Sans'),sans-serif",
+                    }}
+                  >
+                    <MapPin size={10} style={{ color: "var(--rj-emerald)" }} />{" "}
+                    {ev.location}
+                  </span>
+                )}
+                {formattedTime && (
+                  <span
+                    className="text-xs flex items-center gap-1"
+                    style={{
+                      color: "var(--rj-ash)",
+                      fontFamily: "var(--font-body,'DM Sans'),sans-serif",
+                    }}
+                  >
+                    <Clock size={10} /> {formattedTime}
+                  </span>
+                )}
+              </div>
             </div>
-          </div>
-        </motion.div>
-      ))}
+          </motion.div>
+        );
+      })}
     </div>
   );
 }
@@ -326,10 +356,12 @@ function OrderResult({
   const isDelivered = data.status === "delivered";
   const isLive = ["shipped", "out_for_delivery"].includes(data.status);
 
+  // Safe fallback search for any standard tracking number structure
+  const trackingNumber = data.shipping?.trackingNumber || null;
+
   const copyAwb = () => {
-    const awb = data.shipping?.awbCode ?? data.shipping?.trackingNumber ?? "";
-    if (awb) {
-      navigator.clipboard.writeText(awb);
+    if (trackingNumber) {
+      navigator.clipboard.writeText(trackingNumber);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
@@ -341,6 +373,8 @@ function OrderResult({
         minute: "2-digit",
       })
     : null;
+
+  console.log("data", data);
 
   return (
     <motion.div
@@ -381,13 +415,13 @@ function OrderResult({
           )}
         </div>
         <div className="flex items-center gap-3">
-          {data.shipping?.estimatedDeliveryDate && !isDelivered && (
+          {data.expectedDeliveryDate && !isDelivered && (
             <div
               className="flex items-center gap-1.5 font-cinzel text-[10px] tracking-wider"
               style={{ color: "var(--rj-emerald)" }}
             >
               <Clock size={11} /> Est.{" "}
-              {new Date(data.shipping.estimatedDeliveryDate).toLocaleDateString(
+              {new Date(data.expectedDeliveryDate).toLocaleDateString(
                 "en-IN",
                 { day: "2-digit", month: "short" },
               )}
@@ -424,7 +458,7 @@ function OrderResult({
           >
             <img
               src={data.items[0].image}
-              alt={data.items[0].name}
+              alt={data.items[0].title || "Jewelry Item"}
               className="w-full h-full object-cover"
             />
           </div>
@@ -433,7 +467,8 @@ function OrderResult({
               className="font-cormorant font-light leading-snug line-clamp-2"
               style={{ fontSize: "1rem", color: "var(--rj-charcoal)" }}
             >
-              {data.items[0].name}
+              {/* API maps the name to "title" */}
+              {data.items[0].title}
             </p>
             <p
               className="font-cinzel text-[10px] tracking-wider mt-0.5"
@@ -476,13 +511,14 @@ function OrderResult({
           >
             Tracking Timeline
           </p>
-          <TrackingTimeline events={data.timeline} />
+          {/* API maps raw updates array to statusHistory */}
+          <TrackingTimeline events={data.statusHistory} />
         </div>
 
         {/* Details */}
         <div className="md:col-span-2 flex flex-col gap-4">
-          {/* Courier + AWB */}
-          {data.shipping?.carrier || data.shipping?.awbCode ? (
+          {/* Courier + Tracking Details */}
+          {trackingNumber ? (
             <div
               className="p-4 rounded-xl"
               style={{ background: "#fff", border: "1px solid var(--rj-bone)" }}
@@ -497,39 +533,39 @@ function OrderResult({
                 className="font-cinzel text-sm font-bold mb-1"
                 style={{ color: "var(--rj-charcoal)" }}
               >
-                {data.shipping.courierName || data.shipping.carrier || "—"}
+                {data.shipping?.courier || "Processing Package"}
               </p>
-              {data.shipping.awbCode && (
-                <div className="flex items-center gap-2">
-                  <p
-                    className="font-cinzel text-[10px] tracking-wider"
-                    style={{ color: "var(--rj-ash)" }}
-                  >
-                    {data.shipping.awbCode}
-                  </p>
-                  <button
-                    onClick={copyAwb}
-                    className="flex items-center gap-1 font-cinzel text-[9px] tracking-wider uppercase transition-opacity hover:opacity-60"
-                    style={{
-                      color: copied ? "var(--rj-emerald)" : "var(--rj-ash)",
-                      cursor: "pointer",
-                      background: "none",
-                      border: "none",
-                    }}
-                  >
-                    {copied ? (
-                      <>
-                        <Check size={10} /> Copied
-                      </>
-                    ) : (
-                      <>
-                        <Copy size={10} /> Copy
-                      </>
-                    )}
-                  </button>
-                </div>
-              )}
-              {data.shipping.trackingUrl && (
+              <div className="flex items-center gap-2">
+                <p
+                  className="font-cinzel text-[10px] tracking-wider"
+                  style={{ color: "var(--rj-ash)" }}
+                >
+                  {trackingNumber}
+                </p>
+                <button
+                  onClick={copyAwb}
+                  className="flex items-center gap-1 font-cinzel text-[9px] tracking-wider uppercase transition-opacity hover:opacity-60"
+                  style={{
+                    color: copied ? "var(--rj-emerald)" : "var(--rj-ash)",
+                    cursor: "pointer",
+                    background: "none",
+                    border: "none",
+                  }}
+                >
+                  {copied ? (
+                    <>
+                      <Check size={10} /> Copied
+                    </>
+                  ) : (
+                    <>
+                      <Copy size={10} /> Copy
+                    </>
+                  )}
+                </button>
+              </div>
+
+              
+              {data.shipping?.trackingUrl && (
                 <a
                   href={data.shipping.trackingUrl}
                   target="_blank"
@@ -562,7 +598,10 @@ function OrderResult({
                   className="font-cinzel text-[10px]"
                   style={{ color: "var(--rj-ash)" }}
                 >
-                  Tracking will appear once shipped
+                  {/* Shows status-based placeholder if tracking details are null */}
+                  {data.status === "shipped" 
+                    ? "Transit details updating shortly" 
+                    : "Tracking will appear once shipped"}
                 </p>
               </div>
             </div>
@@ -593,7 +632,7 @@ function OrderResult({
                   className="font-cinzel text-xs font-bold mb-0.5"
                   style={{ color: "var(--rj-charcoal)" }}
                 >
-                  {data.shippingAddress?.fullName}
+                  {data.shipping?.address?.fullName}
                 </p>
                 <p
                   className="text-xs leading-relaxed"
@@ -602,9 +641,10 @@ function OrderResult({
                     fontFamily: "var(--font-body,'DM Sans'),sans-serif",
                   }}
                 >
-                  {data.shippingAddress?.addressLine1},{" "}
-                  {data.shippingAddress?.city}, {data.shippingAddress?.state} —{" "}
-                  {data.shippingAddress?.pincode}
+                  {data.shipping?.address?.addressLine1}
+                  {data.shipping?.address?.addressLine2 ? `, ${data.shipping.address.addressLine2}` : ""},{" "}
+                  {data.shipping?.address?.city}, {data.shipping?.address?.state} —{" "}
+                  {data.shipping?.address?.pincode}
                 </p>
               </div>
             </div>
@@ -632,7 +672,7 @@ function OrderResult({
               },
               {
                 label: "Start a return",
-                href: "/account/returns",
+                href: "/contact",
                 icon: <RefreshCw size={11} />,
               },
             ].map((l) => (
@@ -648,7 +688,7 @@ function OrderResult({
           </div>
 
           {/* Delivered: review prompt */}
-          {isDelivered && (
+          {/* {isDelivered && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -687,7 +727,7 @@ function OrderResult({
                 Write a Review
               </Link>
             </motion.div>
-          )}
+          )} */}
         </div>
       </div>
     </motion.div>
