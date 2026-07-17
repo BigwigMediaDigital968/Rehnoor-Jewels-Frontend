@@ -86,7 +86,7 @@ export default function RootLayout({
     >
       <body className="antialiased">
         {/* Google Analytics */}
-        <Script
+        {/* <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-WBLXS066M3"
           strategy="afterInteractive"
         />
@@ -98,7 +98,7 @@ export default function RootLayout({
       gtag('js', new Date());
       gtag('config', 'G-WBLXS066M3');
     `}
-        </Script>
+        </Script> */}
 
         {/* Microsoft Clarity */}
         <Script id="microsoft-clarity" strategy="afterInteractive">
