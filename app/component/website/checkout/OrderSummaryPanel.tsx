@@ -53,7 +53,11 @@ export default function OrderSummaryPanel() {
   const activeItems = checkoutItems();
   const sub = subtotal();
   const save = savings();
-  const ship = SHIPPING_COST[shippingMethod] ?? 0;
+  // const ship = SHIPPING_COST[shippingMethod] ?? 129;
+  const FREE_SHIPPING_THRESHOLD = 999;
+  const DEFAULT_SHIPPING_CHARGE = 129;
+
+  const ship = sub >= FREE_SHIPPING_THRESHOLD ? 0 : DEFAULT_SHIPPING_CHARGE;
 
   // Deriving active validation from cart store settings
   const isCouponApplied = !!cartCoupon?.code;
@@ -319,7 +323,10 @@ export default function OrderSummaryPanel() {
                 ]
               : []),
             {
-              label: `Shipping (${SHIPPING_LABEL[shippingMethod]})`,
+              label:
+                ship === 0
+                  ? `Shipping (Free on orders ₹${FREE_SHIPPING_THRESHOLD}+)`
+                  : `Shipping`,
               value: ship === 0 ? "Free" : fmt(ship),
               green: ship === 0,
             },
@@ -341,6 +348,16 @@ export default function OrderSummaryPanel() {
               </span>
             </div>
           ))}
+
+          {sub < FREE_SHIPPING_THRESHOLD && (
+            <p
+              className="font-cinzel text-[9px] text-center"
+              style={{ color: "var(--rj-ash)" }}
+            >
+              Add {fmt(FREE_SHIPPING_THRESHOLD - sub)} more to get{" "}
+              <strong>FREE Shipping</strong>.
+            </p>
+          )}
 
           <div className="h-px" style={{ background: "var(--rj-bone)" }} />
 

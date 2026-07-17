@@ -501,8 +501,8 @@ function OrderSummary() {
   const discount = isBuyNow ? 0 : (coupon?.discountAmount ?? 0);
   const grand = isBuyNow ? sub : grandTotal();
 
-  const FREE_SHIP = 500;
-  const shipping = grand >= FREE_SHIP ? 0 : 149;
+  const FREE_SHIP = 999;
+  const shipping = grand >= FREE_SHIP ? 0 : 129;
   const final = grand + shipping;
 
   const summaryItemCount =

@@ -824,7 +824,7 @@ const SHIPPING_OPTIONS: {
     value: "standard",
     label: "Standard Delivery",
     sub: "5–7 business days",
-    price: 0,
+    price: 129,
     icon: <Truck size={16} />,
     badge: "Free",
   },
@@ -955,7 +955,7 @@ export function StepShipping({
                     </p>
                   </div>
                   {/* Price */}
-                  <p
+                  {/* <p
                     className="font-cinzel font-bold flex-shrink-0"
                     style={{
                       color:
@@ -966,7 +966,7 @@ export function StepShipping({
                     }}
                   >
                     {opt.price === 0 ? "Free" : `₹${opt.price}`}
-                  </p>
+                  </p> */}
                 </div>
               </button>
             </Tooltip>
