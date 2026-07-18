@@ -6,6 +6,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { trackAddToCart } from "../lib/metaPixel";
+import { autoApplyCoupon } from "../lib/api/orders";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -70,7 +71,23 @@ interface CouponState {
   discountType: "flat" | "percent" | "free_shipping" | "buy_x_get_y" | null;
   discountValue: number;
   validatedAt: number | null;
+  /**
+   * True when this coupon was applied automatically (isAutoApply on the
+   * backend), not typed in by the customer. Auto-applied coupons can be
+   * silently replaced or removed as the cart changes; manually-entered
+   * coupons never are — the customer's explicit choice always wins.
+   */
+  autoApplied: boolean;
 }
+
+const emptyCoupon: CouponState = {
+  code: null,
+  discountAmount: 0,
+  discountType: null,
+  discountValue: 0,
+  validatedAt: null,
+  autoApplied: false,
+};
 
 interface CartState {
   items: CartItem[];
@@ -88,8 +105,17 @@ interface CartState {
   clearCart: () => void;
   setBuyNow: (item: Omit<CartItem, "id">) => void;
   clearBuyNow: () => void;
-  applyCoupon: (c: Omit<CouponState, "validatedAt">) => void;
+  applyCoupon: (
+    c: Omit<CouponState, "validatedAt" | "autoApplied">,
+    autoApplied?: boolean,
+  ) => void;
   removeCoupon: () => void;
+  /**
+   * Asks the backend for the best isAutoApply coupon that currently
+   * qualifies for checkoutItems(), and applies/replaces/clears it.
+   * Never touches a coupon the customer entered manually.
+   */
+  syncAutoApplyCoupon: () => Promise<void>;
 
   checkoutItems: () => CartItem[];
   totalItems: () => number;
@@ -103,18 +129,24 @@ interface CartState {
   toggleDrawer: () => void;
 }
 
+// Debounce auto-apply network calls so rapid qty +/- clicks or repeated
+// addItem calls don't fire a request per keystroke — only once things settle.
+let autoApplySyncTimer: ReturnType<typeof setTimeout> | null = null;
+
+function scheduleAutoApplySync() {
+  if (typeof window === "undefined") return; // no-op during SSR
+  if (autoApplySyncTimer) clearTimeout(autoApplySyncTimer);
+  autoApplySyncTimer = setTimeout(() => {
+    useCartStore.getState().syncAutoApplyCoupon();
+  }, 350);
+}
+
 export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       items: [],
       buyNowItems: null,
-      coupon: {
-        code: null,
-        discountAmount: 0,
-        discountType: null,
-        discountValue: 0,
-        validatedAt: null,
-      },
+      coupon: emptyCoupon,
 
       addItem: (incoming) => {
         const id = incoming.variant
@@ -136,23 +168,28 @@ export const useCartStore = create<CartState>()(
           id: incoming.productId,
           price: incoming.priceNum,
         });
+
+        scheduleAutoApplySync();
       },
 
-      removeItem: (id) =>
+      removeItem: (id) => {
         set((state) => ({
           items: state.items.filter((i) => i.id !== id),
           // if the removed item was the active buy-now selection, clear that too
           buyNowItems: state.buyNowItems?.[0]?.id === id ? null : state.buyNowItems,
-        })),
+        }));
+        scheduleAutoApplySync();
+      },
 
       updateQty: (id, qty) => {
         if (qty < 1) {
-          get().removeItem(id);
+          get().removeItem(id); // removeItem already schedules a sync
           return;
         }
         set((state) => ({
           items: state.items.map((i) => (i.id === id ? { ...i, qty } : i)),
         }));
+        scheduleAutoApplySync();
       },
 
       updateNote: (id, note) =>
@@ -166,13 +203,7 @@ export const useCartStore = create<CartState>()(
         set({
           items: [],
           buyNowItems: null,
-          coupon: {
-            code: null,
-            discountAmount: 0,
-            discountType: null,
-            discountValue: 0,
-            validatedAt: null,
-          },
+          coupon: emptyCoupon,
         }),
 
       setBuyNow: (incoming) => {
@@ -180,23 +211,55 @@ export const useCartStore = create<CartState>()(
           ? `${incoming.productId}-${incoming.variant.variantId}`
           : incoming.productId;
         set({ buyNowItems: [{ ...incoming, id }] }); // preserve incoming.qty, don't force 1
+        scheduleAutoApplySync();
       },
 
+      clearBuyNow: () => {
+        set({ buyNowItems: null });
+        scheduleAutoApplySync();
+      },
 
-      clearBuyNow: () => set({ buyNowItems: null }),
+      applyCoupon: (c, autoApplied = false) =>
+        set({ coupon: { ...c, validatedAt: Date.now(), autoApplied } }),
 
-      applyCoupon: (c) => set({ coupon: { ...c, validatedAt: Date.now() } }),
+      removeCoupon: () => set({ coupon: emptyCoupon }),
 
-      removeCoupon: () =>
-        set({
-          coupon: {
-            code: null,
-            discountAmount: 0,
-            discountType: null,
-            discountValue: 0,
-            validatedAt: null,
-          },
-        }),
+      syncAutoApplyCoupon: async () => {
+        const state = get();
+        const current = state.coupon;
+
+        // Never override a coupon the customer typed in themselves.
+        if (current.code && !current.autoApplied) return;
+
+        const items = state.checkoutItems();
+        if (items.length === 0) {
+          if (current.autoApplied) get().removeCoupon();
+          return;
+        }
+
+        try {
+
+          const result = await autoApplyCoupon(
+            state.subtotal(),
+            state.totalItems(),
+            state.items,
+          );
+          console.log("auto apply", result);
+
+          if (result.applied) {
+            state.applyCoupon({
+              code: result.code ?? null,
+              discountAmount: result.discountAmount ?? 0,
+              discountType: (result.discountType as any) ?? null,
+              discountValue: result.discountValue ?? 0,
+            });
+          } else {
+            state.removeCoupon();
+          }
+        } catch (err) {
+          console.error("Auto-apply coupon sync failed:", err);
+        }
+      },
 
       checkoutItems: () => get().buyNowItems ?? get().items,
       totalItems: () => get().items.reduce((s, i) => s + i.qty, 0),

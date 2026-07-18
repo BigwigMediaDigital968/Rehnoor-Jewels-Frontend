@@ -306,3 +306,47 @@ export async function validateCoupon(
     return { success: false, message: "Could not validate coupon." };
   }
 }
+
+export interface AutoApplyCouponResponse {
+  applied: boolean;
+  code?: string;
+  discountAmount?: number;
+  discountType?: string;
+  discountValue?: number;
+  message?: string;
+}
+export async function autoApplyCoupon(
+  subtotal: number,
+  itemCount: number,
+  items: CartItem[],
+): Promise<AutoApplyCouponResponse> {
+  try {
+    return await api<AutoApplyCouponResponse>(
+      "/api/coupons/auto-apply",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          subtotal,
+          itemCount,
+          items: items.map((i) => ({
+            productId: i.productId,
+            price: i.priceNum,
+            quantity: i.qty,
+          })),
+        }),
+      },
+    );
+  } catch (err) {
+    if (err instanceof ApiError) {
+      return {
+        applied: false,
+        message: err.message,
+      };
+    }
+
+    return {
+      applied: false,
+      message: "Could not auto apply coupon.",
+    };
+  }
+}
