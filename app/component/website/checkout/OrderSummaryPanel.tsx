@@ -65,6 +65,24 @@ export default function OrderSummaryPanel() {
   const discount = cartCoupon?.discountAmount ?? 0;
   const total = Math.max(0, sub - discount + ship);
 
+  // Determine if a Buy X Get Y discount is happening
+  const isBuyXGetY = isCouponApplied && cartCoupon?.discountType === "buy_x_get_y";
+
+  // Identify the free item ID by looking for the item that matches the discount amount
+  let freeItemId: string | number | null = null;
+  if (isBuyXGetY && discount > 0) {
+    // Find the item whose individual priceNum matches the calculated discount value
+    const matchingItem = activeItems.find((item) => item.priceNum === discount);
+    
+    if (matchingItem) {
+      freeItemId = matchingItem.id;
+    } else {
+      // Fallback: if precision differs, pick the item with the lowest priceNum
+      const lowestPricedItem = [...activeItems].sort((a, b) => a.priceNum - b.priceNum)[0];
+      if (lowestPricedItem) freeItemId = lowestPricedItem.id;
+    }
+  }
+
   // Keep CheckoutStore dynamically synchronized with changes originating from the Cart page
   useEffect(() => {
     if (isCouponApplied) {
@@ -88,7 +106,7 @@ export default function OrderSummaryPanel() {
     setCouponErr("");
 
     try {
-      const res = await validateCoupon(code, sub, activeItems.length);
+      const res = await validateCoupon(code, sub, activeItems);
 
       if (!res.success || !res.coupon) {
         setCouponErr(res.message || "Invalid coupon code.");
@@ -122,6 +140,7 @@ export default function OrderSummaryPanel() {
     removeCartCoupon();
     clearCheckoutCoupon();
   };
+
 
   return (
     <aside
@@ -163,59 +182,80 @@ export default function OrderSummaryPanel() {
         <div className="p-5 flex flex-col gap-4">
           {/* Items Map */}
           <div className="flex flex-col gap-3">
-            {activeItems.map((item) => (
-              <div key={item.id} className="flex items-start gap-3">
-                <div
-                  className="relative w-14 h-14 rounded-lg overflow-hidden flex-shrink-0"
-                  style={{ background: "var(--rj-ivory-dark)" }}
-                >
-                  <Image
-                    src={item.image}
-                    alt={item.name}
-                    fill
-                    className="object-cover"
-                    sizes="56px"
-                  />
-                  {/* qty badge */}
-                  <div
-                    className="absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center font-cinzel text-[9px] font-bold"
-                    style={{ background: "var(--rj-charcoal)", color: "#fff" }}
-                  >
-                    {item.qty}
-                  </div>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p
-                    className="font-cormorant font-light leading-snug line-clamp-1"
-                    style={{ fontSize: "0.95rem", color: "var(--rj-charcoal)" }}
-                  >
-                    {item.name}
-                  </p>
+            {activeItems.map((item) => {
+              // Check if this particular mapped item is the one marked as free
+              const isThisItemFree = item.id === freeItemId;
 
-                  {item.variant ? (
-                    <p
-                      className="font-cinzel text-[9px] tracking-wider mt-0.5"
-                      style={{ color: "var(--rj-ash)" }}
+              return (
+                <div key={item.id} className="flex items-start gap-3">
+                  <div
+                    className="relative w-14 h-14 rounded-lg overflow-hidden flex-shrink-0"
+                    style={{ background: "var(--rj-ivory-dark)" }}
+                  >
+                    <Image
+                      src={item.image}
+                      alt={item.name}
+                      fill
+                      className="object-cover"
+                      sizes="56px"
+                    />
+                    {/* qty badge */}
+                    <div
+                      className="absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center font-cinzel text-[9px] font-bold"
+                      style={{ background: "var(--rj-charcoal)", color: "#fff" }}
                     >
-                      {item.variant.title}
-                    </p>
-                  ) : item.subtitle ? (
+                      {item.qty}
+                    </div>
+                  </div>
+                  <div className="flex-1 min-w-0">
                     <p
-                      className="font-cinzel text-[9px] tracking-wider mt-0.5"
-                      style={{ color: "var(--rj-ash)" }}
+                      className="font-cormorant font-light leading-snug line-clamp-1"
+                      style={{ fontSize: "0.95rem", color: "var(--rj-charcoal)" }}
                     >
-                      {item.subtitle}
+                      {item.name}
                     </p>
-                  ) : null}
+
+                    {item.variant ? (
+                      <p
+                        className="font-cinzel text-[9px] tracking-wider mt-0.5"
+                        style={{ color: "var(--rj-ash)" }}
+                      >
+                        {item.variant.title}
+                      </p>
+                    ) : item.subtitle ? (
+                      <p
+                        className="font-cinzel text-[9px] tracking-wider mt-0.5"
+                        style={{ color: "var(--rj-ash)" }}
+                      >
+                        {item.subtitle}
+                      </p>
+                    ) : null}
+                    
+                    {/* Visual context subtext tag under name for clarity */}
+                    {isThisItemFree && (
+                      <span 
+                        className="inline-block font-cinzel text-[8px] font-bold tracking-widest px-1.5 py-0.5 mt-1 rounded uppercase"
+                        style={{ background: "rgba(0,55,32,0.08)", color: "var(--rj-emerald)" }}
+                      >
+                        Free Promotional Item
+                      </span>
+                    )}
+                  </div>
+                  
+                  {/* Dynamic Price Display */}
+                  <p
+                    className="font-cinzel font-bold text-xs flex-shrink-0"
+                    style={{ color: "var(--rj-emerald)" }}
+                  >
+                    {isThisItemFree ? (
+                      <span className="uppercase tracking-wider">Free</span>
+                    ) : (
+                      fmt(item.priceNum * item.qty)
+                    )}
+                  </p>
                 </div>
-                <p
-                  className="font-cinzel font-bold text-xs flex-shrink-0"
-                  style={{ color: "var(--rj-emerald)" }}
-                >
-                  {fmt(item.priceNum * item.qty)}
-                </p>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           <div className="h-px" style={{ background: "var(--rj-bone)" }} />
@@ -285,7 +325,9 @@ export default function OrderSummaryPanel() {
                   className="font-cinzel text-[10px] font-bold"
                   style={{ color: "var(--rj-emerald)" }}
                 >
-                  {activeCouponCode} — {fmt(discount)} off
+                  {isBuyXGetY 
+                    ? `${activeCouponCode} — Free Item Applied` 
+                    : `${activeCouponCode} — ${fmt(discount)} off`}
                 </span>
               </div>
               <Tooltip content="Remove coupon">
@@ -316,7 +358,9 @@ export default function OrderSummaryPanel() {
             ...(discount > 0
               ? [
                   {
-                    label: `Coupon (${activeCouponCode})`,
+                    label: isBuyXGetY
+                      ? `Offer (${activeCouponCode}) — Lowest Item Free`
+                      : `Coupon (${activeCouponCode})`,
                     value: `-${fmt(discount)}`,
                     green: true,
                   },

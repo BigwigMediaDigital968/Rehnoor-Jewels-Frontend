@@ -1,5 +1,8 @@
 // lib/api/orders.ts
 
+import { CartItem } from "@/app/store/cartStore";
+import { Product } from "@/app/types/Product.types";
+
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
 // ─── Core fetch wrapper ────────────────────────────────────────────────────────
@@ -283,7 +286,7 @@ export async function getMyOrders(): Promise<{
 export async function validateCoupon(
   code: string,
   subtotal: number,
-  itemCount?: number,
+  activeItems?: CartItem[],
   email?: string,
 ): Promise<ValidateCouponResponse> {
   try {
@@ -292,8 +295,9 @@ export async function validateCoupon(
       body: JSON.stringify({
         code,
         subtotal,
-        ...(itemCount !== undefined && { itemCount }),
+        ...(activeItems !== undefined && { itemCount:activeItems.length }),
         ...(email && { email }),
+        ...(activeItems && {items:activeItems})
       }),
     });
   } catch (err) {
