@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger);
 
@@ -54,12 +55,46 @@ export default function CollectionHero({
 }) {
   const sectionRef = useRef<HTMLElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
+  const [activePopup, setActivePopup] = useState<"ring" | "earring" | null>(null);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"],
   });
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "28%"]);
+
+
+  const pathname = usePathname();
+
+  const ringLink = "/collections/gold-plated-rings-for-women";
+  const earringLink = "/collections/gold-plated-earrings-for-women";
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+
+    // Trigger Ring popup ONLY if user is visiting the Ring collection
+    if (pathname === ringLink) {
+      timer = setTimeout(() => {
+        setActivePopup("ring");
+      }, 2000);
+    } 
+    // Trigger Earring popup ONLY if user is visiting the Earring collection
+    else if (pathname === earringLink) {
+      timer = setTimeout(() => {
+        setActivePopup("earring");
+      }, 2000);
+    }
+
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [pathname]); // Fires appropriately whenever the route changes
+
+  const closeRingAndNext = () => {
+    setActivePopup(null);
+    // Open the Earring popup 1 second after Ring closes
+  };
+
 
   useEffect(() => {
     if (!sectionRef.current || !bgRef.current) return;
@@ -113,6 +148,7 @@ export default function CollectionHero({
     meta?.heroImage && meta.heroImage.trim() !== "" ? meta.heroImage : null;
 
   return (
+    <>
     <section
       ref={sectionRef}
       className="relative overflow-hidden flex items-center"
@@ -327,5 +363,83 @@ export default function CollectionHero({
         />
       </motion.div>
     </section>
+    {activePopup && (
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          {/* Ring Offer Popup */}
+          {activePopup === "ring" && (
+            <div className="relative max-w-md w-full bg-white rounded-lg overflow-hidden shadow-2xl transform transition-all scale-100">
+              <button
+                onClick={closeRingAndNext}
+                className="absolute top-3 right-3 z-[100000] bg-black/50 hover:bg-black/75 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm cursor-pointer transition-colors"
+                aria-label="Close offer"
+              >
+                ✕
+              </button>
+              <Link href={ringLink} onClick={() => setActivePopup(null)} className="block relative">
+                <div className="relative aspect-[4/5] w-full">
+                  <Image
+                    src="/ring2.png"
+                    alt="Special Offer on Gold Plated Rings"
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+                {/* Ring Coupon Only */}
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/90 to-transparent p-5 text-center text-white z-10">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-2 text-sm">
+                <div className="bg-white/10 backdrop-blur-sm border border-white/20 px-3 rounded w-full sm:w-auto">
+                  <span className="text-gray-300 text-xs block">Buy 3 Get 2</span>
+                  <strong className="text-amber-400 font-mono tracking-wider">BUY3GET2FREE</strong>
+                </div>
+                <div className="bg-white/10 backdrop-blur-sm border border-white/20 px-3 rounded w-full sm:w-auto">
+                  <span className="text-gray-300 text-xs block">Buy 2 Get 1</span>
+                  <strong className="text-amber-400 font-mono tracking-wider">BUY2GET1FREE</strong>
+                </div>
+              </div>
+            </div>
+              </Link>
+            </div>
+          )}
+
+          {/* Earring Offer Popup */}
+          {activePopup === "earring" && (
+            <div className="relative max-w-md w-full bg-white rounded-lg overflow-hidden shadow-2xl transform transition-all scale-100">
+              <button
+                onClick={() => setActivePopup(null)}
+                className="absolute top-3 right-3 z-[100000] bg-black/50 hover:bg-black/75 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm cursor-pointer transition-colors"
+                aria-label="Close offer"
+              >
+                ✕
+              </button>
+              <Link href={earringLink} onClick={() => setActivePopup(null)} className="block relative">
+                <div className="relative aspect-[4/5] w-full">
+                  <Image
+                    src="/Earring2.png"
+                    alt="Special Offer on One Gram Gold Earrings"
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+                {/* Earring Coupon Only */}
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/90 to-transparent p-5 text-center text-white z-10">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-2 text-sm">
+                <div className="bg-white/10 backdrop-blur-sm border border-white/20 px-3 rounded w-full sm:w-auto">
+                  <span className="text-gray-300 text-xs block">Buy 3 Get 2</span>
+                  <strong className="text-amber-400 font-mono tracking-wider">BUY3GET2FREE</strong>
+                </div>
+                <div className="bg-white/10 backdrop-blur-sm border border-white/20 px-3 rounded w-full sm:w-auto">
+                  <span className="text-gray-300 text-xs block">Buy 2 Get 1</span>
+                  <strong className="text-amber-400 font-mono tracking-wider">BUY2GET1FREE</strong>
+                </div>
+              </div>
+            </div>
+              </Link>
+            </div>
+          )}
+        </div>
+      )}
+      </>
   );
 }
