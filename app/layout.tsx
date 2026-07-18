@@ -134,7 +134,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           fbq('track', 'PageView');
           `}
         </Script> */}
-        <noscript>
+        {/* <noscript>
           <img
             height="1"
             width="1"
@@ -142,7 +142,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             src="https://www.facebook.com/tr?id=1037782932526589&ev=PageView&noscript=1"
             alt=""
           />
-        </noscript>
+        </noscript> */}
         {/* <!-- End Meta Pixel Code --> */}
 
         <Suspense fallback={null}>

@@ -5,6 +5,7 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { trackAddToCart } from "../lib/metaPixel";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -129,6 +130,11 @@ export const useCartStore = create<CartState>()(
             };
           }
           return { items: [...state.items, { ...incoming, id }] };
+        });
+
+        trackAddToCart({
+          id: incoming.productId,
+          price: incoming.priceNum,
         });
       },
 
