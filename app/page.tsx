@@ -16,6 +16,7 @@ import PopularSearch from "./component/website/PopularSearch";
 
 import type { Metadata } from "next";
 import Script from "next/script";
+import OfferPopups from "./component/website/OfferPopups.tsx";
 
 export const metadata: Metadata = {
   title: "Shop Gold Plated Jewellery & One Gram Gold Jewellery ",
@@ -114,6 +115,15 @@ export default function HomePage() {
       {/* Page Component */}
       <GoldPriceScroll />
       <main>
+
+        {/* 2. Place the component here and swap placeholders with your actual image URLs */}
+      <OfferPopups 
+        ringImgSrc="/ring2.png" 
+        earringImgSrc="/Earring2.png"
+        ringLink="/collections/gold-plated-rings-for-women"
+        earringLink="/collections/gold-plated-earrings-for-women"
+      />
+
         <HeroSection />
         {/* <CategoriesSection /> */}
         {/* <BestsellersSection /> */}
