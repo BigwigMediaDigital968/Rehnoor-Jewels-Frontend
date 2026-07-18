@@ -61,12 +61,10 @@ export default function OfferPopups({
             </div>
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/90 to-transparent p-5 text-center text-white z-10">
               <div className="flex flex-col sm:flex-row items-center justify-center gap-2 text-sm">
-                <div className="bg-white/10 backdrop-blur-sm border border-white/20 px-3 rounded w-full sm:w-auto">
-                  <span className="text-gray-300 text-xs block">Buy 3 Get 2</span>
+                <div className="bg-white/10 backdrop-blur-sm border border-white/20 px-3 py-1 rounded w-full sm:w-auto">
                   <strong className="text-amber-400 font-mono tracking-wider">BUY3GET2FREE</strong>
                 </div>
-                <div className="bg-white/10 backdrop-blur-sm border border-white/20 px-3 rounded w-full sm:w-auto">
-                  <span className="text-gray-300 text-xs block">Buy 2 Get 1</span>
+                <div className="bg-white/10 backdrop-blur-sm border border-white/20 px-3 py-1 rounded w-full sm:w-auto">
                   <strong className="text-amber-400 font-mono tracking-wider">BUY2GET1FREE</strong>
                 </div>
               </div>
@@ -98,11 +96,9 @@ export default function OfferPopups({
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/90 to-transparent p-5 text-center text-white z-10">
               <div className="flex flex-col sm:flex-row items-center justify-center gap-2 text-sm">
                 <div className="bg-white/10 backdrop-blur-sm border border-white/20 px-3 rounded w-full sm:w-auto">
-                  <span className="text-gray-300 text-xs block">Buy 3 Get 2</span>
                   <strong className="text-amber-400 font-mono tracking-wider">BUY3GET2FREE</strong>
                 </div>
                 <div className="bg-white/10 backdrop-blur-sm border border-white/20 px-3 rounded w-full sm:w-auto">
-                  <span className="text-gray-300 text-xs block">Buy 2 Get 1</span>
                   <strong className="text-amber-400 font-mono tracking-wider">BUY2GET1FREE</strong>
                 </div>
               </div>
