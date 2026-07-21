@@ -75,9 +75,9 @@ export function useRazorpayCheckout(): UseRazorpayCheckoutReturn {
 
     const total = pricing?.total ?? 0;
 
-    console.log("placeOrder response:", res.data);
-    console.log("razorpayOrderId:", razorpayOrderId);
-    console.log("paymentMethod:", paymentMethod);
+    // console.log("placeOrder response:", res.data);
+    // console.log("razorpayOrderId:", razorpayOrderId);
+    // console.log("paymentMethod:", paymentMethod);
 
     // ── COD / non-gateway path ────────────────────────────────────────────────
     if (paymentMethod !== "razorpay" || !razorpayOrderId) {

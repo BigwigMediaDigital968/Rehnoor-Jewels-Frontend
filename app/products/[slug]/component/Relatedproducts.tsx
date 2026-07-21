@@ -390,7 +390,7 @@ export default function RelatedProducts({
     };
   }, [collectionSlug, currentProductId, currentProductDbId]);
 
-  console.log(collectionSlug);
+  // console.log(collectionSlug);
 
   // ── Carousel state ──────────────────────────────────────────────
   const containerRef = useRef<HTMLDivElement>(null);

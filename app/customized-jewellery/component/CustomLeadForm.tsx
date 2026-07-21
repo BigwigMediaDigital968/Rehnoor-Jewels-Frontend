@@ -104,7 +104,7 @@ export default function CustomLeadForm() {
 
       const data = await res.json();
 
-      console.log(data);
+      // console.log(data);
 
       if (!res.ok || !data.success) {
         const serverMsg =

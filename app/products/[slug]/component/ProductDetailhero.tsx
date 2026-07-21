@@ -853,6 +853,25 @@ export default function ProductDetailHero({
 
     return () => observer.disconnect();
   }, []);
+
+
+  // META PIXEL VIEWCONTENT EVENT STARTS
+
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && (window as any).fbq) {
+      (window as any).fbq("track", "ViewContent", {
+        content_ids: [product.id],
+        content_type: "product",
+        value: product.price,
+        currency: "INR",
+      });
+    }
+  }, [product]);
+
+    // META PIXEL VIEWCONTENT EVENT END
+
+
   return (
     <>
       {zoomed && (

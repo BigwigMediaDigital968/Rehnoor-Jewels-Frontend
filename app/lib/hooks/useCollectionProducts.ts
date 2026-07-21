@@ -47,7 +47,7 @@ export function useCollectionProducts({
     load();
   }, [load]);
 
-  console.log(data);
+  // console.log(data);
 
   // ── Normalise ApiProduct → Product shape the grid expects ───────
   // This is a thin adapter so CollectionProductGrid keeps its Product type

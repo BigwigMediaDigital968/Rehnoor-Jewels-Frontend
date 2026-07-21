@@ -360,7 +360,7 @@ function CouponSection({ email }: { email?: string }) {
     const result = await validateCoupon(
       code.trim(),
       subtotal(),
-      checkoutItems().length,
+      checkoutItems(),
       email,
     );
     setLoading(false);

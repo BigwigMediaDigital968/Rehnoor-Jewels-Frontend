@@ -28,6 +28,7 @@ import {
   StepPayment,
   StepReview,
 } from "../component/steps/CheckoutSteps";
+import { trackPurchase } from "../lib/metaPixel";
 
 // ─── Order success ─────────────────────────────────────────────────────────────
 
@@ -325,8 +326,8 @@ export default function CheckoutPage() {
   const clearCart = useCartStore((s) => s.clearCart);
   const clearBuyNow = useCartStore((s) => s.clearBuyNow);
 
-  console.log("checkoutItems", checkoutItems());
-  console.log("items", items);
+  // console.log("checkoutItems", checkoutItems());
+  // console.log("items", items);
 
   // console.log("CheckoutPage rendered. Items in cart:", items);
   // ── Checkout form store ──────────────────────────────────────────────────────
@@ -392,6 +393,16 @@ export default function CheckoutPage() {
 
   // ── Success screen ───────────────────────────────────────────────────────────
   if (stage === "success" && result) {
+
+    const allProductIds = checkoutItems().map((item) => item.productId);
+
+    // 2. Fire ONE single purchase event containing everything
+    trackPurchase({
+      id: allProductIds,        // Pass the array of IDs: ["id_1", "id_2"]
+      price: result.total, // The combined final grand total price (e.g., 95000)
+      currency: "INR"
+    });
+
     return (
       <OrderSuccess
         orderNumber={result.orderNumber}
