@@ -741,7 +741,7 @@ export default function BlogPage() {
                 No spam. Just gold guides, new arrivals, and exclusive offers.
               </p>
             </div>
-            <div className="flex gap-2 w-full sm:w-auto">
+            <div className="flex flex-col md:flex-row gap-2 w-full sm:w-auto">
               <input
                 type="email"
                 placeholder="your@email.com"
