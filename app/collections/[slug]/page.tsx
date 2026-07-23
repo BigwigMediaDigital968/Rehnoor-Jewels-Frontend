@@ -29,12 +29,12 @@ import NecklaceSet from "./custom/NecklaceSet";
 const EXTRA_SECTIONS: Record<string, React.FC<{ meta: CollectionMeta }>> = {
   "gold-plated-chains-for-men": ChainForMenPage,
   "gold-plated-bracelets-for-men": BraceletForMen,
-  "kada-for-men": KadaForMen,
-  "rings-for-men": RingsForMen,
-  "pendants-for-men": PendantsForMen,
+  "gold-plated-kada-for-men": KadaForMen,
+  "gold-plated-rings-for-men": RingsForMen,
+  "gold-plated-pendants-for-men": PendantsForMen,
   "gold-plated-rings-for-women": RingsForWomen,
   "gold-plated-chains-for-women": ChainsForWomen,
-  "rani-haar-designed-for-every-women": RaaniHaarPage,
+  // "rani-haar-designed-for-every-women": RaaniHaarPage,
   "gold-plated-pendants-for-women": PendantForWomen,
   "gold-plated-mangalsutra-for-women": MangalSutraCollection,
   "gold-plated-necklaces-for-women": NecklaceForWomen,
@@ -259,6 +259,47 @@ export default async function CollectionDetailPage({
               })),
             },
           }),
+        }}
+      />
+
+      <script
+        id="products-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            products.map((product) => ({
+              "@context": "https://schema.org",
+              "@type": "Product",
+
+              "@id": `https://www.rehnoorjewels.com${product.href}`,
+
+              url: `https://www.rehnoorjewels.com${product.href}`,
+
+              name: product.name,
+
+              description: product.seoDescription,
+
+              image: product.images.map((image) => image.src),
+
+              sku: product.id,
+
+              brand: {
+                "@type": "Brand",
+                name: "Rehnoor Jewels",
+              },
+
+              category: product.category,
+
+              offers: {
+                "@type": "Offer",
+                url: `https://www.rehnoorjewels.com${product.href}`,
+                priceCurrency: "INR",
+                price: Number(product.price.replace(/[^\d.]/g, "")),
+                availability: "https://schema.org/InStock",
+                itemCondition: "https://schema.org/NewCondition",
+              },
+            })),
+          ),
         }}
       />
 

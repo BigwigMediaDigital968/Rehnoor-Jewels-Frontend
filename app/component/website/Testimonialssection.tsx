@@ -2,16 +2,13 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 
-const testimonials = [
+export const testimonials = [
   {
     id: 1,
     name: "PRIYA SHARMA",
     product: "Gold-Plated Necklace",
-    avatar:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80",
     rating: 5,
     text: "Really loved the gold-plated necklace. The shine is beautiful, and it looks very close to real gold. Perfect for both daily wear and small occasions.",
   },
@@ -19,8 +16,6 @@ const testimonials = [
     id: 2,
     name: "AMAN VERMA",
     product: "Bracelet",
-    avatar:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80",
     rating: 5,
     text: "Bought a bracelet and I’m happy with the quality. It’s stylish, lightweight, and goes well with most outfits.",
   },
@@ -28,8 +23,6 @@ const testimonials = [
     id: 3,
     name: "NEHA KAPOOR",
     product: "Earrings",
-    avatar:
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80",
     rating: 5,
     text: "The earrings I ordered are elegant and comfortable to wear. I received compliments the first time I wore them.",
   },
@@ -37,8 +30,6 @@ const testimonials = [
     id: 4,
     name: "RAHUL MEHTA",
     product: "Men's Chain",
-    avatar:
-      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&q=80",
     rating: 5,
     text: "Great collection for men. The chain I purchased looks premium, and the finishing is impressive. The jewellery is versatile enough to wear with casual and formal outfits. I especially liked that aspect of it.",
   },
@@ -46,8 +37,6 @@ const testimonials = [
     id: 5,
     name: "SIMRAN KAUR",
     product: "Luxury Jewellery Collection",
-    avatar:
-      "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=100&q=80",
     rating: 5,
     text: "Affordable yet high-end jewellery with great designs. It makes you feel luxurious when you're wearing it and gives a rich look without being too heavy or uncomfortable.",
   },
@@ -55,8 +44,6 @@ const testimonials = [
     id: 6,
     name: "KARAN MALHOTRA",
     product: "Premium Ring",
-    avatar:
-      "https://images.unsplash.com/photo-1504593811423-6dd665756598?w=100&q=80",
     rating: 5,
     text: "The ring looks classy and well-made. Even with daily wear, the shine remains. The fitting is also perfect and comfortable for everyday use.",
   },
@@ -64,8 +51,6 @@ const testimonials = [
     id: 7,
     name: "ANJALI GUPTA",
     product: "Jewellery Gift Set",
-    avatar:
-      "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&q=80",
     rating: 5,
     text: "Ordered a jewellery set for gifting, and it was perfect. Nice packaging and beautiful design. The person I gifted it to absolutely loved it.",
   },
@@ -73,8 +58,6 @@ const testimonials = [
     id: 8,
     name: "ROHIT SINGH",
     product: "Ethnic Jewellery Collection",
-    avatar:
-      "https://images.unsplash.com/photo-1504257432389-52343af06ae3?w=100&q=80",
     rating: 5,
     text: "Good quality jewellery. Looks great with ethnic wear, and delivery was also quick. The entire process went off without a hitch.",
   },
@@ -176,14 +159,6 @@ export default function TestimonialsSection() {
                     {/* Bottom Author Row Metadata Block */}
                     <div>
                       <div className="flex items-center gap-3">
-                        {/* <div className="relative w-10 h-10 rounded-lg overflow-hidden flex-shrink-0 bg-neutral-100">
-                          <Image
-                            src={item.avatar}
-                            alt={item.name}
-                            fill
-                            className="object-cover grayscale-[15%]"
-                          />
-                        </div> */}
                         <div className="overflow-hidden">
                           <h4 className="font-cinzel text-xs font-bold tracking-wider text-neutral-800 truncate">
                             {item.name}

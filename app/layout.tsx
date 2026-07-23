@@ -85,21 +85,6 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="antialiased">
-        {/* Google Analytics */}
-        {/* <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-WBLXS066M3"
-          strategy="afterInteractive"
-        />
-
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-WBLXS066M3');
-    `}
-        </Script> */}
-
         {/* <!-- Google Tag Manager --> */}
         <script>{`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -118,32 +103,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     })(window, document, "clarity", "script", "wios29204d");
   `}
         </Script>
-        {/* <!-- Meta Pixel Code --> */}
-
-        {/* <Script id="facebook-pixel" strategy="afterInteractive">
-          {`
-          !function(f,b,e,v,n,t,s)
-          {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-          n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-          if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-          n.queue=[];t=b.createElement(e);t.async=!0;
-          t.src=v;s=b.getElementsByTagName(e)[0];
-          s.parentNode.insertBefore(t,s)}(window, document,'script',
-          'https://connect.facebook.net/en_US/fbevents.js');
-          fbq('init', '1037782932526589');
-          fbq('track', 'PageView');
-          `}
-        </Script> */}
-        {/* <noscript>
-          <img
-            height="1"
-            width="1"
-            style={{ display: "none" }}
-            src="https://www.facebook.com/tr?id=1037782932526589&ev=PageView&noscript=1"
-            alt=""
-          />
-        </noscript> */}
-        {/* <!-- End Meta Pixel Code --> */}
 
         <Suspense fallback={null}>
           <ScrollToTop />

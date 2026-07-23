@@ -316,7 +316,7 @@ function SideCard({ post, index }: { post: BlogCard; index: number }) {
             </span>
           )}
 
-          <h4
+          <h2
             className="font-cormorant mt-2 leading-tight line-clamp-2"
             style={{
               fontSize: "clamp(1rem,1.4vw,1.2rem)",
@@ -324,7 +324,7 @@ function SideCard({ post, index }: { post: BlogCard; index: number }) {
             }}
           >
             {post.title}
-          </h4>
+          </h2>
           <p
             className="text-sm leading-relaxed line-clamp-2"
             style={{

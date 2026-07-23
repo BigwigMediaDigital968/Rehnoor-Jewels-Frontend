@@ -6,6 +6,7 @@ import TestimonialsSection from "../component/website/pages/collection/Testimoni
 import TrustSection from "../component/website/pages/collection/TrustSection";
 import NewsletterSection from "../component/website/NewsletterSection";
 import Script from "next/script";
+import { collectionFAQProps } from "../data/Faqdata";
 
 export const metadata: Metadata = {
   title: "Explore All Jewellery Collections",
@@ -67,68 +68,80 @@ export default function CollectionsPage() {
                 {
                   "@type": "ListItem",
                   position: 1,
-                  name: "Chains for Men",
+                  name: "Gold Plated Chains for Men",
                   url: "https://www.rehnoorjewels.com/collections/gold-plated-chains-for-men",
                 },
                 {
                   "@type": "ListItem",
                   position: 2,
-                  name: "Kadas for Men",
-                  url: "https://www.rehnoorjewels.com/collections/kada-for-men",
+                  name: "Gold Plated Kadas for Men",
+                  url: "https://www.rehnoorjewels.com/collections/gold-plated-kada-for-men",
                 },
                 {
                   "@type": "ListItem",
                   position: 3,
-                  name: "Rings for Men",
-                  url: "https://www.rehnoorjewels.com/collections/rings-for-men",
+                  name: "Gold Plated Rings for Men",
+                  url: "https://www.rehnoorjewels.com/collections/gold-plated-rings-for-men",
                 },
                 {
                   "@type": "ListItem",
                   position: 4,
-                  name: "Bracelets for Men",
+                  name: "Gold Plated Bracelets for Men",
                   url: "https://www.rehnoorjewels.com/collections/gold-plated-bracelets-for-men",
                 },
                 {
                   "@type": "ListItem",
                   position: 5,
-                  name: "Pendants for Men",
-                  url: "https://www.rehnoorjewels.com/collections/pendants-for-men",
+                  name: "Gold Plated Pendants for Men",
+                  url: "https://www.rehnoorjewels.com/collections/gold-plated-pendants-for-men",
                 },
-                // {
-                //   "@type": "ListItem",
-                //   position: 6,
-                //   name: "New Arrivals",
-                //   url: "https://www.rehnoorjewels.com/collections/new-arrivals",
-                // },
                 {
                   "@type": "ListItem",
-                  position: 7,
-                  name: "Chains for Women",
+                  position: 6,
+                  name: "Gold Plated Chains for Women",
                   url: "https://www.rehnoorjewels.com/collections/gold-plated-chains-for-women",
                 },
                 {
                   "@type": "ListItem",
-                  position: 8,
-                  name: "Rings for Women",
+                  position: 7,
+                  name: "Gold Plated Rings for Women",
                   url: "https://www.rehnoorjewels.com/collections/gold-plated-rings-for-women",
                 },
                 {
                   "@type": "ListItem",
-                  position: 9,
-                  name: "Pendants for Women",
+                  position: 8,
+                  name: "Gold Plated Pendants for Women",
                   url: "https://www.rehnoorjewels.com/collections/gold-plated-pendants-for-women",
                 },
                 {
                   "@type": "ListItem",
-                  position: 10,
-                  name: "Mangalsutra",
+                  position: 9,
+                  name: "Gold Plated Mangalsutra",
                   url: "https://www.rehnoorjewels.com/collections/gold-plated-mangalsutra-for-women",
                 },
                 {
                   "@type": "ListItem",
+                  position: 10,
+                  name: "Gold Plated Necklaces for Women",
+                  url: "https://www.rehnoorjewels.com/collections/gold-plated-necklaces-for-women",
+                },
+                {
+                  "@type": "ListItem",
                   position: 11,
-                  name: "Rani Haar",
-                  url: "https://www.rehnoorjewels.com/collections/rani-haar-designed-for-every-women",
+                  name: "Gold Plated Ear-rings for Women",
+                  url: "https://www.rehnoorjewels.com/collections/gold-plated-earrings-for-women",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 12,
+                  name: "Gold Plated Bracelet for Women",
+                  url: "https://www.rehnoorjewels.com/collections/gold-plated-bracelets-for-women",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 13,
+                  name: "Gold Plated Necklace with Ear-rings",
+                  url: "https://www.rehnoorjewels.com/collections/gold-plated-necklace-with-earrings",
                 },
               ],
             },
@@ -157,6 +170,27 @@ export default function CollectionsPage() {
                 item: "https://www.rehnoorjewels.com/collections",
               },
             ],
+          }),
+        }}
+      />
+
+      {/* FAQ Schema */}
+
+      <Script
+        id="faq-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: collectionFAQProps.items.map((faq) => ({
+              "@type": "Question",
+              name: faq.question,
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: faq.answer,
+              },
+            })),
           }),
         }}
       />

@@ -17,9 +17,9 @@ const footerLinks = {
   collectionsMen: [
     { label: "Chains", href: "/collections/gold-plated-chains-for-men" },
     { label: "Bracelets", href: "/collections/gold-plated-bracelets-for-men" },
-    { label: "Rings", href: "/collections/rings-for-men" },
-    { label: "Pendants", href: "/collections/pendants-for-men" },
-    { label: "Kadas", href: "/collections/kada-for-men" },
+    { label: "Rings", href: "/collections/gold-plated-rings-for-men" },
+    { label: "Pendants", href: "/collections/gold-plated-pendants-for-men" },
+    { label: "Kadas", href: "/collections/gold-plated-kada-for-men" },
   ],
 
   collectionsWomen: [
@@ -42,14 +42,11 @@ const footerLinks = {
     { label: "About Us", href: "/about" },
     { label: "Blogs", href: "/blogs" },
     { label: "Contact Us", href: "/contact" },
-    // { label: "FAQ", href: "/faq" },
-    // { label: "Size Guide", href: "/size-guide" },
     { label: "Track Order", href: "/track-order" },
   ],
 
   policies: [
     { label: "Privacy Policy", href: "/policies/privacy" },
-    // { label: "Terms of Service", href: "/terms" },
     { label: "Shipping", href: "/policies/shipping" },
     { label: "Return & Refund", href: "/policies/returns" },
     { label: "Cookies", href: "/policies/cookies" },
@@ -64,7 +61,7 @@ const socials = [
     href: "https://www.instagram.com/rehnoorjewels",
   },
 
-  { icon: FaFacebook, label: "Facebook", href: "https://facebook.com" },
+  { icon: FaFacebook, label: "Facebook", href: "https://www.facebook.com/profile.php?id=61572567415162" },
   {
     icon: FaPinterestP,
     label: "Pinterest",

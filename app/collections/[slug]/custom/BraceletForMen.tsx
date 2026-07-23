@@ -320,16 +320,6 @@ const REVIEWS: ReviewItem[] = [
     city: "Chandigarh",
     text: "Wore my one gram gold bracelet to a wedding last week and received so many compliments! Everyone thought it was a real gold bracelet. Rehnoor Jewels truly delivers on quality and style!",
   },
-  // {
-  //   name: "Sandeep Kulkarni",
-  //   city: "Pune",
-  //   text: "I ordered two gold plated bracelets from Rehnoor Jewels, one for myself and one for my brother. Both of us are extremely happy with the purchase. The designs are trendy, the quality is great, and the price is unbeatable!",
-  // },
-  // {
-  //   name: "Vishal Dubey",
-  //   city: "Surat",
-  //   text: "The one gram gold bracelet I ordered looks exactly like the pictures on the website. The shine is incredible and the anti-tarnish finish keeps it looking brand new. Rehnoor Jewels has earned a loyal customer!",
-  // },
   {
     name: "Anjali Sharma",
     city: "Delhi",
@@ -341,6 +331,48 @@ const REVIEWS: ReviewItem[] = [
     text: "Was looking for a thoughtful Rakhi gift and came across Rehnoor Jewels. I ordered a one gram gold bracelet for my brother and he absolutely loved it! It arrived beautifully packed and looked stunning. Will definitely be ordering more pieces soon!",
   },
 ];
+
+const reviewSchema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "@id":
+    "https://www.rehnoorjewels.com/collections/gold-plated-bracelets-for-men",
+  name: "Gold Plated Bracelets for Men",
+  url: "https://www.rehnoorjewels.com/collections/gold-plated-bracelets-for-men",
+
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: (
+      REVIEWS.reduce((sum, r) => sum + 5, 0) / REVIEWS.length
+    ).toFixed(1),
+    reviewCount: REVIEWS.length,
+    bestRating: 5,
+    worstRating: 1,
+  },
+
+  review: REVIEWS.map((review) => ({
+    "@type": "Review",
+
+    author: {
+      "@type": "Person",
+      name: review.name,
+    },
+
+    reviewRating: {
+      "@type": "Rating",
+      ratingValue: 5,
+      bestRating: 5,
+      worstRating: 1,
+    },
+
+    reviewBody: review.text,
+
+    publisher: {
+      "@type": "Organization",
+      name: "Rehnoor Jewels",
+    },
+  })),
+};
 
 // ─────────────────────────────────────────────────────────────────
 // FAQ ACCORDION ITEM
@@ -581,86 +613,18 @@ export default function BraceletForMen() {
         }}
       />
 
+      <script
+        id="review-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(reviewSchema),
+        }}
+      />
+
       <div
         style={{ background: "var(--rj-ivory)" }}
         className="overflow-hidden"
       >
-        {/* ══════════════════════════════════════════════════
-          HERO INTRO — charcoal bg
-      ══════════════════════════════════════════════════ */}
-        {/* <Section
-          className="relative overflow-hidden"
-          style={{ background: "var(--rj-charcoal)" }}
-        >
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background:
-                "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(252,193,81,0.06) 0%, transparent 70%)",
-            }}
-          />
-          <div
-            className="absolute top-0 left-0 right-0 h-px"
-            style={{
-              background:
-                "linear-gradient(90deg, transparent, rgba(252,193,81,0.4), transparent)",
-            }}
-          />
-
-          <div className="container-rj section-padding py-20 relative z-10">
-            <div className="max-w-3xl mx-auto text-center">
-              <motion.div variants={fadeUp} custom={0}>
-                <Label>Rehnoor Jewels Collection</Label>
-              </motion.div>
-
-              <motion.h1
-                variants={fadeUp}
-                custom={1}
-                className="font-cormorant font-light leading-tight mb-5"
-                style={{
-                  fontSize: "clamp(2.2rem, 6vw, 4rem)",
-                  color: "#fff",
-                  letterSpacing: "-0.01em",
-                }}
-              >
-                Gold Plated Bracelets{" "}
-                <em
-                  className="font-normal not-italic"
-                  style={{
-                    background:
-                      "var(--gradient-gold, linear-gradient(135deg,#fcc151,#e8a020))",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}
-                >
-                  for Men
-                </em>
-              </motion.h1>
-
-              <GoldDivider />
-
-              <motion.p
-                variants={fadeUp}
-                custom={2}
-                className="mt-5 leading-relaxed"
-                style={{
-                  color: "rgba(255,255,255,0.6)",
-                  fontSize: "clamp(0.95rem, 2vw, 1.1rem)",
-                  fontFamily: "var(--font-body,'DM Sans'),sans-serif",
-                  lineHeight: "1.85",
-                }}
-              >
-                Shop our exclusive collection of gold plated bracelets for men
-                crafted for those who wear their style with confidence. Each
-                piece is designed to give you a rich, premium gold look at an
-                affordable price, perfect for everyday wear as well as special
-                occasions.
-              </motion.p>
-            </div>
-          </div>
-        </Section> */}
-
         {/* ══════════════════════════════════════════════════
           WHAT ARE GOLD PLATED BRACELETS?
       ══════════════════════════════════════════════════ */}
