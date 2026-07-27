@@ -18,6 +18,7 @@ import {
   Loader2,
   Trash2,
   ChevronRight,
+  Sparkles,
 } from "lucide-react";
 import { useSearch } from "@/app/lib/hooks/useSearch";
 import type {
@@ -304,128 +305,48 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* ── Backdrop ─────────────────────────────────── */}
+          {/* Backdrop blur matching your site interaction overlay */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[150]"
-            style={{
-              background: "rgba(0,0,0,0.55)",
-              backdropFilter: "blur(4px)",
-              WebkitBackdropFilter: "blur(4px)",
-            }}
+            className="fixed inset-0 z-[140] bg-black/30 backdrop-blur-sm"
             onClick={handleClose}
           />
 
-          {/* ── Panel ────────────────────────────────────── */}
-          {/*
-            FIX: Use fixed + inset-x-0 + mx-auto instead of left:50% + transform.
-            The transform approach fails when combined with Framer Motion's own
-            transform handling. Pure Tailwind centering is reliable.
-          */}
+          {/* Floating Card - Exactly positioned below your navbar trigger */}
           <motion.div
-            initial={{ opacity: 0, y: -16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -16 }}
-            transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
-            className="fixed inset-x-0 top-0 z-[160] mx-auto w-full px-3 sm:px-4"
-            style={{ maxWidth: "780px" }}
-            onClick={(e) => e.stopPropagation()}
+            initial={{ opacity: 0, scale: 0.98, y: -10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.98, y: -10 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed inset-x-0 top-[85px] z-[150] mx-auto w-full max-w-[760px] px-4"
           >
-            <div
-              className="bg-white rounded-b-2xl overflow-hidden w-full"
-              style={{
-                boxShadow:
-                  "0 24px 80px rgba(0,55,32,0.18), 0 4px 20px rgba(0,0,0,0.1)",
-                border: "1px solid rgba(0,55,32,0.08)",
-                borderTop: "none",
-              }}
-            >
-              {/* Accent bar */}
-              <div
-                className="h-0.5 w-full"
-                style={{
-                  background:
-                    "linear-gradient(90deg, var(--rj-emerald), var(--rj-gold), var(--rj-emerald))",
-                }}
-              />
-
-              {/* ── Input row ─────────────────────────────── */}
-              <div
-                className="flex items-center gap-2 sm:gap-3 px-3 sm:px-5 py-3 sm:py-4"
-                style={{ borderBottom: "1px solid rgba(0,55,32,0.08)" }}
-              >
-                <Search
-                  size={18}
-                  className="flex-shrink-0"
-                  style={{ color: "var(--rj-emerald)" }}
-                />
-
-                <form onSubmit={handleSubmit} className="flex-1 min-w-0">
+            {/* The Luxury Rounded Container */}
+            <div className="bg-[#FAF9F6] text-[#002818] rounded-2xl sm:rounded-[2rem] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] border border-white/60 overflow-hidden flex flex-col">
+              
+              {/* ── Search Input Field ───────────────────────────────────── */}
+              <div className="p-6 pb-4 border-b border-neutral-200/60">
+                <form onSubmit={handleSubmit} className="relative flex items-center w-full">
+                  <Search size={18} className="text-[#002818]/60 absolute left-2" />
                   <input
                     ref={inputRef}
                     type="text"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Search chains, rings, kadas…"
-                    className="w-full bg-transparent outline-none font-cinzel text-[13px] sm:text-sm tracking-wide"
-                    style={{ color: "var(--rj-charcoal)" }}
-                    autoComplete="off"
-                    spellCheck={false}
+                    placeholder="WHAT ARE YOU LOOKING FOR?"
+                    className="w-full pl-9 pr-16 py-2 bg-transparent rounded-full outline-none font-cinzel text-xs tracking-[0.15em] text-[#002818] placeholder-[#002818]/40 uppercase"
                   />
+                  
+                  <div className="absolute right-2 flex items-center gap-2">
+                    {isLoading && <Loader2 size={14} className="animate-spin text-[#002818]/60" />}
+                    {query && (
+                      <button type="button" onClick={() => setQuery("")} className="text-neutral-400 hover:text-neutral-600">
+                        <X size={16} />
+                      </button>
+                    )}
+                  </div>
                 </form>
-
-                {/* Spinner */}
-                <AnimatePresence>
-                  {isLoading && (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.8 }}
-                    >
-                      <Loader2
-                        size={16}
-                        className="animate-spin flex-shrink-0"
-                        style={{ color: "var(--rj-gold)" }}
-                      />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                {query && (
-                  <button
-                    onClick={() => setQuery("")}
-                    className="p-1 rounded-full flex-shrink-0 transition-colors"
-                    style={{ color: "var(--rj-ash)", cursor: "pointer" }}
-                  >
-                    <X size={15} />
-                  </button>
-                )}
-
-                {/* ESC badge — hidden on very small screens */}
-                <button
-                  onClick={handleClose}
-                  className="hidden xs:flex flex-shrink-0 items-center font-cinzel text-[9px] tracking-[0.15em] uppercase px-2 py-1.5 rounded-lg transition-all"
-                  style={{
-                    background: "rgba(0,55,32,0.06)",
-                    color: "var(--rj-ash)",
-                    cursor: "pointer",
-                  }}
-                >
-                  Esc
-                </button>
-
-                {/* Mobile close — always visible */}
-                <button
-                  onClick={handleClose}
-                  className="flex xs:hidden flex-shrink-0 p-1 rounded-full"
-                  style={{ color: "var(--rj-ash)", cursor: "pointer" }}
-                  aria-label="Close search"
-                >
-                  <X size={18} />
-                </button>
               </div>
 
               {/* ── Body ──────────────────────────────────── */}
@@ -588,7 +509,6 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                       className="p-3 sm:p-4 space-y-4"
                     >
                       {/* Products section */}
-                      {results!.products.length > 0 && (
                         <section>
                           <div className="flex items-center justify-between mb-2">
                             <div className="flex items-center gap-2">
@@ -624,7 +544,15 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                               View all <ArrowRight size={10} />
                             </Link>
                           </div>
-                          {/* Responsive grid: 1 col mobile, 2 col sm+ */}
+                          
+                        {results!.products.length === 0 ? (
+                          <p
+                            className="font-cinzel text-[10px] tracking-wider py-3 text-center"
+                            style={{ color: "var(--rj-ash)" }}
+                          >
+                            No products found for "{debouncedQuery}"
+                          </p>
+                        ) : (
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-0.5">
                             {results!.products.map((p) => (
                               <ProductCard
@@ -634,8 +562,8 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                               />
                             ))}
                           </div>
-                        </section>
-                      )}
+                        )}
+                      </section>
 
                       {results!.products.length > 0 &&
                         results!.collections.length > 0 && (
@@ -646,7 +574,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                         )}
 
                       {/* Collections section */}
-                      {results!.collections.length > 0 && (
+                      {results!.products.length === 0 && results!.collections.length > 0 && (
                         <section>
                           <div className="flex items-center justify-between mb-2">
                             <div className="flex items-center gap-2">
@@ -778,7 +706,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                     {debouncedQuery}"
                   </span>
                   <Link
-                    href={`/rearch-results?search=${encodeURIComponent(debouncedQuery)}`}
+                    href={`/search-results?search=${encodeURIComponent(debouncedQuery)}`}
                     onClick={() => {
                       commitSearch(debouncedQuery);
                       handleClose();

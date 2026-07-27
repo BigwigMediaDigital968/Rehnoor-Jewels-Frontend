@@ -484,6 +484,15 @@ export default function ProductsSearchPage() {
   const [sortBy, setSortBy] = useState<SortOption>("newest");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [activeCategory, setActiveCategory] = useState("All");
+  const [debouncedQuery, setDebouncedQuery] = useState(localQuery);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedQuery(localQuery);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [localQuery]);
 
   // Sync URL → local state when URL changes
   useEffect(() => {
@@ -499,12 +508,12 @@ export default function ProductsSearchPage() {
       setError(null);
 
       const sortMap: Record<SortOption, { sort: any; order: "asc" | "desc" }> =
-        {
-          newest: { sort: "createdAt", order: "desc" },
-          "price-asc": { sort: "price", order: "asc" },
-          "price-desc": { sort: "price", order: "desc" },
-          rating: { sort: "rating", order: "desc" },
-        };
+      {
+        newest: { sort: "createdAt", order: "desc" },
+        "price-asc": { sort: "price", order: "asc" },
+        "price-desc": { sort: "price", order: "desc" },
+        rating: { sort: "rating", order: "desc" },
+      };
 
       try {
         const [productsRes, collectionsRes] = await Promise.allSettled([
@@ -556,10 +565,32 @@ export default function ProductsSearchPage() {
   }, [products]);
 
   // Client-side filter
+  // const filtered = useMemo(() => {
+  //   if (activeCategory === "All") return products;
+  //   return products.filter((p) => p.category === activeCategory);
+  // }, [products, activeCategory]);
+
   const filtered = useMemo(() => {
-    if (activeCategory === "All") return products;
-    return products.filter((p) => p.category === activeCategory);
-  }, [products, activeCategory]);
+  let result = products;
+
+  // Search by product name
+  if (debouncedQuery.trim()) {
+    const query = debouncedQuery.toLowerCase();
+
+    result = result.filter((product) =>
+      product.name.toLowerCase().includes(query)
+    );
+  }
+
+  // Category filter
+  if (activeCategory !== "All") {
+    result = result.filter(
+      (product) => product.category === activeCategory
+    );
+  }
+
+  return result;
+}, [products, activeCategory, debouncedQuery]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -606,7 +637,7 @@ export default function ProductsSearchPage() {
                 background: "rgba(0,55,32,0.04)",
                 border: "1.5px solid rgba(0,55,32,0.1)",
               }}
-              onFocus={() => {}}
+              onFocus={() => { }}
             >
               <Search
                 size={16}
