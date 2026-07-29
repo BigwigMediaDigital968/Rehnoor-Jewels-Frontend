@@ -164,8 +164,6 @@ function normalizeProducts(raw: ApiProduct[]): Product[] {
         ? `₹${Number(p.originalPrice).toLocaleString("en-IN")}`
         : undefined),
     tag: p.tag || undefined,
-    // rating: p.rating,
-    // reviewCount: p.reviewCount,
     category: p.category,
     href: `/products/${p.slug}`,
     images: p.images?.length
@@ -290,14 +288,14 @@ export default async function CollectionDetailPage({
 
               category: product.category,
 
-              offers: {
-                "@type": "Offer",
-                url: `https://www.rehnoorjewels.com${product.href}`,
-                priceCurrency: "INR",
-                price: Number(product.price.replace(/[^\d.]/g, "")),
-                availability: "https://schema.org/InStock",
-                itemCondition: "https://schema.org/NewCondition",
-              },
+              // offers: {
+              //   "@type": "Offer",
+              //   url: `https://www.rehnoorjewels.com${product.href}`,
+              //   priceCurrency: "INR",
+              //   price: Number(product.price.replace(/[^\d.]/g, "")),
+              //   availability: "https://schema.org/InStock",
+              //   itemCondition: "https://schema.org/NewCondition",
+              // },
             })),
           ),
         }}

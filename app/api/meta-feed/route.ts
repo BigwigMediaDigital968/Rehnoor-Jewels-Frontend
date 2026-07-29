@@ -6,12 +6,18 @@ function escapeXml(unsafe: string | null | undefined): string {
   if (!unsafe) return "";
   return unsafe.replace(/[<>&'"]/g, (c) => {
     switch (c) {
-      case "<": return "&lt;";
-      case ">": return "&gt;";
-      case "&": return "&amp;";
-      case "'": return "&apos;";
-      case '"': return "&quot;";
-      default: return c;
+      case "<":
+        return "&lt;";
+      case ">":
+        return "&gt;";
+      case "&":
+        return "&amp;";
+      case "'":
+        return "&apos;";
+      case '"':
+        return "&quot;";
+      default:
+        return c;
     }
   });
 }
@@ -19,14 +25,18 @@ function escapeXml(unsafe: string | null | undefined): string {
 export async function GET() {
   try {
     // Fetch all active products from your database.
-    const productResponse = await fetchPublicProducts({ limit: 250 });
+    const productResponse = await fetchPublicProducts({ limit: 550 });
 
     if (!productResponse || !productResponse.success || !productResponse.data) {
-      throw new Error("Invalid or empty data payload from internal products API");
+      throw new Error(
+        "Invalid or empty data payload from internal products API",
+      );
     }
 
     // Filter down to active products with valid configurations
-    const activeProducts = productResponse.data.filter((p: ApiProduct) => p.isActive);
+    const activeProducts = productResponse.data.filter(
+      (p: ApiProduct) => p.isActive,
+    );
 
     let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">
@@ -37,26 +47,38 @@ export async function GET() {
     <language>en</language>`;
 
     for (const prod of activeProducts) {
+      // console.log(prod);
+      
       // 1. Resolve product page target URL link
       const productLink = `https://www.rehnoorjewels.com/products/${prod.slug}`;
 
       // 2. Resolve primary visual asset file path
-      const mainImage = prod.images && prod.images.length > 0 
-        ? prod.images[0].src 
-        : "https://www.rehnoorjewels.com/placeholder-jewelry.jpg";
+      const mainImage =
+        prod.images && prod.images.length > 0
+          ? prod.images[0].src
+          : "https://www.rehnoorjewels.com/placeholder-jewelry.jpg";
 
       // 3. Fallback extraction logic for Gross Weight data parameter mapping
-      const resolvedWeight = prod.weightGrams 
-        ? `${prod.weightGrams} g` 
-        : (prod.specifications?.find(s => s.key.toLowerCase().includes("weight") || s.key.toLowerCase() === "g.wt.")?.value || "N/A");
+      const resolvedWeight = prod.weightGrams
+        ? `${prod.weightGrams} g`
+        : prod.specifications?.find(
+            (s) =>
+              s.key.toLowerCase().includes("weight") ||
+              s.key.toLowerCase() === "g.wt.",
+          )?.value || "N/A";
 
       // 4. Construct safe text context content descriptors
       const cleanTitle = escapeXml(prod.name);
       const cleanSubtitle = prod.subtitle ? escapeXml(prod.subtitle) : "";
-      const fullDescription = escapeXml(prod.shortDescription || prod.longDescription || `Discover the beautifully crafted ${prod.name} at Rehnoor Jewels. Handcrafted high artisan jewelry item.`);
+      const fullDescription = escapeXml(
+        prod.shortDescription ||
+          prod.longDescription ||
+          `Discover the beautifully crafted ${prod.name} at Rehnoor Jewels. Handcrafted high artisan jewelry item.`,
+      );
 
       // 5. Meta-optimized conditional states
-      const availability = prod.stock && prod.stock > 0 ? "in stock" : "out of stock";
+      const availability =
+        prod.stock && prod.stock > 0 ? "in stock" : "out of stock";
 
       xml += `
     <item>
@@ -67,7 +89,8 @@ export async function GET() {
       <g:image_link>${mainImage}</g:image_link>
       <g:condition>new</g:condition>
       <g:availability>${availability}</g:availability>
-      <g:price>${prod.price} INR</g:price>
+      <g:price>${prod.originalPrice} INR</g:price>
+      <g:sale_price>${prod.price} INR</g:sale_price>
       <g:brand>Rehnoor Jewels</g:brand>
       <g:google_product_category>Jewelry &amp; Watches &gt; Jewelry</g:google_product_category>
       <g:product_type>${escapeXml(prod.category || "Jewelry")}</g:product_type>
@@ -92,13 +115,14 @@ export async function GET() {
     return new NextResponse(xml, {
       headers: {
         "Content-Type": "application/xml; charset=utf-8",
-        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+        "Cache-Control":
+          "no-store, no-cache, must-revalidate, proxy-revalidate",
       },
     });
   } catch (error: any) {
     return new NextResponse(
       `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>Error</title><description>${escapeXml(error.message)}</description></channel></rss>`,
-      { status: 500, headers: { "Content-Type": "application/xml" } }
+      { status: 500, headers: { "Content-Type": "application/xml" } },
     );
   }
 }
