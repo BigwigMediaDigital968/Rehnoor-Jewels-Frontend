@@ -98,7 +98,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || "https://rehnoorjewels.com";
+    process.env.NEXT_PUBLIC_SITE_URL || "https://www.rehnoorjewels.com";
 
   try {
     const res = await fetchProductBySlug(slug);
@@ -165,7 +165,7 @@ export default async function ProductDetailPage({
 }) {
   const { slug } = await params;
   const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || "https://rehnoorjewels.com";
+    process.env.NEXT_PUBLIC_SITE_URL;
 
   let product: Product;
   let collectionSlug: string;

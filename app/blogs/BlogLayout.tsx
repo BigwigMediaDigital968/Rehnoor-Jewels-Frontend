@@ -567,7 +567,7 @@ export default function BlogPage() {
           {/* Search */}
           <div className="relative max-w-xs w-full">
             <Search
-              size={13}
+              size={16}
               className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
               style={{ color: query ? "var(--rj-emerald)" : "var(--rj-ash)" }}
             />
@@ -576,7 +576,7 @@ export default function BlogPage() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search articles…"
-              className="w-full pl-9 pr-8 py-2.5 font-cinzel text-xs tracking-wider outline-none rounded-lg"
+              className="w-full pl-9 pr-8 py-3 font-cinzel text-xs tracking-wider outline-none rounded-lg"
               style={{
                 background: "#fff",
                 border: `1px solid ${query ? "var(--rj-emerald)" : "var(--rj-bone)"}`,
@@ -589,7 +589,7 @@ export default function BlogPage() {
                 className="absolute right-3 top-1/2 -translate-y-1/2"
                 style={{ cursor: "pointer" }}
               >
-                <X size={12} style={{ color: "var(--rj-ash)" }} />
+                <X size={16} style={{ color: "var(--rj-ash)" }} />
               </button>
             )}
           </div>
@@ -601,7 +601,7 @@ export default function BlogPage() {
                 <button
                   key={cat}
                   onClick={() => setActiveCategory(cat)}
-                  className="font-cinzel text-[9px] tracking-widest uppercase px-3 py-1.5 rounded-full transition-all duration-200"
+                  className="font-cinzel text-[12px] tracking-widest uppercase px-3 py-1.5 rounded-full transition-all duration-200"
                   style={{
                     background:
                       activeCategory === cat ? "var(--rj-emerald)" : "#fff",

@@ -32,18 +32,18 @@ export async function GET() {
 <rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">
   <channel>
     <title>Rehnoor Jewels Meta Product Catalog</title>
-    <link>https://rehnoorjewels.com</link>
+    <link>https://www.rehnoorjewels.com</link>
     <description>Premium live-synchronized gold-plated and natural diamond custom articles registry for Meta Shops.</description>
     <language>en</language>`;
 
     for (const prod of activeProducts) {
       // 1. Resolve product page target URL link
-      const productLink = `https://rehnoorjewels.com/products/${prod.slug}`;
+      const productLink = `https://www.rehnoorjewels.com/products/${prod.slug}`;
 
       // 2. Resolve primary visual asset file path
       const mainImage = prod.images && prod.images.length > 0 
         ? prod.images[0].src 
-        : "https://rehnoorjewels.com/placeholder-jewelry.jpg";
+        : "https://www.rehnoorjewels.com/placeholder-jewelry.jpg";
 
       // 3. Fallback extraction logic for Gross Weight data parameter mapping
       const resolvedWeight = prod.weightGrams 

@@ -17,7 +17,7 @@ import CertificationMarquee from "./component/Certification";
 // Next.js App Router Metadata Configuration
 export async function generateMetadata(): Promise<Metadata> {
   const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || "https://rehnoorjewels.com";
+    process.env.NEXT_PUBLIC_SITE_URL;
   const title = "Customized Jewellery in Gold & Diamonds";
   const description =
     "Customized Jewellery in 14K–22K gold & natural diamonds. Transparent pricing, WhatsApp consultation. Only at Rehnoor Jewels.";
@@ -80,7 +80,7 @@ export async function generateMetadata(): Promise<Metadata> {
 // ─────────────────────────────────────────────────────────────────
 export default function CustomJewelleryPage() {
   const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || "https://rehnoorjewels.com";
+    process.env.NEXT_PUBLIC_SITE_URL || "https://www.rehnoorjewels.com";
 
   // 1. Organization & AggregateRating Integrated Base Schema
   const organizationSchema = {
