@@ -248,22 +248,22 @@ export default async function ProductDetailPage({
           },
         }
       : {}),
-    offers: {
-      "@type": "Offer",
-      url: `${siteUrl}/products/${rawSlug}`,
-      priceCurrency: rawData.currency || "INR",
-      price: productPriceNumber,
-      priceValidUntil: "2027-12-31",
-      itemCondition: "https://schema.org/NewCondition",
-      availability:
-        product.stock && product.stock > 0
-          ? "https://schema.org/InStock"
-          : "https://schema.org/OutOfStock",
-      seller: {
-        "@type": "Organization",
-        name: "Rehnoor Jewels",
-      },
-    },
+    // offers: {
+    //   "@type": "Offer",
+    //   url: `${siteUrl}/products/${rawSlug}`,
+    //   priceCurrency: rawData.currency || "INR",
+    //   price: productPriceNumber,
+    //   priceValidUntil: "2027-12-31",
+    //   itemCondition: "https://schema.org/NewCondition",
+    //   availability:
+    //     product.stock && product.stock > 0
+    //       ? "https://schema.org/InStock"
+    //       : "https://schema.org/OutOfStock",
+    //   seller: {
+    //     "@type": "Organization",
+    //     name: "Rehnoor Jewels",
+    //   },
+    // },
   };
   // console.log("product",product );
 
