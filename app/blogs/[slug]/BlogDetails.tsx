@@ -808,17 +808,20 @@ export default function BlogDetailLayout({ slug }: BlogDetailLayoutProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
           >
-            {blog.category && (
-              <span
+            <div className="flex flex-wrap gap-2 mb-2">
+              {blog.category &&
+              blog.category.split(",").map((cat) => (
+                <span
                 className="inline-block font-cinzel text-[9px] font-bold tracking-widest uppercase px-3 py-1 rounded-full mb-3"
                 style={{
                   background: "var(--rj-emerald)",
                   color: "var(--rj-gold)",
                 }}
               >
-                {blog.category}
+                {cat.trim()}
               </span>
-            )}
+              ))}
+            </div>
             <h1
               className="font-cormorant font-light text-white leading-tight"
               style={{ fontSize: "clamp(1.6rem, 4vw, 3rem)", maxWidth: "42ch" }}

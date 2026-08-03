@@ -218,8 +218,8 @@ function BlogCard({
 
           {/* Category pill */}
           {post.category && (
-            <div className="absolute top-3 left-3">
-              <span
+            <div className="absolute top-3 left-3 flex gap-2">
+              {/* <span
                 className="font-cinzel text-[8px] font-bold tracking-widest uppercase px-2.5 py-1 rounded-full"
                 style={{
                   background: "var(--rj-emerald)",
@@ -227,7 +227,20 @@ function BlogCard({
                 }}
               >
                 {post.category}
+              </span> */}
+              {
+                post.category.split(",").map((cat) => (
+                  <span
+                className="font-cinzel text-[8px] font-bold tracking-widest uppercase px-2.5 py-1 rounded-full"
+                style={{
+                  background: "var(--rj-emerald)",
+                  color: "var(--rj-gold)",
+                }}
+              >
+                {cat}
               </span>
+                ))
+              }
             </div>
           )}
 
