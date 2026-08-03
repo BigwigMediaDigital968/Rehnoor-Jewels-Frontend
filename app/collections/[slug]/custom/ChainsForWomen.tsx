@@ -29,23 +29,27 @@ import Link from "next/link";
 const ChainsForWomen = () => {
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const [currentReview, setCurrentReview] = useState(0);
-  const reviewRef = useRef<HTMLDivElement>(null);
 
   // SEO Schema Generation
   useEffect(() => {
     const schema = {
       "@context": "https://schema.org/",
-      "@type": "Product",
+      "@type": "CollectionPage", 
       name: "Gold Plated Chains for Women",
-      brand: { "@type": "Brand", name: "Rehnoor Jewels" },
+      brand: {
+        "@type": "Brand",
+        name: "Rehnoor Jewels",
+      },
       description:
         "Premium 1 gram gold plated chains for women with anti-tarnish protection and high-quality gold plating.",
-      category: "Jewelry > Necklaces",
+      url: "https://www.rehnoorjewels.com/collections/gold-plated-chains-for-women",
     };
+
     const script = document.createElement("script");
     script.type = "application/ld+json";
     script.text = JSON.stringify(schema);
     document.head.appendChild(script);
+
     return () => {
       document.head.removeChild(script);
     };

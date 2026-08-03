@@ -98,7 +98,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || "https://rehnoorjewels.com";
+    process.env.NEXT_PUBLIC_SITE_URL || "https://www.rehnoorjewels.com";
 
   try {
     const res = await fetchProductBySlug(slug);
@@ -165,7 +165,7 @@ export default async function ProductDetailPage({
 }) {
   const { slug } = await params;
   const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || "https://rehnoorjewels.com";
+    process.env.NEXT_PUBLIC_SITE_URL;
 
   let product: Product;
   let collectionSlug: string;
@@ -248,22 +248,22 @@ export default async function ProductDetailPage({
           },
         }
       : {}),
-    offers: {
-      "@type": "Offer",
-      url: `${siteUrl}/products/${rawSlug}`,
-      priceCurrency: rawData.currency || "INR",
-      price: productPriceNumber,
-      priceValidUntil: "2027-12-31",
-      itemCondition: "https://schema.org/NewCondition",
-      availability:
-        product.stock && product.stock > 0
-          ? "https://schema.org/InStock"
-          : "https://schema.org/OutOfStock",
-      seller: {
-        "@type": "Organization",
-        name: "Rehnoor Jewels",
-      },
-    },
+    // offers: {
+    //   "@type": "Offer",
+    //   url: `${siteUrl}/products/${rawSlug}`,
+    //   priceCurrency: rawData.currency || "INR",
+    //   price: productPriceNumber,
+    //   priceValidUntil: "2027-12-31",
+    //   itemCondition: "https://schema.org/NewCondition",
+    //   availability:
+    //     product.stock && product.stock > 0
+    //       ? "https://schema.org/InStock"
+    //       : "https://schema.org/OutOfStock",
+    //   seller: {
+    //     "@type": "Organization",
+    //     name: "Rehnoor Jewels",
+    //   },
+    // },
   };
   // console.log("product",product );
 

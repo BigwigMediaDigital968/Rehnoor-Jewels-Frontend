@@ -332,48 +332,6 @@ const REVIEWS: ReviewItem[] = [
   },
 ];
 
-const reviewSchema = {
-  "@context": "https://schema.org",
-  "@type": "CollectionPage",
-  "@id":
-    "https://www.rehnoorjewels.com/collections/gold-plated-bracelets-for-men",
-  name: "Gold Plated Bracelets for Men",
-  url: "https://www.rehnoorjewels.com/collections/gold-plated-bracelets-for-men",
-
-  aggregateRating: {
-    "@type": "AggregateRating",
-    ratingValue: (
-      REVIEWS.reduce((sum, r) => sum + 5, 0) / REVIEWS.length
-    ).toFixed(1),
-    reviewCount: REVIEWS.length,
-    bestRating: 5,
-    worstRating: 1,
-  },
-
-  review: REVIEWS.map((review) => ({
-    "@type": "Review",
-
-    author: {
-      "@type": "Person",
-      name: review.name,
-    },
-
-    reviewRating: {
-      "@type": "Rating",
-      ratingValue: 5,
-      bestRating: 5,
-      worstRating: 1,
-    },
-
-    reviewBody: review.text,
-
-    publisher: {
-      "@type": "Organization",
-      name: "Rehnoor Jewels",
-    },
-  })),
-};
-
 // ─────────────────────────────────────────────────────────────────
 // FAQ ACCORDION ITEM
 // ─────────────────────────────────────────────────────────────────
@@ -610,14 +568,6 @@ export default function BraceletForMen() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(faqSchema),
-        }}
-      />
-
-      <script
-        id="review-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(reviewSchema),
         }}
       />
 
