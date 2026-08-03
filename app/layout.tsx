@@ -12,6 +12,7 @@ import RecentlyViewedFloating from "./products/[slug]/component/RecentlyViewedFl
 import ScrollToTop from "./component/ScrollToTop";
 import { Suspense } from "react";
 import { CartDrawerWrapper } from "./component/website/cart/Cartdrawerwrapper";
+import OfferMarquee from "./component/shared/OfferMarquee";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -112,6 +113,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         {/* <FloatingOfferBadge offerKey="welcome" /> */}
 
         <CartDrawerWrapper />
+        <OfferMarquee/>
 
         <NavbarNew />
         {children}

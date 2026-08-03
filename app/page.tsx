@@ -338,7 +338,6 @@ export default function HomePage() {
       {/* <GoldPriceScroll /> */}
       <main>
         <OfferPopup slides={ACTIVE_PROMOTIONS} delaySeconds={2} />
-
         <HeroSection />
         {/* <CategoriesSection /> */}
         {/* <BestsellersSection /> */}
