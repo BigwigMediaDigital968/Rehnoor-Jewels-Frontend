@@ -309,7 +309,7 @@ export default function CollectionHero({
         {/* Stats strip */}
         <div className="flex flex-wrap gap-8 pt-6 border-t border-white/10">
           {[
-            { v: `${meta.productCount}`, l: "Pieces" },
+            { v: `${meta.products.length}`, l: "Pieces" },
             { v: "Timeless", l: "Designs" },
             { v: "Premium", l: "Finish" },
             { v: "Free", l: "Size Adjust" },
