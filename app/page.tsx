@@ -77,20 +77,20 @@ const websiteSchema = {
 };
 
 const ACTIVE_PROMOTIONS: OfferSlide[] = [
-  {
-    id: "promo-rings",
-    imgSrc: "/ring2.png", // Replace with your target asset pathway
-    alt: "Special Offer on Luxury Gold Plated Customization Rings Collection",
-    link: "/collections/gold-plated-rings-for-women",
-    coupons: ["BUY3GET2FREE", "BUY2GET1FREE"],
-  },
-  {
-    id: "promo-earrings",
-    imgSrc: "/Earring2.png",
-    alt: "Bespoke One Gram Gold Layered Architectural Earring Articles Offer",
-    link: "/collections/gold-plated-earrings-for-women",
-    coupons: ["BUY3GET2FREE", "REHNOOR10"],
-  },
+  // {
+  //   id: "promo-rings",
+  //   imgSrc: "/ring2.png", // Replace with your target asset pathway
+  //   alt: "Special Offer on Luxury Gold Plated Customization Rings Collection",
+  //   link: "/collections/gold-plated-rings-for-women",
+  //   coupons: ["BUY3GET2FREE", "BUY2GET1FREE"],
+  // },
+  // {
+  //   id: "promo-earrings",
+  //   imgSrc: "/Earring2.png",
+  //   alt: "Bespoke One Gram Gold Layered Architectural Earring Articles Offer",
+  //   link: "/collections/gold-plated-earrings-for-women",
+  //   coupons: ["BUY3GET2FREE", "REHNOOR10"],
+  // },
 ];
 
 const reviewSchema = {
