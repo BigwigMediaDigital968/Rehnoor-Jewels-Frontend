@@ -1776,7 +1776,7 @@ function AddressForm({
   return (
     <div className="flex flex-col gap-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
+        {/* <div>
           <FieldLabel text="Full Name" required />
           <input
             value={addr.fullName}
@@ -1807,7 +1807,7 @@ function AddressForm({
             }
           />
           <ErrMsg msg={errs[k("phone")]} />
-        </div>
+        </div> */}
       </div>
       <div>
         <FieldLabel text="Address Line 1" required />
