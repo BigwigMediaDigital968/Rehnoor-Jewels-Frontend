@@ -177,8 +177,7 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
   const [hovered, setHovered] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
   const [showSizePicker, setShowSizePicker] = useState(false);
-    const { openDrawer } = useCartStore();
-
+  const { openDrawer } = useCartStore();
 
   // ── Zustand ──────────────────────────────────────────────────
   const addItem = useCartStore((s) => s.addItem);
@@ -300,267 +299,269 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
           />
         )}
       </AnimatePresence>
-
-      <motion.div
-        layout
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.96 }}
-        transition={{ duration: 0.4, delay: (index % 6) * 0.04 }}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        onClick={() => router.push(product.href)}
-        className="flex flex-col"
-        style={{
-          background: "#fff",
-          borderRadius: "14px",
-          overflow: "hidden",
-          border: `1px solid ${hovered ? "rgba(252,193,81,0.5)" : "var(--rj-bone)"}`,
-          boxShadow: hovered
-            ? "0 12px 36px rgba(0,0,0,0.1), 0 0 0 1px rgba(252,193,81,0.15)"
-            : "0 2px 10px rgba(0,0,0,0.05)",
-          transition: "all 0.3s ease",
-          transform: hovered ? "translateY(-3px)" : "translateY(0)",
-          cursor: "pointer",
-        }}
-      >
-        {/* Image area */}
-        <div
-          className="relative overflow-hidden"
-          style={{ aspectRatio: "1/1", background: "var(--rj-ivory-dark)" }}
+      
+      <Link href={product.href} className="w-full">
+        <motion.div
+          layout
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.96 }}
+          transition={{ duration: 0.4, delay: (index % 6) * 0.04 }}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+          // onClick={() => router.push(product.href)}
+          className="flex flex-col"
+          style={{
+            background: "#fff",
+            borderRadius: "14px",
+            overflow: "hidden",
+            border: `1px solid ${hovered ? "rgba(252,193,81,0.5)" : "var(--rj-bone)"}`,
+            boxShadow: hovered
+              ? "0 12px 36px rgba(0,0,0,0.1), 0 0 0 1px rgba(252,193,81,0.15)"
+              : "0 2px 10px rgba(0,0,0,0.05)",
+            transition: "all 0.3s ease",
+            transform: hovered ? "translateY(-3px)" : "translateY(0)",
+            cursor: "pointer",
+          }}
         >
-          <Image
-            src={product.images[0].src}
-            alt={product.images[0].alt}
-            fill
-            sizes="(max-width:640px) 50vw, (max-width:1024px) 33vw, 25vw"
-            className="object-cover"
-            style={{
-              transform: hovered ? "scale(1.06)" : "scale(1)",
-              transition: "transform 0.6s ease",
-            }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-
-          {/* Tag */}
-          {tag && product.tag && (
-            <div className="absolute top-2.5 left-2.5 z-20 pointer-events-none">
-              <span
-                className="font-cinzel text-[8px] font-bold tracking-widest px-2 py-0.5 rounded-full"
-                style={{ background: tag.bg, color: tag.color }}
-              >
-                {product.tag}
-              </span>
-            </div>
-          )}
-
-          {/* Wishlist — now backed by Zustand */}
-          <button
-            onClick={handleWishlist}
-            className="absolute top-2.5 right-2.5 z-20 w-7 h-7 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
-            style={{
-              background: isWishlisted
-                ? "rgba(252,193,81,0.15)"
-                : "rgba(255,255,255,0.93)",
-              cursor: "pointer",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-            }}
-            aria-label={
-              isWishlisted ? "Remove from wishlist" : "Add to wishlist"
-            }
+          {/* Image area */}
+          <div
+            className="relative overflow-hidden"
+            style={{ aspectRatio: "1/1", background: "var(--rj-ivory-dark)" }}
           >
-            <Heart
-              size={12}
+            <Image
+              src={product.images[0].src}
+              alt={product.images[0].alt}
+              fill
+              sizes="(max-width:640px) 50vw, (max-width:1024px) 33vw, 25vw"
+              className="object-cover"
               style={{
-                fill: isWishlisted ? "var(--rj-gold)" : "transparent",
-                color: isWishlisted ? "var(--rj-gold)" : "var(--rj-ash)",
-                transition: "all 0.25s",
+                transform: hovered ? "scale(1.06)" : "scale(1)",
+                transition: "transform 0.6s ease",
               }}
             />
-          </button>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
 
-          {/* Info tooltip */}
-          <div className="absolute top-3 right-14 z-20 group">
+            {/* Tag */}
+            {tag && product.tag && (
+              <div className="absolute top-2.5 left-2.5 z-20 pointer-events-none">
+                <span
+                  className="font-cinzel text-[8px] font-bold tracking-widest px-2 py-0.5 rounded-full"
+                  style={{ background: tag.bg, color: tag.color }}
+                >
+                  {product.tag}
+                </span>
+              </div>
+            )}
+
+            {/* Wishlist — now backed by Zustand */}
             <button
-              className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-115"
+              onClick={handleWishlist}
+              className="absolute top-2.5 right-2.5 z-20 w-7 h-7 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
               style={{
-                background: "rgba(255,255,255,0.95)",
-                boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
+                background: isWishlisted
+                  ? "rgba(252,193,81,0.15)"
+                  : "rgba(255,255,255,0.93)",
                 cursor: "pointer",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
               }}
+              aria-label={
+                isWishlisted ? "Remove from wishlist" : "Add to wishlist"
+              }
             >
-              <Info size={13} style={{ color: "var(--rj-ash)" }} />
+              <Heart
+                size={12}
+                style={{
+                  fill: isWishlisted ? "var(--rj-gold)" : "transparent",
+                  color: isWishlisted ? "var(--rj-gold)" : "var(--rj-ash)",
+                  transition: "all 0.25s",
+                }}
+              />
             </button>
-            <div
-              className="absolute top-5 right-0 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all duration-300"
-              style={{
-                minWidth: 180,
-                background: "rgba(0,0,0,0.85)",
-                color: "#fff",
-                fontSize: 12,
-                padding: "10px 12px",
-                borderRadius: 8,
-                boxShadow: "0 4px 16px rgba(0,0,0,0.2)",
-                transform: "translateY(6px)",
-                backdropFilter: "blur(8px)",
-              }}
-            >
-              {product.ourPromise ||
-                "Crafted with 22kt gold, ethically sourced and designed to last generations."}
+
+            {/* Info tooltip */}
+            <div className="absolute top-3 right-14 z-20 group">
+              <button
+                className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-115"
+                style={{
+                  background: "rgba(255,255,255,0.95)",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
+                  cursor: "pointer",
+                }}
+              >
+                <Info size={13} style={{ color: "var(--rj-ash)" }} />
+              </button>
+              <div
+                className="absolute top-5 right-0 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all duration-300"
+                style={{
+                  minWidth: 180,
+                  background: "rgba(0,0,0,0.85)",
+                  color: "#fff",
+                  fontSize: 12,
+                  padding: "10px 12px",
+                  borderRadius: 8,
+                  boxShadow: "0 4px 16px rgba(0,0,0,0.2)",
+                  transform: "translateY(6px)",
+                  backdropFilter: "blur(8px)",
+                }}
+              >
+                {product.ourPromise ||
+                  "Crafted with 22kt gold, ethically sourced and designed to last generations."}
+              </div>
             </div>
+
+            {/* Desktop hover overlay */}
+            <AnimatePresence>
+              {hovered && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.18 }}
+                  className="absolute inset-0 hidden md:flex flex-col items-center justify-center gap-2 z-10"
+                >
+                  <div className="absolute inset-0 bg-[var(--rj-emerald)]/20 backdrop-blur-[1px]" />
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      router.push(product.href);
+                    }}
+                    className="relative z-10 flex items-center gap-1.5 px-4 py-2 rounded-full font-cinzel text-[9px] tracking-widest uppercase font-bold transition-all hover:scale-105"
+                    style={{
+                      background: "rgba(255,255,255,0.97)",
+                      color: "var(--rj-emerald)",
+                      boxShadow: "0 4px 16px rgba(0,0,0,0.2)",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <Eye size={11} /> View Details
+                  </button>
+                  {/* Add to Cart — opens size picker or adds directly */}
+                  <button
+                    onClick={handleCartClick}
+                    className="relative z-10 flex items-center gap-1.5 px-4 py-2 rounded-full font-cinzel text-[9px] tracking-widest uppercase font-bold transition-all hover:scale-105"
+                    style={{
+                      background: addedToCart
+                        ? "var(--rj-emerald)"
+                        : "rgba(255,255,255,0.97)",
+                      color: addedToCart ? "#fff" : "var(--rj-charcoal)",
+                      boxShadow: "0 4px 16px rgba(0,0,0,0.2)",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {addedToCart ? (
+                      <>
+                        <Check size={11} /> Added
+                      </>
+                    ) : (
+                      <>
+                        <ShoppingBag size={11} /> Add to Cart
+                      </>
+                    )}
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
-          {/* Desktop hover overlay */}
-          <AnimatePresence>
-            {hovered && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.18 }}
-                className="absolute inset-0 hidden md:flex flex-col items-center justify-center gap-2 z-10"
-              >
-                <div className="absolute inset-0 bg-[var(--rj-emerald)]/20 backdrop-blur-[1px]" />
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    router.push(product.href);
-                  }}
-                  className="relative z-10 flex items-center gap-1.5 px-4 py-2 rounded-full font-cinzel text-[9px] tracking-widest uppercase font-bold transition-all hover:scale-105"
-                  style={{
-                    background: "rgba(255,255,255,0.97)",
-                    color: "var(--rj-emerald)",
-                    boxShadow: "0 4px 16px rgba(0,0,0,0.2)",
-                    cursor: "pointer",
-                  }}
-                >
-                  <Eye size={11} /> View Details
-                </button>
-                {/* Add to Cart — opens size picker or adds directly */}
-                <button
-                  onClick={handleCartClick}
-                  className="relative z-10 flex items-center gap-1.5 px-4 py-2 rounded-full font-cinzel text-[9px] tracking-widest uppercase font-bold transition-all hover:scale-105"
-                  style={{
-                    background: addedToCart
-                      ? "var(--rj-emerald)"
-                      : "rgba(255,255,255,0.97)",
-                    color: addedToCart ? "#fff" : "var(--rj-charcoal)",
-                    boxShadow: "0 4px 16px rgba(0,0,0,0.2)",
-                    cursor: "pointer",
-                  }}
-                >
-                  {addedToCart ? (
-                    <>
-                      <Check size={11} /> Added
-                    </>
-                  ) : (
-                    <>
-                      <ShoppingBag size={11} /> Add to Cart
-                    </>
-                  )}
-                </button>
-              </motion.div>
+          {/* Body */}
+          <div className="flex flex-col flex-1 p-3">
+            {product.rating && (
+              <div className="flex items-center gap-1 mb-1">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star
+                    key={i}
+                    size={9}
+                    style={{
+                      fill:
+                        i < Math.floor(product.rating!)
+                          ? "var(--rj-gold)"
+                          : "transparent",
+                      color:
+                        i < Math.floor(product.rating!)
+                          ? "var(--rj-gold)"
+                          : "var(--rj-bone)",
+                    }}
+                  />
+                ))}
+                {product.reviewCount && (
+                  <span
+                    className="font-cinzel text-[8px] ml-0.5"
+                    style={{ color: "var(--rj-ash)" }}
+                  >
+                    ({product.reviewCount})
+                  </span>
+                )}
+              </div>
             )}
-          </AnimatePresence>
-        </div>
-
-        {/* Body */}
-        <div className="flex flex-col flex-1 p-3">
-          {product.rating && (
-            <div className="flex items-center gap-1 mb-1">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star
-                  key={i}
-                  size={9}
-                  style={{
-                    fill:
-                      i < Math.floor(product.rating!)
-                        ? "var(--rj-gold)"
-                        : "transparent",
-                    color:
-                      i < Math.floor(product.rating!)
-                        ? "var(--rj-gold)"
-                        : "var(--rj-bone)",
-                  }}
-                />
-              ))}
-              {product.reviewCount && (
-                <span
-                  className="font-cinzel text-[8px] ml-0.5"
-                  style={{ color: "var(--rj-ash)" }}
-                >
-                  ({product.reviewCount})
-                </span>
-              )}
-            </div>
-          )}
-          <h3
-            className="font-cormorant font-light leading-snug mb-0.5 line-clamp-1 transition-colors duration-200"
-            style={{
-              fontSize: "clamp(0.85rem,1.4vw,1rem)",
-              color: hovered ? "var(--rj-emerald)" : "var(--rj-charcoal)",
-            }}
-          >
-            {product.name}
-          </h3>
-          {/* <p
+            <h3
+              className="font-cormorant font-light leading-snug mb-0.5 line-clamp-1 transition-colors duration-200"
+              style={{
+                fontSize: "clamp(0.85rem,1.4vw,1rem)",
+                color: hovered ? "var(--rj-emerald)" : "var(--rj-charcoal)",
+              }}
+            >
+              {product.name}
+            </h3>
+            {/* <p
             className="text-[10px] mb-2 line-clamp-1"
             style={{ color: "var(--rj-ash)" }}
           >
             {product.subtitle}
           </p> */}
 
-          <div className="flex items-center gap-1.5 flex-wrap mt-auto">
-            {product.originalPrice && (
+            <div className="flex items-center gap-1.5 flex-wrap mt-auto">
+              {product.originalPrice && (
+                <span
+                  className="text-[10px] line-through"
+                  style={{ color: "var(--rj-ash)" }}
+                >
+                  {product.originalPrice}
+                </span>
+              )}
               <span
-                className="text-[10px] line-through"
-                style={{ color: "var(--rj-ash)" }}
+                className="font-cinzel font-bold"
+                style={{ fontSize: "0.88rem", color: "var(--rj-emerald)" }}
               >
-                {product.originalPrice}
+                {product.price}
               </span>
-            )}
-            <span
-              className="font-cinzel font-bold"
-              style={{ fontSize: "0.88rem", color: "var(--rj-emerald)" }}
-            >
-              {product.price}
-            </span>
-            {discountPct > 0 && (
-              <span
-                className="font-cinzel text-[8px] font-bold px-1.5 py-0.5 rounded-full"
-                style={{ background: "#fef2f2", color: "#ef4444" }}
-              >
-                {discountPct}% OFF
-              </span>
-            )}
+              {discountPct > 0 && (
+                <span
+                  className="font-cinzel text-[8px] font-bold px-1.5 py-0.5 rounded-full"
+                  style={{ background: "#fef2f2", color: "#ef4444" }}
+                >
+                  {discountPct}% OFF
+                </span>
+              )}
+            </div>
           </div>
-        </div>
 
-        {/* Mobile: Add to Cart */}
-        <div className="md:hidden px-3 pb-3">
-          <button
-            onClick={handleCartClick}
-            className="w-full py-2 rounded-full font-cinzel text-[9px] tracking-widest uppercase font-bold transition-all duration-250 flex items-center justify-center gap-1.5"
-            style={{
-              background: addedToCart
-                ? "var(--rj-emerald)"
-                : "var(--rj-charcoal)",
-              color: "#fff",
-              cursor: "pointer",
-            }}
-          >
-            {addedToCart ? (
-              <>
-                <Check size={10} /> Added
-              </>
-            ) : (
-              <>
-                <ShoppingBag size={10} /> Add to Cart
-              </>
-            )}
-          </button>
-        </div>
-      </motion.div>
+          {/* Mobile: Add to Cart */}
+          <div className="md:hidden px-3 pb-3">
+            <button
+              onClick={handleCartClick}
+              className="w-full py-2 rounded-full font-cinzel text-[9px] tracking-widest uppercase font-bold transition-all duration-250 flex items-center justify-center gap-1.5"
+              style={{
+                background: addedToCart
+                  ? "var(--rj-emerald)"
+                  : "var(--rj-charcoal)",
+                color: "#fff",
+                cursor: "pointer",
+              }}
+            >
+              {addedToCart ? (
+                <>
+                  <Check size={10} /> Added
+                </>
+              ) : (
+                <>
+                  <ShoppingBag size={10} /> Add to Cart
+                </>
+              )}
+            </button>
+          </div>
+        </motion.div>
+      </Link>
     </>
   );
 }

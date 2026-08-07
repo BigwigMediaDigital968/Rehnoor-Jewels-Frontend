@@ -681,23 +681,6 @@ export default function ProductDetailHero({
     }
   }, [activeVariant]);
 
-  // const isFirstRender = useRef(true);
-
-  // useEffect(() => {
-  //   if (isFirstRender.current) {
-  //     isFirstRender.current = false;
-  //     return; // keep imgIdx = 0 on initial load
-  //   }
-
-  //   if (!activeVariant?._id) return;
-
-  //   const index = variantImageMap.get(activeVariant._id);
-
-  //   if (index !== undefined) {
-  //     setImgIdx(index);
-  //   }
-  // }, [activeVariant?._id, selections]);
-
   // ── UI state ──
   const [qty, setQty] = useState(1);
   const [addedToCart, setAddedToCart] = useState(false);

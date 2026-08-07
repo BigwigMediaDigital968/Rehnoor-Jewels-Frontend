@@ -40,7 +40,7 @@ function toProduct(p: any): Product {
     name: p.name,
     subtitle: p.subtitle,
 
-    price: p.priceFormatted ?? `₹${p.price.toLocaleString("en-IN")}`,
+    price: p.priceFormatted ?? `₹${p.price?.toLocaleString("en-IN") ?? 0}`,
     originalPrice: p.originalPriceFormatted ?? undefined,
 
     tag: p.tag,
@@ -110,7 +110,6 @@ export async function generateMetadata({
         ? [{ url: p.images[0].src, alt: p.name }]
         : [];
 
-      // Safe fallback formatting for the raw numeric value
       const priceAmount = String(p.price || "");
       const currencyCode = p.currency || "INR";
 
@@ -129,7 +128,7 @@ export async function generateMetadata({
           description,
           url: `${siteUrl}/products/${slug}`,
           siteName: "Rehnoor Jewels",
-          type: "website", // Resetting to a valid standard built-in type
+          type: "website",
           images: shareImage,
         },
         twitter: {
@@ -138,7 +137,6 @@ export async function generateMetadata({
           description,
           images: p.images?.[0]?.src ? [p.images[0].src] : [],
         },
-        // Inject custom or extended spec meta tags safely here:
         other: {
           "og:type": "product",
           "product:price:amount": priceAmount,
@@ -165,7 +163,7 @@ export default async function ProductDetailPage({
 }) {
   const { slug } = await params;
   const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL;
+    process.env.NEXT_PUBLIC_SITE_URL || "https://www.rehnoorjewels.com";
 
   let product: Product;
   let collectionSlug: string;
@@ -222,7 +220,6 @@ export default async function ProductDetailPage({
   };
 
   // 2. Product Details & Offer Schema
-  const productPriceNumber = Number(rawData.price) || 0;
   const productSchema = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -236,7 +233,17 @@ export default async function ProductDetailPage({
       "@type": "Brand",
       name: "Rehnoor Jewels",
     },
-    // Optional metrics mapping conditionally if reviews/ratings live inside the item base
+    offers: {
+      "@type": "Offer",
+      url: `${siteUrl}/products/${rawSlug}`,
+      priceCurrency: rawData.currency || "INR",
+      price: rawData.price ?? 0,
+      availability:
+        product.stock && product.stock > 0
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+      itemCondition: "https://schema.org/NewCondition",
+    },
     ...(product.rating && product.reviewCount
       ? {
           aggregateRating: {
@@ -248,24 +255,7 @@ export default async function ProductDetailPage({
           },
         }
       : {}),
-    // offers: {
-    //   "@type": "Offer",
-    //   url: `${siteUrl}/products/${rawSlug}`,
-    //   priceCurrency: rawData.currency || "INR",
-    //   price: productPriceNumber,
-    //   priceValidUntil: "2027-12-31",
-    //   itemCondition: "https://schema.org/NewCondition",
-    //   availability:
-    //     product.stock && product.stock > 0
-    //       ? "https://schema.org/InStock"
-    //       : "https://schema.org/OutOfStock",
-    //   seller: {
-    //     "@type": "Organization",
-    //     name: "Rehnoor Jewels",
-    //   },
-    // },
   };
-  // console.log("product",product );
 
   return (
     <main>
