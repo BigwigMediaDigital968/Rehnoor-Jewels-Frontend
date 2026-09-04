@@ -27,18 +27,12 @@ interface MagicCheckoutContact {
   phone: string;
 }
 
-declare global {
-  interface Window {
-    Razorpay: any;
-  }
-}
-
 const RJ_NAME = "Rehnoor Jewels";
 
 let scriptLoadPromise: Promise<void> | null = null;
 function loadMagicCheckoutScript(): Promise<void> {
   if (typeof window === "undefined") return Promise.resolve();
-  if (window.Razorpay) return Promise.resolve();
+  if ((window as any).Razorpay) return Promise.resolve();
   if (scriptLoadPromise) return scriptLoadPromise;
 
   scriptLoadPromise = new Promise((resolve, reject) => {
@@ -46,7 +40,8 @@ function loadMagicCheckoutScript(): Promise<void> {
     script.src = "https://checkout.razorpay.com/v1/magic-checkout.js";
     script.async = true;
     script.onload = () => resolve();
-    script.onerror = () => reject(new Error("Could not load Razorpay Magic Checkout script."));
+    script.onerror = () =>
+      reject(new Error("Could not load Razorpay Magic Checkout script."));
     document.body.appendChild(script);
   });
 
@@ -160,7 +155,8 @@ export function useMagicCheckout() {
         },
       };
 
-      rzpRef.current = new window.Razorpay(options);
+      const RazorpayConstructor = (window as Record<string, any>).Razorpay;
+      rzpRef.current = new RazorpayConstructor(options);
       rzpRef.current.open();
     } catch (err) {
       setError(
