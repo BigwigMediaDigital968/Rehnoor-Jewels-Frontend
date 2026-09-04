@@ -1,7 +1,3 @@
-// hooks/useRazorpayCheckout.ts
-// Encapsulates the entire Razorpay payment flow:
-//   placeOrder → open modal → verifyPayment → success / failure
-// The checkout page just calls `initiate()` and reacts to returned state.
 
 import { useState, useCallback } from "react";
 import {

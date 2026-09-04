@@ -133,6 +133,7 @@ function CartItemRow({ item }: { item: CartItem }) {
     setBuyNow(item);
     resetCheckout();
     router.push("/checkout");
+    // router.push("/checkout-magic");
   };
 
   //  New Safe Code
@@ -516,6 +517,7 @@ function OrderSummary() {
     setValidating(false);
     resetCheckout();
     router.push("/checkout");
+    // router.push("/checkout-magic");
   };
 
   return (

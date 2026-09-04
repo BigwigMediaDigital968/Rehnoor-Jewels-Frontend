@@ -1,24 +1,3 @@
-// import CheckoutPage from "./CheckoutPage";
-
-// export default function CheckOutPageContent() {
-//   return (
-//     <>
-//       <CheckoutPage />
-//     </>
-//   );
-// }
-
-// app/checkout/page.tsx
-//
-// Single-page checkout: all sections render together (no step switching).
-// Each section is a forwardRef component exposing validate(). On "Place
-// Order" we run every section's validate(), and only call the Razorpay/COD
-// flow if every one of them passes — otherwise we scroll to the first
-// section that failed.
-//
-// The overlay now covers every processing stage (creating_order →
-// awaiting_payment → verifying → success) so the screen never goes blank
-// between "Place Order" and landing on /thankyou.
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -326,14 +305,6 @@ export default function CheckoutPage() {
     });
 
     try {
-      // sessionStorage.setItem(
-      //   "rj_last_order",
-      //   JSON.stringify({
-      //     orderNumber: result.orderNumber,
-      //     total: result.total,
-      //     paymentMethod: result.paymentMethod,
-      //   }),
-      // );
       
       sessionStorage.setItem(
         "rj_last_order",

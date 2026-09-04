@@ -28,8 +28,9 @@ import type {
   Variant,
   VariantOption,
 } from "../../../types/Product.types";
-import { useWishlistStore } from "@/app/store/cartStore";
+import { useCartStore, useWishlistStore } from "@/app/store/cartStore";
 import ZoomModal from "./ZoomModal";
+import ShiprocketCheckoutButton from "@/app/checkout-shiprocket/ShiprocketCheckoutButton";
 
 // ─────────────────────────────────────────────────────────────────
 // TYPES
@@ -515,12 +516,13 @@ function VariantSelector({
                       padding: isShort ? "0" : "0 1rem",
                       borderRadius: isShort ? "50%" : "2rem",
                       width: isShort ? "3rem" : undefined,
-                      border: `2px solid ${selected
-                        ? "var(--rj-emerald)"
-                        : selectionError && !selections[option.name]
-                          ? "#fca5a5"
-                          : "var(--rj-bone)"
-                        }`,
+                      border: `2px solid ${
+                        selected
+                          ? "var(--rj-emerald)"
+                          : selectionError && !selections[option.name]
+                            ? "#fca5a5"
+                            : "var(--rj-bone)"
+                      }`,
                       background: selected
                         ? "var(--rj-emerald)"
                         : "transparent",
@@ -772,7 +774,7 @@ export default function ProductDetailHero({
       await navigator.clipboard.writeText(window.location.href);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch { }
+    } catch {}
   };
 
   const breadcrumbCollectionSlug =
@@ -827,7 +829,7 @@ export default function ProductDetailHero({
       ([entry]) => {
         setShowStickyCTA(!entry.isIntersecting);
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     if (ctaSectionRef.current) {
@@ -837,9 +839,7 @@ export default function ProductDetailHero({
     return () => observer.disconnect();
   }, []);
 
-
   // META PIXEL VIEWCONTENT EVENT STARTS
-
 
   useEffect(() => {
     if (typeof window !== "undefined" && (window as any).fbq) {
@@ -852,8 +852,7 @@ export default function ProductDetailHero({
     }
   }, [product]);
 
-    // META PIXEL VIEWCONTENT EVENT END
-
+  // META PIXEL VIEWCONTENT EVENT END
 
   return (
     <>
@@ -1393,8 +1392,7 @@ export default function ProductDetailHero({
                 </button>
               </div>
 
-
-              <div ref={ctaSectionRef} className="space-y-2 max-w-xl w-full mx-auto">
+              {/* <div ref={ctaSectionRef} className="space-y-2 max-w-xl w-full mx-auto">
                 <button
                   onClick={handleAddToCart}
                   disabled={outOfStock}
@@ -1426,7 +1424,6 @@ export default function ProductDetailHero({
                     </>
                   ) : (
                     <>
-                      {/* <ShoppingBag size={14} />{" "} */}
                       <span className="inline">Add to Cart</span>
                     </>
                   )}
@@ -1445,14 +1442,92 @@ export default function ProductDetailHero({
                 >
                   {outOfStock ? "Currently Unavailable" : "Buy It Now"}
                 </button>
+              </div> */}
+
+              {/* Shiprocket Direct Buy Now Button */}
+              <div className="w-full">
+                <ShiprocketCheckoutButton
+                  disabled={outOfStock}
+                  onClick={() => {
+                    // Validate options/variants before checkout
+                    if (!validateAndProceed()) return false;
+
+                    // Safely parse original price to number or null
+                    const parsedProductOriginalPrice = product.originalPrice
+                      ? Number(product.originalPrice)
+                      : null;
+
+                    // Helper function to safely extract a URL string from string or image object
+                    const getImageUrl = (img: any): string => {
+                      if (!img) return "";
+                      if (typeof img === "string") return img;
+                      return img.src || img.url || "";
+                    };
+
+                    // Resolve variant image URL
+                    const rawVariantImg = Array.isArray(activeVariant?.images)
+                      ? activeVariant.images[0]
+                      : activeVariant?.images || (activeVariant as any)?.image;
+
+                    // Resolve product image URL
+                    const rawProductImg = Array.isArray(product.images)
+                      ? product.images[0]
+                      : product.images;
+
+                    const mainImageUrl =
+                      getImageUrl(rawVariantImg) ||
+                      getImageUrl(rawProductImg) ||
+                      "";
+
+                    // Construct VariantSnapshot strictly matching VariantSnapshot type
+                    const selectedVariantSnapshot = activeVariant
+                      ? {
+                          variantId: activeVariant._id,
+                          title: activeVariant.title || null,
+                          options: activeVariant.options || {},
+                          price: Number(activeVariant.price) || displayPriceNum,
+                          originalPrice: activeVariant.originalPrice
+                            ? Number(activeVariant.originalPrice)
+                            : null,
+                          sku: activeVariant.sku,
+                          weightGrams: activeVariant.weightGrams,
+                          image: mainImageUrl,
+                        }
+                      : null;
+
+                    // Construct product link fallback
+                    const productSlugOrId =
+                      (product as any).slug ||
+                      product.id ||
+                      (product as any)._id;
+
+                    // Call setBuyNow matching Omit<CartItem, "id">
+                    useCartStore.getState().setBuyNow({
+                      productId: product.id,
+                      name: product.name,
+                      subtitle: product.subtitle || "",
+                      image: mainImageUrl, // Renamed from 'images' to 'image'
+                      priceNum:
+                        selectedVariantSnapshot?.price ?? displayPriceNum,
+                      originalPriceNum:
+                        selectedVariantSnapshot?.originalPrice ??
+                        (isNaN(parsedProductOriginalPrice as number)
+                          ? null
+                          : parsedProductOriginalPrice),
+                      qty: qty,
+                      href: `/product/${productSlugOrId}`,
+                      category: product.category,
+                      tag: product.tag,
+                      variant: selectedVariantSnapshot,
+                    });
+
+                    return true;
+                  }}
+                />
               </div>
 
-
-              {showStickyCTA && (
-                <div
-                  className="fixed lg:hidden -bottom-2 left-0 right-0 z-50 border-t bg-white/95 backdrop-blur-sm px-4 py-3 pb-4"
-
-                >
+              {/* {showStickyCTA && (
+                <div className="fixed lg:hidden -bottom-2 left-0 right-0 z-50 border-t bg-white/95 backdrop-blur-sm px-4 py-3 pb-4">
                   <div className="mx-auto max-w-screen-sm grid grid-cols-2 gap-4">
                     <button
                       onClick={handleAddToCart}
@@ -1504,7 +1579,125 @@ export default function ProductDetailHero({
                     </button>
                   </div>
                 </div>
+              )} */}
+
+              {showStickyCTA && (
+                <div className="fixed lg:hidden -bottom-2 left-0 right-0 z-50 border-t bg-white/95 backdrop-blur-sm px-4 py-3 pb-4">
+                  <div className="mx-auto max-w-screen-sm grid grid-cols-2 gap-4">
+                    {/* Add To Cart Button */}
+                    <button
+                      onClick={handleAddToCart}
+                      disabled={outOfStock}
+                      className="w-full flex items-center justify-center gap-2 py-3 font-cinzel text-[11px] tracking-widest uppercase font-bold rounded-full transition-all duration-300 active:scale-95"
+                      style={{
+                        background: outOfStock
+                          ? "var(--rj-bone)"
+                          : addedToCart
+                            ? "var(--rj-emerald)"
+                            : "var(--gradient-gold)",
+                        color: outOfStock
+                          ? "var(--rj-ash)"
+                          : addedToCart
+                            ? "#fff"
+                            : "var(--rj-emerald)",
+                        boxShadow: outOfStock
+                          ? "none"
+                          : addedToCart
+                            ? "0 4px 20px rgba(0,55,32,0.25)"
+                            : "0 4px 20px rgba(252,193,81,0.3)",
+                        cursor: outOfStock ? "not-allowed" : "pointer",
+                      }}
+                    >
+                      {outOfStock ? (
+                        "Out of Stock"
+                      ) : addedToCart ? (
+                        <>
+                          <Check size={14} /> Added!
+                        </>
+                      ) : (
+                        <span>Add to Cart</span>
+                      )}
+                    </button>
+
+                    {/* Shiprocket Checkout Button replacing 'Buy It Now' */}
+                    <ShiprocketCheckoutButton
+                      disabled={outOfStock}
+                      onClick={() => {
+                        if (!validateAndProceed()) return false;
+
+                        const parsedProductOriginalPrice = product.originalPrice
+                          ? Number(product.originalPrice)
+                          : null;
+
+                        const getImageUrl = (img: any): string => {
+                          if (!img) return "";
+                          if (typeof img === "string") return img;
+                          return img.src || img.url || "";
+                        };
+
+                        const rawVariantImg = Array.isArray(
+                          activeVariant?.images,
+                        )
+                          ? activeVariant.images[0]
+                          : activeVariant?.images ||
+                            (activeVariant as any)?.image;
+
+                        const rawProductImg = Array.isArray(product.images)
+                          ? product.images[0]
+                          : product.images;
+
+                        const mainImageUrl =
+                          getImageUrl(rawVariantImg) ||
+                          getImageUrl(rawProductImg) ||
+                          "";
+
+                        const selectedVariantSnapshot = activeVariant
+                          ? {
+                              variantId: activeVariant._id,
+                              title: activeVariant.title || null,
+                              options: activeVariant.options || {},
+                              price:
+                                Number(activeVariant.price) || displayPriceNum,
+                              originalPrice: activeVariant.originalPrice
+                                ? Number(activeVariant.originalPrice)
+                                : null,
+                              sku: activeVariant.sku,
+                              weightGrams: activeVariant.weightGrams,
+                              image: mainImageUrl,
+                            }
+                          : null;
+
+                        const productSlugOrId =
+                          (product as any).slug ||
+                          product.id ||
+                          (product as any)._id;
+
+                        useCartStore.getState().setBuyNow({
+                          productId: product.id,
+                          name: product.name,
+                          subtitle: product.subtitle || "",
+                          image: mainImageUrl,
+                          priceNum:
+                            selectedVariantSnapshot?.price ?? displayPriceNum,
+                          originalPriceNum:
+                            selectedVariantSnapshot?.originalPrice ??
+                            (isNaN(parsedProductOriginalPrice as number)
+                              ? null
+                              : parsedProductOriginalPrice),
+                          qty: qty,
+                          href: `/product/${productSlugOrId}`,
+                          category: product.category,
+                          tag: product.tag,
+                          variant: selectedVariantSnapshot,
+                        });
+
+                        return true;
+                      }}
+                    />
+                  </div>
+                </div>
               )}
+
               {product.shortDescription && (
                 <p
                   className="text-sm leading-relaxed mb-6"

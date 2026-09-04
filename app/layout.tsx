@@ -85,6 +85,14 @@ export default function RootLayout({
       className={`${cormorant.variable} ${dmSans.variable} ${cinzel.variable}`}
       suppressHydrationWarning
     >
+      <head>
+        {/* Shiprocket Checkout Stylesheet */}
+        <link
+          rel="stylesheet"
+          href="https://checkout-ui.shiprocket.com/assets/styles/shopify.css"
+        />
+      </head>
+
       <body className="antialiased">
         {/* <!-- Google Tag Manager --> */}
         <script>{`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -113,7 +121,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         {/* <FloatingOfferBadge offerKey="welcome" /> */}
 
         <CartDrawerWrapper />
-        <OfferMarquee/>
+        <OfferMarquee />
 
         <NavbarNew />
         {children}
@@ -132,6 +140,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               border: "1px solid rgba(252,193,81,0.3)",
             },
           }}
+        />
+
+        {/* Hidden Domain Identifier Required by Shiprocket JS */}
+        <input
+          type="hidden"
+          value={process.env.NEXT_PUBLIC_SELLER_DOMAIN || "rehnoorjewels.com"}
+          id="sellerDomain"
+        />
+
+        {/* Shiprocket Checkout Script */}
+        <Script
+          src="https://checkout-ui.shiprocket.com/assets/js/channels/shopify.js"
+          strategy="lazyOnload"
         />
       </body>
     </html>
