@@ -41,10 +41,13 @@ export async function POST(req: NextRequest) {
     let lineItemsTotal = 0; // paise
 
     for (const item of items) {
-      const product = await Product.findById(item.productId).lean();
+      const product = (await Product.findById(item.productId).lean()) as any;
       if (!product || product.isActive === false) {
         return NextResponse.json(
-          { success: false, message: `Product ${item.productId} is unavailable.` },
+          {
+            success: false,
+            message: `Product ${item.productId} is unavailable.`,
+          },
           { status: 400 },
         );
       }
@@ -66,7 +69,9 @@ export async function POST(req: NextRequest) {
         }
         unitPriceRupees = variant.price;
         variantSku = variant.sku || variantSku;
-        variantTitle = variant.title ? `${product.name} — ${variant.title}` : product.name;
+        variantTitle = variant.title
+          ? `${product.name} — ${variant.title}`
+          : product.name;
         image = variant.images?.[0]?.src || image;
       }
 
@@ -77,7 +82,9 @@ export async function POST(req: NextRequest) {
 
       lineItems.push({
         sku: variantSku,
-        variant_id: item.variantId ? String(item.variantId) : String(product._id),
+        variant_id: item.variantId
+          ? String(item.variantId)
+          : String(product._id),
         price: unitPricePaise,
         offer_price: unitPricePaise, // discounts are handled live via the promotions widget, not here
         quantity,
