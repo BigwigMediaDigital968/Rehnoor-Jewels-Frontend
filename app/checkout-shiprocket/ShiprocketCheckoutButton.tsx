@@ -1,13 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useCartStore } from "../store/cartStore";
 
 interface ShiprocketCheckoutButtonProps {
   label?: React.ReactNode;
   disabled?: boolean;
   onClick?: () => boolean | void;
-  onSuccess?: () => void; // Called when checkout completes successfully
+  onSuccess?: () => void;
+  onCancel?: () => void;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -17,18 +18,39 @@ export default function ShiprocketCheckoutButton({
   disabled = false,
   onClick,
   onSuccess,
+  onCancel,
   className = "",
   style,
 }: ShiprocketCheckoutButtonProps) {
   const [loading, setLoading] = useState(false);
 
+  // Listen to Shiprocket SDK window events safely without TypeScript type mismatches
+  useEffect(() => {
+    const handleSuccess = () => {
+      onSuccess?.();
+    };
+
+    const handleCancel = () => {
+      onCancel?.();
+    };
+
+    window.addEventListener("shiprocket_checkout_success", handleSuccess);
+    window.addEventListener("shiprocket_checkout_cancel", handleCancel);
+    window.addEventListener("shiprocket_checkout_close", handleCancel);
+
+    return () => {
+      window.removeEventListener("shiprocket_checkout_success", handleSuccess);
+      window.removeEventListener("shiprocket_checkout_cancel", handleCancel);
+      window.removeEventListener("shiprocket_checkout_close", handleCancel);
+    };
+  }, [onSuccess, onCancel]);
+
   const handleCheckout = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    // Fire the custom onClick handler first (e.g., setBuyNow, validate options)
+    // 1. Run validation/setup handler
     if (onClick) {
       const isValid = onClick();
-      // If explicit boolean false is returned, halt checkout flow
       if (isValid === false) return;
     }
 
@@ -38,7 +60,7 @@ export default function ShiprocketCheckoutButton({
       const API_BASE_URL =
         process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
-      // 1. Fetch active items (handles normal cart or Buy Now items)
+      // 2. Fetch active checkout items
       const cartItems = useCartStore.getState().checkoutItems();
 
       if (!cartItems.length) {
@@ -47,7 +69,7 @@ export default function ShiprocketCheckoutButton({
         return;
       }
 
-      // 2. Map items to fit Shiprocket API structure
+      // 3. Map items to fit Shiprocket API structure
       const formattedItems = cartItems.map((item) => ({
         variantId: item.variant?.variantId || item.productId,
         productId: item.productId,
@@ -56,7 +78,7 @@ export default function ShiprocketCheckoutButton({
         price: item.priceNum,
       }));
 
-      // 3. Save order metadata to sessionStorage for ThankYouPage display
+      // 4. Save order metadata to sessionStorage for ThankYouPage
       const pendingOrder = {
         orderNumber: `RJ-${Math.floor(100000 + Math.random() * 900000)}`,
         total: useCartStore.getState().grandTotal(),
@@ -71,7 +93,7 @@ export default function ShiprocketCheckoutButton({
       };
       sessionStorage.setItem("rj_last_order", JSON.stringify(pendingOrder));
 
-      // 4. Request Shiprocket Access Token
+      // 5. Request Shiprocket Access Token
       const response = await fetch(
         `${API_BASE_URL}/api/shiprocket/access-token`,
         {
@@ -88,24 +110,21 @@ export default function ShiprocketCheckoutButton({
 
       if (!data.success || !data.token) {
         alert("Failed to initialize checkout session. Please try again.");
+        onCancel?.();
         return;
       }
 
-      // Execute success callback if provided (e.g., removing drawer item)
-      if (onSuccess) {
-        onSuccess();
-      }
-
-      // 5. Trigger Headless Checkout
+      // 6. Trigger Headless Checkout passing strictly allowed properties
       if (window.HeadlessCheckout?.addToCart) {
         window.HeadlessCheckout.addToCart(e, data.token, {
-          fallbackUrl: `${window.location.origin}/cart`,
+          fallbackUrl: `${window.location.origin}/checkout`,
         });
       } else {
         window.location.href = `${window.location.origin}/checkout`;
       }
     } catch (err) {
       console.error("Checkout initiation error:", err);
+      onCancel?.();
     } finally {
       setLoading(false);
     }

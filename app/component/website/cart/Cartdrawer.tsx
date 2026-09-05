@@ -361,7 +361,7 @@ function DrawerItemRow({
             </button>
           </div>
 
-          {/* Bottom Control Row (Qty Stepper + Price + Direct Buy Button) */}
+          {/* Bottom Control Row */}
           <div className="flex items-center justify-between mt-2 gap-2">
             {/* Quantity Stepper */}
             <div
@@ -409,20 +409,29 @@ function DrawerItemRow({
                 )}
               </div>
 
-              {/* Compact Buy Button with clean pill styling */}
+              {/* Direct Buy Button */}
               <ShiprocketCheckoutButton
                 label="BUY IT NOW"
-                className="text-[9px] px-3 py-1.5 whitespace-nowrap rounded-full tracking-wider"
+                className="text-[9px] px-3 py-1.5 whitespace-nowrap rounded-full tracking-wider font-bold"
                 style={{
                   background: "#18181B",
                   color: "#FFFFFF",
                 }}
                 onClick={() => {
+                  // Stage item into temporary buyNow state without altering main cart store
                   setBuyNow(item);
                   return true;
                 }}
                 onSuccess={() => {
-                  removeItem(item.id);
+                  // Trigger removal ONLY after successful order placement
+                  setRemoving(true);
+                  setTimeout(() => {
+                    removeItem(item.id);
+                    useCartStore.getState().clearBuyNow();
+                  }, 300);
+                }}
+                onCancel={() => {
+                  // If payment modal is dismissed, discard temporary payload and retain item in cart
                   useCartStore.getState().clearBuyNow();
                 }}
               />
@@ -1093,7 +1102,6 @@ function CouponSection() {
 // }
 
 function DrawerSummary({ onClose }: { onClose: () => void }) {
-  const router = useRouter();
   const {
     subtotal,
     savings,
