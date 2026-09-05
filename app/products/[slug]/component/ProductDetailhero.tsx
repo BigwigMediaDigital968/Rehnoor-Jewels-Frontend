@@ -22,6 +22,8 @@ import {
   Info,
   ChevronUp,
   ChevronDown,
+  Minus,
+  Plus,
 } from "lucide-react";
 import type {
   Product,
@@ -854,6 +856,70 @@ export default function ProductDetailHero({
 
   // META PIXEL VIEWCONTENT EVENT END
 
+  // Extract buy-now payload logic for reusability & performance
+  const handleBuyNowClick = () => {
+    if (!validateAndProceed()) return false;
+
+    const parsedProductOriginalPrice = product.originalPrice
+      ? Number(product.originalPrice)
+      : null;
+
+    const getImageUrl = (img: any): string => {
+      if (!img) return "";
+      if (typeof img === "string") return img;
+      return img.src || img.url || "";
+    };
+
+    const rawVariantImg = Array.isArray(activeVariant?.images)
+      ? activeVariant.images[0]
+      : activeVariant?.images || (activeVariant as any)?.image;
+
+    const rawProductImg = Array.isArray(product.images)
+      ? product.images[0]
+      : product.images;
+
+    const mainImageUrl =
+      getImageUrl(rawVariantImg) || getImageUrl(rawProductImg) || "";
+
+    const selectedVariantSnapshot = activeVariant
+      ? {
+          variantId: activeVariant._id,
+          title: activeVariant.title || null,
+          options: activeVariant.options || {},
+          price: Number(activeVariant.price) || displayPriceNum,
+          originalPrice: activeVariant.originalPrice
+            ? Number(activeVariant.originalPrice)
+            : null,
+          sku: activeVariant.sku,
+          weightGrams: activeVariant.weightGrams,
+          image: mainImageUrl,
+        }
+      : null;
+
+    const productSlugOrId =
+      (product as any).slug || product.id || (product as any)._id;
+
+    useCartStore.getState().setBuyNow({
+      productId: product.id,
+      name: product.name,
+      subtitle: product.subtitle || "",
+      image: mainImageUrl,
+      priceNum: selectedVariantSnapshot?.price ?? displayPriceNum,
+      originalPriceNum:
+        selectedVariantSnapshot?.originalPrice ??
+        (isNaN(parsedProductOriginalPrice as number)
+          ? null
+          : parsedProductOriginalPrice),
+      qty: qty,
+      href: `/product/${productSlugOrId}`,
+      category: product.category,
+      tag: product.tag,
+      variant: selectedVariantSnapshot,
+    });
+
+    return true;
+  };
+
   return (
     <>
       {zoomed && (
@@ -1283,7 +1349,7 @@ export default function ProductDetailHero({
               )}
 
               {/* ── Qty + Add to cart ── */}
-              <div className="flex items-center gap-3 mb-4">
+              {/* <div className="flex items-center gap-3 mb-4">
                 <div
                   className="flex items-center rounded-full flex-shrink-0"
                   style={{ border: "1.5px solid var(--rj-bone)" }}
@@ -1392,7 +1458,7 @@ export default function ProductDetailHero({
                 </button>
               </div>
 
-              {/* <div ref={ctaSectionRef} className="space-y-2 max-w-xl w-full mx-auto">
+               <div ref={ctaSectionRef} className="space-y-2 max-w-xl w-full mx-auto">
                 <button
                   onClick={handleAddToCart}
                   disabled={outOfStock}
@@ -1442,89 +1508,7 @@ export default function ProductDetailHero({
                 >
                   {outOfStock ? "Currently Unavailable" : "Buy It Now"}
                 </button>
-              </div> */}
-
-              {/* Shiprocket Direct Buy Now Button */}
-              <div className="w-full">
-                <ShiprocketCheckoutButton
-                  disabled={outOfStock}
-                  onClick={() => {
-                    // Validate options/variants before checkout
-                    if (!validateAndProceed()) return false;
-
-                    // Safely parse original price to number or null
-                    const parsedProductOriginalPrice = product.originalPrice
-                      ? Number(product.originalPrice)
-                      : null;
-
-                    // Helper function to safely extract a URL string from string or image object
-                    const getImageUrl = (img: any): string => {
-                      if (!img) return "";
-                      if (typeof img === "string") return img;
-                      return img.src || img.url || "";
-                    };
-
-                    // Resolve variant image URL
-                    const rawVariantImg = Array.isArray(activeVariant?.images)
-                      ? activeVariant.images[0]
-                      : activeVariant?.images || (activeVariant as any)?.image;
-
-                    // Resolve product image URL
-                    const rawProductImg = Array.isArray(product.images)
-                      ? product.images[0]
-                      : product.images;
-
-                    const mainImageUrl =
-                      getImageUrl(rawVariantImg) ||
-                      getImageUrl(rawProductImg) ||
-                      "";
-
-                    // Construct VariantSnapshot strictly matching VariantSnapshot type
-                    const selectedVariantSnapshot = activeVariant
-                      ? {
-                          variantId: activeVariant._id,
-                          title: activeVariant.title || null,
-                          options: activeVariant.options || {},
-                          price: Number(activeVariant.price) || displayPriceNum,
-                          originalPrice: activeVariant.originalPrice
-                            ? Number(activeVariant.originalPrice)
-                            : null,
-                          sku: activeVariant.sku,
-                          weightGrams: activeVariant.weightGrams,
-                          image: mainImageUrl,
-                        }
-                      : null;
-
-                    // Construct product link fallback
-                    const productSlugOrId =
-                      (product as any).slug ||
-                      product.id ||
-                      (product as any)._id;
-
-                    // Call setBuyNow matching Omit<CartItem, "id">
-                    useCartStore.getState().setBuyNow({
-                      productId: product.id,
-                      name: product.name,
-                      subtitle: product.subtitle || "",
-                      image: mainImageUrl, // Renamed from 'images' to 'image'
-                      priceNum:
-                        selectedVariantSnapshot?.price ?? displayPriceNum,
-                      originalPriceNum:
-                        selectedVariantSnapshot?.originalPrice ??
-                        (isNaN(parsedProductOriginalPrice as number)
-                          ? null
-                          : parsedProductOriginalPrice),
-                      qty: qty,
-                      href: `/product/${productSlugOrId}`,
-                      category: product.category,
-                      tag: product.tag,
-                      variant: selectedVariantSnapshot,
-                    });
-
-                    return true;
-                  }}
-                />
-              </div>
+              </div>  */}
 
               {/* {showStickyCTA && (
                 <div className="fixed lg:hidden -bottom-2 left-0 right-0 z-50 border-t bg-white/95 backdrop-blur-sm px-4 py-3 pb-4">
@@ -1581,14 +1565,91 @@ export default function ProductDetailHero({
                 </div>
               )} */}
 
+              {/* Quantity Stepper + Primary ADD TO BAG */}
+              <div
+                ref={ctaSectionRef}
+                className="space-y-3 max-w-xl w-full mx-auto my-5"
+              >
+                <div className="flex items-center gap-3">
+                  {/* Quantity Stepper */}
+                  <div
+                    className="flex items-center justify-between rounded-full px-3 py-2.5 min-w-[110px]"
+                    style={{
+                      border: "1px solid var(--rj-bone)",
+                      background: "#FFFFFF",
+                    }}
+                  >
+                    <button
+                      onClick={() => setQty((prev) => Math.max(1, prev - 1))}
+                      className="text-gray-500 hover:text-black font-medium transition-colors px-1"
+                      type="button"
+                    >
+                      <Minus size={12} />
+                    </button>
+                    <span className="font-cinzel text-xs font-bold text-[var(--rj-charcoal)]">
+                      {qty}
+                    </span>
+                    <button
+                      onClick={() => setQty((prev) => prev + 1)}
+                      className="text-gray-500 hover:text-black font-medium transition-colors px-1"
+                      type="button"
+                    >
+                      <Plus size={12} />
+                    </button>
+                  </div>
+
+                  {/* Primary Gold CTA */}
+                  <button
+                    onClick={handleAddToCart}
+                    disabled={outOfStock}
+                    className="flex-1 flex items-center justify-center gap-2 py-3 font-cinzel text-[11px] tracking-widest uppercase font-bold rounded-full transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                    style={{
+                      background: outOfStock
+                        ? "var(--rj-bone)"
+                        : addedToCart
+                          ? "var(--rj-emerald)"
+                          : "var(--gradient-gold)",
+                      color: outOfStock
+                        ? "var(--rj-ash)"
+                        : addedToCart
+                          ? "#ffffff"
+                          : "var(--rj-emerald)",
+                      cursor: outOfStock ? "not-allowed" : "pointer",
+                    }}
+                  >
+                    {outOfStock ? (
+                      "Out of Stock"
+                    ) : addedToCart ? (
+                      <>
+                        <Check size={14} /> Added to Bag
+                      </>
+                    ) : (
+                      "Add to Bag"
+                    )}
+                  </button>
+                </div>
+
+                {/* Direct BUY IT NOW Button */}
+                <ShiprocketCheckoutButton
+                  label={outOfStock ? "Currently Unavailable" : "BUY IT NOW"}
+                  disabled={outOfStock}
+                  className="w-full py-3.5 text-[11px] tracking-widest rounded-full font-bold uppercase transition-all duration-300 active:scale-95 shadow-md"
+                  style={{
+                    background: outOfStock ? "var(--rj-bone)" : "#18181B",
+                    color: outOfStock ? "var(--rj-ash)" : "#FFFFFF",
+                  }}
+                  onClick={handleBuyNowClick}
+                />
+              </div>
+
+              {/* Mobile Sticky CTA Bar */}
               {showStickyCTA && (
-                <div className="fixed lg:hidden -bottom-2 left-0 right-0 z-50 border-t bg-white/95 backdrop-blur-sm px-4 py-3 pb-4">
-                  <div className="mx-auto max-w-screen-sm grid grid-cols-2 gap-4">
-                    {/* Add To Cart Button */}
+                <div className="fixed lg:hidden bottom-0 left-0 right-0 z-50 border-t border-gray-100 bg-white/95 backdrop-blur-md px-4 py-3 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
+                  <div className="mx-auto max-w-screen-sm grid grid-cols-2 gap-3 items-center">
                     <button
                       onClick={handleAddToCart}
                       disabled={outOfStock}
-                      className="w-full flex items-center justify-center gap-2 py-3 font-cinzel text-[11px] tracking-widest uppercase font-bold rounded-full transition-all duration-300 active:scale-95"
+                      className="w-full flex items-center justify-center gap-1.5 py-3 font-cinzel text-[10px] tracking-wider uppercase font-bold rounded-full transition-all active:scale-95 disabled:opacity-50"
                       style={{
                         background: outOfStock
                           ? "var(--rj-bone)"
@@ -1598,101 +1659,30 @@ export default function ProductDetailHero({
                         color: outOfStock
                           ? "var(--rj-ash)"
                           : addedToCart
-                            ? "#fff"
+                            ? "#ffffff"
                             : "var(--rj-emerald)",
-                        boxShadow: outOfStock
-                          ? "none"
-                          : addedToCart
-                            ? "0 4px 20px rgba(0,55,32,0.25)"
-                            : "0 4px 20px rgba(252,193,81,0.3)",
-                        cursor: outOfStock ? "not-allowed" : "pointer",
                       }}
                     >
                       {outOfStock ? (
                         "Out of Stock"
                       ) : addedToCart ? (
                         <>
-                          <Check size={14} /> Added!
+                          <Check size={12} /> Added
                         </>
                       ) : (
-                        <span>Add to Cart</span>
+                        "Add to Bag"
                       )}
                     </button>
 
-                    {/* Shiprocket Checkout Button replacing 'Buy It Now' */}
                     <ShiprocketCheckoutButton
+                      label="BUY IT NOW"
                       disabled={outOfStock}
-                      onClick={() => {
-                        if (!validateAndProceed()) return false;
-
-                        const parsedProductOriginalPrice = product.originalPrice
-                          ? Number(product.originalPrice)
-                          : null;
-
-                        const getImageUrl = (img: any): string => {
-                          if (!img) return "";
-                          if (typeof img === "string") return img;
-                          return img.src || img.url || "";
-                        };
-
-                        const rawVariantImg = Array.isArray(
-                          activeVariant?.images,
-                        )
-                          ? activeVariant.images[0]
-                          : activeVariant?.images ||
-                            (activeVariant as any)?.image;
-
-                        const rawProductImg = Array.isArray(product.images)
-                          ? product.images[0]
-                          : product.images;
-
-                        const mainImageUrl =
-                          getImageUrl(rawVariantImg) ||
-                          getImageUrl(rawProductImg) ||
-                          "";
-
-                        const selectedVariantSnapshot = activeVariant
-                          ? {
-                              variantId: activeVariant._id,
-                              title: activeVariant.title || null,
-                              options: activeVariant.options || {},
-                              price:
-                                Number(activeVariant.price) || displayPriceNum,
-                              originalPrice: activeVariant.originalPrice
-                                ? Number(activeVariant.originalPrice)
-                                : null,
-                              sku: activeVariant.sku,
-                              weightGrams: activeVariant.weightGrams,
-                              image: mainImageUrl,
-                            }
-                          : null;
-
-                        const productSlugOrId =
-                          (product as any).slug ||
-                          product.id ||
-                          (product as any)._id;
-
-                        useCartStore.getState().setBuyNow({
-                          productId: product.id,
-                          name: product.name,
-                          subtitle: product.subtitle || "",
-                          image: mainImageUrl,
-                          priceNum:
-                            selectedVariantSnapshot?.price ?? displayPriceNum,
-                          originalPriceNum:
-                            selectedVariantSnapshot?.originalPrice ??
-                            (isNaN(parsedProductOriginalPrice as number)
-                              ? null
-                              : parsedProductOriginalPrice),
-                          qty: qty,
-                          href: `/product/${productSlugOrId}`,
-                          category: product.category,
-                          tag: product.tag,
-                          variant: selectedVariantSnapshot,
-                        });
-
-                        return true;
+                      className="w-full py-3 text-[10px] tracking-wider rounded-full font-bold uppercase transition-all active:scale-95"
+                      style={{
+                        background: outOfStock ? "var(--rj-bone)" : "#18181B",
+                        color: outOfStock ? "var(--rj-ash)" : "#FFFFFF",
                       }}
+                      onClick={handleBuyNowClick}
                     />
                   </div>
                 </div>

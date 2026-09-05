@@ -4,18 +4,34 @@ import React, { useState } from "react";
 import { useCartStore } from "../store/cartStore";
 
 interface ShiprocketCheckoutButtonProps {
+  label?: React.ReactNode;
   disabled?: boolean;
   onClick?: () => boolean | void;
+  onSuccess?: () => void; // Called when checkout completes successfully
+  className?: string;
+  style?: React.CSSProperties;
 }
 
 export default function ShiprocketCheckoutButton({
+  label = "Proceed to Buy Now",
   disabled = false,
   onClick,
+  onSuccess,
+  className = "",
+  style,
 }: ShiprocketCheckoutButtonProps) {
   const [loading, setLoading] = useState(false);
 
   const handleCheckout = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+
+    // Fire the custom onClick handler first (e.g., setBuyNow, validate options)
+    if (onClick) {
+      const isValid = onClick();
+      // If explicit boolean false is returned, halt checkout flow
+      if (isValid === false) return;
+    }
+
     try {
       setLoading(true);
 
@@ -75,6 +91,11 @@ export default function ShiprocketCheckoutButton({
         return;
       }
 
+      // Execute success callback if provided (e.g., removing drawer item)
+      if (onSuccess) {
+        onSuccess();
+      }
+
       // 5. Trigger Headless Checkout
       if (window.HeadlessCheckout?.addToCart) {
         window.HeadlessCheckout.addToCart(e, data.token, {
@@ -94,14 +115,14 @@ export default function ShiprocketCheckoutButton({
     <button
       onClick={handleCheckout}
       disabled={disabled || loading}
-      className="w-full py-4 font-cinzel text-[11px] tracking-widest uppercase font-bold rounded-full transition-all duration-300 hover:opacity-90 active:scale-95 mb-3 cursor-pointer"
+      className={`w-full font-cinzel tracking-widest uppercase font-bold rounded-full transition-all duration-300 hover:opacity-90 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer ${className}`}
       style={{
         background: "var(--rj-emerald)",
         color: "var(--rj-gold)",
-        cursor: "pointer",
+        ...style,
       }}
     >
-      {loading ? "Initializing..." : "Proceed to Buy Now"}
+      {loading ? "Initializing..." : label}
     </button>
   );
 }

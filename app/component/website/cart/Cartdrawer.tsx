@@ -78,6 +78,183 @@ function EmptyCart({ onClose }: { onClose: () => void }) {
 
 // ─── Cart Item Row (compact, drawer-width) ────────────────────────────────────
 
+// function DrawerItemRow({
+//   item,
+//   onNavigate,
+// }: {
+//   item: CartItem;
+//   onNavigate: () => void;
+// }) {
+//   const { removeItem, updateQty, setBuyNow } = useCartStore();
+//   const { reset: resetCheckout } = useCheckoutStore();
+//   const router = useRouter();
+//   const [removing, setRemoving] = useState(false);
+
+//   const handleRemove = () => {
+//     setRemoving(true);
+//     setTimeout(() => removeItem(item.id), 300);
+//   };
+
+//   const discountPct = item.originalPriceNum
+//     ? Math.round((1 - item.priceNum / item.originalPriceNum) * 100)
+//     : 0;
+
+//   const handleBuyNow = () => {
+//     setBuyNow(item);
+//     resetCheckout();
+//     onNavigate();
+//     router.push("/checkout");
+//     // router.push("/checkout-magic");
+//   };
+
+//   const variantLabel = item.variant?.options
+//     ? Object.values(item.variant.options).filter(Boolean).join(" · ")
+//     : null;
+
+//   return (
+//     <motion.div
+//       layout
+//       initial={{ opacity: 0, x: -20 }}
+//       animate={{ opacity: removing ? 0 : 1, x: removing ? -40 : 0 }}
+//       exit={{ opacity: 0, x: -40, height: 0 }}
+//       transition={{ duration: 0.3 }}
+//       className="flex gap-3 p-3 rounded-2xl mb-3"
+//       style={{
+//         background: "#fff",
+//         border: "1px solid var(--rj-bone)",
+//       }}
+//     >
+//       {/* Image */}
+//       <Link
+//         href={item.href}
+//         onClick={onNavigate}
+//         className="relative flex-shrink-0 rounded-xl overflow-hidden group"
+//         style={{
+//           width: 72,
+//           height: 72,
+//           background: "var(--rj-ivory-dark)",
+//           cursor: "pointer",
+//         }}
+//       >
+//         <Image
+//           src={item.image}
+//           alt={item.name}
+//           fill
+//           className="object-cover transition-transform duration-500 group-hover:scale-105"
+//           sizes="72px"
+//         />
+//         {discountPct > 0 && (
+//           <span
+//             className="absolute top-1 left-1 font-cinzel font-bold rounded-full px-1.5 py-0.5"
+//             style={{
+//               fontSize: 7,
+//               background: "var(--rj-emerald)",
+//               color: "var(--rj-gold)",
+//             }}
+//           >
+//             {discountPct}% OFF
+//           </span>
+//         )}
+//       </Link>
+
+//       {/* Details */}
+//       <div className="flex-1 min-w-0 flex flex-col justify-between">
+//         <div className="flex items-start justify-between gap-2">
+//           <div className="min-w-0">
+//             <Link href={item.href} onClick={onNavigate}>
+//               <h3
+//                 className="font-cormorant font-light leading-tight hover:text-[var(--rj-emerald)] transition-colors truncate"
+//                 style={{
+//                   fontSize: "0.95rem",
+//                   color: "var(--rj-charcoal)",
+//                   cursor: "pointer",
+//                 }}
+//               >
+//                 {item.name}
+//               </h3>
+//             </Link>
+//             {variantLabel && (
+//               <p
+//                 className="font-cinzel text-[9px] tracking-wider mt-0.5 truncate"
+//                 style={{ color: "var(--rj-emerald)" }}
+//               >
+//                 {variantLabel}
+//               </p>
+//             )}
+//           </div>
+//           <button
+//             onClick={handleRemove}
+//             className="flex-shrink-0 transition-opacity hover:opacity-60"
+//             style={{ color: "var(--rj-ash)", cursor: "pointer" }}
+//           >
+//             <Trash2 size={13} />
+//           </button>
+//         </div>
+
+//         <div className="flex items-center justify-between mt-1.5">
+//           {/* Qty stepper */}
+//           <div
+//             className="flex items-center rounded-full"
+//             style={{ border: "1.5px solid var(--rj-bone)" }}
+//           >
+//             <button
+//               onClick={() => updateQty(item.id, item.qty - 1)}
+//               className="w-6 h-6 flex items-center justify-center transition-colors hover:bg-[var(--rj-ivory-dark)] rounded-full"
+//               style={{ cursor: "pointer", color: "var(--rj-charcoal)" }}
+//             >
+//               <Minus size={10} />
+//             </button>
+//             <span
+//               className="w-5 text-center font-cinzel text-xs"
+//               style={{ color: "var(--rj-charcoal)" }}
+//             >
+//               {item.qty}
+//             </span>
+//             <button
+//               onClick={() => updateQty(item.id, item.qty + 1)}
+//               className="w-6 h-6 flex items-center justify-center transition-colors hover:bg-[var(--rj-ivory-dark)] rounded-full"
+//               style={{ cursor: "pointer", color: "var(--rj-charcoal)" }}
+//             >
+//               <Plus size={10} />
+//             </button>
+//           </div>
+
+//           {/* Price + Buy now */}
+//           <div className="flex items-center gap-2">
+//             <div className="text-right">
+//               <span
+//                 className="font-cinzel font-bold"
+//                 style={{ fontSize: "0.85rem", color: "var(--rj-charcoal)" }}
+//               >
+//                 {fmtPrice(item.priceNum * item.qty)}
+//               </span>
+//               {item.originalPriceNum && (
+//                 <span
+//                   className="font-cinzel text-[8px] ml-1 line-through"
+//                   style={{ color: "var(--rj-ash)" }}
+//                 >
+//                   {fmtPrice(item.originalPriceNum * item.qty)}
+//                 </span>
+//               )}
+//             </div>
+//             <button
+//               onClick={handleBuyNow}
+//               className="font-cinzel text-[8px] tracking-wider uppercase px-2.5 py-1 rounded-full transition-all hover:opacity-80 whitespace-nowrap"
+//               style={{
+//                 background: "var(--gradient-gold)",
+//                 color: "var(--rj-emerald)",
+//                 cursor: "pointer",
+//               }}
+//             >
+//               Buy Now
+//             </button>
+//           </div>
+//         </div>
+//       </div>
+//     </motion.div>
+//   );
+// }
+
 function DrawerItemRow({
   item,
   onNavigate,
@@ -86,8 +263,6 @@ function DrawerItemRow({
   onNavigate: () => void;
 }) {
   const { removeItem, updateQty, setBuyNow } = useCartStore();
-  const { reset: resetCheckout } = useCheckoutStore();
-  const router = useRouter();
   const [removing, setRemoving] = useState(false);
 
   const handleRemove = () => {
@@ -98,14 +273,6 @@ function DrawerItemRow({
   const discountPct = item.originalPriceNum
     ? Math.round((1 - item.priceNum / item.originalPriceNum) * 100)
     : 0;
-
-  const handleBuyNow = () => {
-    setBuyNow(item);
-    resetCheckout();
-    onNavigate();
-    router.push("/checkout");
-    // router.push("/checkout-magic");
-  };
 
   const variantLabel = item.variant?.options
     ? Object.values(item.variant.options).filter(Boolean).join(" · ")
@@ -118,136 +285,148 @@ function DrawerItemRow({
       animate={{ opacity: removing ? 0 : 1, x: removing ? -40 : 0 }}
       exit={{ opacity: 0, x: -40, height: 0 }}
       transition={{ duration: 0.3 }}
-      className="flex gap-3 p-3 rounded-2xl mb-3"
+      className="p-3.5 rounded-2xl mb-3 relative"
       style={{
         background: "#fff",
         border: "1px solid var(--rj-bone)",
       }}
     >
-      {/* Image */}
-      <Link
-        href={item.href}
-        onClick={onNavigate}
-        className="relative flex-shrink-0 rounded-xl overflow-hidden group"
-        style={{
-          width: 72,
-          height: 72,
-          background: "var(--rj-ivory-dark)",
-          cursor: "pointer",
-        }}
-      >
-        <Image
-          src={item.image}
-          alt={item.name}
-          fill
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
-          sizes="72px"
-        />
-        {discountPct > 0 && (
-          <span
-            className="absolute top-1 left-1 font-cinzel font-bold rounded-full px-1.5 py-0.5"
-            style={{
-              fontSize: 7,
-              background: "var(--rj-emerald)",
-              color: "var(--rj-gold)",
-            }}
-          >
-            {discountPct}% OFF
-          </span>
-        )}
-      </Link>
-
-      {/* Details */}
-      <div className="flex-1 min-w-0 flex flex-col justify-between">
-        <div className="flex items-start justify-between gap-2">
-          <div className="min-w-0">
-            <Link href={item.href} onClick={onNavigate}>
-              <h3
-                className="font-cormorant font-light leading-tight hover:text-[var(--rj-emerald)] transition-colors truncate"
-                style={{
-                  fontSize: "0.95rem",
-                  color: "var(--rj-charcoal)",
-                  cursor: "pointer",
-                }}
-              >
-                {item.name}
-              </h3>
-            </Link>
-            {variantLabel && (
-              <p
-                className="font-cinzel text-[9px] tracking-wider mt-0.5 truncate"
-                style={{ color: "var(--rj-emerald)" }}
-              >
-                {variantLabel}
-              </p>
-            )}
-          </div>
-          <button
-            onClick={handleRemove}
-            className="flex-shrink-0 transition-opacity hover:opacity-60"
-            style={{ color: "var(--rj-ash)", cursor: "pointer" }}
-          >
-            <Trash2 size={13} />
-          </button>
-        </div>
-
-        <div className="flex items-center justify-between mt-1.5">
-          {/* Qty stepper */}
-          <div
-            className="flex items-center rounded-full"
-            style={{ border: "1.5px solid var(--rj-bone)" }}
-          >
-            <button
-              onClick={() => updateQty(item.id, item.qty - 1)}
-              className="w-6 h-6 flex items-center justify-center transition-colors hover:bg-[var(--rj-ivory-dark)] rounded-full"
-              style={{ cursor: "pointer", color: "var(--rj-charcoal)" }}
-            >
-              <Minus size={10} />
-            </button>
+      <div className="flex gap-3">
+        {/* Product Image */}
+        <Link
+          href={item.href}
+          onClick={onNavigate}
+          className="relative flex-shrink-0 rounded-xl overflow-hidden group"
+          style={{
+            width: 72,
+            height: 72,
+            background: "var(--rj-ivory-dark)",
+            cursor: "pointer",
+          }}
+        >
+          <Image
+            src={item.image}
+            alt={item.name}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            sizes="72px"
+          />
+          {discountPct > 0 && (
             <span
-              className="w-5 text-center font-cinzel text-xs"
-              style={{ color: "var(--rj-charcoal)" }}
-            >
-              {item.qty}
-            </span>
-            <button
-              onClick={() => updateQty(item.id, item.qty + 1)}
-              className="w-6 h-6 flex items-center justify-center transition-colors hover:bg-[var(--rj-ivory-dark)] rounded-full"
-              style={{ cursor: "pointer", color: "var(--rj-charcoal)" }}
-            >
-              <Plus size={10} />
-            </button>
-          </div>
-
-          {/* Price + Buy now */}
-          <div className="flex items-center gap-2">
-            <div className="text-right">
-              <span
-                className="font-cinzel font-bold"
-                style={{ fontSize: "0.85rem", color: "var(--rj-charcoal)" }}
-              >
-                {fmtPrice(item.priceNum * item.qty)}
-              </span>
-              {item.originalPriceNum && (
-                <span
-                  className="font-cinzel text-[8px] ml-1 line-through"
-                  style={{ color: "var(--rj-ash)" }}
-                >
-                  {fmtPrice(item.originalPriceNum * item.qty)}
-                </span>
-              )}
-            </div>
-            <button
-              onClick={handleBuyNow}
-              className="font-cinzel text-[8px] tracking-wider uppercase px-2.5 py-1 rounded-full transition-all hover:opacity-80 whitespace-nowrap"
+              className="absolute top-1 left-1 font-cinzel font-bold rounded-md px-1 py-0.5"
               style={{
-                background: "var(--gradient-gold)",
-                color: "var(--rj-emerald)",
-                cursor: "pointer",
+                fontSize: 8,
+                background: "var(--rj-emerald)",
+                color: "var(--rj-gold)",
               }}
             >
-              Buy Now
+              {discountPct}% OFF
+            </span>
+          )}
+        </Link>
+
+        {/* Details & Action Rows */}
+        <div className="flex-1 min-w-0 flex flex-col justify-between">
+          {/* Header Title + Trash Icon */}
+          <div className="flex items-start justify-between gap-2">
+            <div className="min-w-0 pr-1">
+              <Link href={item.href} onClick={onNavigate}>
+                <h3
+                  className="font-cormorant font-light leading-snug hover:text-[var(--rj-emerald)] transition-colors line-clamp-2"
+                  style={{
+                    fontSize: "0.95rem",
+                    color: "var(--rj-charcoal)",
+                    cursor: "pointer",
+                  }}
+                >
+                  {item.name}
+                </h3>
+              </Link>
+              {variantLabel && (
+                <p
+                  className="font-cinzel text-[9px] tracking-wider mt-0.5 truncate"
+                  style={{ color: "var(--rj-emerald)" }}
+                >
+                  {variantLabel}
+                </p>
+              )}
+            </div>
+
+            <button
+              onClick={handleRemove}
+              className="flex-shrink-0 p-1 text-gray-400 hover:text-red-500 transition-colors"
+              aria-label="Remove item"
+            >
+              <Trash2 size={14} />
             </button>
+          </div>
+
+          {/* Bottom Control Row (Qty Stepper + Price + Direct Buy Button) */}
+          <div className="flex items-center justify-between mt-2 gap-2">
+            {/* Quantity Stepper */}
+            <div
+              className="flex items-center rounded-full px-1 py-0.5"
+              style={{ border: "1px solid #E2E8F0" }}
+            >
+              <button
+                onClick={() => updateQty(item.id, item.qty - 1)}
+                className="w-5 h-5 flex items-center justify-center transition-colors hover:bg-gray-100 rounded-full"
+                style={{ cursor: "pointer", color: "var(--rj-charcoal)" }}
+              >
+                <Minus size={9} />
+              </button>
+              <span
+                className="w-5 text-center font-cinzel text-xs font-medium"
+                style={{ color: "var(--rj-charcoal)" }}
+              >
+                {item.qty}
+              </span>
+              <button
+                onClick={() => updateQty(item.id, item.qty + 1)}
+                className="w-5 h-5 flex items-center justify-center transition-colors hover:bg-gray-100 rounded-full"
+                style={{ cursor: "pointer", color: "var(--rj-charcoal)" }}
+              >
+                <Plus size={9} />
+              </button>
+            </div>
+
+            {/* Price + Button Stack */}
+            <div className="flex items-center gap-2">
+              <div className="text-right flex items-baseline gap-1">
+                <span
+                  className="font-cinzel font-bold text-sm"
+                  style={{ color: "var(--rj-charcoal)" }}
+                >
+                  {fmtPrice(item.priceNum * item.qty)}
+                </span>
+                {item.originalPriceNum && (
+                  <span
+                    className="font-cinzel text-[9px] line-through"
+                    style={{ color: "var(--rj-ash)" }}
+                  >
+                    {fmtPrice(item.originalPriceNum * item.qty)}
+                  </span>
+                )}
+              </div>
+
+              {/* Compact Buy Button with clean pill styling */}
+              <ShiprocketCheckoutButton
+                label="BUY IT NOW"
+                className="text-[9px] px-3 py-1.5 whitespace-nowrap rounded-full tracking-wider"
+                style={{
+                  background: "#18181B",
+                  color: "#FFFFFF",
+                }}
+                onClick={() => {
+                  setBuyNow(item);
+                  return true;
+                }}
+                onSuccess={() => {
+                  removeItem(item.id);
+                  useCartStore.getState().clearBuyNow();
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -1109,7 +1288,14 @@ function DrawerSummary({ onClose }: { onClose: () => void }) {
         </div>
 
         {/* Dynamic Shiprocket Checkout Integration */}
-        <ShiprocketCheckoutButton  />
+        <ShiprocketCheckoutButton
+          label="PROCEED TO BUY NOW"
+          className="w-full py-3.5 text-xs tracking-[0.2em] rounded-full shadow-md transition-all active:scale-[0.98]"
+          style={{
+            background: "#003720", // Deep emerald dark green
+            color: "#FCC151", // Elegant gold color matching image mockup
+          }}
+        />
 
         <p
           className="font-cinzel text-[8px] tracking-wider text-center"
