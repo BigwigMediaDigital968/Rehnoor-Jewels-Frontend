@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useCartStore } from "../store/cartStore";
+import { wigzoTrack } from "@/app/lib/wigzo";
 
 interface ShiprocketCheckoutButtonProps {
   label?: React.ReactNode;
@@ -68,6 +69,26 @@ export default function ShiprocketCheckoutButton({
         setLoading(false);
         return;
       }
+
+      // Track Wigzo Checkout Started Event
+      const primaryItem = cartItems[0];
+      wigzoTrack("checkoutstarted", {
+        completed_at: new Date().toISOString(),
+        closed_at: new Date().toISOString(),
+        currency: "INR",
+        image: primaryItem?.image || "",
+        total_price: String(useCartStore.getState().grandTotal()),
+        total_line_items_price: String(useCartStore.getState().grandTotal()),
+        checkout_id: Math.floor(100000 + Math.random() * 900000),
+        product_id: String(primaryItem?.productId || ""),
+        variant_id: String(
+          primaryItem?.variant?.variantId || primaryItem?.productId || "",
+        ),
+        quantity: primaryItem?.qty || 1,
+        title: primaryItem?.name || "",
+        price: String(primaryItem?.priceNum || 0),
+        vendor: "Rehnoor Jewels",
+      });
 
       // 3. Map items to fit Shiprocket API structure
       const formattedItems = cartItems.map((item) => ({

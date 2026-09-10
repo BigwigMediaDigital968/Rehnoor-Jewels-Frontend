@@ -10,6 +10,7 @@ import {
 } from "@/app/lib/api/productLive";
 import type { Product } from "../../types/Product.types";
 import RecentlyViewedTracker from "./component/RecentlyViewedTracker";
+import WigzoProductViewTracker from "./component/WigzoProductViewTracker";
 
 // ─────────────────────────────────────────────────────────────────
 // HELPERS
@@ -268,6 +269,9 @@ export default async function ProductDetailPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
       />
+
+      {/* Wigzo Product View Tracker */}
+      <WigzoProductViewTracker product={product} />
 
       <RecentlyViewedTracker
         product={{

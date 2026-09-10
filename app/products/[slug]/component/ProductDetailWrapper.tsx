@@ -5,6 +5,7 @@ import { useCartStore, VariantSnapshot } from "@/app/store/cartStore";
 import { useCheckoutStore } from "@/app/store/checkoutStore";
 import ProductDetailHero from "./ProductDetailhero";
 import type { Product } from "../../../types/Product.types";
+import { wigzoTrack } from "@/app/lib/wigzo";
 
 interface Props {
   product: Product;
@@ -65,8 +66,26 @@ export default function ProductDetailWrapper({
   }
 
   const handleAddToCart = (size: string, qty: number, variantId?: string) => {
-    addItem(buildCartPayload(size, qty, variantId));
+    const payload = buildCartPayload(size, qty, variantId);
+    addItem(payload);
     openDrawer();
+
+    // Trigger Wigzo Add To Cart Tracking
+    wigzoTrack("addtocart", {
+      canonicalURL: window.location.href,
+      productUrl: window.location.href,
+      title: product.name,
+      price: String(payload.priceNum),
+      previousPrice: String(payload.originalPriceNum || payload.priceNum),
+      description: product.shortDescription || "",
+      image: payload.image,
+      productId: product.id,
+      category: product.category || "Jewelry",
+      tags: Array.isArray(product.seoKeywords)
+        ? product.seoKeywords.join(",")
+        : "",
+      language: "en",
+    });
   };
 
   const handleBuyNow = (size: string, qty: number, variantId?: string) => {

@@ -91,6 +91,21 @@ export default function RootLayout({
           rel="stylesheet"
           href="https://checkout-ui.shiprocket.com/assets/styles/shopify.css"
         />
+
+        <Script id="wigzo-mapper" strategy="afterInteractive">
+          {`
+            (function(w,i,g,z,o){
+              var a,m;w['WigzoObject']=o;w[o]=w[o]||function(){
+                (w[o].q=w[o].q||[]).push(arguments)
+              },w[o].l=1*new Date();
+              w[o].h=z;a=i.createElement(g);
+              m=i.getElementsByTagName(g)[0];a.async=1;a.src=z;
+              m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//app.wigzo.com/wigzo.compressed.js','wigzo');
+            
+            wigzo('configure', 'cP-P6m4nRLGHVCBD54CAVg');
+          `}
+        </Script>
       </head>
 
       <body className="antialiased">
