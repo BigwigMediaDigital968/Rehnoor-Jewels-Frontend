@@ -1279,6 +1279,21 @@ export default function ProductDetailHero({
                 </div>
               )}
 
+              {/* Offers */}
+              <div className="flex items-center gap-2 flex-wrap">
+                {/* Buy 2 Get 1 FREE */}
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[11px] font-extrabold tracking-wider uppercase text-white bg-[#ff1e1e] shadow-sm select-none">
+                  <span className="w-1.5 h-1.5 rounded-full bg-white shrink-0 animate-pulse" />
+                  BUY 2 GET 1 FREE
+                </span>
+
+                {/* Buy 3 Get 2 FREE */}
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[11px] font-extrabold tracking-wider uppercase text-white bg-[#ff1e1e] shadow-sm select-none">
+                  <span className="w-1.5 h-1.5 rounded-full bg-white shrink-0 animate-pulse" />
+                  BUY 3 GET 2 FREE
+                </span>
+              </div>
+
               <OfferBanner imageUrl={product.offerBannerImage || ""} />
 
               {/* ── VARIANT SELECTORS (new) ── */}

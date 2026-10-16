@@ -1,8 +1,530 @@
+// "use client";
+
+// import { useEffect, useRef, useState, useCallback } from "react";
+// import { motion, AnimatePresence } from "framer-motion";
+// import { X, ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
+
+// interface ImageData {
+//   src: string;
+//   alt: string;
+// }
+
+// interface ZoomModalProps {
+//   images: ImageData[];
+//   currentIndex: number;
+//   setCurrentIndex: (index: number | ((prev: number) => number)) => void;
+//   onClose: () => void;
+//   title?: string;
+// }
+
+// const LENS_SIZE = 168; // diameter px
+// const ZOOM_SCALE = 6.0; // magnification factor
+
+// export default function ZoomModal({
+//   images = [],
+//   currentIndex,
+//   setCurrentIndex,
+//   onClose,
+//   title = "Gallery View",
+// }: ZoomModalProps) {
+//   const thumbnailRefs = useRef<(HTMLButtonElement | null)[]>([]);
+//   const scrollRailRef = useRef<HTMLDivElement>(null);
+//   const stageRef = useRef<HTMLDivElement>(null);
+//   const cardRef = useRef<HTMLDivElement>(null);
+//   const imgRef = useRef<HTMLImageElement>(null);
+
+//   // Lens: viewport-space cursor + image-space bg-position
+//   const [lens, setLens] = useState<{
+//     active: boolean; // true only when cursor is over the stage on desktop
+//     // position of lens centre relative to the *card* (px) — avoids overflow clip
+//     lx: number;
+//     ly: number;
+//     // background-position percentages (0-100) for the zoomed image
+//     bx: number;
+//     by: number;
+//   }>({ active: false, lx: 0, ly: 0, bx: 50, by: 50 });
+
+//   // Only show lens on pointer-capable (non-touch) devices
+//   const [isPointer, setIsPointer] = useState(false);
+//   useEffect(() => {
+//     setIsPointer(window.matchMedia("(pointer: fine)").matches);
+//   }, []);
+
+//   // Lock body scroll
+//   useEffect(() => {
+//     const prev = document.body.style.overflow;
+//     document.body.style.overflow = "hidden";
+//     return () => {
+//       document.body.style.overflow = prev;
+//     };
+//   }, []);
+
+//   // Keyboard nav
+//   const handleNext = useCallback(
+//     (e?: React.MouseEvent | KeyboardEvent) => {
+//       (e as React.MouseEvent)?.stopPropagation?.();
+//       setCurrentIndex((p) => (p + 1) % images.length);
+//     },
+//     [images.length, setCurrentIndex],
+//   );
+//   const handlePrev = useCallback(
+//     (e?: React.MouseEvent | KeyboardEvent) => {
+//       (e as React.MouseEvent)?.stopPropagation?.();
+//       setCurrentIndex((p) => (p - 1 + images.length) % images.length);
+//     },
+//     [images.length, setCurrentIndex],
+//   );
+//   useEffect(() => {
+//     const onKey = (e: KeyboardEvent) => {
+//       if (e.key === "ArrowRight") handleNext(e);
+//       if (e.key === "ArrowLeft") handlePrev(e);
+//       if (e.key === "Escape") onClose();
+//     };
+//     window.addEventListener("keydown", onKey);
+//     return () => window.removeEventListener("keydown", onKey);
+//   }, [handleNext, handlePrev, onClose]);
+
+//   // Auto-scroll active thumbnail into view
+//   useEffect(() => {
+//     const thumb = thumbnailRefs.current[currentIndex];
+//     const rail = scrollRailRef.current;
+//     if (!thumb || !rail) return;
+//     rail.scrollTo({
+//       left: thumb.offsetLeft - rail.offsetWidth / 2 + thumb.offsetWidth / 2,
+//       behavior: "smooth",
+//     });
+//   }, [currentIndex]);
+
+//   // Mouse move: compute lens position relative to card, bg-position relative to image
+//   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+//     if (!isPointer) return;
+//     const stage = stageRef.current;
+//     const img = imgRef.current;
+//     const card = cardRef.current;
+//     if (!stage || !img || !card) return;
+
+//     const stageRect = stage.getBoundingClientRect();
+//     const cardRect = card.getBoundingClientRect();
+
+//     // Cursor relative to stage
+//     const cx = e.clientX - stageRect.left;
+//     const cy = e.clientY - stageRect.top;
+
+//     // Rendered image rect inside the stage (object-contain letterboxing)
+//     const natW = img.naturalWidth || img.clientWidth;
+//     const natH = img.naturalHeight || img.clientHeight;
+//     const sW = stageRect.width;
+//     const sH = stageRect.height;
+//     const imgAspect = natW / natH;
+//     const stageAspect = sW / sH;
+
+//     let rendW: number, rendH: number, offX: number, offY: number;
+//     if (imgAspect > stageAspect) {
+//       rendW = sW;
+//       rendH = sW / imgAspect;
+//       offX = 0;
+//       offY = (sH - rendH) / 2;
+//     } else {
+//       rendH = sH;
+//       rendW = sH * imgAspect;
+//       offX = (sW - rendW) / 2;
+//       offY = 0;
+//     }
+
+//     const relX = Math.max(0, Math.min(cx - offX, rendW));
+//     const relY = Math.max(0, Math.min(cy - offY, rendH));
+//     const bx = (relX / rendW) * 100;
+//     const by = (relY / rendH) * 100;
+
+//     // Lens centre relative to card — so it isn't clipped by stage overflow:hidden
+//     const lx = e.clientX - cardRect.left;
+//     const ly = e.clientY - cardRect.top;
+
+//     // Clamp lens so it stays fully inside the card
+//     const clampedLx = Math.max(
+//       LENS_SIZE / 2,
+//       Math.min(cardRect.width - LENS_SIZE / 2, lx),
+//     );
+//     const clampedLy = Math.max(
+//       LENS_SIZE / 2,
+//       Math.min(cardRect.height - LENS_SIZE / 2, ly),
+//     );
+
+//     setLens({ active: true, lx: clampedLx, ly: clampedLy, bx, by });
+//   };
+
+//   // Swipe to navigate
+//   const handleDragEnd = (_e: unknown, info: { offset: { x: number } }) => {
+//     if (info.offset.x < -50) handleNext();
+//     else if (info.offset.x > 50) handlePrev();
+//   };
+
+//   if (!images.length) return null;
+//   const current = images[currentIndex];
+
+//   return (
+//     <div
+//       className="fixed inset-0 z-[200] flex items-center justify-center p-3 md:p-6 select-none overflow-hidden"
+//       style={{ fontFamily: "inherit" }}
+//     >
+//        {/* ── MOBILE VIEW (Hidden on Desktop) ── */}
+//       <div
+//         className="fixed inset-0 z-50 flex flex-col bg-black/95 md:hidden"
+//         onClick={onClose}
+//       >
+//         {/* Mobile Top Header */}
+//         <div className="flex items-center justify-between w-full p-4 z-10 bg-gradient-to-b from-black/80 to-transparent">
+//           <span className="text-white/70 text-xs font-mono tracking-widest">
+//             {currentIndex + 1} / {images.length}
+//           </span>
+//           <button
+//             onClick={onClose}
+//             className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 active:bg-white/20 border border-white/10 text-white"
+//             aria-label="Close gallery"
+//           >
+//             <X size={20} />
+//           </button>
+//         </div>
+
+//         {/* Mobile Image Stage: Pure wrapper to allow native touch zooming */}
+//         <div
+//           className="flex-grow flex items-center justify-center p-4 overflow-auto"
+//           onClick={(e) => e.stopPropagation()}
+//         >
+//           <AnimatePresence mode="wait">
+//             <motion.img
+//               key={currentIndex}
+//               src={current.src}
+//               alt={current.alt || title}
+//               initial={{ opacity: 0 }}
+//               animate={{ opacity: 1 }}
+//               exit={{ opacity: 0 }}
+//               transition={{ duration: 0.2 }}
+//               className="max-w-full max-h-[75dvh] object-contain select-text"
+//               style={{
+//                 pointerEvents: "auto", // Essential: unlocks native browser zoom engines
+//                 touchAction: "auto"    // Essential: tells mobile safari/chrome to handle normal interactions
+//               }}
+//             />
+//           </AnimatePresence>
+//         </div>
+
+//         {/* Mobile Bottom Navigation Layout */}
+//         {images.length > 1 && (
+//           <div
+//             className="flex items-center justify-center gap-12 p-6 bg-gradient-to-t from-black/80 to-transparent"
+//             onClick={(e) => e.stopPropagation()}
+//           >
+//             <button
+//               onClick={handlePrev}
+//               className="p-3.5 rounded-full bg-white/10 text-white active:scale-90 transition-transform"
+//               aria-label="Previous item"
+//             >
+//               <ChevronLeft size={24} />
+//             </button>
+//             <button
+//               onClick={handleNext}
+//               className="p-3.5 rounded-full bg-white/10 text-white active:scale-90 transition-transform"
+//               aria-label="Next item"
+//             >
+//               <ChevronRight size={24} />
+//             </button>
+//           </div>
+//         )}
+//       </div>
+
+//       {/* ── DESKTOP VIEW (Hidden on Mobile) ── */}
+//       {/* Backdrop */}
+//       <motion.div
+//         initial={{ opacity: 0 }}
+//         animate={{ opacity: 1 }}
+//         exit={{ opacity: 0 }}
+//         transition={{ duration: 0.25 }}
+//         className="absolute inset-0 md:block"
+//         style={{
+//           background: "rgba(0,24,10,0.75)",
+//           backdropFilter: "blur(10px)",
+//         }}
+//         onClick={onClose}
+//       />
+
+//       {/* Card — position:relative so lens can be absolute inside it */}
+//       <motion.div
+//         ref={cardRef}
+//         initial={{ scale: 0.96, opacity: 0 }}
+//         animate={{ scale: 1, opacity: 1 }}
+//         exit={{ scale: 0.96, opacity: 0 }}
+//         transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+//         className="relative z-10 flex flex-col w-full"
+//         style={{
+//           maxWidth: 900,
+//           height: "min(92dvh, 780px)",
+//           background: "rgba(0,24,10,0.92)",
+//           backdropFilter: "blur(16px)",
+//           border: "1px solid rgba(255,255,255,0.09)",
+//           borderRadius: 20,
+//           overflow: "hidden",
+//         }}
+//         onClick={(e) => e.stopPropagation()}
+//       >
+//         {/* ── Top bar ── */}
+//         <div
+//           className="flex items-center justify-between px-4 py-3 flex-shrink-0"
+//           style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}
+//         >
+//           <div className="flex items-center gap-2.5">
+//             <ZoomIn size={14} style={{ color: "rgba(252,193,81,0.7)" }} />
+//             <span
+//               style={{
+//                 fontFamily: "var(--font-cinzel, 'Cinzel', serif)",
+//                 fontSize: 9,
+//                 letterSpacing: "0.2em",
+//                 textTransform: "uppercase",
+//                 color: "rgba(252,193,81,0.55)",
+//               }}
+//             >
+//               {currentIndex + 1} / {images.length}
+//             </span>
+//           </div>
+//           <button
+//             onClick={onClose}
+//             className="flex items-center justify-center transition-all duration-200 hover:rotate-90 hover:opacity-70"
+//             style={{
+//               width: 32,
+//               height: 32,
+//               borderRadius: "50%",
+//               background: "rgba(255,255,255,0.07)",
+//               border: "1px solid rgba(255,255,255,0.1)",
+//               color: "#e8e4d9",
+//               cursor: "pointer",
+//             }}
+//             aria-label="Close gallery"
+//           >
+//             <X size={14} strokeWidth={2} />
+//           </button>
+//         </div>
+
+//         {/* ── Image stage ── */}
+//         <div
+//           ref={stageRef}
+//           className="relative overflow-hidden flex items-center justify-center"
+//           style={{
+//             flexGrow: 1,
+//             flexShrink: 1,
+//             minHeight: 200,
+//             cursor: isPointer ? "crosshair" : "grab",
+//             background: "rgba(0,18,8,0.4)",
+//           }}
+//           onMouseMove={handleMouseMove}
+//           onMouseLeave={() => setLens((l) => ({ ...l, active: false }))}
+//         >
+//           <AnimatePresence mode="wait">
+//             <motion.div
+//               key={currentIndex}
+//               initial={{ opacity: 0, scale: 0.97 }}
+//               animate={{ opacity: 1, scale: 1 }}
+//               exit={{ opacity: 0, scale: 1.02 }}
+//               transition={{ duration: 0.25, ease: "easeOut" }}
+//               drag="x"
+//               dragConstraints={{ left: 0, right: 0 }}
+//               dragElastic={0.35}
+//               onDragEnd={handleDragEnd}
+//               className="absolute inset-0 flex items-center justify-center"
+//               style={{ cursor: isPointer ? "crosshair" : "grab" }}
+//             >
+//               {/* eslint-disable-next-line @next/next/no-img-element */}
+//               <img
+//                 ref={imgRef}
+//                 src={current.src}
+//                 alt={current.alt || title}
+//                 draggable={false}
+//                 style={{
+//                   maxWidth: "100%",
+//                   maxHeight: "100%",
+//                   objectFit: "contain",
+//                   padding: "10px 14px",
+//                   pointerEvents: "none",
+//                   userSelect: "none",
+//                   display: "block",
+//                 }}
+//               />
+//             </motion.div>
+//           </AnimatePresence>
+
+//           {/* Prev / Next */}
+//           {images.length > 1 && (
+//             <>
+//               <button
+//                 onClick={handlePrev}
+//                 className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center justify-center transition-all duration-150 hover:scale-105 active:scale-95"
+//                 style={{
+//                   width: 40,
+//                   height: 40,
+//                   borderRadius: "50%",
+//                   background: "rgba(0,30,15,0.75)",
+//                   border: "1px solid rgba(255,255,255,0.12)",
+//                   color: "#e8e4d9",
+//                   cursor: "pointer",
+//                   zIndex: 90,
+//                 }}
+//                 aria-label="Previous image"
+//               >
+//                 <ChevronLeft size={18} strokeWidth={2} />
+//               </button>
+//               <button
+//                 onClick={handleNext}
+//                 className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center transition-all duration-150 hover:scale-105 active:scale-95"
+//                 style={{
+//                   width: 40,
+//                   height: 40,
+//                   borderRadius: "50%",
+//                   background: "rgba(0,30,15,0.75)",
+//                   border: "1px solid rgba(255,255,255,0.12)",
+//                   color: "#e8e4d9",
+//                   cursor: "pointer",
+//                   zIndex: 90,
+//                 }}
+//                 aria-label="Next image"
+//               >
+//                 <ChevronRight size={18} strokeWidth={2} />
+//               </button>
+//             </>
+//           )}
+//         </div>
+
+//         {/* ── Zoom lens — sibling of stage, not child, so overflow:hidden doesn't clip it ── */}
+//         {isPointer && lens.active && (
+//           <div
+//             aria-hidden="true"
+//             style={{
+//               position: "absolute",
+//               // lx/ly are the lens *centre* relative to the card
+//               left: lens.lx - LENS_SIZE / 2,
+//               top: lens.ly - LENS_SIZE / 2,
+//               width: LENS_SIZE,
+//               height: LENS_SIZE,
+//               borderRadius: "50%",
+//               border: "2px solid rgba(252,193,81,0.8)",
+//               boxShadow:
+//                 "0 0 0 1px rgba(0,0,0,0.5), " +
+//                 "0 8px 32px rgba(0,0,0,0.5), " +
+//                 "inset 0 0 0 1px rgba(255,255,255,0.06)",
+//               backgroundImage: `url(${current.src})`,
+//               backgroundRepeat: "no-repeat",
+//               backgroundSize: `${ZOOM_SCALE * 100}%`,
+//               backgroundPosition: `${lens.bx}% ${lens.by}%`,
+//               pointerEvents: "none",
+//               // Sits above the stage content but below modal chrome
+//               zIndex: 20,
+//               // Subtle vignette
+//               WebkitMaskImage:
+//                 "radial-gradient(circle, black 60%, transparent 100%)",
+//               maskImage: "radial-gradient(circle, black 60%, transparent 100%)",
+//             }}
+//           >
+//             {/* crosshair */}
+//             <div
+//               style={{
+//                 position: "absolute",
+//                 left: "50%",
+//                 top: "12%",
+//                 bottom: "12%",
+//                 width: 1,
+//                 background: "rgba(255,255,255,0.2)",
+//                 transform: "translateX(-50%)",
+//               }}
+//             />
+//             <div
+//               style={{
+//                 position: "absolute",
+//                 top: "50%",
+//                 left: "12%",
+//                 right: "12%",
+//                 height: 1,
+//                 background: "rgba(255,255,255,0.2)",
+//                 transform: "translateY(-50%)",
+//               }}
+//             />
+//           </div>
+//         )}
+
+//         {/* ── Thumbnail rail ── */}
+//         {images.length > 1 && (
+//           <div
+//             ref={scrollRailRef}
+//             className="flex gap-2 overflow-x-auto flex-shrink-0"
+//             style={{
+//               padding: "10px 12px",
+//               borderTop: "1px solid rgba(255,255,255,0.07)",
+//               scrollbarWidth: "none",
+//               msOverflowStyle: "none",
+//             }}
+//             onClick={(e) => e.stopPropagation()}
+//           >
+//             {images.map((img, i) => (
+//               <button
+//                 key={i}
+//                 ref={(el) => {
+//                   thumbnailRefs.current[i] = el;
+//                 }}
+//                 onClick={() => setCurrentIndex(i)}
+//                 style={{
+//                   flexShrink: 0,
+//                   width: 64,
+//                   height: 52,
+//                   borderRadius: 10,
+//                   overflow: "hidden",
+//                   padding: 0,
+//                   border:
+//                     i === currentIndex
+//                       ? "2px solid rgba(252,193,81,0.85)"
+//                       : "2px solid transparent",
+//                   opacity: i === currentIndex ? 1 : 0.42,
+//                   transform: i === currentIndex ? "scale(1.06)" : "scale(1)",
+//                   transition: "all 0.2s ease",
+//                   cursor: "pointer",
+//                   background: "rgba(0,0,0,0.3)",
+//                 }}
+//               >
+//                 {/* eslint-disable-next-line @next/next/no-img-element */}
+//                 <img
+//                   src={img.src}
+//                   alt={`View ${i + 1}`}
+//                   style={{
+//                     width: "100%",
+//                     height: "100%",
+//                     objectFit: "cover",
+//                     pointerEvents: "none",
+//                     userSelect: "none",
+//                     display: "block",
+//                   }}
+//                 />
+//               </button>
+//             ))}
+//           </div>
+//         )}
+//       </motion.div>
+
+//       <style>{`
+//         div::-webkit-scrollbar { display: none; }
+//       `}</style>
+//     </div>
+//   );
+// }
+
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
+import {
+  X,
+  ChevronLeft,
+  ChevronRight,
+  ZoomIn,
+  ZoomOut,
+  Maximize,
+  Minimize,
+} from "lucide-react";
 
 interface ImageData {
   src: string;
@@ -17,146 +539,101 @@ interface ZoomModalProps {
   title?: string;
 }
 
-const LENS_SIZE = 168; // diameter px
-const ZOOM_SCALE = 3.0; // magnification factor
-
 export default function ZoomModal({
   images = [],
   currentIndex,
   setCurrentIndex,
   onClose,
-  title = "Gallery View",
+  title = "Product View",
 }: ZoomModalProps) {
-  const thumbnailRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const scrollRailRef = useRef<HTMLDivElement>(null);
-  const stageRef = useRef<HTMLDivElement>(null);
-  const cardRef = useRef<HTMLDivElement>(null);
-  const imgRef = useRef<HTMLImageElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isZoomed, setIsZoomed] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [panPosition, setPanPosition] = useState({ x: 0, y: 0 });
 
-  // Lens: viewport-space cursor + image-space bg-position
-  const [lens, setLens] = useState<{
-    active: boolean; // true only when cursor is over the stage on desktop
-    // position of lens centre relative to the *card* (px) — avoids overflow clip
-    lx: number;
-    ly: number;
-    // background-position percentages (0-100) for the zoomed image
-    bx: number;
-    by: number;
-  }>({ active: false, lx: 0, ly: 0, bx: 50, by: 50 });
-
-  // Only show lens on pointer-capable (non-touch) devices
-  const [isPointer, setIsPointer] = useState(false);
+  // Reset zoom level whenever image index changes
   useEffect(() => {
-    setIsPointer(window.matchMedia("(pointer: fine)").matches);
-  }, []);
+    setIsZoomed(false);
+    setPanPosition({ x: 0, y: 0 });
+  }, [currentIndex]);
 
   // Lock body scroll
   useEffect(() => {
-    const prev = document.body.style.overflow;
+    const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
-      document.body.style.overflow = prev;
+      document.body.style.overflow = originalOverflow;
     };
   }, []);
 
-  // Keyboard nav
+  // Navigation callbacks
   const handleNext = useCallback(
     (e?: React.MouseEvent | KeyboardEvent) => {
-      (e as React.MouseEvent)?.stopPropagation?.();
+      e?.stopPropagation();
       setCurrentIndex((p) => (p + 1) % images.length);
     },
     [images.length, setCurrentIndex],
   );
+
   const handlePrev = useCallback(
     (e?: React.MouseEvent | KeyboardEvent) => {
-      (e as React.MouseEvent)?.stopPropagation?.();
+      e?.stopPropagation();
       setCurrentIndex((p) => (p - 1 + images.length) % images.length);
     },
     [images.length, setCurrentIndex],
   );
+
+  // Keyboard navigation
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "ArrowRight") handleNext(e);
-      if (e.key === "ArrowLeft") handlePrev(e);
-      if (e.key === "Escape") onClose();
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight" && !isZoomed) handleNext(e);
+      if (e.key === "ArrowLeft" && !isZoomed) handlePrev(e);
+      if (e.key === "Escape") {
+        if (isFullscreen) {
+          document.exitFullscreen?.();
+        } else {
+          onClose();
+        }
+      }
     };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [handleNext, handlePrev, onClose]);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handleNext, handlePrev, isZoomed, isFullscreen, onClose]);
 
-  // Auto-scroll active thumbnail into view
-  useEffect(() => {
-    const thumb = thumbnailRefs.current[currentIndex];
-    const rail = scrollRailRef.current;
-    if (!thumb || !rail) return;
-    rail.scrollTo({
-      left: thumb.offsetLeft - rail.offsetWidth / 2 + thumb.offsetWidth / 2,
-      behavior: "smooth",
-    });
-  }, [currentIndex]);
-
-  // Mouse move: compute lens position relative to card, bg-position relative to image
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!isPointer) return;
-    const stage = stageRef.current;
-    const img = imgRef.current;
-    const card = cardRef.current;
-    if (!stage || !img || !card) return;
-
-    const stageRect = stage.getBoundingClientRect();
-    const cardRect = card.getBoundingClientRect();
-
-    // Cursor relative to stage
-    const cx = e.clientX - stageRect.left;
-    const cy = e.clientY - stageRect.top;
-
-    // Rendered image rect inside the stage (object-contain letterboxing)
-    const natW = img.naturalWidth || img.clientWidth;
-    const natH = img.naturalHeight || img.clientHeight;
-    const sW = stageRect.width;
-    const sH = stageRect.height;
-    const imgAspect = natW / natH;
-    const stageAspect = sW / sH;
-
-    let rendW: number, rendH: number, offX: number, offY: number;
-    if (imgAspect > stageAspect) {
-      rendW = sW;
-      rendH = sW / imgAspect;
-      offX = 0;
-      offY = (sH - rendH) / 2;
+  // Toggle Fullscreen mode
+  const toggleFullscreen = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!document.fullscreenElement) {
+      containerRef.current?.requestFullscreen?.();
+      setIsFullscreen(true);
     } else {
-      rendH = sH;
-      rendW = sH * imgAspect;
-      offX = (sW - rendW) / 2;
-      offY = 0;
+      document.exitFullscreen?.();
+      setIsFullscreen(false);
     }
-
-    const relX = Math.max(0, Math.min(cx - offX, rendW));
-    const relY = Math.max(0, Math.min(cy - offY, rendH));
-    const bx = (relX / rendW) * 100;
-    const by = (relY / rendH) * 100;
-
-    // Lens centre relative to card — so it isn't clipped by stage overflow:hidden
-    const lx = e.clientX - cardRect.left;
-    const ly = e.clientY - cardRect.top;
-
-    // Clamp lens so it stays fully inside the card
-    const clampedLx = Math.max(
-      LENS_SIZE / 2,
-      Math.min(cardRect.width - LENS_SIZE / 2, lx),
-    );
-    const clampedLy = Math.max(
-      LENS_SIZE / 2,
-      Math.min(cardRect.height - LENS_SIZE / 2, ly),
-    );
-
-    setLens({ active: true, lx: clampedLx, ly: clampedLy, bx, by });
   };
 
-  // Swipe to navigate
-  const handleDragEnd = (_e: unknown, info: { offset: { x: number } }) => {
-    if (info.offset.x < -50) handleNext();
-    else if (info.offset.x > 50) handlePrev();
+  // Toggle Zoom on Image click
+  const handleImageClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!isZoomed) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const clickX = e.clientX - rect.left - rect.width / 2;
+      const clickY = e.clientY - rect.top - rect.height / 2;
+      setPanPosition({ x: -clickX * 1.5, y: -clickY * 1.5 });
+      setIsZoomed(true);
+    } else {
+      setIsZoomed(false);
+      setPanPosition({ x: 0, y: 0 });
+    }
+  };
+
+  // Pan image when zoomed
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isZoomed) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    setPanPosition({ x: -x * 1.2, y: -y * 1.2 });
   };
 
   if (!images.length) return null;
@@ -164,350 +641,102 @@ export default function ZoomModal({
 
   return (
     <div
-      className="fixed inset-0 z-[200] flex items-center justify-center p-3 md:p-6 select-none overflow-hidden"
-      style={{ fontFamily: "inherit" }}
+      ref={containerRef}
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black select-none overflow-hidden"
     >
-       {/* ── MOBILE VIEW (Hidden on Desktop) ── */}
-      <div
-        className="fixed inset-0 z-50 flex flex-col bg-black/95 md:hidden"
-        onClick={onClose}
-      >
-        {/* Mobile Top Header */}
-        <div className="flex items-center justify-between w-full p-4 z-10 bg-gradient-to-b from-black/80 to-transparent">
-          <span className="text-white/70 text-xs font-mono tracking-widest">
-            {currentIndex + 1} / {images.length}
-          </span>
-          <button
-            onClick={onClose}
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 active:bg-white/20 border border-white/10 text-white"
-            aria-label="Close gallery"
-          >
-            <X size={20} />
-          </button>
-        </div>
-
-        {/* Mobile Image Stage: Pure wrapper to allow native touch zooming */}
-        <div
-          className="flex-grow flex items-center justify-center p-4 overflow-auto"
-          onClick={(e) => e.stopPropagation()}
+      {/* ── Top-Right Controls Bar ── */}
+      <div className="absolute top-4 right-6 z-50 flex items-center gap-4 text-white/80">
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsZoomed((prev) => !prev);
+          }}
+          className="p-2 transition-colors hover:text-white cursor-pointer"
+          aria-label="Toggle zoom"
+          title={isZoomed ? "Zoom out" : "Zoom in"}
         >
-          <AnimatePresence mode="wait">
-            <motion.img
-              key={currentIndex}
-              src={current.src}
-              alt={current.alt || title}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="max-w-full max-h-[75dvh] object-contain select-text"
-              style={{
-                pointerEvents: "auto", // Essential: unlocks native browser zoom engines
-                touchAction: "auto"    // Essential: tells mobile safari/chrome to handle normal interactions
-              }}
-            />
-          </AnimatePresence>
-        </div>
+          {isZoomed ? <ZoomOut size={22} /> : <ZoomIn size={22} />}
+        </button>
 
-        {/* Mobile Bottom Navigation Layout */}
-        {images.length > 1 && (
-          <div
-            className="flex items-center justify-center gap-12 p-6 bg-gradient-to-t from-black/80 to-transparent"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={handlePrev}
-              className="p-3.5 rounded-full bg-white/10 text-white active:scale-90 transition-transform"
-              aria-label="Previous item"
-            >
-              <ChevronLeft size={24} />
-            </button>
-            <button
-              onClick={handleNext}
-              className="p-3.5 rounded-full bg-white/10 text-white active:scale-90 transition-transform"
-              aria-label="Next item"
-            >
-              <ChevronRight size={24} />
-            </button>
-          </div>
-        )}
+        <button
+          onClick={toggleFullscreen}
+          className="p-2 transition-colors hover:text-white cursor-pointer"
+          aria-label="Toggle fullscreen"
+          title="Fullscreen mode"
+        >
+          {isFullscreen ? <Minimize size={20} /> : <Maximize size={20} />}
+        </button>
+
+        <button
+          onClick={onClose}
+          className="p-2 transition-colors hover:text-white cursor-pointer"
+          aria-label="Close modal"
+          title="Close (Esc)"
+        >
+          <X size={24} />
+        </button>
       </div>
 
-      {/* ── DESKTOP VIEW (Hidden on Mobile) ── */}
-      {/* Backdrop */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.25 }}
-        className="absolute inset-0 md:block"
-        style={{
-          background: "rgba(0,24,10,0.75)",
-          backdropFilter: "blur(10px)",
-        }}
+      {/* ── Left Navigation Arrow ── */}
+      {images.length > 1 && !isZoomed && (
+        <button
+          onClick={handlePrev}
+          className="absolute left-6 top-1/2 -translate-y-1/2 z-50 p-3 text-white/70 hover:text-white transition-all hover:scale-110 active:scale-95 cursor-pointer"
+          aria-label="Previous image"
+        >
+          <ChevronLeft size={36} strokeWidth={1.5} />
+        </button>
+      )}
+
+      {/* ── Center Stage Area ── */}
+      <div
+        className="relative w-full h-full flex items-center justify-center p-6 md:p-12 overflow-hidden"
         onClick={onClose}
-      />
-
-      {/* Card — position:relative so lens can be absolute inside it */}
-      <motion.div
-        ref={cardRef}
-        initial={{ scale: 0.96, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.96, opacity: 0 }}
-        transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-        className="relative z-10 flex flex-col w-full"
-        style={{
-          maxWidth: 900,
-          height: "min(92dvh, 780px)",
-          background: "rgba(0,24,10,0.92)",
-          backdropFilter: "blur(16px)",
-          border: "1px solid rgba(255,255,255,0.09)",
-          borderRadius: 20,
-          overflow: "hidden",
-        }}
-        onClick={(e) => e.stopPropagation()}
+        onMouseMove={handleMouseMove}
       >
-        {/* ── Top bar ── */}
-        <div
-          className="flex items-center justify-between px-4 py-3 flex-shrink-0"
-          style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}
-        >
-          <div className="flex items-center gap-2.5">
-            <ZoomIn size={14} style={{ color: "rgba(252,193,81,0.7)" }} />
-            <span
-              style={{
-                fontFamily: "var(--font-cinzel, 'Cinzel', serif)",
-                fontSize: 9,
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-                color: "rgba(252,193,81,0.55)",
-              }}
-            >
-              {currentIndex + 1} / {images.length}
-            </span>
-          </div>
-          <button
-            onClick={onClose}
-            className="flex items-center justify-center transition-all duration-200 hover:rotate-90 hover:opacity-70"
-            style={{
-              width: 32,
-              height: 32,
-              borderRadius: "50%",
-              background: "rgba(255,255,255,0.07)",
-              border: "1px solid rgba(255,255,255,0.1)",
-              color: "#e8e4d9",
-              cursor: "pointer",
-            }}
-            aria-label="Close gallery"
-          >
-            <X size={14} strokeWidth={2} />
-          </button>
-        </div>
-
-        {/* ── Image stage ── */}
-        <div
-          ref={stageRef}
-          className="relative overflow-hidden flex items-center justify-center"
-          style={{
-            flexGrow: 1,
-            flexShrink: 1,
-            minHeight: 200,
-            cursor: isPointer ? "crosshair" : "grab",
-            background: "rgba(0,18,8,0.4)",
-          }}
-          onMouseMove={handleMouseMove}
-          onMouseLeave={() => setLens((l) => ({ ...l, active: false }))}
-        >
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentIndex}
-              initial={{ opacity: 0, scale: 0.97 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 1.02 }}
-              transition={{ duration: 0.25, ease: "easeOut" }}
-              drag="x"
-              dragConstraints={{ left: 0, right: 0 }}
-              dragElastic={0.35}
-              onDragEnd={handleDragEnd}
-              className="absolute inset-0 flex items-center justify-center"
-              style={{ cursor: isPointer ? "crosshair" : "grab" }}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                ref={imgRef}
-                src={current.src}
-                alt={current.alt || title}
-                draggable={false}
-                style={{
-                  maxWidth: "100%",
-                  maxHeight: "100%",
-                  objectFit: "contain",
-                  padding: "10px 14px",
-                  pointerEvents: "none",
-                  userSelect: "none",
-                  display: "block",
-                }}
-              />
-            </motion.div>
-          </AnimatePresence>
-
-          {/* Prev / Next */}
-          {images.length > 1 && (
-            <>
-              <button
-                onClick={handlePrev}
-                className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center justify-center transition-all duration-150 hover:scale-105 active:scale-95"
-                style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: "50%",
-                  background: "rgba(0,30,15,0.75)",
-                  border: "1px solid rgba(255,255,255,0.12)",
-                  color: "#e8e4d9",
-                  cursor: "pointer",
-                  zIndex: 90,
-                }}
-                aria-label="Previous image"
-              >
-                <ChevronLeft size={18} strokeWidth={2} />
-              </button>
-              <button
-                onClick={handleNext}
-                className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center transition-all duration-150 hover:scale-105 active:scale-95"
-                style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: "50%",
-                  background: "rgba(0,30,15,0.75)",
-                  border: "1px solid rgba(255,255,255,0.12)",
-                  color: "#e8e4d9",
-                  cursor: "pointer",
-                  zIndex: 90,
-                }}
-                aria-label="Next image"
-              >
-                <ChevronRight size={18} strokeWidth={2} />
-              </button>
-            </>
-          )}
-        </div>
-
-        {/* ── Zoom lens — sibling of stage, not child, so overflow:hidden doesn't clip it ── */}
-        {isPointer && lens.active && (
-          <div
-            aria-hidden="true"
-            style={{
-              position: "absolute",
-              // lx/ly are the lens *centre* relative to the card
-              left: lens.lx - LENS_SIZE / 2,
-              top: lens.ly - LENS_SIZE / 2,
-              width: LENS_SIZE,
-              height: LENS_SIZE,
-              borderRadius: "50%",
-              border: "2px solid rgba(252,193,81,0.8)",
-              boxShadow:
-                "0 0 0 1px rgba(0,0,0,0.5), " +
-                "0 8px 32px rgba(0,0,0,0.5), " +
-                "inset 0 0 0 1px rgba(255,255,255,0.06)",
-              backgroundImage: `url(${current.src})`,
-              backgroundRepeat: "no-repeat",
-              backgroundSize: `${ZOOM_SCALE * 100}%`,
-              backgroundPosition: `${lens.bx}% ${lens.by}%`,
-              pointerEvents: "none",
-              // Sits above the stage content but below modal chrome
-              zIndex: 20,
-              // Subtle vignette
-              WebkitMaskImage:
-                "radial-gradient(circle, black 60%, transparent 100%)",
-              maskImage: "radial-gradient(circle, black 60%, transparent 100%)",
-            }}
-          >
-            {/* crosshair */}
-            <div
-              style={{
-                position: "absolute",
-                left: "50%",
-                top: "12%",
-                bottom: "12%",
-                width: 1,
-                background: "rgba(255,255,255,0.2)",
-                transform: "translateX(-50%)",
-              }}
-            />
-            <div
-              style={{
-                position: "absolute",
-                top: "50%",
-                left: "12%",
-                right: "12%",
-                height: 1,
-                background: "rgba(255,255,255,0.2)",
-                transform: "translateY(-50%)",
-              }}
-            />
-          </div>
-        )}
-
-        {/* ── Thumbnail rail ── */}
-        {images.length > 1 && (
-          <div
-            ref={scrollRailRef}
-            className="flex gap-2 overflow-x-auto flex-shrink-0"
-            style={{
-              padding: "10px 12px",
-              borderTop: "1px solid rgba(255,255,255,0.07)",
-              scrollbarWidth: "none",
-              msOverflowStyle: "none",
-            }}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentIndex}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="relative flex items-center justify-center max-w-full max-h-full"
             onClick={(e) => e.stopPropagation()}
           >
-            {images.map((img, i) => (
-              <button
-                key={i}
-                ref={(el) => {
-                  thumbnailRefs.current[i] = el;
-                }}
-                onClick={() => setCurrentIndex(i)}
-                style={{
-                  flexShrink: 0,
-                  width: 64,
-                  height: 52,
-                  borderRadius: 10,
-                  overflow: "hidden",
-                  padding: 0,
-                  border:
-                    i === currentIndex
-                      ? "2px solid rgba(252,193,81,0.85)"
-                      : "2px solid transparent",
-                  opacity: i === currentIndex ? 1 : 0.42,
-                  transform: i === currentIndex ? "scale(1.06)" : "scale(1)",
-                  transition: "all 0.2s ease",
-                  cursor: "pointer",
-                  background: "rgba(0,0,0,0.3)",
-                }}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={img.src}
-                  alt={`View ${i + 1}`}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    pointerEvents: "none",
-                    userSelect: "none",
-                    display: "block",
-                  }}
-                />
-              </button>
-            ))}
-          </div>
-        )}
-      </motion.div>
+            <motion.img
+              src={current.src}
+              alt={current.alt || title}
+              onClick={handleImageClick}
+              animate={{
+                scale: isZoomed ? 2.5 : 1,
+                x: isZoomed ? panPosition.x : 0,
+                y: isZoomed ? panPosition.y : 0,
+              }}
+              transition={{
+                scale: { duration: 0.3, ease: "easeInOut" },
+                x: { duration: 0.1, ease: "linear" },
+                y: { duration: 0.1, ease: "linear" },
+              }}
+              style={{
+                cursor: isZoomed ? "zoom-out" : "zoom-in",
+              }}
+              className="max-w-[85vw] max-h-[85vh] object-contain shadow-2xl bg-white"
+            />
+          </motion.div>
+        </AnimatePresence>
+      </div>
 
-      <style>{`
-        div::-webkit-scrollbar { display: none; }
-      `}</style>
+      {/* ── Right Navigation Arrow ── */}
+      {images.length > 1 && !isZoomed && (
+        <button
+          onClick={handleNext}
+          className="absolute right-6 top-1/2 -translate-y-1/2 z-50 p-3 text-white/70 hover:text-white transition-all hover:scale-110 active:scale-95 cursor-pointer"
+          aria-label="Next image"
+        >
+          <ChevronRight size={36} strokeWidth={1.5} />
+        </button>
+      )}
     </div>
   );
 }

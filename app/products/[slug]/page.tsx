@@ -36,6 +36,7 @@ function extractCollection(collection: any, category?: string) {
 }
 
 function toProduct(p: any): Product {
+
   return {
     id: p._id,
     name: p.name,

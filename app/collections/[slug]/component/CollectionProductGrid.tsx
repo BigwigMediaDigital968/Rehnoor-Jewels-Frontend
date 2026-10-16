@@ -179,6 +179,11 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
   const [showSizePicker, setShowSizePicker] = useState(false);
   const { openDrawer } = useCartStore();
 
+  // ── Image Source References ────────────────────────────────────
+  const primaryImage = product.images[0]?.src;
+  const secondaryImage = product.images[1]?.src || primaryImage; // Fallback to primary if 2nd doesn't exist
+  const hasSecondaryImage = product.images.length > 1;
+
   // ── Zustand ──────────────────────────────────────────────────
   const addItem = useCartStore((s) => s.addItem);
   const toggleItem = useWishlistStore((s) => s.toggleItem);
@@ -203,7 +208,7 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
         productId: product.id,
         name: product.name,
         subtitle: product.subtitle,
-        image: product.images[0].src,
+        image: primaryImage,
         priceNum: parsePrice(product.price),
         originalPriceNum: product.originalPrice
           ? parsePrice(product.originalPrice)
@@ -213,19 +218,19 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
         tag: product.tag,
       });
     },
-    [product, toggleItem],
+    [product, toggleItem, primaryImage],
   );
+
   // ── Cart: open size picker, or add directly if only 1 size ──
   const handleCartClick = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
       if (!product.sizes || product.sizes.length === 0) {
-        // No sizes/variants exist — add directly as null variant
         addItem({
           productId: product.id,
           name: product.name,
           subtitle: product.subtitle,
-          image: product.images[0].src,
+          image: primaryImage,
           priceNum: parsePrice(product.price),
           originalPriceNum: product.originalPrice
             ? parsePrice(product.originalPrice)
@@ -234,7 +239,7 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
           href: product.href,
           category: product.category,
           tag: product.tag,
-          variant: null, // <-- Satisfies VariantSnapshot | null requirements
+          variant: null,
         });
         openDrawer();
         flashAdded();
@@ -242,20 +247,17 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
         setShowSizePicker(true);
       }
     },
-    [product, addItem],
+    [product, addItem, primaryImage, openDrawer],
   );
 
   // ── Confirm after size is chosen ────────────────────────────
   const handleConfirmSize = useCallback(
     (sizeLabel: string) => {
-      // Find the corresponding local size object array from your product
-      const foundSize = product.sizes?.find((s) => s.label === sizeLabel);
-
       addItem({
         productId: product.id,
         name: product.name,
         subtitle: product.subtitle,
-        image: product.images[0].src,
+        image: primaryImage,
         priceNum: parsePrice(product.price),
         originalPriceNum: product.originalPrice
           ? parsePrice(product.originalPrice)
@@ -264,22 +266,21 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
         href: product.href,
         category: product.category,
         tag: product.tag,
-        // Build the dynamic VariantSnapshot object mapping
         variant: {
-          variantId: sizeLabel.toLowerCase().replace(/\s+/g, "-"), // Clean fallback slug id
+          variantId: sizeLabel.toLowerCase().replace(/\s+/g, "-"),
           title: sizeLabel,
           options: { Size: sizeLabel },
           price: parsePrice(product.price),
           originalPrice: product.originalPrice
             ? parsePrice(product.originalPrice)
             : null,
-          image: product.images[0].src,
+          image: primaryImage,
         },
       });
       setShowSizePicker(false);
       flashAdded();
     },
-    [product, addItem],
+    [product, addItem, primaryImage],
   );
 
   const flashAdded = () => {
@@ -289,7 +290,7 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
 
   return (
     <>
-      {/* Size picker modal (portal-like, outside card DOM) */}
+      {/* Size picker modal */}
       <AnimatePresence>
         {showSizePicker && (
           <SizePickerModal
@@ -299,7 +300,7 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
           />
         )}
       </AnimatePresence>
-      
+
       <Link href={product.href} className="w-full">
         <motion.div
           layout
@@ -309,13 +310,14 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
           transition={{ duration: 0.4, delay: (index % 6) * 0.04 }}
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
-          // onClick={() => router.push(product.href)}
           className="flex flex-col"
           style={{
             background: "#fff",
             borderRadius: "14px",
             overflow: "hidden",
-            border: `1px solid ${hovered ? "rgba(252,193,81,0.5)" : "var(--rj-bone)"}`,
+            border: `1px solid ${
+              hovered ? "rgba(252,193,81,0.5)" : "var(--rj-bone)"
+            }`,
             boxShadow: hovered
               ? "0 12px 36px rgba(0,0,0,0.1), 0 0 0 1px rgba(252,193,81,0.15)"
               : "0 2px 10px rgba(0,0,0,0.05)",
@@ -329,18 +331,37 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
             className="relative overflow-hidden"
             style={{ aspectRatio: "1/1", background: "var(--rj-ivory-dark)" }}
           >
+            {/* Primary Image */}
             <Image
-              src={product.images[0].src}
-              alt={product.images[0].alt}
+              src={primaryImage}
+              alt={product.images[0]?.alt || product.name}
               fill
               sizes="(max-width:640px) 50vw, (max-width:1024px) 33vw, 25vw"
               className="object-cover"
               style={{
+                opacity: hovered && hasSecondaryImage ? 0 : 1,
                 transform: hovered ? "scale(1.06)" : "scale(1)",
-                transition: "transform 0.6s ease",
+                transition: "opacity 0.5s ease, transform 0.6s ease",
               }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+
+            {/* Secondary Image (revealed on hover) */}
+            {hasSecondaryImage && (
+              <Image
+                src={secondaryImage}
+                alt={product.images[1]?.alt || `${product.name} alternate view`}
+                fill
+                sizes="(max-width:640px) 50vw, (max-width:1024px) 33vw, 25vw"
+                className="object-cover absolute inset-0"
+                style={{
+                  opacity: hovered ? 1 : 0,
+                  transform: hovered ? "scale(1.06)" : "scale(1)",
+                  transition: "opacity 0.5s ease, transform 0.6s ease",
+                }}
+              />
+            )}
+
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
 
             {/* Tag */}
             {tag && product.tag && (
@@ -354,7 +375,7 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
               </div>
             )}
 
-            {/* Wishlist — now backed by Zustand */}
+            {/* Wishlist Button */}
             <button
               onClick={handleWishlist}
               className="absolute top-2.5 right-2.5 z-20 w-7 h-7 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
@@ -409,59 +430,6 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
                   "Crafted with 22kt gold, ethically sourced and designed to last generations."}
               </div>
             </div>
-
-            {/* Desktop hover overlay */}
-            <AnimatePresence>
-              {hovered && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.18 }}
-                  className="absolute inset-0 hidden md:flex flex-col items-center justify-center gap-2 z-10"
-                >
-                  <div className="absolute inset-0 bg-[var(--rj-emerald)]/20 backdrop-blur-[1px]" />
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      router.push(product.href);
-                    }}
-                    className="relative z-10 flex items-center gap-1.5 px-4 py-2 rounded-full font-cinzel text-[9px] tracking-widest uppercase font-bold transition-all hover:scale-105"
-                    style={{
-                      background: "rgba(255,255,255,0.97)",
-                      color: "var(--rj-emerald)",
-                      boxShadow: "0 4px 16px rgba(0,0,0,0.2)",
-                      cursor: "pointer",
-                    }}
-                  >
-                    <Eye size={11} /> View Details
-                  </button>
-                  {/* Add to Cart — opens size picker or adds directly */}
-                  <button
-                    onClick={handleCartClick}
-                    className="relative z-10 flex items-center gap-1.5 px-4 py-2 rounded-full font-cinzel text-[9px] tracking-widest uppercase font-bold transition-all hover:scale-105"
-                    style={{
-                      background: addedToCart
-                        ? "var(--rj-emerald)"
-                        : "rgba(255,255,255,0.97)",
-                      color: addedToCart ? "#fff" : "var(--rj-charcoal)",
-                      boxShadow: "0 4px 16px rgba(0,0,0,0.2)",
-                      cursor: "pointer",
-                    }}
-                  >
-                    {addedToCart ? (
-                      <>
-                        <Check size={11} /> Added
-                      </>
-                    ) : (
-                      <>
-                        <ShoppingBag size={11} /> Add to Cart
-                      </>
-                    )}
-                  </button>
-                </motion.div>
-              )}
-            </AnimatePresence>
           </div>
 
           {/* Body */}
@@ -503,12 +471,6 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
             >
               {product.name}
             </h3>
-            {/* <p
-            className="text-[10px] mb-2 line-clamp-1"
-            style={{ color: "var(--rj-ash)" }}
-          >
-            {product.subtitle}
-          </p> */}
 
             <div className="flex items-center gap-1.5 flex-wrap mt-auto">
               {product.originalPrice && (
