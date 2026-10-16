@@ -1280,7 +1280,7 @@ export default function ProductDetailHero({
               )}
 
               {/* Offers */}
-              <div className="flex items-center gap-2 flex-wrap">
+              <div className="flex items-center gap-2 flex-wrap mt-2 mb-5">
                 {/* Buy 2 Get 1 FREE */}
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[11px] font-extrabold tracking-wider uppercase text-white bg-[#ff1e1e] shadow-sm select-none">
                   <span className="w-1.5 h-1.5 rounded-full bg-white shrink-0 animate-pulse" />

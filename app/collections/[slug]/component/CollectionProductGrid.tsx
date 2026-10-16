@@ -401,7 +401,7 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
             </button>
 
             {/* Info tooltip */}
-            <div className="absolute top-3 right-14 z-20 group">
+            {/* <div className="absolute top-3 right-14 z-20 group">
               <button
                 className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-115"
                 style={{
@@ -429,7 +429,7 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
                 {product.ourPromise ||
                   "Crafted with 22kt gold, ethically sourced and designed to last generations."}
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/* Body */}
