@@ -123,6 +123,11 @@ export default function ShiprocketCheckoutButton({
           body: JSON.stringify({
             items: formattedItems,
             redirectUrl: `${window.location.origin}/thankyou`,
+            // Buy-now checkouts never carry a cart coupon
+            ...(!useCartStore.getState().buyNowItems &&
+              useCartStore.getState().coupon?.code && {
+                couponCode: useCartStore.getState().coupon.code,
+              }),
           }),
         },
       );
@@ -130,7 +135,11 @@ export default function ShiprocketCheckoutButton({
       const data = await response.json();
 
       if (!data.success || !data.token) {
-        alert("Failed to initialize checkout session. Please try again.");
+        alert(
+          data?.error && response.status === 400
+            ? data.error
+            : "Failed to initialize checkout session. Please try again.",
+        );
         onCancel?.();
         return;
       }
