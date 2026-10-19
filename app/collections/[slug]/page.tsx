@@ -287,15 +287,6 @@ export default async function CollectionDetailPage({
               },
 
               category: product.category,
-
-              // offers: {
-              //   "@type": "Offer",
-              //   url: `https://www.rehnoorjewels.com${product.href}`,
-              //   priceCurrency: "INR",
-              //   price: Number(product.price.replace(/[^\d.]/g, "")),
-              //   availability: "https://schema.org/InStock",
-              //   itemCondition: "https://schema.org/NewCondition",
-              // },
             })),
           ),
         }}
