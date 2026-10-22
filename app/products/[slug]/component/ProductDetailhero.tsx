@@ -24,6 +24,10 @@ import {
   ChevronDown,
   Minus,
   Plus,
+  Ticket,
+  Tag,
+  Copy,
+  CheckCircle,
 } from "lucide-react";
 import type {
   Product,
@@ -698,6 +702,50 @@ export default function ProductDetailHero({
   const { toggleItem, isWishlisted } = useWishlistStore();
   const wishlisted = isWishlisted(product.id);
 
+  const [offersModalOpen, setOffersModalOpen] = useState(false);
+  const [copiedCode, setCopiedCode] = useState<string | null>(null);
+
+  const handleCopyCode = (code: string) => {
+    navigator.clipboard.writeText(code);
+    setCopiedCode(code);
+    setTimeout(() => setCopiedCode(null), 2000);
+  };
+
+  const offersList = [
+    {
+      code: "B1G1",
+      title: "Buy 1 Get 1 FREE",
+      description: "Valid exclusively on women's earrings & rings.",
+      tag: "Category Special",
+      tagBg: "rgba(0,55,32,0.1)",
+      tagColor: "var(--rj-emerald)",
+    },
+    {
+      code: "BLACKFRIDAY10",
+      title: "10% OFF",
+      description: "Applicable on a minimum order value of ₹1,000.",
+      tag: "Black Friday",
+      tagBg: "rgba(0,0,0,0.08)",
+      tagColor: "var(--rj-charcoal)",
+    },
+    {
+      code: "BLACKFRIDAY20",
+      title: "20% OFF",
+      description: "Applicable on a minimum order value of ₹2,000.",
+      tag: "Black Friday",
+      tagBg: "rgba(0,0,0,0.08)",
+      tagColor: "var(--rj-charcoal)",
+    },
+    {
+      code: "Prepaid100",
+      title: "Flat ₹100 OFF",
+      description: "Automatic discount applied on prepaid orders.",
+      tag: "Prepaid Offer",
+      tagBg: "rgba(252,193,81,0.15)",
+      tagColor: "#a07800",
+    },
+  ];
+
   const prevImg = useCallback(
     () => setImgIdx((i) => (i - 1 + images.length) % images.length),
     [images.length],
@@ -1280,19 +1328,211 @@ export default function ProductDetailHero({
               )}
 
               {/* Offers */}
-              <div className="flex items-center gap-2 flex-wrap mt-2 mb-5">
-                {/* Buy 2 Get 1 FREE */}
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[11px] font-extrabold tracking-wider uppercase text-white bg-[#ff1e1e] shadow-sm select-none">
-                  <span className="w-1.5 h-1.5 rounded-full bg-white shrink-0 animate-pulse" />
-                  BUY 2 GET 1 FREE
-                </span>
+              {/* ══ OFFERS SECTION ══ */}
+              <div className="flex flex-col gap-3.5 mt-2 mb-6">             
 
-                {/* Buy 3 Get 2 FREE */}
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[11px] font-extrabold tracking-wider uppercase text-white bg-[#ff1e1e] shadow-sm select-none">
-                  <span className="w-1.5 h-1.5 rounded-full bg-white shrink-0 animate-pulse" />
-                  BUY 3 GET 2 FREE
-                </span>
+                {/* Clickable Trigger to Open Offers Popup */}
+                <button
+                  type="button"
+                  onClick={() => setOffersModalOpen(true)}
+                  className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-all duration-200 hover:shadow-md group cursor-pointer"
+                  style={{
+                    background: "var(--rj-ivory-dark)",
+                    border: "1px solid var(--rj-bone)",
+                  }}
+                >
+                  <div className="flex items-center gap-2.5 text-left">
+                    <div
+                      className="w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition-transform group-hover:scale-105"
+                      style={{
+                        background: "rgba(0,55,32,0.1)",
+                        color: "var(--rj-emerald)",
+                      }}
+                    >
+                      <Ticket size={15} />
+                    </div>
+                    <div>
+                      <p
+                        className="font-cinzel text-xs font-bold tracking-wide"
+                        style={{ color: "var(--rj-charcoal)" }}
+                      >
+                        Available Offers & Coupon Codes
+                      </p>
+                      <p
+                        className="text-[11px]"
+                        style={{ color: "var(--rj-ash)" }}
+                      >
+                        Tap to view promo codes & redemption guide
+                      </p>
+                    </div>
+                  </div>
+                  <span
+                    className="font-cinzel text-[11px] font-bold tracking-wider underline group-hover:opacity-80"
+                    style={{ color: "var(--rj-emerald)" }}
+                  >
+                    View All
+                  </span>
+                </button>
               </div>
+
+              {/* ══ OFFERS POPUP MODAL ══ */}
+              <AnimatePresence>
+                {offersModalOpen && (
+                  <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
+                    {/* Backdrop */}
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      onClick={() => setOffersModalOpen(false)}
+                      className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+                    />
+
+                    {/* Modal Card */}
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                      transition={{ duration: 0.2 }}
+                      className="relative w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl z-10 flex flex-col max-h-[90vh]"
+                      style={{ background: "var(--rj-ivory)" }}
+                    >
+                      {/* Header */}
+                      <div
+                        className="px-6 py-4 flex items-center justify-between shrink-0"
+                        style={{
+                          background: "var(--rj-emerald)",
+                          color: "#fff",
+                        }}
+                      >
+                        <div className="flex items-center gap-2">
+                          <Ticket
+                            size={18}
+                            style={{ color: "var(--rj-gold)" }}
+                          />
+                          <h3 className="font-cinzel text-base font-bold tracking-wider">
+                            Exclusive Offers & Coupons
+                          </h3>
+                        </div>
+                        <button
+                          onClick={() => setOffersModalOpen(false)}
+                          className="p-1 rounded-full transition-colors hover:bg-white/10 text-white cursor-pointer"
+                          aria-label="Close offers modal"
+                        >
+                          <X size={18} />
+                        </button>
+                      </div>
+
+                      {/* Content Body */}
+                      <div className="p-6 overflow-y-auto flex-1 space-y-4">
+                        {offersList.map((offer) => (
+                          <div
+                            key={offer.code}
+                            className="p-4 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-shadow hover:shadow-sm"
+                            style={{
+                              background: "#fff",
+                              borderColor: "var(--rj-bone)",
+                            }}
+                          >
+                            <div className="space-y-1">
+                              <span
+                                className="font-cinzel text-[9px] font-bold tracking-widest uppercase px-2 py-0.5 rounded-full inline-block"
+                                style={{
+                                  background: offer.tagBg,
+                                  color: offer.tagColor,
+                                }}
+                              >
+                                {offer.tag}
+                              </span>
+                              <h4
+                                className="font-cinzel text-sm font-bold"
+                                style={{ color: "var(--rj-charcoal)" }}
+                              >
+                                {offer.title}
+                              </h4>
+                              <p
+                                className="text-xs"
+                                style={{ color: "var(--rj-ash)" }}
+                              >
+                                {offer.description}
+                              </p>
+                            </div>
+
+                            {/* Copy Coupon Action */}
+                            <div className="flex items-center sm:flex-col items-end justify-between sm:justify-center gap-2 border-t sm:border-t-0 pt-2 sm:pt-0 border-dashed border-gray-200">
+                              <button
+                                type="button"
+                                onClick={() => handleCopyCode(offer.code)}
+                                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border-2 border-dashed font-mono font-bold text-xs transition-all active:scale-95 cursor-pointer"
+                                style={{
+                                  borderColor: "var(--rj-gold)",
+                                  background: "rgba(252,193,81,0.08)",
+                                  color: "var(--rj-charcoal)",
+                                }}
+                              >
+                                <span>{offer.code}</span>
+                                {copiedCode === offer.code ? (
+                                  <Check
+                                    size={14}
+                                    className="text-emerald-600"
+                                  />
+                                ) : (
+                                  <Copy
+                                    size={14}
+                                    className="text-[var(--rj-ash)]"
+                                  />
+                                )}
+                              </button>
+                              <span className="text-[10px] h-3 font-semibold text-emerald-600">
+                                {copiedCode === offer.code ? "Copied!" : ""}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+
+                        {/* Checkout Redemption Instructions */}
+                        <div
+                          className="p-4 rounded-xl border mt-6"
+                          style={{
+                            background: "var(--rj-ivory-dark)",
+                            borderColor: "var(--rj-bone)",
+                          }}
+                        >
+                          <h5
+                            className="font-cinzel text-xs font-bold tracking-wider uppercase mb-2 flex items-center gap-1.5"
+                            style={{ color: "var(--rj-charcoal)" }}
+                          >
+                            <CheckCircle
+                              size={14}
+                              style={{ color: "var(--rj-emerald)" }}
+                            />
+                            How to apply coupon at checkout
+                          </h5>
+                          <ol
+                            className="list-decimal list-inside text-xs space-y-1.5"
+                            style={{ color: "var(--rj-ash)" }}
+                          >
+                            <li>
+                              Paste the copied code into the{" "}
+                              <strong style={{ color: "var(--rj-charcoal)" }}>
+                                &quot;Discount / Promo Code&quot;
+                              </strong>{" "}
+                              field on the checkout page.
+                            </li>
+                            <li>
+                              Click{" "}
+                              <strong style={{ color: "var(--rj-charcoal)" }}>
+                                Apply
+                              </strong>{" "}
+                              to calculate your savings.
+                            </li>
+                          </ol>
+                        </div>
+                      </div>
+                    </motion.div>
+                  </div>
+                )}
+              </AnimatePresence>
 
               <OfferBanner imageUrl={product.offerBannerImage || ""} />
 
