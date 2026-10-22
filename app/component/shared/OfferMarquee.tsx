@@ -5,24 +5,25 @@ import { Sparkles, Percent, Gift } from "lucide-react";
 
 const OFFERS = [
   {
-    text: "💍 Shop More, Save More - Rings & Earrings: 2+1 Free | 3+2 Free 💍",
+    text: "💍 Buy 1 Get 1 Free on Women's Rings & Earrings 💍",
     code: null,
+    icon: Gift,
   },
   {
-    text: "💍 Shop More, Save More - Rings & Earrings: 2+1 Free | 3+2 Free 💍",
-    code: null,
-  },
-
-  { text: "🔥 BUY 2 GET 1 FREE 🔥", code: null, icon: Percent },
-  { text: "🔥 BUY 3 GET 2 FREE 🔥", code: null, icon: Percent },
-
-  {
-    text: "🛍️ Black Friday Sale: Spend ₹1000 - 10% OFF | ₹2000 - 20% OFF | ₹3000+ - 30% OFF 🛍️",
+    text: "🛍️ Black Friday Sale: Use BLACKFRIDAY10 on orders above ₹1,000 & BLACKFRIDAY20 on orders above ₹2,000",
     code: null,
     icon: Percent,
   },
-  //   { text: "FREE ADJUSTABLE SIZE RESIZING ON ALL PIECES", code: null, icon: Gift },
-  //   { text: "BIS HALLMARKED 22KT ONE GRAM GOLD ARTISANSHIP", code: null, icon: Sparkles },
+  // {
+  //   text: "🔥 Black Friday Sale: Use BLACKFRIDAY20 on orders above ₹2,000",
+  //   code: null,
+  //   icon: Percent,
+  // },
+  {
+    text: "💸 Get ₹100 OFF on All Prepaid Orders",
+    code: null,
+    icon: Gift,
+  },
 ];
 
 export default function OfferMarquee() {
