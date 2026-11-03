@@ -441,7 +441,7 @@ function DrawerSummary({ onClose }: { onClose: () => void }) {
               fontFamily: "var(--font-body,'DM Sans'),sans-serif",
             }}
           >
-            You can apply coupan code at final checkout.
+            You can apply coupon code at final checkout.
           </p>
         </div>
 
