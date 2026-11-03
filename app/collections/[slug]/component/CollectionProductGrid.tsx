@@ -202,6 +202,8 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
   // ── Wishlist toggle ──────────────────────────────────────────
   const handleWishlist = useCallback(
     (e: React.MouseEvent) => {
+      // Card is wrapped in a <Link>: block its navigation as well
+      e.preventDefault();
       e.stopPropagation();
       toggleItem({
         id: product.id,
@@ -224,6 +226,8 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
   // ── Cart: open size picker, or add directly if only 1 size ──
   const handleCartClick = useCallback(
     (e: React.MouseEvent) => {
+      // Card is wrapped in a <Link>: block its navigation as well
+      e.preventDefault();
       e.stopPropagation();
       if (!product.sizes || product.sizes.length === 0) {
         addItem({
