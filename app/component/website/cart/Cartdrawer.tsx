@@ -106,7 +106,7 @@ function DrawerItemRow({
       animate={{ opacity: removing ? 0 : 1, x: removing ? -40 : 0 }}
       exit={{ opacity: 0, x: -40, height: 0 }}
       transition={{ duration: 0.3 }}
-      className="p-3.5 rounded-2xl mb-3 relative"
+      className="p-3 rounded-2xl mb-3 relative overflow-hidden"
       style={{
         background: "#fff",
         border: "1px solid var(--rj-bone)",
@@ -119,8 +119,8 @@ function DrawerItemRow({
           onClick={onNavigate}
           className="relative flex-shrink-0 rounded-xl overflow-hidden group"
           style={{
-            width: 72,
-            height: 72,
+            width: 94,
+            height: 102,
             background: "var(--rj-ivory-dark)",
             cursor: "pointer",
           }}
@@ -130,9 +130,9 @@ function DrawerItemRow({
             alt={item.name}
             fill
             className="object-cover transition-transform duration-500 group-hover:scale-105"
-            sizes="72px"
+            sizes="84px"
           />
-          {discountPct > 0 && (
+          {/* {discountPct > 0 && (
             <span
               className="absolute top-1 left-1 font-cinzel font-bold rounded-md px-1 py-0.5"
               style={{
@@ -143,7 +143,7 @@ function DrawerItemRow({
             >
               {discountPct}% OFF
             </span>
-          )}
+          )} */}
         </Link>
 
         {/* Details & Action Rows */}
@@ -175,69 +175,85 @@ function DrawerItemRow({
 
             <button
               onClick={handleRemove}
-              className="flex-shrink-0 p-1 text-gray-400 hover:text-red-500 transition-colors"
+              className="flex-shrink-0 -m-1.5 p-2 text-gray-400 hover:text-red-500 transition-colors"
               aria-label="Remove item"
             >
               <Trash2 size={14} />
             </button>
           </div>
 
-          {/* Bottom Control Row */}
-          <div className="flex items-center justify-between mt-2 gap-2">
-            {/* Quantity Stepper */}
-            <div
-              className="flex items-center rounded-full px-1 py-0.5"
-              style={{ border: "1px solid #E2E8F0" }}
-            >
-              <button
-                onClick={() => updateQty(item.id, item.qty - 1)}
-                className="w-5 h-5 flex items-center justify-center transition-colors hover:bg-gray-100 rounded-full"
-                style={{ cursor: "pointer", color: "var(--rj-charcoal)" }}
-              >
-                <Minus size={9} />
-              </button>
-              <span
-                className="w-5 text-center font-cinzel text-xs font-medium"
-                style={{ color: "var(--rj-charcoal)" }}
-              >
-                {item.qty}
-              </span>
-              <button
-                onClick={() => updateQty(item.id, item.qty + 1)}
-                className="w-5 h-5 flex items-center justify-center transition-colors hover:bg-gray-100 rounded-full"
-                style={{ cursor: "pointer", color: "var(--rj-charcoal)" }}
-              >
-                <Plus size={9} />
-              </button>
-            </div>
-
-            {/* Price + Button Stack */}
-            <div className="flex items-center gap-2">
-              <div className="text-right flex items-baseline gap-1">
+          <div>
+            {/* Price */}
+            <div className="flex justify-between">
+              <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 mt-2">
                 <span
-                  className="font-cinzel font-bold text-sm"
+                  className="font-cinzel font-bold text-base leading-none"
                   style={{ color: "var(--rj-charcoal)" }}
                 >
                   {fmtPrice(item.priceNum * item.qty)}
                 </span>
                 {item.originalPriceNum && (
                   <span
-                    className="font-cinzel text-[9px] line-through"
+                    className="font-cinzel text-[10px] line-through leading-none"
                     style={{ color: "var(--rj-ash)" }}
                   >
                     {fmtPrice(item.originalPriceNum * item.qty)}
                   </span>
                 )}
               </div>
+              {discountPct > 0 && (
+                <div>
+                  <span
+                    className=" font-cinzel font-bold rounded-md px-2 py-1"
+                    style={{
+                      fontSize: 8,
+                      background: "var(--rj-emerald)",
+                      color: "var(--rj-gold)",
+                    }}
+                  >
+                    {discountPct}% OFF
+                  </span>
+                </div>
+              )}
+            </div>
+            {/* Actions: stepper left, buy button right, below price */}
+            <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-2 mt-2.5">
+              <div
+                className="inline-flex items-center rounded-full h-7"
+                style={{
+                  border: "1px solid var(--rj-bone)",
+                  background: "#fff",
+                }}
+              >
+                <button
+                  onClick={() => updateQty(item.id, item.qty - 1)}
+                  className="w-7 h-7 flex items-center justify-center rounded-full transition-colors hover:bg-[var(--rj-ivory-dark)] active:scale-90"
+                  style={{ cursor: "pointer", color: "var(--rj-charcoal)" }}
+                  aria-label="Decrease quantity"
+                >
+                  <Minus size={12} />
+                </button>
+                <span
+                  className="min-w-8 text-center font-cinzel text-xs font-semibold tabular-nums"
+                  style={{ color: "var(--rj-charcoal)" }}
+                  aria-live="polite"
+                >
+                  {item.qty}
+                </span>
+                <button
+                  onClick={() => updateQty(item.id, item.qty + 1)}
+                  className="w-7 h-7 flex items-center justify-center rounded-full transition-colors hover:bg-[var(--rj-ivory-dark)] active:scale-90"
+                  style={{ cursor: "pointer", color: "var(--rj-charcoal)" }}
+                  aria-label="Increase quantity"
+                >
+                  <Plus size={12} />
+                </button>
+              </div>
 
-              {/* Direct Buy Button */}
               <ShiprocketCheckoutButton
                 label="BUY IT NOW"
-                className="text-[9px] px-3 py-1.5 whitespace-nowrap rounded-full tracking-wider font-bold"
-                style={{
-                  background: "#18181B",
-                  color: "#FFFFFF",
-                }}
+                className="h-7 px-4 text-[10px] whitespace-nowrap tracking-widest"
+                style={{ background: "#18181B", color: "#FFFFFF" }}
                 onClick={() => {
                   // Stage item into temporary buyNow state without altering main cart store
                   setBuyNow(item);
@@ -303,7 +319,6 @@ function BuyNowBanner() {
     </motion.div>
   );
 }
-
 
 function CouponSection() {
   const { coupon, subtotal, applyCoupon, removeCoupon, checkoutItems } =
@@ -508,7 +523,7 @@ function CouponSection() {
   );
 }
 
-// Sticky Bottom Summary 
+// Sticky Bottom Summary
 function DrawerSummary({ onClose }: { onClose: () => void }) {
   const {
     subtotal,
@@ -551,7 +566,7 @@ function DrawerSummary({ onClose }: { onClose: () => void }) {
   }));
 
   return (
-    <>
+    <div className="flex-shrink-0">
       <div className="w-full relative overflow-hidden">
         <style>{`
         @keyframes subtleGlowSweep {
@@ -559,6 +574,7 @@ function DrawerSummary({ onClose }: { onClose: () => void }) {
           100% { transform: translateX(200%) skewX(-25deg); }
         }
         .animate-glow-sweep {
+          will-change: transform;
           animation: subtleGlowSweep 3.5s linear 0.3s infinite;
         }
       `}</style>
@@ -582,8 +598,9 @@ function DrawerSummary({ onClose }: { onClose: () => void }) {
       </div>
 
       <div
-        className="flex-shrink-0 px-4 pt-3 pb-4 space-y-2.5"
+        className="px-4 pt-3 space-y-2.5"
         style={{
+          paddingBottom: "max(1rem, env(safe-area-inset-bottom))",
           background: "#fff",
           borderTop: "1px solid var(--rj-bone)",
           boxShadow: "0 -8px 24px -8px rgba(0,0,0,0.08)",
@@ -720,7 +737,7 @@ function DrawerSummary({ onClose }: { onClose: () => void }) {
           256-bit SSL encrypted · Payment info never stored
         </p>
       </div>
-    </>
+    </div>
   );
 }
 
@@ -739,15 +756,19 @@ export function CartDrawer() {
 
   // Lock background scroll while drawer is open
   useEffect(() => {
+    const html = document.documentElement;
     if (isDrawerOpen) {
+      html.style.overflow = "hidden";
       document.body.style.overflow = "hidden";
     } else {
+      html.style.overflow = "";
       document.body.style.overflow = "";
       // Drawer just closed without completing checkout — don't let a stale
       // buy-now selection linger into the next time the drawer opens.
       if (buyNowItems) clearBuyNow();
     }
     return () => {
+      html.style.overflow = "";
       document.body.style.overflow = "";
     };
   }, [isDrawerOpen]);
@@ -757,143 +778,143 @@ export function CartDrawer() {
   return (
     <AnimatePresence>
       {isDrawerOpen && (
-        <>
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{
-              duration: 0.4, // Slightly increased for a more premium, graceful feel
-              ease: [0.215, 0.61, 0.355, 1.0], // Custom cubic-bezier (easeOutCubic) for ultra-smooth easing
-            }}
-            onClick={closeDrawer}
-            className={`fixed inset-0 z-[90] backdrop-blur-[2px] ${isDrawerOpen ? "block" : "hidden"}`} // Optional: added a tiny backdrop-blur for luxury feel
-            style={{ background: "rgba(0, 20, 12, 0.45)" }}
-          />
-
-          {/* Drawer panel */}
-          <motion.div
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{
-              type: "spring",
-              stiffness: 320, // High enough to make it snap open snappily
-              damping: 32, // High damping completely eliminates visible bouncing, keeping it clean
-              mass: 0.8, // Keeps the panel feeling light and highly responsive
-            }}
-            className="fixed top-0 right-0 h-full z-[999] flex flex-col"
+        <motion.div
+          key="cart-backdrop"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{
+            duration: 0.4, // Slightly increased for a more premium, graceful feel
+            ease: [0.215, 0.61, 0.355, 1.0], // Custom cubic-bezier (easeOutCubic) for ultra-smooth easing
+          }}
+          onClick={closeDrawer}
+          className="fixed inset-0 z-[90] backdrop-blur-[2px]"
+          style={{ background: "rgba(0, 20, 12, 0.45)", touchAction: "none" }}
+        />
+      )}
+      {isDrawerOpen && (
+        <motion.div
+          key="cart-panel"
+          initial={{ x: "100%" }}
+          animate={{ x: 0 }}
+          exit={{ x: "100%" }}
+          transition={{
+            type: "spring",
+            stiffness: 320, // High enough to make it snap open snappily
+            damping: 32, // High damping completely eliminates visible bouncing, keeping it clean
+            mass: 0.8, // Keeps the panel feeling light and highly responsive
+          }}
+          className="fixed top-0 right-0 z-[999] flex flex-col overflow-hidden"
+          style={{
+            height: "100dvh",
+            width: "min(440px, 95vw)",
+            background: "var(--rj-ivory)",
+            boxShadow: "-12px 0 40px rgba(0,0,0,0.18)",
+          }}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Shopping bag"
+        >
+          {/* Fixed header */}
+          <div
+            className="flex-shrink-0 flex items-center justify-between px-4 py-4"
             style={{
-              width: "min(440px, 95vw)",
-              background: "var(--rj-ivory)",
-              boxShadow: "-12px 0 40px rgba(0,0,0,0.18)",
+              background: "#fff",
+              borderBottom: "1px solid var(--rj-bone)",
             }}
-            role="dialog"
-            aria-modal="true"
-            aria-label="Shopping bag"
           >
-            {/* Fixed header */}
-            <div
-              className="flex-shrink-0 flex items-center justify-between px-4 py-4"
-              style={{
-                background: "#fff",
-                borderBottom: "1px solid var(--rj-bone)",
-              }}
+            <button
+              onClick={closeDrawer}
+              className="flex items-center gap-1.5 transition-opacity hover:opacity-60"
+              style={{ cursor: "pointer", color: "var(--rj-charcoal)" }}
             >
+              <ChevronLeft size={18} />
+            </button>
+            <h2
+              className="font-cinzel text-sm font-bold tracking-wider"
+              style={{ color: "var(--rj-charcoal)" }}
+            >
+              Shopping Bag ({totalItems()})
+            </h2>
+            {items.length > 0 ? (
               <button
-                onClick={closeDrawer}
-                className="flex items-center gap-1.5 transition-opacity hover:opacity-60"
-                style={{ cursor: "pointer", color: "var(--rj-charcoal)" }}
+                onClick={clearCart}
+                className="font-cinzel text-[9px] tracking-widest uppercase transition-opacity hover:opacity-60"
+                style={{ color: "var(--rj-ash)", cursor: "pointer" }}
               >
-                <ChevronLeft size={18} />
+                Clear
               </button>
-              <h2
-                className="font-cinzel text-sm font-bold tracking-wider"
-                style={{ color: "var(--rj-charcoal)" }}
-              >
-                Shopping Bag ({totalItems()})
-              </h2>
-              {items.length > 0 ? (
-                <button
-                  onClick={clearCart}
-                  className="font-cinzel text-[9px] tracking-widest uppercase transition-opacity hover:opacity-60"
-                  style={{ color: "var(--rj-ash)", cursor: "pointer" }}
-                >
-                  Clear
-                </button>
-              ) : (
-                <span style={{ width: 18 }} />
-              )}
-            </div>
-
-            {items.length === 0 ? (
-              <EmptyCart onClose={closeDrawer} />
             ) : (
-              <>
-                {/* Scrollable item list — the only part that grows/scrolls */}
-                <div
-                  className="flex-1 overflow-y-auto px-4 pt-4"
-                  style={{ minHeight: 0 }}
-                >
-                  <BuyNowBanner />
-
-                  <motion.div layout>
-                    <AnimatePresence mode="popLayout">
-                      {items.map((item) => (
-                        <DrawerItemRow
-                          key={item.id}
-                          item={item}
-                          onNavigate={handleNavigate}
-                        />
-                      ))}
-                    </AnimatePresence>
-                  </motion.div>
-
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.2 }}
-                    className="mb-4 p-3 rounded-xl flex items-start gap-2.5"
-                    style={{
-                      background: "rgba(252,193,81,0.06)",
-                      border: "1px dashed rgba(252,193,81,0.3)",
-                    }}
-                  >
-                    <Gift
-                      size={14}
-                      style={{
-                        color: "var(--rj-gold)",
-                        flexShrink: 0,
-                        marginTop: 2,
-                      }}
-                    />
-                    <div>
-                      <p
-                        className="font-cinzel text-[9px] tracking-widest uppercase font-bold mb-0.5"
-                        style={{ color: "var(--rj-charcoal)" }}
-                      >
-                        Gift Box Included
-                      </p>
-                      <p
-                        className="text-[11px] leading-snug"
-                        style={{
-                          color: "var(--rj-ash)",
-                          fontFamily: "var(--font-body,'DM Sans'),sans-serif",
-                        }}
-                      >
-                        Every order ships in our signature gift box, free.
-                      </p>
-                    </div>
-                  </motion.div>
-                </div>
-
-                {/* Sticky bottom summary — never scrolls away */}
-                <DrawerSummary onClose={closeDrawer} />
-              </>
+              <span style={{ width: 18 }} />
             )}
-          </motion.div>
-        </>
+          </div>
+
+          {items.length === 0 ? (
+            <EmptyCart onClose={closeDrawer} />
+          ) : (
+            <>
+              {/* Scrollable item list — the only part that grows/scrolls */}
+              <div
+                className="flex-1 overflow-y-auto overscroll-contain px-4 pt-4"
+                style={{ minHeight: 0, WebkitOverflowScrolling: "touch" }}
+              >
+                <BuyNowBanner />
+
+                <motion.div layout>
+                  <AnimatePresence mode="popLayout">
+                    {items.map((item) => (
+                      <DrawerItemRow
+                        key={item.id}
+                        item={item}
+                        onNavigate={handleNavigate}
+                      />
+                    ))}
+                  </AnimatePresence>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                  className="mb-4 p-3 rounded-xl flex items-start gap-2.5"
+                  style={{
+                    background: "rgba(252,193,81,0.06)",
+                    border: "1px dashed rgba(252,193,81,0.3)",
+                  }}
+                >
+                  <Gift
+                    size={14}
+                    style={{
+                      color: "var(--rj-gold)",
+                      flexShrink: 0,
+                      marginTop: 2,
+                    }}
+                  />
+                  <div>
+                    <p
+                      className="font-cinzel text-[9px] tracking-widest uppercase font-bold mb-0.5"
+                      style={{ color: "var(--rj-charcoal)" }}
+                    >
+                      Gift Box Included
+                    </p>
+                    <p
+                      className="text-[11px] leading-snug"
+                      style={{
+                        color: "var(--rj-ash)",
+                        fontFamily: "var(--font-body,'DM Sans'),sans-serif",
+                      }}
+                    >
+                      Every order ships in our signature gift box, free.
+                    </p>
+                  </div>
+                </motion.div>
+              </div>
+
+              {/* Sticky bottom summary — never scrolls away */}
+              <DrawerSummary onClose={closeDrawer} />
+            </>
+          )}
+        </motion.div>
       )}
     </AnimatePresence>
   );

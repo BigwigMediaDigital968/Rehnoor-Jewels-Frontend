@@ -164,7 +164,7 @@ export default function ShiprocketCheckoutButton({
     <button
       onClick={handleCheckout}
       disabled={disabled || loading}
-      className={`w-full font-cinzel tracking-widest uppercase font-bold rounded-full transition-all duration-300 hover:opacity-90 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer ${className}`}
+      className={` font-cinzel tracking-widest uppercase font-bold rounded-full transition-all duration-300 hover:opacity-90 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer ${className}`}
       style={{
         background: "var(--rj-emerald)",
         color: "var(--rj-gold)",

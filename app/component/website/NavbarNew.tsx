@@ -881,7 +881,6 @@ export default function NavbarNew() {
               {/* Mobile cart */}
               <div className="lg:hidden">
                 <IconWithBadge
-                  href="/#"
                   onclick={openDrawer}
                   icon={<ShoppingBag size={20} />}
                   count={cartCount}
