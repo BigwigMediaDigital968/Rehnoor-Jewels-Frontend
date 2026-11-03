@@ -22,7 +22,6 @@ import {
 } from "lucide-react";
 import { useCartStore, fmtPrice, CartItem } from "@/app/store/cartStore";
 import { useCheckoutStore } from "@/app/store/checkoutStore";
-import { validateCoupon } from "@/app/lib/api/orders";
 import ShiprocketCheckoutButton from "@/app/checkout-shiprocket/ShiprocketCheckoutButton";
 
 // ─── Empty ────────────────────────────────────────────────────────────────────
@@ -320,220 +319,10 @@ function BuyNowBanner() {
   );
 }
 
-function CouponSection() {
-  const { coupon, subtotal, applyCoupon, removeCoupon, checkoutItems } =
-    useCartStore();
-  const [code, setCode] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [show, setShow] = useState(false);
-
-  // 1. Get a stable reference to your items
-  const items = checkoutItems();
-
-  // 2. Automatically re-validate when items change
-  useEffect(() => {
-    // Only trigger if a coupon is already applied
-    if (!coupon?.code) return;
-
-    const revalidateActiveCoupon = async () => {
-      // Passing coupon.code, current subtotal, and updated items array
-      const result = await validateCoupon(
-        coupon?.code?.trim() ?? "",
-        subtotal(),
-        items,
-      );
-
-      if (!result.success || !result.coupon) {
-        // If it becomes invalid (e.g., below minItemCount or dropped below Buy X limit)
-        setError(result.message || "Cart no longer qualifies for this coupon.");
-        removeCoupon();
-        return;
-      }
-
-      // Update store with the newly calculated discount amount
-      applyCoupon({
-        code: result.coupon.code,
-        discountAmount: result.discountAmount ?? 0,
-        discountType: result.coupon.discountType,
-        discountValue: result.coupon.discountValue,
-      });
-    };
-
-    revalidateActiveCoupon();
-
-    // Deeply stringifying items ensures the effect only runs if item configurations,
-    // quantities, or prices actually shift—not on simple component rerenders.
-  }, [
-    JSON.stringify(items),
-    coupon?.code,
-    subtotal,
-    applyCoupon,
-    removeCoupon,
-  ]);
-
-  const handleApply = async () => {
-    if (!code.trim()) return;
-    setLoading(true);
-    setError("");
-    const result = await validateCoupon(code.trim(), subtotal(), items);
-    setLoading(false);
-
-    if (!result.success || !result.coupon) {
-      setError(result.message || "Invalid coupon code.");
-      removeCoupon();
-      return;
-    }
-
-    applyCoupon({
-      code: result.coupon.code,
-      discountAmount: result.discountAmount ?? 0,
-      discountType: result.coupon.discountType,
-      discountValue: result.coupon.discountValue,
-    });
-    setCode("");
-    setShow(false);
-  };
-
-  if (coupon?.code) {
-    return (
-      <div>
-        <div
-          className="flex items-center justify-between p-2.5 rounded-xl"
-          style={{
-            background: "rgba(0,55,32,0.06)",
-            border: "1.5px solid rgba(0,55,32,0.15)",
-          }}
-        >
-          <div className="flex items-center gap-2">
-            <Check size={13} style={{ color: "var(--rj-emerald)" }} />
-            <div>
-              <p
-                className="font-cinzel text-[11px] font-bold"
-                style={{ color: "var(--rj-emerald)" }}
-              >
-                {coupon.code} applied!
-              </p>
-              <p
-                className="font-cinzel text-[8px] tracking-wider"
-                style={{ color: "var(--rj-ash)" }}
-              >
-                You save {fmtPrice(coupon.discountAmount)}
-              </p>
-            </div>
-          </div>
-          <button onClick={removeCoupon} style={{ cursor: "pointer" }}>
-            <X size={13} style={{ color: "var(--rj-ash)" }} />
-          </button>
-        </div>
-        {/* Display an inline validation error even if coupon panel is closed */}
-        {error && (
-          <p
-            className="font-cinzel text-[8px] mt-1.5 pl-1"
-            style={{ color: "#ef4444" }}
-          >
-            {error}
-          </p>
-        )}
-      </div>
-    );
-  }
-
-  if (!show) {
-    return (
-      <div>
-        <button
-          onClick={() => setShow(true)}
-          className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-colors hover:bg-[var(--rj-ivory-dark)]"
-          style={{
-            border: "1px dashed var(--rj-bone)",
-            cursor: "pointer",
-          }}
-        >
-          <span
-            className="flex items-center gap-1.5 font-cinzel text-[10px] tracking-wider"
-            style={{ color: "var(--rj-ash)" }}
-          >
-            <Tag size={12} /> Enter a coupon
-          </span>
-          <ArrowRight size={11} style={{ color: "var(--rj-ash)" }} />
-        </button>
-        {error && (
-          <p
-            className="font-cinzel text-[8px] mt-1.5 pl-1"
-            style={{ color: "#ef4444" }}
-          >
-            {error}
-          </p>
-        )}
-      </div>
-    );
-  }
-
-  return (
-    <div>
-      <div className="flex gap-2">
-        <div className="relative flex-1">
-          <Tag
-            size={12}
-            className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
-            style={{ color: error ? "#fca5a5" : "var(--rj-ash)" }}
-          />
-          <input
-            type="text"
-            autoFocus
-            value={code}
-            onChange={(e) => {
-              setCode(e.target.value.toUpperCase());
-              setError("");
-            }}
-            onKeyDown={(e) => e.key === "Enter" && handleApply()}
-            placeholder="Coupon code"
-            className="w-full pl-8 pr-3 py-2 font-cinzel text-[11px] tracking-wider outline-none"
-            style={{
-              background: "#fff",
-              border: `1px solid ${error ? "#fca5a5" : "var(--rj-bone)"}`,
-              borderRadius: "8px",
-              color: "var(--rj-charcoal)",
-            }}
-          />
-        </div>
-        <button
-          onClick={handleApply}
-          disabled={loading}
-          className="px-3.5 py-2 font-cinzel text-[9px] tracking-widest uppercase font-bold rounded-lg transition-all disabled:opacity-50"
-          style={{
-            background: "var(--rj-emerald)",
-            color: "var(--rj-gold)",
-            cursor: "pointer",
-          }}
-        >
-          {loading ? "…" : "Apply"}
-        </button>
-      </div>
-      {error && (
-        <p
-          className="font-cinzel text-[8px] mt-1.5"
-          style={{ color: "#ef4444" }}
-        >
-          {error}
-        </p>
-      )}
-    </div>
-  );
-}
-
 // Sticky Bottom Summary
 function DrawerSummary({ onClose }: { onClose: () => void }) {
-  const {
-    subtotal,
-    savings,
-    coupon,
-    grandTotal,
-    items,
-    checkoutItems,
-    buyNowItems,
-  } = useCartStore();
+  const { subtotal, savings, items, checkoutItems, buyNowItems } =
+    useCartStore();
 
   const activeItems = checkoutItems();
   const isBuyNow = !!buyNowItems && buyNowItems.length > 0;
@@ -548,8 +337,8 @@ function DrawerSummary({ onClose }: { onClose: () => void }) {
         : 0
       : savings();
 
-  const discount = isBuyNow ? 0 : (coupon?.discountAmount ?? 0);
-  const grand = isBuyNow ? sub : grandTotal();
+  // Pre-coupon total: discounts are applied inside the Shiprocket checkout
+  const grand = sub;
 
   const FREE_SHIP = 999;
   const shipping = grand >= FREE_SHIP ? 0 : 129;
@@ -632,7 +421,29 @@ function DrawerSummary({ onClose }: { onClose: () => void }) {
           </div>
         )}
 
-        {!isBuyNow && <CouponSection />}
+        {/* Coupons are entered/applied inside the Shiprocket checkout */}
+        <div
+          className="flex items-start gap-2 px-3 py-2 rounded-xl"
+          style={{
+            background: "rgba(252,193,81,0.08)",
+            border: "1px dashed rgba(252,193,81,0.4)",
+          }}
+        >
+          <Tag
+            size={12}
+            className="flex-shrink-0 mt-0.5"
+            style={{ color: "var(--rj-gold)" }}
+          />
+          <p
+            className="text-[12px] leading-snug"
+            style={{
+              color: "var(--rj-ash)",
+              fontFamily: "var(--font-body,'DM Sans'),sans-serif",
+            }}
+          >
+            You can apply coupan code at final checkout.
+          </p>
+        </div>
 
         <div className="h-px" style={{ background: "var(--rj-bone)" }} />
 
@@ -665,22 +476,6 @@ function DrawerSummary({ onClose }: { onClose: () => void }) {
                 style={{ color: "var(--rj-emerald)" }}
               >
                 -{fmtPrice(save)}
-              </span>
-            </div>
-          )}
-          {discount > 0 && !isBuyNow && (
-            <div className="flex items-center justify-between">
-              <span
-                className="font-cinzel text-[10px] tracking-wider"
-                style={{ color: "var(--rj-ash)" }}
-              >
-                Coupon ({coupon?.code})
-              </span>
-              <span
-                className="font-cinzel text-xs font-bold"
-                style={{ color: "var(--rj-emerald)" }}
-              >
-                -{fmtPrice(discount)}
               </span>
             </div>
           )}
