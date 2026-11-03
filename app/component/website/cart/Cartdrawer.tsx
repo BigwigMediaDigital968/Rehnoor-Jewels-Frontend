@@ -216,7 +216,7 @@ function DrawerItemRow({
               )}
             </div>
             {/* Actions: stepper left, buy button right, below price */}
-            <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-2 mt-2.5">
+            <div className="flex items-center justify-between gap-x-2 gap-y-2 mt-2.5">
               <div
                 className="inline-flex items-center rounded-full h-7"
                 style={{
