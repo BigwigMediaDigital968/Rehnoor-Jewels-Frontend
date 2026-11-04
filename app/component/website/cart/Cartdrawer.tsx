@@ -12,6 +12,7 @@ import {
   Tag,
   X,
   ChevronLeft,
+  ChevronUp,
   ShoppingBag,
   ArrowRight,
   Check,
@@ -19,6 +20,7 @@ import {
   Sparkles,
   Lock,
   AlertCircle,
+  ChevronDown,
 } from "lucide-react";
 import { useCartStore, fmtPrice, CartItem } from "@/app/store/cartStore";
 import { useCheckoutStore } from "@/app/store/checkoutStore";
@@ -93,6 +95,8 @@ function DrawerItemRow({
   const discountPct = item.originalPriceNum
     ? Math.round((1 - item.priceNum / item.originalPriceNum) * 100)
     : 0;
+
+  const itemChip = RUNNING_OFFERS.find((o) => o.itemChip)?.itemChip;
 
   const variantLabel = item.variant?.options
     ? Object.values(item.variant.options).filter(Boolean).join(" · ")
@@ -169,6 +173,18 @@ function DrawerItemRow({
                 >
                   {variantLabel}
                 </p>
+              )}
+              {itemChip && (
+                <span
+                  className="inline-flex items-center gap-1 mt-1 rounded-md px-2 py-0.5 text-[10px] font-medium"
+                  style={{
+                    background: "rgba(252,193,81,0.15)",
+                    color: "var(--rj-charcoal)",
+                  }}
+                >
+                  <Tag size={10} style={{ color: "var(--rj-gold)" }} />
+                  {itemChip}
+                </span>
               )}
             </div>
 
@@ -319,12 +335,52 @@ function BuyNowBanner() {
   );
 }
 
+// ─── Running offers (hardcoded — real discounts are applied by Shiprocket checkout) ───
+
+const RUNNING_OFFERS: { text: string; itemChip?: string }[] = [
+  { text: "Buy 2 Get 1 Free", itemChip: "Buy 2 Get 1 Free" },
+  { text: "Extra ₹100 off on prepaid orders" },
+];
+
+function OfferBar() {
+  if (RUNNING_OFFERS.length === 0) return null;
+  return (
+    <div
+      className="w-full rounded-xl px-3 py-2 mb-3 relative overflow-hidden"
+      style={{ background: "#003720" }}
+      role="note"
+      aria-label="Running offers"
+    >
+      <p className="font-cinzel text-[9px] tracking-widest uppercase text-white/70 mb-1">
+        Offers running now
+      </p>
+      <ul className="space-y-0.5">
+        {RUNNING_OFFERS.map((o) => (
+          <li
+            key={o.text}
+            className="flex items-center gap-2 text-[13px] font-medium text-white"
+          >
+            <Tag size={12} style={{ color: "#FCC131" }} className="flex-shrink-0" />
+            <span>
+              <strong className="font-bold" style={{ color: "#FCC131" }}>
+                {o.text}
+              </strong>
+            </span>
+          </li>
+        ))}
+      </ul>
+      <p className="text-[11px] text-white/70 mt-1">
+        Applied automatically at checkout
+      </p>
+    </div>
+  );
+}
+
 // Sticky Bottom Summary
 function DrawerSummary({ onClose }: { onClose: () => void }) {
-  const { subtotal, savings, items, checkoutItems, buyNowItems } =
-    useCartStore();
+  const { subtotal, savings, buyNowItems } = useCartStore();
+  const [open, setOpen] = useState(false);
 
-  const activeItems = checkoutItems();
   const isBuyNow = !!buyNowItems && buyNowItems.length > 0;
   const buyNowItem = isBuyNow ? buyNowItems[0] : null;
 
@@ -337,22 +393,7 @@ function DrawerSummary({ onClose }: { onClose: () => void }) {
         : 0
       : savings();
 
-  // Pre-coupon total: discounts are applied inside the Shiprocket checkout
-  const grand = sub;
-
   const FREE_SHIP = 999;
-  const shipping = grand >= FREE_SHIP ? 0 : 129;
-  const final = grand + shipping;
-
-  // Format cart items for Shiprocket Access Token API format
-  const shiprocketFormattedItems = activeItems.map((item) => ({
-    variantId:
-      (item.variant as { _id?: string; id?: string })?._id ||
-      (item.variant as { _id?: string; id?: string })?.id ||
-      item.id,
-    id: item.id,
-    quantity: item.qty,
-  }));
 
   return (
     <div className="flex-shrink-0">
@@ -387,7 +428,7 @@ function DrawerSummary({ onClose }: { onClose: () => void }) {
       </div>
 
       <div
-        className="px-4 pt-3 space-y-2.5"
+        className="px-4 pt-3"
         style={{
           paddingBottom: "max(1rem, env(safe-area-inset-bottom))",
           background: "#fff",
@@ -395,142 +436,134 @@ function DrawerSummary({ onClose }: { onClose: () => void }) {
           boxShadow: "0 -8px 24px -8px rgba(0,0,0,0.08)",
         }}
       >
-        {/* Free shipping progress */}
-        {grand < FREE_SHIP && (
-          <div>
-            <p
-              className="font-cinzel text-[9px] tracking-wider mb-1.5 flex items-center gap-1"
-              style={{ color: "var(--rj-ash)" }}
-            >
-              <Sparkles size={10} style={{ color: "var(--rj-gold)" }} />
-              Add {fmtPrice(FREE_SHIP - grand)} more for free shipping
-            </p>
-            <div
-              className="h-1.5 rounded-full overflow-hidden"
-              style={{ background: "var(--rj-bone)" }}
-            >
-              <motion.div
-                className="h-full rounded-full"
-                style={{ background: "var(--gradient-gold)" }}
-                animate={{
-                  width: `${Math.min((grand / FREE_SHIP) * 100, 100)}%`,
-                }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Coupons are entered/applied inside the Shiprocket checkout */}
-        <div
-          className="flex items-start gap-2 px-3 py-2 rounded-xl"
-          style={{
-            background: "rgba(252,193,81,0.08)",
-            border: "1px dashed rgba(252,193,81,0.4)",
-          }}
+        {/* Total row — tap to reveal the breakdown */}
+        <button
+          type="button"
+          onClick={() => setOpen((o) => !o)}
+          aria-expanded={open}
+          aria-controls="cart-summary-details"
+          className="w-full flex items-center justify-between min-h-11 cursor-pointer"
         >
-          <Tag
-            size={12}
-            className="flex-shrink-0 mt-0.5"
-            style={{ color: "var(--rj-gold)" }}
-          />
+          <span
+            className="flex items-center gap-1 font-cinzel text-xs font-bold tracking-wider"
+            style={{ color: "var(--rj-charcoal)" }}
+          >
+            Estimated total
+            <ChevronDown
+              size={14}
+              className="transition-transform duration-200 motion-reduce:transition-none"
+              style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)" }}
+            />
+          </span>
+          <span
+            className="font-cormorant font-semibold"
+            style={{ fontSize: "1.4rem", color: "var(--rj-charcoal)" }}
+          >
+            {fmtPrice(sub)}
+          </span>
+        </button>
+
+        {/* Highlighted checkout note */}
+        <div
+          className="flex items-center gap-3 pl-3 pr-3 py-2.5 mt-2 mb-2 rounded-xl"
+          style={{
+            background: "#FCC131",
+            border: "1px solid #E0A526",
+            boxShadow: "0 2px 8px rgba(252,193,81,0.35)",
+          }}
+          role="note"
+        >
+          <span
+            className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center"
+            style={{ background: "#003720" }}
+          >
+            <Tag size={14} style={{ color: "#FCC131" }} />
+          </span>
           <p
-            className="text-[12px] leading-snug"
+            className="text-[13px] leading-snug font-bold"
             style={{
-              color: "var(--rj-ash)",
+              color: "#003720",
               fontFamily: "var(--font-body,'DM Sans'),sans-serif",
             }}
           >
-            You can apply coupon code at final checkout.
+            Offers &amp; shipping will be applied at checkout
           </p>
         </div>
 
-        <div className="h-px" style={{ background: "var(--rj-bone)" }} />
-
-        {/* Condensed price lines */}
-        <div className="space-y-1">
-          <div className="flex items-center justify-between">
-            <span
-              className="font-cinzel text-[10px] tracking-wider"
-              style={{ color: "var(--rj-ash)" }}
-            >
-              Subtotal
-            </span>
-            <span
-              className="font-cinzel text-xs font-bold"
-              style={{ color: "var(--rj-charcoal)" }}
-            >
-              {fmtPrice(sub)}
-            </span>
-          </div>
-          {save > 0 && (
-            <div className="flex items-center justify-between">
-              <span
-                className="font-cinzel text-[10px] tracking-wider"
-                style={{ color: "var(--rj-ash)" }}
-              >
-                You save
-              </span>
-              <span
-                className="font-cinzel text-xs font-bold"
-                style={{ color: "var(--rj-emerald)" }}
-              >
-                -{fmtPrice(save)}
-              </span>
-            </div>
-          )}
-          <div className="flex items-center justify-between">
-            <span
-              className="font-cinzel text-[10px] tracking-wider"
-              style={{ color: "var(--rj-ash)" }}
-            >
-              Shipping
-            </span>
-            <span
-              className="font-cinzel text-xs font-bold"
-              style={{
-                color:
-                  shipping === 0 ? "var(--rj-emerald)" : "var(--rj-charcoal)",
-              }}
-            >
-              {shipping === 0 ? "Free" : fmtPrice(shipping)}
-            </span>
-          </div>
-        </div>
-
-        <div className="h-px" style={{ background: "var(--rj-bone)" }} />
-
-        <div className="flex items-center justify-between">
-          <span
-            className="font-cinzel text-xs font-bold tracking-wider"
-            style={{ color: "var(--rj-charcoal)" }}
-          >
-            Total
-          </span>
-          <span
-            className="font-cormorant font-light"
-            style={{ fontSize: "1.4rem", color: "var(--rj-charcoal)" }}
-          >
-            {fmtPrice(final)}
-          </span>
-        </div>
-
-        {/* Dynamic Shiprocket Checkout Integration */}
-        <ShiprocketCheckoutButton
-          label="PROCEED TO BUY NOW"
-          className="w-full py-3.5 text-xs tracking-[0.2em] rounded-full shadow-md transition-all active:scale-[0.98]"
-          style={{
-            background: "#003720", // Deep emerald dark green
-            color: "#FCC151", // Elegant gold color matching image mockup
-          }}
-        />
-
-        <p
-          className="font-cinzel text-[8px] tracking-wider text-center"
-          style={{ color: "var(--rj-ash)" }}
+        {/* Breakdown dropdown */}
+        <div
+          id="cart-summary-details"
+          className="grid transition-[grid-template-rows] duration-200 ease-out motion-reduce:transition-none"
+          style={{ gridTemplateRows: open ? "1fr" : "0fr" }}
         >
-          256-bit SSL encrypted · Payment info never stored
-        </p>
+          <div className="overflow-hidden">
+            <div className="space-y-2 pb-3 pt-1">
+              <div className="flex items-center justify-between">
+                <span className="font-cinzel text-[10px] tracking-wider" style={{ color: "var(--rj-ash)" }}>
+                  Subtotal
+                </span>
+                <span className="font-cinzel text-xs font-bold" style={{ color: "var(--rj-charcoal)" }}>
+                  {fmtPrice(sub)}
+                </span>
+              </div>
+              {save > 0 && (
+                <div className="flex items-center justify-between">
+                  <span className="font-cinzel text-[10px] tracking-wider" style={{ color: "var(--rj-ash)" }}>
+                    You&rsquo;re saving
+                  </span>
+                  <span className="font-cinzel text-xs font-bold" style={{ color: "var(--rj-emerald)" }}>
+                    -{fmtPrice(save)}
+                  </span>
+                </div>
+              )}
+              <div className="flex items-center justify-between">
+                <span className="font-cinzel text-[10px] tracking-wider" style={{ color: "var(--rj-ash)" }}>
+                  Shipping
+                </span>
+                <span className="font-cinzel text-xs font-bold" style={{ color: "var(--rj-charcoal)" }}>
+                  Calculated at checkout
+                </span>
+              </div>
+              {sub < FREE_SHIP && (
+                <div>
+                  <p
+                    className="font-cinzel text-[9px] tracking-wider mb-1.5 flex items-center gap-1"
+                    style={{ color: "var(--rj-ash)" }}
+                  >
+                    <Sparkles size={10} style={{ color: "var(--rj-gold)" }} />
+                    Add {fmtPrice(FREE_SHIP - sub)} more for free shipping
+                  </p>
+                  <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "var(--rj-bone)" }}>
+                    <motion.div
+                      className="h-full rounded-full"
+                      style={{ background: "var(--gradient-gold)" }}
+                      animate={{ width: `${Math.min((sub / FREE_SHIP) * 100, 100)}%` }}
+                      transition={{ duration: 0.5, ease: "easeOut" }}
+                    />
+                  </div>
+                </div>
+              )}
+              <p className="text-[11px]" style={{ color: "var(--rj-ash)" }}>
+                Taxes included.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-2 mt-2">
+          <ShiprocketCheckoutButton
+            // label="PROCEED TO BUY NOW"
+            label="Click to checkout"
+            className="w-full py-3.5 text-xs tracking-[0.2em] rounded-full shadow-md transition-all active:scale-[0.98]"
+            style={{ background: "#003720", color: "#FCC151" }}
+          />
+          <p
+            className="font-cinzel text-[8px] tracking-wider text-center"
+            style={{ color: "var(--rj-ash)" }}
+          >
+            256-bit SSL encrypted · Payment info never stored
+          </p>
+        </div>
       </div>
     </div>
   );
@@ -653,6 +686,7 @@ export function CartDrawer() {
                 className="flex-1 overflow-y-auto overscroll-contain px-4 pt-4"
                 style={{ minHeight: 0, WebkitOverflowScrolling: "touch" }}
               >
+                <OfferBar />
                 <BuyNowBanner />
 
                 <motion.div layout>
