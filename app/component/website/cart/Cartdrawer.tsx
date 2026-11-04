@@ -96,8 +96,6 @@ function DrawerItemRow({
     ? Math.round((1 - item.priceNum / item.originalPriceNum) * 100)
     : 0;
 
-  const itemChip = RUNNING_OFFERS.find((o) => o.itemChip)?.itemChip;
-
   const variantLabel = item.variant?.options
     ? Object.values(item.variant.options).filter(Boolean).join(" · ")
     : null;
@@ -173,18 +171,6 @@ function DrawerItemRow({
                 >
                   {variantLabel}
                 </p>
-              )}
-              {itemChip && (
-                <span
-                  className="inline-flex items-center gap-1 mt-1 rounded-md px-2 py-0.5 text-[10px] font-medium"
-                  style={{
-                    background: "rgba(252,193,81,0.15)",
-                    color: "var(--rj-charcoal)",
-                  }}
-                >
-                  <Tag size={10} style={{ color: "var(--rj-gold)" }} />
-                  {itemChip}
-                </span>
               )}
             </div>
 
@@ -337,42 +323,92 @@ function BuyNowBanner() {
 
 // ─── Running offers (hardcoded — real discounts are applied by Shiprocket checkout) ───
 
-const RUNNING_OFFERS: { text: string; itemChip?: string }[] = [
-  { text: "Buy 2 Get 1 Free", itemChip: "Buy 2 Get 1 Free" },
+const RUNNING_OFFERS: { text: string }[] = [
+  { text: "Buy 2 Get 1 Free" },
   { text: "Extra ₹100 off on prepaid orders" },
 ];
 
 function OfferBar() {
   if (RUNNING_OFFERS.length === 0) return null;
+  const items = (suffix: string) =>
+    RUNNING_OFFERS.map((o) => (
+      <span
+        key={o.text + suffix}
+        className="inline-flex items-center gap-2 pr-8 text-[12px] font-bold whitespace-nowrap"
+        style={{ color: "#FCC131" }}
+      >
+        <Tag size={12} className="flex-shrink-0" />
+        {o.text}
+      </span>
+    ));
   return (
-    <div
-      className="w-full rounded-xl px-3 py-2 mb-3 relative overflow-hidden"
+    <>
+    {/* <div
+      className="w-full flex-shrink-0 h-8 relative overflow-hidden flex items-center motion-reduce:overflow-x-auto"
       style={{ background: "#003720" }}
       role="note"
-      aria-label="Running offers"
+      aria-label={`Offers running now: ${RUNNING_OFFERS.map((o) => o.text).join(", ")}. Applied automatically at checkout.`}
     >
-      <p className="font-cinzel text-[9px] tracking-widest uppercase text-white/70 mb-1">
-        Offers running now
-      </p>
-      <ul className="space-y-0.5">
-        {RUNNING_OFFERS.map((o) => (
-          <li
-            key={o.text}
-            className="flex items-center gap-2 text-[13px] font-medium text-white"
-          >
-            <Tag size={12} style={{ color: "#FCC131" }} className="flex-shrink-0" />
-            <span>
-              <strong className="font-bold" style={{ color: "#FCC131" }}>
-                {o.text}
-              </strong>
-            </span>
-          </li>
-        ))}
-      </ul>
-      <p className="text-[11px] text-white/70 mt-1">
-        Applied automatically at checkout
-      </p>
-    </div>
+      <style>{`
+        @keyframes offerMarquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .offer-marquee-track {
+          display: flex;
+          width: max-content;
+          will-change: transform;
+          animation: offerMarquee 14s linear infinite;
+        }
+        .offer-marquee-track:hover { animation-play-state: paused; }
+        @media (prefers-reduced-motion: reduce) {
+          .offer-marquee-track { animation: none; }
+        }
+      `}</style>
+      <div className="offer-marquee-track pl-3">
+        <span className="inline-flex items-center pr-8 text-[10px] tracking-widest uppercase text-white/70 font-cinzel whitespace-nowrap">
+          Offers running now
+        </span>
+        {items("a")}
+        <span aria-hidden className="inline-flex items-center pr-8 text-[10px] tracking-widest uppercase text-white/70 font-cinzel whitespace-nowrap">
+          Offers running now
+        </span>
+        <span aria-hidden className="contents">{items("b")}</span>
+      </div>
+    </div> */}
+    
+    
+    
+    <div className="w-full relative overflow-hidden">
+        <style>{`
+        @keyframes subtleGlowSweep {
+          0% { transform: translateX(-100%) skewX(-25deg); }
+          100% { transform: translateX(200%) skewX(-25deg); }
+        }
+        .animate-glow-sweep {
+          will-change: transform;
+          animation: subtleGlowSweep 3.5s linear 0.3s infinite;
+        }
+      `}</style>
+
+        <div className="w-full bg-[#003720] py-3 text-center text-xs sm:text-[16px] tracking-wider text-white/90 relative overflow-hidden shadow-sm">
+          <div
+            className="absolute inset-0 w-1/3 h-full pointer-events-none animate-glow-sweep"
+            style={{
+              background:
+                "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.35) 50%, rgba(255,255,255,0) 100%)",
+            }}
+          />
+          <span className="relative z-10 font-medium text-sm">
+            {/* 🎉 You&rsquo;re saving{" "}
+            <strong className="text-[#FCC131] font-bold">
+              {fmtPrice(save)}
+            </strong>
+            ! */}
+           <strong className="text-[#FCC131] font-bold">🎉 Flat Rs. 100 OFF on Prepaid Orders!     </strong>     </span>
+        </div>
+      </div></>
+    
   );
 }
 
@@ -397,7 +433,7 @@ function DrawerSummary({ onClose }: { onClose: () => void }) {
 
   return (
     <div className="flex-shrink-0">
-      <div className="w-full relative overflow-hidden">
+      {/* <div className="w-full relative overflow-hidden">
         <style>{`
         @keyframes subtleGlowSweep {
           0% { transform: translateX(-100%) skewX(-25deg); }
@@ -423,9 +459,9 @@ function DrawerSummary({ onClose }: { onClose: () => void }) {
               {fmtPrice(save)}
             </strong>
             !
-          </span>
+           <strong className="text-[#FCC131] font-bold">🎉 Flat Rs. 100 OFF on Prepaid Orders!     </strong>     </span>
         </div>
-      </div>
+      </div> */}
 
       <div
         className="px-4 pt-3"
@@ -486,7 +522,7 @@ function DrawerSummary({ onClose }: { onClose: () => void }) {
               fontFamily: "var(--font-body,'DM Sans'),sans-serif",
             }}
           >
-            Offers &amp; shipping will be applied at checkout
+            Offers &amp; discounts will be applied at checkout
           </p>
         </div>
 
@@ -553,7 +589,7 @@ function DrawerSummary({ onClose }: { onClose: () => void }) {
         <div className="space-y-2 mt-2">
           <ShiprocketCheckoutButton
             // label="PROCEED TO BUY NOW"
-            label="Click to checkout"
+            label="PROCEED to checkout"
             className="w-full py-3.5 text-xs tracking-[0.2em] rounded-full shadow-md transition-all active:scale-[0.98]"
             style={{ background: "#003720", color: "#FCC151" }}
           />
@@ -616,7 +652,7 @@ export function CartDrawer() {
             ease: [0.215, 0.61, 0.355, 1.0], // Custom cubic-bezier (easeOutCubic) for ultra-smooth easing
           }}
           onClick={closeDrawer}
-          className="fixed inset-0 z-[90] backdrop-blur-[2px]"
+          className="fixed inset-0 z-[110] backdrop-blur-[2px]"
           style={{ background: "rgba(0, 20, 12, 0.45)", touchAction: "none" }}
         />
       )}
@@ -681,12 +717,14 @@ export function CartDrawer() {
             <EmptyCart onClose={closeDrawer} />
           ) : (
             <>
+              {/* Pinned offers ticker — sits under the header, never scrolls */}
+              <OfferBar />
+
               {/* Scrollable item list — the only part that grows/scrolls */}
               <div
                 className="flex-1 overflow-y-auto overscroll-contain px-4 pt-4"
                 style={{ minHeight: 0, WebkitOverflowScrolling: "touch" }}
               >
-                <OfferBar />
                 <BuyNowBanner />
 
                 <motion.div layout>
