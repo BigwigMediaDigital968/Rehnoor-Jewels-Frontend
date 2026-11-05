@@ -355,8 +355,7 @@ export default function RelatedProducts({
     fetchPublicProducts({
       collection: collectionSlug, // e.g. "chains-for-men" ← now correct
       limit: 12,
-      sort: "createdAt",
-      order: "desc",
+      // no sort → backend returns the admin-defined collection order
     })
       .then((res) => {
         if (cancelled) return;

@@ -72,7 +72,7 @@ export async function fetchPublicCollections(params?: {
   const url = `${BASE}/api/collections${qs.toString() ? `?${qs}` : ""}`;
 
   const res = await fetch(url, {
-    next: { revalidate: 60 },
+    next: { revalidate: 30 },
     headers: { "Content-Type": "application/json" },
   });
 
@@ -93,7 +93,7 @@ export async function fetchCollectionBySlug(
   slug: string,
 ): Promise<SingleCollectionResponse> {
   const res = await fetch(`${BASE}/api/collections/${slug}`, {
-    next: { revalidate: 60 },
+    next: { revalidate: 30 },
     headers: { "Content-Type": "application/json" },
   });
 

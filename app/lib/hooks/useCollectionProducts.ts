@@ -28,8 +28,7 @@ export function useCollectionProducts({
       const res = await fetchPublicProducts({
         collection: collectionSlug,
         limit: 100, // pull all; client-side pagination handles the rest
-        sort: "createdAt",
-        order: "desc",
+        // no sort → backend returns the admin-defined collection order
       });
       if (res.success) {
         setData(res.data);

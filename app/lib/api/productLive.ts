@@ -196,7 +196,7 @@ export async function fetchPublicProducts(params?: {
   const url = `${BASE}/api/products${qs.toString() ? `?${qs}` : ""}`;
 
   const res = await fetch(url, {
-    next: { revalidate: 60 },
+    next: { revalidate: 30 },
     headers: { "Content-Type": "application/json" },
   });
 
