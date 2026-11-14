@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -8,8 +8,6 @@ import {
   ChevronLeft,
   ChevronRight,
   Heart,
-  Share2,
-  ShoppingBag,
   Check,
   Star,
   Shield,
@@ -24,10 +22,11 @@ import {
   ChevronDown,
   Minus,
   Plus,
-  Ticket,
   Tag,
   Copy,
-  CheckCircle,
+  Eye,
+  Gift,
+  Sparkles
 } from "lucide-react";
 import type {
   Product,
@@ -714,38 +713,45 @@ export default function ProductDetailHero({
   const offersList = [
     {
       code: "B1G1",
+      tag: "Category Special",
       title: "Buy 1 Get 1 FREE",
       description: "Valid exclusively on women's earrings & rings.",
-      tag: "Category Special",
-      tagBg: "rgba(0,55,32,0.1)",
-      tagColor: "var(--rj-emerald)",
+      type: "code" as const,
+      icon: Gift,
+      rowBg: "#FFF7ED",
+      accentColor: "#F97316",
     },
     {
       code: "BLACKFRIDAY10",
+      tag: "Black Friday",
       title: "10% OFF",
       description: "Applicable on a minimum order value of ₹1,000.",
-      tag: "Black Friday",
-      tagBg: "rgba(0,0,0,0.08)",
-      tagColor: "var(--rj-charcoal)",
+      type: "code" as const,
+      icon: Tag,
+      rowBg: "#ECFDF5",
+      accentColor: "#059669",
     },
     {
       code: "BLACKFRIDAY20",
+      tag: "Black Friday",
       title: "20% OFF",
       description: "Applicable on a minimum order value of ₹2,000.",
-      tag: "Black Friday",
-      tagBg: "rgba(0,0,0,0.08)",
-      tagColor: "var(--rj-charcoal)",
+      type: "code" as const,
+      icon: Sparkles,
+      rowBg: "#F5F3FF",
+      accentColor: "#7C3AED",
     },
     {
       code: "Prepaid100",
+      tag: "Prepaid Offer",
       title: "Flat ₹100 OFF",
       description: "Automatic discount applied on prepaid orders.",
-      tag: "Prepaid Offer",
-      tagBg: "rgba(252,193,81,0.15)",
-      tagColor: "#a07800",
+      type: "auto" as const,
+      icon: Tag,
+      rowBg: "#FEF2F2",
+      accentColor: "#EF4444",
     },
   ];
-
   const prevImg = useCallback(
     () => setImgIdx((i) => (i - 1 + images.length) % images.length),
     [images.length],
@@ -967,6 +973,55 @@ export default function ProductDetailHero({
 
     return true;
   };
+
+  // 1. Deterministic product-wise stats (static per product, no API needed)
+  const { recentSalesCount, activeViewers } = useMemo(() => {
+    const key = String(product.id || product.name || "default");
+    let hash = 0;
+    for (let i = 0; i < key.length; i++) {
+      hash = (hash << 5) - hash + key.charCodeAt(i);
+      hash |= 0;
+    }
+    const abs = Math.abs(hash);
+    return {
+      recentSalesCount: (abs % 9) + 11,
+      activeViewers: (abs % 8) + 14,
+    };
+  }, [product.id, product.name]);
+
+  // 2. Live Rolling Sale Countdown (never gets stuck at 00:00:00:00)
+  const [timeLeft, setTimeLeft] = useState<{
+    days: string;
+    hours: string;
+    min: string;
+    sec: string;
+  } | null>(null);
+
+  useEffect(() => {
+    // Evergreen cycle: counts down to the end of a rolling 2-day window (resets smoothly)
+    const CYCLE_MS = 36 * 60 * 60 * 1000; // 36-hour rolling sale window
+
+    const updateTimer = () => {
+      const now = Date.now();
+      const remaining = CYCLE_MS - (now % CYCLE_MS);
+
+      const days = Math.floor(remaining / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((remaining / (1000 * 60 * 60)) % 24);
+      const min = Math.floor((remaining / 1000 / 60) % 60);
+      const sec = Math.floor((remaining / 1000) % 60);
+
+      setTimeLeft({
+        days: String(days).padStart(2, "0"),
+        hours: String(hours).padStart(2, "0"),
+        min: String(min).padStart(2, "0"),
+        sec: String(sec).padStart(2, "0"),
+      });
+    };
+
+    updateTimer();
+    const interval = setInterval(updateTimer, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <>
@@ -1236,7 +1291,7 @@ export default function ProductDetailHero({
               <h1
                 className="font-cormorant font-light leading-tight mb-2"
                 style={{
-                  fontSize: "clamp(1.8rem, 4vw, 3rem)",
+                  fontSize: "clamp(1.5rem, 4vw, 2rem)",
                   color: "var(--rj-charcoal)",
                   letterSpacing: "-0.01em",
                 }}
@@ -1244,7 +1299,7 @@ export default function ProductDetailHero({
                 {product.name}
               </h1>
 
-              <p
+              {/* <p
                 className="mb-4"
                 style={{
                   color: "var(--rj-ash)",
@@ -1253,7 +1308,7 @@ export default function ProductDetailHero({
                 }}
               >
                 {product.subtitle}
-              </p>
+              </p> */}
 
               {product.rating && product.rating > 0 && (
                 <div
@@ -1304,7 +1359,7 @@ export default function ProductDetailHero({
                 <div className="flex items-baseline gap-3 flex-wrap mb-6">
                   <span
                     className="font-cinzel font-bold"
-                    style={{ fontSize: "2rem", color: "var(--rj-charcoal)" }}
+                    style={{ fontSize: "1.5rem", color: "var(--rj-charcoal)" }}
                   >
                     {product.price}
                   </span>
@@ -1327,212 +1382,85 @@ export default function ProductDetailHero({
                 </div>
               )}
 
-              {/* Offers */}
-              {/* ══ OFFERS SECTION ══ */}
-              <div className="flex flex-col gap-3.5 mt-2 mb-6">             
-
-                {/* Clickable Trigger to Open Offers Popup */}
-                <button
-                  type="button"
-                  onClick={() => setOffersModalOpen(true)}
-                  className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl transition-all duration-200 hover:shadow-md group cursor-pointer"
-                  style={{
-                    background: "var(--rj-ivory-dark)",
-                    border: "1px solid var(--rj-bone)",
-                  }}
-                >
-                  <div className="flex items-center gap-2.5 text-left">
-                    <div
-                      className="w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition-transform group-hover:scale-105"
-                      style={{
-                        background: "rgba(0,55,32,0.1)",
-                        color: "var(--rj-emerald)",
-                      }}
-                    >
-                      <Ticket size={15} />
-                    </div>
-                    <div>
-                      <p
-                        className="font-cinzel text-xs font-bold tracking-wide"
-                        style={{ color: "var(--rj-charcoal)" }}
-                      >
-                        Available Offers & Coupon Codes
-                      </p>
-                      <p
-                        className="text-[11px]"
-                        style={{ color: "var(--rj-ash)" }}
-                      >
-                        Tap to view promo codes & redemption guide
-                      </p>
-                    </div>
-                  </div>
-                  <span
-                    className="font-cinzel text-[11px] font-bold tracking-wider underline group-hover:opacity-80"
-                    style={{ color: "var(--rj-emerald)" }}
+              {/* ── Urgency Countdown & Social Proof Block ── */}
+              <div className="mb-6 space-y-3.5">
+                {/* Sale Countdown */}
+                <div>
+                  <p
+                    className="font-cinzel text-[11px] font-bold tracking-widest uppercase mb-2.5"
+                    style={{ color: "#a07800" }}
                   >
-                    View All
-                  </span>
-                </button>
-              </div>
+                    Hurry! Sale Ends In
+                  </p>
 
-              {/* ══ OFFERS POPUP MODAL ══ */}
-              <AnimatePresence>
-                {offersModalOpen && (
-                  <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
-                    {/* Backdrop */}
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      onClick={() => setOffersModalOpen(false)}
-                      className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-                    />
-
-                    {/* Modal Card */}
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.95, y: 10 }}
-                      animate={{ opacity: 1, scale: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                      transition={{ duration: 0.2 }}
-                      className="relative w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl z-10 flex flex-col max-h-[90vh]"
-                      style={{ background: "var(--rj-ivory)" }}
-                    >
-                      {/* Header */}
+                  <div className="grid grid-cols-4 gap-2.5 max-w-[320px]">
+                    {[
+                      { label: "Days", value: timeLeft?.days ?? "01" },
+                      { label: "Hours", value: timeLeft?.hours ?? "11" },
+                      { label: "Min", value: timeLeft?.min ?? "59" },
+                      { label: "Sec", value: timeLeft?.sec ?? "59" },
+                    ].map((unit) => (
                       <div
-                        className="px-6 py-4 flex items-center justify-between shrink-0"
+                        key={unit.label}
+                        className="flex flex-col items-center justify-center py-2.5 px-2 rounded-xl"
                         style={{
-                          background: "var(--rj-emerald)",
-                          color: "#fff",
+                          background: "rgba(252, 193, 81, 0.12)",
+                          border: "1px solid rgba(252, 193, 81, 0.35)",
                         }}
                       >
-                        <div className="flex items-center gap-2">
-                          <Ticket
-                            size={18}
-                            style={{ color: "var(--rj-gold)" }}
-                          />
-                          <h3 className="font-cinzel text-base font-bold tracking-wider">
-                            Exclusive Offers & Coupons
-                          </h3>
-                        </div>
-                        <button
-                          onClick={() => setOffersModalOpen(false)}
-                          className="p-1 rounded-full transition-colors hover:bg-white/10 text-white cursor-pointer"
-                          aria-label="Close offers modal"
+                        <span
+                          className="font-cinzel text-lg sm:text-xl font-bold leading-none mb-1 tabular-nums"
+                          style={{ color: "#a07800" }}
                         >
-                          <X size={18} />
-                        </button>
-                      </div>
-
-                      {/* Content Body */}
-                      <div className="p-6 overflow-y-auto flex-1 space-y-4">
-                        {offersList.map((offer) => (
-                          <div
-                            key={offer.code}
-                            className="p-4 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-shadow hover:shadow-sm"
-                            style={{
-                              background: "#fff",
-                              borderColor: "var(--rj-bone)",
-                            }}
-                          >
-                            <div className="space-y-1">
-                              <span
-                                className="font-cinzel text-[9px] font-bold tracking-widest uppercase px-2 py-0.5 rounded-full inline-block"
-                                style={{
-                                  background: offer.tagBg,
-                                  color: offer.tagColor,
-                                }}
-                              >
-                                {offer.tag}
-                              </span>
-                              <h4
-                                className="font-cinzel text-sm font-bold"
-                                style={{ color: "var(--rj-charcoal)" }}
-                              >
-                                {offer.title}
-                              </h4>
-                              <p
-                                className="text-xs"
-                                style={{ color: "var(--rj-ash)" }}
-                              >
-                                {offer.description}
-                              </p>
-                            </div>
-
-                            {/* Copy Coupon Action */}
-                            <div className="flex items-center sm:flex-col items-end justify-between sm:justify-center gap-2 border-t sm:border-t-0 pt-2 sm:pt-0 border-dashed border-gray-200">
-                              <button
-                                type="button"
-                                onClick={() => handleCopyCode(offer.code)}
-                                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border-2 border-dashed font-mono font-bold text-xs transition-all active:scale-95 cursor-pointer"
-                                style={{
-                                  borderColor: "var(--rj-gold)",
-                                  background: "rgba(252,193,81,0.08)",
-                                  color: "var(--rj-charcoal)",
-                                }}
-                              >
-                                <span>{offer.code}</span>
-                                {copiedCode === offer.code ? (
-                                  <Check
-                                    size={14}
-                                    className="text-emerald-600"
-                                  />
-                                ) : (
-                                  <Copy
-                                    size={14}
-                                    className="text-[var(--rj-ash)]"
-                                  />
-                                )}
-                              </button>
-                              <span className="text-[10px] h-3 font-semibold text-emerald-600">
-                                {copiedCode === offer.code ? "Copied!" : ""}
-                              </span>
-                            </div>
-                          </div>
-                        ))}
-
-                        {/* Checkout Redemption Instructions */}
-                        <div
-                          className="p-4 rounded-xl border mt-6"
-                          style={{
-                            background: "var(--rj-ivory-dark)",
-                            borderColor: "var(--rj-bone)",
-                          }}
+                          {unit.value}
+                        </span>
+                        <span
+                          className="text-[11px] font-medium"
+                          style={{ color: "var(--rj-ash)" }}
                         >
-                          <h5
-                            className="font-cinzel text-xs font-bold tracking-wider uppercase mb-2 flex items-center gap-1.5"
-                            style={{ color: "var(--rj-charcoal)" }}
-                          >
-                            <CheckCircle
-                              size={14}
-                              style={{ color: "var(--rj-emerald)" }}
-                            />
-                            How to apply coupon at checkout
-                          </h5>
-                          <ol
-                            className="list-decimal list-inside text-xs space-y-1.5"
-                            style={{ color: "var(--rj-ash)" }}
-                          >
-                            <li>
-                              Paste the copied code into the{" "}
-                              <strong style={{ color: "var(--rj-charcoal)" }}>
-                                &quot;Discount / Promo Code&quot;
-                              </strong>{" "}
-                              field on the checkout page.
-                            </li>
-                            <li>
-                              Click{" "}
-                              <strong style={{ color: "var(--rj-charcoal)" }}>
-                                Apply
-                              </strong>{" "}
-                              to calculate your savings.
-                            </li>
-                          </ol>
-                        </div>
+                          {unit.label}
+                        </span>
                       </div>
-                    </motion.div>
+                    ))}
                   </div>
-                )}
-              </AnimatePresence>
+                </div>
+
+                {/* Live Viewers + 3-Day Sold Counter */}
+                <div className="flex flex-wrap items-center gap-2.5 pt-1">
+                  {/* Green Pill matching your reference */}
+                  <div
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full"
+                    style={{
+                      background: "rgba(16, 185, 129, 0.1)",
+                      border: "1px solid rgba(16, 185, 129, 0.35)",
+                    }}
+                  >
+                    <Eye size={13} className="text-emerald-600 shrink-0" />
+                    <span className="font-cinzel text-xs font-bold text-emerald-700">
+                      {activeViewers}
+                    </span>
+                  </div>
+                  <span
+                    className="text-xs"
+                    style={{ color: "var(--rj-charcoal)" }}
+                  >
+                    People are viewing this right now
+                  </span>
+
+                  <span className="text-gray-300 hidden sm:inline">•</span>
+
+                  {/* 3-Day Sold Pill */}
+                  <span
+                    className="font-cinzel text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full"
+                    style={{
+                      background: "rgba(0, 55, 32, 0.07)",
+                      color: "var(--rj-emerald)",
+                    }}
+                  >
+                    {recentSalesCount} sold in last 3 days
+                  </span>
+                </div>
+              </div>
 
               <OfferBanner imageUrl={product.offerBannerImage || ""} />
 
@@ -1602,223 +1530,6 @@ export default function ProductDetailHero({
                   </div>
                 </div>
               )}
-
-              {/* ── Qty + Add to cart ── */}
-              {/* <div className="flex items-center gap-3 mb-4">
-                <div
-                  className="flex items-center rounded-full flex-shrink-0"
-                  style={{ border: "1.5px solid var(--rj-bone)" }}
-                >
-                  <button
-                    onClick={() => setQty((q) => Math.max(1, q - 1))}
-                    className="w-11 h-11 flex items-center justify-center text-lg font-light transition-colors hover:bg-[var(--rj-ivory-dark)] rounded-full"
-                    style={{ color: "var(--rj-charcoal)", cursor: "pointer" }}
-                  >
-                    −
-                  </button>
-                  <span
-                    className="w-8 text-center font-cinzel text-sm"
-                    style={{ color: "var(--rj-charcoal)" }}
-                  >
-                    {qty}
-                  </span>
-                  <button
-                    onClick={() =>
-                      setQty((q) => Math.min(q + 1, activeVariant?.stock ?? 99))
-                    }
-                    className="w-11 h-11 flex items-center justify-center text-lg font-light transition-colors hover:bg-[var(--rj-ivory-dark)] rounded-full"
-                    style={{ color: "var(--rj-charcoal)", cursor: "pointer" }}
-                  >
-                    +
-                  </button>
-                </div>
-
-                <button
-                  onClick={handleAddToCart}
-                  disabled={outOfStock}
-                  className="flex-1 hidden lg:flex items-center justify-center gap-2 py-3 font-cinzel text-[11px] tracking-widest uppercase font-bold rounded-full transition-all duration-300 active:scale-95"
-                  style={{
-                    background: outOfStock
-                      ? "var(--rj-bone)"
-                      : addedToCart
-                        ? "var(--rj-emerald)"
-                        : "var(--gradient-gold)",
-                    color: outOfStock
-                      ? "var(--rj-ash)"
-                      : addedToCart
-                        ? "#fff"
-                        : "var(--rj-emerald)",
-                    boxShadow: outOfStock
-                      ? "none"
-                      : addedToCart
-                        ? "0 4px 20px rgba(0,55,32,0.25)"
-                        : "0 4px 20px rgba(252,193,81,0.3)",
-                    cursor: outOfStock ? "not-allowed" : "pointer",
-                  }}
-                >
-                  {outOfStock ? (
-                    "Out of Stock"
-                  ) : addedToCart ? (
-                    <>
-                      <Check size={14} /> Added!
-                    </>
-                  ) : (
-                    <>
-                      <ShoppingBag size={14} />{" "}
-                      <span className="hidden sm:inline">Add to Cart</span>
-                    </>
-                  )}
-                </button>
-
-                <button
-                  onClick={handleToggleWishlist}
-                  className="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-200 hover:scale-110"
-                  style={{
-                    border: wishlisted
-                      ? "1.5px solid rgba(252,193,81,0.5)"
-                      : "1.5px solid var(--rj-bone)",
-                    background: wishlisted
-                      ? "rgba(252,193,81,0.08)"
-                      : "transparent",
-                    cursor: "pointer",
-                  }}
-                  aria-label={
-                    wishlisted ? "Remove from wishlist" : "Add to wishlist"
-                  }
-                >
-                  <Heart
-                    size={15}
-                    style={{
-                      fill: wishlisted ? "var(--rj-gold)" : "transparent",
-                      color: wishlisted ? "var(--rj-gold)" : "var(--rj-ash)",
-                      transition: "all 0.25s",
-                    }}
-                  />
-                </button>
-
-                <button
-                  onClick={handleShare}
-                  className="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-200 hover:scale-110"
-                  style={{
-                    border: "1.5px solid var(--rj-bone)",
-                    cursor: "pointer",
-                  }}
-                  aria-label="Share"
-                >
-                  {copied ? (
-                    <Check size={14} style={{ color: "var(--rj-emerald)" }} />
-                  ) : (
-                    <Share2 size={14} style={{ color: "var(--rj-ash)" }} />
-                  )}
-                </button>
-              </div>
-
-               <div ref={ctaSectionRef} className="space-y-2 max-w-xl w-full mx-auto">
-                <button
-                  onClick={handleAddToCart}
-                  disabled={outOfStock}
-                  className="w-full flex lg:hidden items-center justify-center gap-2 py-3 font-cinzel text-[11px] tracking-widest uppercase font-bold rounded-full transition-all duration-300 active:scale-95"
-                  style={{
-                    background: outOfStock
-                      ? "var(--rj-bone)"
-                      : addedToCart
-                        ? "var(--rj-emerald)"
-                        : "var(--gradient-gold)",
-                    color: outOfStock
-                      ? "var(--rj-ash)"
-                      : addedToCart
-                        ? "#fff"
-                        : "var(--rj-emerald)",
-                    boxShadow: outOfStock
-                      ? "none"
-                      : addedToCart
-                        ? "0 4px 20px rgba(0,55,32,0.25)"
-                        : "0 4px 20px rgba(252,193,81,0.3)",
-                    cursor: outOfStock ? "not-allowed" : "pointer",
-                  }}
-                >
-                  {outOfStock ? (
-                    "Out of Stock"
-                  ) : addedToCart ? (
-                    <>
-                      <Check size={14} /> Added!
-                    </>
-                  ) : (
-                    <>
-                      <span className="inline">Add to Cart</span>
-                    </>
-                  )}
-                </button>
-                <button
-                  onClick={handleBuyNow}
-                  disabled={outOfStock}
-                  className="w-full py-3 font-cinzel text-[11px] tracking-widest uppercase font-bold rounded-full transition-all duration-300 hover:opacity-90 active:scale-95 mb-6"
-                  style={{
-                    background: outOfStock
-                      ? "var(--rj-bone)"
-                      : "var(--rj-charcoal)",
-                    color: outOfStock ? "var(--rj-ash)" : "#fff",
-                    cursor: outOfStock ? "not-allowed" : "pointer",
-                  }}
-                >
-                  {outOfStock ? "Currently Unavailable" : "Buy It Now"}
-                </button>
-              </div>  */}
-
-              {/* {showStickyCTA && (
-                <div className="fixed lg:hidden -bottom-2 left-0 right-0 z-50 border-t bg-white/95 backdrop-blur-sm px-4 py-3 pb-4">
-                  <div className="mx-auto max-w-screen-sm grid grid-cols-2 gap-4">
-                    <button
-                      onClick={handleAddToCart}
-                      disabled={outOfStock}
-                      className="w-full flex items-center justify-center gap-2 py-3 font-cinzel text-[11px] tracking-widest uppercase font-bold rounded-full transition-all duration-300 active:scale-95"
-                      style={{
-                        background: outOfStock
-                          ? "var(--rj-bone)"
-                          : addedToCart
-                            ? "var(--rj-emerald)"
-                            : "var(--gradient-gold)",
-                        color: outOfStock
-                          ? "var(--rj-ash)"
-                          : addedToCart
-                            ? "#fff"
-                            : "var(--rj-emerald)",
-                        boxShadow: outOfStock
-                          ? "none"
-                          : addedToCart
-                            ? "0 4px 20px rgba(0,55,32,0.25)"
-                            : "0 4px 20px rgba(252,193,81,0.3)",
-                        cursor: outOfStock ? "not-allowed" : "pointer",
-                      }}
-                    >
-                      {outOfStock ? (
-                        "Out of Stock"
-                      ) : addedToCart ? (
-                        <>
-                          <Check size={14} /> Added!
-                        </>
-                      ) : (
-                        <span>Add to Cart</span>
-                      )}
-                    </button>
-
-                    <button
-                      onClick={handleBuyNow}
-                      disabled={outOfStock}
-                      className="w-full py-3 font-cinzel text-[11px] tracking-widest uppercase font-bold rounded-full transition-all duration-300 hover:opacity-90 active:scale-95"
-                      style={{
-                        background: outOfStock
-                          ? "var(--rj-bone)"
-                          : "var(--rj-charcoal)",
-                        color: outOfStock ? "var(--rj-ash)" : "#fff",
-                        cursor: outOfStock ? "not-allowed" : "pointer",
-                      }}
-                    >
-                      {outOfStock ? "Currently Unavailable" : "Buy It Now"}
-                    </button>
-                  </div>
-                </div>
-              )} */}
 
               {/* Quantity Stepper + Primary ADD TO BAG */}
               <div
@@ -1897,6 +1608,152 @@ export default function ProductDetailHero({
                 />
               </div>
 
+              {/* ══ STATIC EXCLUSIVE OFFERS SECTION ══ */}
+              <div
+                className="rounded-2xl p-4 sm:p-5 my-6"
+                style={{
+                  background: "#FFF8F7",
+                  border: "1px solid var(--rj-bone)",
+                }}
+              >
+                {/* Section Header */}
+                <div className="flex items-center justify-between gap-2 mb-4">
+                  <div className="flex items-center gap-2.5">
+                    <div
+                      className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
+                      style={{
+                        background: "rgba(239, 68, 68, 0.1)",
+                        color: "#EF4444",
+                      }}
+                    >
+                      <Gift size={16} />
+                    </div>
+                    <div>
+                      <h3
+                        className="font-cinzel text-sm sm:text-base font-bold tracking-wide leading-tight"
+                        style={{ color: "var(--rj-charcoal)" }}
+                      >
+                        Exclusive Offers
+                      </h3>
+                      <div
+                        className="h-0.5 w-16 rounded-full mt-1"
+                        style={{
+                          background:
+                            "linear-gradient(90deg, #EF4444 0%, transparent 100%)",
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  <span
+                    className="text-[11px] font-medium"
+                    style={{ color: "var(--rj-ash)" }}
+                  >
+                    Use code at checkout
+                  </span>
+                </div>
+
+                {/* Offer Rows */}
+                <div className="space-y-2.5">
+                  {offersList.map((offer) => {
+                    const IconComponent = offer.icon;
+                    const isCopied = copiedCode === offer.code;
+
+                    return (
+                      <div
+                        key={offer.code}
+                        className="flex items-center justify-between gap-3 px-3.5 py-3 rounded-xl transition-transform duration-200 hover:scale-[1.005]"
+                        style={{ background: offer.rowBg }}
+                      >
+                        {/* Left: Icon + Vertical Divider + Offer Details */}
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div
+                            className="w-8 h-8 rounded-full bg-white flex items-center justify-center shrink-0 shadow-2xs"
+                            style={{ color: offer.accentColor }}
+                          >
+                            <IconComponent size={15} />
+                          </div>
+
+                          <div className="h-8 w-px bg-black/10 shrink-0" />
+
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <p
+                                className="font-cinzel text-xs sm:text-sm font-bold leading-snug"
+                                style={{ color: "var(--rj-charcoal)" }}
+                              >
+                                {offer.title}
+                              </p>
+                              <span
+                                className="font-cinzel text-[8px] font-bold tracking-widest uppercase px-1.5 py-0.5 rounded-full bg-white/80"
+                                style={{ color: offer.accentColor }}
+                              >
+                                {offer.tag}
+                              </span>
+                            </div>
+                            <p
+                              className="text-[11px] leading-snug mt-0.5"
+                              style={{ color: "var(--rj-ash)" }}
+                            >
+                              {offer.description}
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Right: "Auto Applied ✓" or Copyable Code Pill */}
+                        {offer.type === "auto" ? (
+                          <div
+                            className="shrink-0 inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg border border-dashed bg-white text-[11px] font-semibold min-w-[124px]"
+                            style={{
+                              borderColor: offer.accentColor,
+                              color: offer.accentColor,
+                            }}
+                          >
+                            <span>Auto Applied</span>
+                            <Check size={12} strokeWidth={2.5} />
+                          </div>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => handleCopyCode(offer.code)}
+                            className="shrink-0 inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg border border-dashed bg-white font-mono text-[11px] font-bold min-w-[124px] transition-all active:scale-95 cursor-pointer hover:shadow-xs"
+                            style={{
+                              borderColor: offer.accentColor,
+                              color: offer.accentColor,
+                            }}
+                            title="Click to copy promo code"
+                          >
+                            <span>{isCopied ? "COPIED!" : offer.code}</span>
+                            {isCopied ? (
+                              <Check size={12} strokeWidth={2.5} />
+                            ) : (
+                              <Copy size={12} />
+                            )}
+                          </button>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Subtle Checkout Redemption Note */}
+                <p
+                  className="text-[11px] mt-3.5 pt-3 border-t border-black/5"
+                  style={{ color: "var(--rj-ash)" }}
+                >
+                  <strong style={{ color: "var(--rj-charcoal)" }}>
+                    How to redeem:
+                  </strong>{" "}
+                  Copy a code above, paste it into{" "}
+                  <strong style={{ color: "var(--rj-charcoal)" }}>
+                    &quot;Discount / Promo Code&quot;
+                  </strong>{" "}
+                  at checkout, and click{" "}
+                  <strong style={{ color: "var(--rj-charcoal)" }}>Apply</strong>
+                  .
+                </p>
+              </div>
+
               {/* Mobile Sticky CTA Bar */}
               {showStickyCTA && (
                 <div className="fixed lg:hidden bottom-0 left-0 right-0 z-50 border-t border-gray-100 bg-white/95 backdrop-blur-md px-4 py-3 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
@@ -1955,9 +1812,9 @@ export default function ProductDetailHero({
                 </p>
               )}
 
-              <ShortDescriptionBlock
+              {/* <ShortDescriptionBlock
                 text={product.ourPromise || product.shortDescription || ""}
-              />
+              /> */}
 
               <div
                 className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6"
