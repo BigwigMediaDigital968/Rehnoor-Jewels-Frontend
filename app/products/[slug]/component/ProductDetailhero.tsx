@@ -26,7 +26,7 @@ import {
   Copy,
   Eye,
   Gift,
-  Sparkles
+  Sparkles,
 } from "lucide-react";
 import type {
   Product,
@@ -36,6 +36,8 @@ import type {
 import { useCartStore, useWishlistStore } from "@/app/store/cartStore";
 import ZoomModal from "./ZoomModal";
 import ShiprocketCheckoutButton from "@/app/checkout-shiprocket/ShiprocketCheckoutButton";
+import PincodeChecker from "@/app/component/PincodeChecker";
+import WhatsAppOrderButton from "./WhatsAppOrderButton";
 
 // ─────────────────────────────────────────────────────────────────
 // TYPES
@@ -752,6 +754,7 @@ export default function ProductDetailHero({
       accentColor: "#EF4444",
     },
   ];
+  
   const prevImg = useCallback(
     () => setImgIdx((i) => (i - 1 + images.length) % images.length),
     [images.length],
@@ -1608,25 +1611,27 @@ export default function ProductDetailHero({
                 />
               </div>
 
+              <PincodeChecker weightKg={0.2} />
+
               {/* ══ STATIC EXCLUSIVE OFFERS SECTION ══ */}
               <div
-                className="rounded-2xl p-4 sm:p-5 my-6"
+                className="rounded-2xl p-3.5 sm:p-5 my-6"
                 style={{
                   background: "#FFF8F7",
                   border: "1px solid var(--rj-bone)",
                 }}
               >
                 {/* Section Header */}
-                <div className="flex items-center justify-between gap-2 mb-4">
+                <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
                   <div className="flex items-center gap-2.5">
                     <div
-                      className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
+                      className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center shrink-0"
                       style={{
                         background: "rgba(239, 68, 68, 0.1)",
                         color: "#EF4444",
                       }}
                     >
-                      <Gift size={16} />
+                      <Gift size={15} />
                     </div>
                     <div>
                       <h3
@@ -1646,7 +1651,7 @@ export default function ProductDetailHero({
                   </div>
 
                   <span
-                    className="text-[11px] font-medium"
+                    className="text-[10px] sm:text-[11px] font-medium"
                     style={{ color: "var(--rj-ash)" }}
                   >
                     Use code at checkout
@@ -1662,22 +1667,22 @@ export default function ProductDetailHero({
                     return (
                       <div
                         key={offer.code}
-                        className="flex items-center justify-between gap-3 px-3.5 py-3 rounded-xl transition-transform duration-200 hover:scale-[1.005]"
+                        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 sm:gap-3 p-3 sm:px-3.5 sm:py-3 rounded-xl transition-transform duration-200 hover:scale-[1.005]"
                         style={{ background: offer.rowBg }}
                       >
-                        {/* Left: Icon + Vertical Divider + Offer Details */}
-                        <div className="flex items-center gap-3 min-w-0">
+                        {/* Top / Left: Icon + Divider + Offer Details */}
+                        <div className="flex items-start sm:items-center gap-2.5 sm:gap-3 min-w-0">
                           <div
-                            className="w-8 h-8 rounded-full bg-white flex items-center justify-center shrink-0 shadow-2xs"
+                            className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white flex items-center justify-center shrink-0 shadow-2xs mt-0.5 sm:mt-0"
                             style={{ color: offer.accentColor }}
                           >
-                            <IconComponent size={15} />
+                            <IconComponent size={14} />
                           </div>
 
-                          <div className="h-8 w-px bg-black/10 shrink-0" />
+                          <div className="hidden sm:block h-8 w-px bg-black/10 shrink-0" />
 
-                          <div className="min-w-0">
-                            <div className="flex items-center gap-2 flex-wrap">
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
                               <p
                                 className="font-cinzel text-xs sm:text-sm font-bold leading-snug"
                                 style={{ color: "var(--rj-charcoal)" }}
@@ -1685,7 +1690,7 @@ export default function ProductDetailHero({
                                 {offer.title}
                               </p>
                               <span
-                                className="font-cinzel text-[8px] font-bold tracking-widest uppercase px-1.5 py-0.5 rounded-full bg-white/80"
+                                className="font-cinzel text-[8px] font-bold tracking-wider uppercase px-1.5 py-0.5 rounded-full bg-white/90 whitespace-nowrap"
                                 style={{ color: offer.accentColor }}
                               >
                                 {offer.tag}
@@ -1700,37 +1705,39 @@ export default function ProductDetailHero({
                           </div>
                         </div>
 
-                        {/* Right: "Auto Applied ✓" or Copyable Code Pill */}
-                        {offer.type === "auto" ? (
-                          <div
-                            className="shrink-0 inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg border border-dashed bg-white text-[11px] font-semibold min-w-[124px]"
-                            style={{
-                              borderColor: offer.accentColor,
-                              color: offer.accentColor,
-                            }}
-                          >
-                            <span>Auto Applied</span>
-                            <Check size={12} strokeWidth={2.5} />
-                          </div>
-                        ) : (
-                          <button
-                            type="button"
-                            onClick={() => handleCopyCode(offer.code)}
-                            className="shrink-0 inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg border border-dashed bg-white font-mono text-[11px] font-bold min-w-[124px] transition-all active:scale-95 cursor-pointer hover:shadow-xs"
-                            style={{
-                              borderColor: offer.accentColor,
-                              color: offer.accentColor,
-                            }}
-                            title="Click to copy promo code"
-                          >
-                            <span>{isCopied ? "COPIED!" : offer.code}</span>
-                            {isCopied ? (
+                        {/* Bottom / Right: Full-width on mobile, compact fixed pill on sm+ */}
+                        <div className="pl-9 sm:pl-0 shrink-0">
+                          {offer.type === "auto" ? (
+                            <div
+                              className="w-full sm:w-auto sm:min-w-[124px] inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg border border-dashed bg-white text-[11px] font-semibold"
+                              style={{
+                                borderColor: offer.accentColor,
+                                color: offer.accentColor,
+                              }}
+                            >
+                              <span>Auto Applied</span>
                               <Check size={12} strokeWidth={2.5} />
-                            ) : (
-                              <Copy size={12} />
-                            )}
-                          </button>
-                        )}
+                            </div>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => handleCopyCode(offer.code)}
+                              className="w-full sm:w-auto sm:min-w-[124px] inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg border border-dashed bg-white font-mono text-[11px] font-bold transition-all active:scale-95 cursor-pointer hover:shadow-xs"
+                              style={{
+                                borderColor: offer.accentColor,
+                                color: offer.accentColor,
+                              }}
+                              title="Click to copy promo code"
+                            >
+                              <span>{isCopied ? "COPIED!" : offer.code}</span>
+                              {isCopied ? (
+                                <Check size={12} strokeWidth={2.5} />
+                              ) : (
+                                <Copy size={12} />
+                              )}
+                            </button>
+                          )}
+                        </div>
                       </div>
                     );
                   })}
@@ -1738,7 +1745,7 @@ export default function ProductDetailHero({
 
                 {/* Subtle Checkout Redemption Note */}
                 <p
-                  className="text-[11px] mt-3.5 pt-3 border-t border-black/5"
+                  className="text-[11px] leading-relaxed mt-3.5 pt-3 border-t border-black/5"
                   style={{ color: "var(--rj-ash)" }}
                 >
                   <strong style={{ color: "var(--rj-charcoal)" }}>
@@ -1842,6 +1849,15 @@ export default function ProductDetailHero({
                   </div>
                 ))}
               </div>
+              
+              <WhatsAppOrderButton
+                product={product}
+                selectedOptions={selections}
+                quantity={qty}
+                // activePrice={activeVariant?.product.price}
+                // activeSku={activeVariant?.sku || product.sku}
+              />
+
             </div>
           </div>
         </div>
