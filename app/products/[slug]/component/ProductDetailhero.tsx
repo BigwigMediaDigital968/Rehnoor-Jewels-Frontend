@@ -38,6 +38,7 @@ import ZoomModal from "./ZoomModal";
 import ShiprocketCheckoutButton from "@/app/checkout-shiprocket/ShiprocketCheckoutButton";
 import PincodeChecker from "@/app/component/PincodeChecker";
 import WhatsAppOrderButton from "./WhatsAppOrderButton";
+import { fetchProductReviews } from "@/app/lib/api/reviews";
 
 // ─────────────────────────────────────────────────────────────────
 // TYPES
@@ -45,24 +46,16 @@ import WhatsAppOrderButton from "./WhatsAppOrderButton";
 
 interface ProductVariant {
   _id: string;
-
   title?: string;
-
   sku?: string;
   barcode?: string;
-
   price: number;
   originalPrice?: number | null;
-
   stock?: number | null;
-
   weightGrams?: number;
-
   isDefault: boolean;
   isActive: boolean;
-
   options?: Record<string, string>;
-
   images?: {
     src: string;
     alt: string;
@@ -677,9 +670,6 @@ export default function ProductDetailHero({
   const [imgIdx, setImgIdx] = useState(0);
   const images = galleryImages;
 
-  // Reset image index when the image source set changes
-  // useEffect(() => setImgIdx(0), [activeVariant?._id]);
-
   useEffect(() => {
     if (!activeVariant?._id) return;
 
@@ -703,7 +693,6 @@ export default function ProductDetailHero({
   const { toggleItem, isWishlisted } = useWishlistStore();
   const wishlisted = isWishlisted(product.id);
 
-  const [offersModalOpen, setOffersModalOpen] = useState(false);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
   const handleCopyCode = (code: string) => {
@@ -754,7 +743,7 @@ export default function ProductDetailHero({
       accentColor: "#EF4444",
     },
   ];
-  
+
   const prevImg = useCallback(
     () => setImgIdx((i) => (i - 1 + images.length) % images.length),
     [images.length],
@@ -807,11 +796,6 @@ export default function ProductDetailHero({
     setTimeout(() => setAddedToCart(false), 2500);
   };
 
-  const handleBuyNow = () => {
-    if (!validateAndProceed()) return;
-    onBuyNow?.(activeVariant?.title ?? "", qty, activeVariant?._id);
-  };
-
   const handleToggleWishlist = (e: React.MouseEvent) => {
     e.stopPropagation();
     toggleItem({
@@ -826,14 +810,6 @@ export default function ProductDetailHero({
       category: product.category,
       tag: product.tag,
     });
-  };
-
-  const handleShare = async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {}
   };
 
   const breadcrumbCollectionSlug =
@@ -1025,6 +1001,39 @@ export default function ProductDetailHero({
     const interval = setInterval(updateTimer, 1000);
     return () => clearInterval(interval);
   }, []);
+
+  const [liveRating, setLiveRating] = useState<number>(product.rating ?? 0);
+  const [liveReviewCount, setLiveReviewCount] = useState<number>(
+    product.reviewCount ?? 0,
+  );
+
+  useEffect(() => {
+    // If product already has rating & reviewCount from API, no extra fetch needed
+    if (product.rating && product.rating > 0 && product.reviewCount) {
+      setLiveRating(product.rating);
+      setLiveReviewCount(product.reviewCount);
+      return;
+    }
+
+    const slugOrId = product.href?.split("/").pop() || product.id;
+    if (!slugOrId) return;
+
+    fetchProductReviews(slugOrId, { page: 1, limit: 1 })
+      .then((res) => {
+        if (res.success && res.pagination && res.pagination.total > 0) {
+          const total = res.pagination.total;
+          const avg =
+            Object.entries(res.ratingBreakdown || {}).reduce(
+              (sum, [stars, count]) => sum + Number(stars) * Number(count),
+              0,
+            ) / total;
+
+          setLiveRating(avg);
+          setLiveReviewCount(total);
+        }
+      })
+      .catch(() => {});
+  }, [product.id, product.href, product.rating, product.reviewCount]);
 
   return (
     <>
@@ -1313,7 +1322,8 @@ export default function ProductDetailHero({
                 {product.subtitle}
               </p> */}
 
-              {product.rating && product.rating > 0 && (
+              {/* Product Reviews */}
+              {liveRating > 0 && (
                 <div
                   className="flex items-center gap-3 mb-5 pb-5"
                   style={{ borderBottom: "1px solid var(--rj-bone)" }}
@@ -1325,11 +1335,11 @@ export default function ProductDetailHero({
                         size={14}
                         style={{
                           fill:
-                            i < Math.floor(product.rating!)
+                            i < Math.floor(liveRating)
                               ? "var(--rj-gold)"
                               : "transparent",
                           color:
-                            i < Math.floor(product.rating!)
+                            i < Math.floor(liveRating)
                               ? "var(--rj-gold)"
                               : "var(--rj-bone)",
                         }}
@@ -1337,18 +1347,18 @@ export default function ProductDetailHero({
                     ))}
                   </div>
                   <span
-                    className="font-cinzel text-xs font-bold"
+                    className="font-cinzel text-md font-bold"
                     style={{ color: "var(--rj-charcoal)" }}
                   >
-                    {product.rating.toFixed(1)}
+                    {liveRating.toFixed(1)}
                   </span>
-                  {product.reviewCount && product.reviewCount > 0 && (
+                  {liveReviewCount > 0 && (
                     <a
                       href="#reviews"
                       className="font-cinzel text-[10px] tracking-wider transition-opacity hover:opacity-60"
                       style={{ color: "var(--rj-emerald)", cursor: "pointer" }}
                     >
-                      ({product.reviewCount} reviews)
+                      ({liveReviewCount} reviews)
                     </a>
                   )}
                 </div>
@@ -1849,7 +1859,7 @@ export default function ProductDetailHero({
                   </div>
                 ))}
               </div>
-              
+
               <WhatsAppOrderButton
                 product={product}
                 selectedOptions={selections}
@@ -1857,7 +1867,6 @@ export default function ProductDetailHero({
                 // activePrice={activeVariant?.product.price}
                 // activeSku={activeVariant?.sku || product.sku}
               />
-
             </div>
           </div>
         </div>
