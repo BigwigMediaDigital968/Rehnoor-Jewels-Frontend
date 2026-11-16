@@ -522,7 +522,7 @@ function DrawerSummary({ onClose }: { onClose: () => void }) {
               fontFamily: "var(--font-body,'DM Sans'),sans-serif",
             }}
           >
-            Offers &amp; discounts will be applied at checkout
+            Only one Offer or discounts will be applied at checkout
           </p>
         </div>
 
