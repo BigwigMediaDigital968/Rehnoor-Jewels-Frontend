@@ -1214,12 +1214,12 @@ function ReviewCard({ review }: { review: Review }) {
                       ·
                     </span>
                   )}
-                  <span
+                  {/* <span
                     className="text-[10px]"
                     style={{ color: "var(--rj-ash)" }}
                   >
                     {formatDate(review.createdAt)}
-                  </span>
+                  </span> */}
                   {review.sizePurchased && (
                     <>
                       <span
