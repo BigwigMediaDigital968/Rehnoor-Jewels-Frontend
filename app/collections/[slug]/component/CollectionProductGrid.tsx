@@ -1,22 +1,13 @@
 "use client";
 
 import { useState, useMemo, useCallback, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  X,
-  Heart,
-  Star,
-  Check,
-  Eye,
-  Info,
-  ShoppingBag,
-  RefreshCw,
-} from "lucide-react";
+import { X, Heart, Star, Check, ShoppingBag, RefreshCw } from "lucide-react";
 import type { Product } from "../../../types/Product.types";
 import { useCartStore, useWishlistStore } from "@/app/store/cartStore";
 import Link from "next/link";
+import { fetchProductReviews } from "@/app/lib/api/reviews";
 
 const TAG_STYLES: Record<string, { bg: string; color: string }> = {
   Bestseller: { bg: "var(--rj-gold)", color: "#000" },
@@ -171,26 +162,21 @@ function SkeletonCard() {
   );
 }
 
-// PRODUCT CARD (inline — links to product detail page)
-
 function ProductCard({ product, index }: { product: Product; index: number }) {
   const [hovered, setHovered] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
   const [showSizePicker, setShowSizePicker] = useState(false);
   const { openDrawer } = useCartStore();
 
-  // ── Image Source References ────────────────────────────────────
   const primaryImage = product.images[0]?.src;
-  const secondaryImage = product.images[1]?.src || primaryImage; // Fallback to primary if 2nd doesn't exist
+  const secondaryImage = product.images[1]?.src || primaryImage;
   const hasSecondaryImage = product.images.length > 1;
 
-  // ── Zustand ──────────────────────────────────────────────────
   const addItem = useCartStore((s) => s.addItem);
   const toggleItem = useWishlistStore((s) => s.toggleItem);
   const isWishlisted = useWishlistStore((s) => s.isWishlisted(product.id));
 
   const tag = product.tag ? TAG_STYLES[product.tag] : null;
-  const router = useRouter();
 
   const discountPct = product.originalPrice
     ? Math.round(
@@ -199,10 +185,8 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
       )
     : 0;
 
-  // ── Wishlist toggle ──────────────────────────────────────────
   const handleWishlist = useCallback(
     (e: React.MouseEvent) => {
-      // Card is wrapped in a <Link>: block its navigation as well
       e.preventDefault();
       e.stopPropagation();
       toggleItem({
@@ -223,10 +207,8 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
     [product, toggleItem, primaryImage],
   );
 
-  // ── Cart: open size picker, or add directly if only 1 size ──
   const handleCartClick = useCallback(
     (e: React.MouseEvent) => {
-      // Card is wrapped in a <Link>: block its navigation as well
       e.preventDefault();
       e.stopPropagation();
       if (!product.sizes || product.sizes.length === 0) {
@@ -254,7 +236,6 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
     [product, addItem, primaryImage, openDrawer],
   );
 
-  // ── Confirm after size is chosen ────────────────────────────
   const handleConfirmSize = useCallback(
     (sizeLabel: string) => {
       addItem({
@@ -292,9 +273,11 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
     setTimeout(() => setAddedToCart(false), 2000);
   };
 
+  const rating = product.rating ?? 0;
+  const reviewCount = product.reviewCount ?? 0;
+
   return (
     <>
-      {/* Size picker modal */}
       <AnimatePresence>
         {showSizePicker && (
           <SizePickerModal
@@ -335,7 +318,6 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
             className="relative overflow-hidden"
             style={{ aspectRatio: "1/1", background: "var(--rj-ivory-dark)" }}
           >
-            {/* Primary Image */}
             <Image
               src={primaryImage}
               alt={product.images[0]?.alt || product.name}
@@ -349,7 +331,6 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
               }}
             />
 
-            {/* Secondary Image (revealed on hover) */}
             {hasSecondaryImage && (
               <Image
                 src={secondaryImage}
@@ -367,7 +348,6 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
 
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
 
-            {/* Tag */}
             {tag && product.tag && (
               <div className="absolute top-2.5 left-2.5 z-20 pointer-events-none">
                 <span
@@ -379,7 +359,6 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
               </div>
             )}
 
-            {/* Wishlist Button */}
             <button
               onClick={handleWishlist}
               className="absolute top-2.5 right-2.5 z-20 w-7 h-7 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
@@ -403,69 +382,47 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
                 }}
               />
             </button>
-
-            {/* Info tooltip */}
-            {/* <div className="absolute top-3 right-14 z-20 group">
-              <button
-                className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-115"
-                style={{
-                  background: "rgba(255,255,255,0.95)",
-                  boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
-                  cursor: "pointer",
-                }}
-              >
-                <Info size={13} style={{ color: "var(--rj-ash)" }} />
-              </button>
-              <div
-                className="absolute top-5 right-0 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all duration-300"
-                style={{
-                  minWidth: 180,
-                  background: "rgba(0,0,0,0.85)",
-                  color: "#fff",
-                  fontSize: 12,
-                  padding: "10px 12px",
-                  borderRadius: 8,
-                  boxShadow: "0 4px 16px rgba(0,0,0,0.2)",
-                  transform: "translateY(6px)",
-                  backdropFilter: "blur(8px)",
-                }}
-              >
-                {product.ourPromise ||
-                  "Crafted with 22kt gold, ethically sourced and designed to last generations."}
-              </div>
-            </div> */}
           </div>
 
           {/* Body */}
           <div className="flex flex-col flex-1 p-3">
-            {product.rating && (
+            {rating > 0 && (
               <div className="flex items-center gap-1 mb-1">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star
-                    key={i}
-                    size={9}
-                    style={{
-                      fill:
-                        i < Math.floor(product.rating!)
-                          ? "var(--rj-gold)"
-                          : "transparent",
-                      color:
-                        i < Math.floor(product.rating!)
-                          ? "var(--rj-gold)"
-                          : "var(--rj-bone)",
-                    }}
-                  />
-                ))}
-                {product.reviewCount && (
+                <div className="flex items-center gap-0.5">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star
+                      key={i}
+                      size={10}
+                      style={{
+                        fill:
+                          i < Math.round(rating)
+                            ? "var(--rj-gold)"
+                            : "transparent",
+                        color:
+                          i < Math.round(rating)
+                            ? "var(--rj-gold)"
+                            : "var(--rj-bone)",
+                      }}
+                    />
+                  ))}
+                </div>
+                <span
+                  className="font-cinzel text-[9px] font-bold ml-0.5"
+                  style={{ color: "var(--rj-charcoal)" }}
+                >
+                  {rating.toFixed(1)}
+                </span>
+                {reviewCount > 0 && (
                   <span
-                    className="font-cinzel text-[8px] ml-0.5"
+                    className="font-cinzel text-[9px]"
                     style={{ color: "var(--rj-ash)" }}
                   >
-                    ({product.reviewCount})
+                    ({reviewCount})
                   </span>
                 )}
               </div>
             )}
+
             <h3
               className="font-cormorant font-light leading-snug mb-0.5 line-clamp-1 transition-colors duration-200"
               style={{
@@ -791,13 +748,15 @@ function Sidebar({
             return (
               <button
                 key={r}
+                type="button"
                 onClick={() =>
                   onChange({ ...filters, ratings: toggle(filters.ratings, r) })
                 }
-                className="w-full flex items-center gap-2 py-1.5 px-2 rounded-lg transition-all duration-200 mb-1"
+                className="w-full flex items-center gap-2 py-1.5 px-2 rounded-lg transition-all duration-200 mb-1 outline-none focus:outline-none"
                 style={{
                   background: active ? "rgba(0,55,32,0.06)" : "transparent",
                   cursor: "pointer",
+                  outline: "none",
                 }}
               >
                 <div className="flex gap-0.5">
@@ -861,6 +820,71 @@ export default function CollectionProductGrid({
     [products],
   );
 
+  const getProductKey = useCallback(
+    (p: Product) => p.id || p.href || p.name,
+    [],
+  );
+
+  const [liveRatings, setLiveRatings] = useState<
+    Record<string, { rating: number; reviewCount: number }>
+  >({});
+
+  useEffect(() => {
+    const missing = products.filter((p) => !p.rating || p.rating <= 0);
+    if (missing.length === 0) return;
+
+    let cancelled = false;
+
+    Promise.all(
+      missing.map(async (p) => {
+        const key = getProductKey(p);
+        const slug = p.href?.split("/").filter(Boolean).pop() || p.id;
+        if (!slug) return null;
+
+        try {
+          const res = await fetchProductReviews(slug, { page: 1, limit: 1 });
+          if (res.success && res.pagination && res.pagination.total > 0) {
+            const total = res.pagination.total;
+            const avg =
+              Object.entries(res.ratingBreakdown || {}).reduce(
+                (sum, [stars, count]) => sum + Number(stars) * Number(count),
+                0,
+              ) / total;
+            return { key, rating: avg, reviewCount: total };
+          }
+        } catch {}
+        return null;
+      }),
+    ).then((entries) => {
+      if (cancelled) return;
+      const updates: Record<string, { rating: number; reviewCount: number }> =
+        {};
+      entries.forEach((item) => {
+        if (item) {
+          updates[item.key] = {
+            rating: item.rating,
+            reviewCount: item.reviewCount,
+          };
+        }
+      });
+      if (Object.keys(updates).length > 0) {
+        setLiveRatings((prev) => ({ ...prev, ...updates }));
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [products, getProductKey]);
+
+  const getEffectiveRating = useCallback(
+    (p: Product) => {
+      if (p.rating && p.rating > 0) return p.rating;
+      return liveRatings[getProductKey(p)]?.rating ?? 0;
+    },
+    [liveRatings, getProductKey],
+  );
+
   // ── All existing state is unchanged ─────────────────────────────
   const [filters, setFilters] = useState<Filters>({
     priceMin: 0,
@@ -896,10 +920,15 @@ export default function CollectionProductGrid({
       list = list.filter((p) =>
         p.sizes?.some((s) => filters.sizes.includes(s.label) && s.available),
       );
-    if (filters.ratings.length)
-      list = list.filter((p) =>
-        filters.ratings.some((r) => (p.rating ?? 0) >= r),
-      );
+    if (filters.ratings.length) {
+      list = list.filter((p) => {
+        const rVal = getEffectiveRating(p);
+        if (rVal <= 0) return false;
+        return filters.ratings.some((minStars) =>
+          minStars === 5 ? rVal >= 4.5 : rVal >= minStars,
+        );
+      });
+    }
     list = list.filter((p) => parsePrice(p.price) <= filters.priceMax);
 
     if (sortBy === "price-asc")
@@ -907,14 +936,14 @@ export default function CollectionProductGrid({
     if (sortBy === "price-desc")
       list.sort((a, b) => parsePrice(b.price) - parsePrice(a.price));
     if (sortBy === "rating")
-      list.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
+      list.sort((a, b) => getEffectiveRating(b) - getEffectiveRating(a));
     if (sortBy === "newest")
       list.sort(
         (a, b) => (b.tag === "New" ? 1 : 0) - (a.tag === "New" ? 1 : 0),
       );
 
     return list;
-  }, [products, query, filters, sortBy]);
+  }, [products, query, filters, sortBy, getEffectiveRating]);
 
   useEffect(() => {
     setVisibleCount(INITIAL_COUNT);
@@ -1103,9 +1132,30 @@ export default function CollectionProductGrid({
                   className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4"
                 >
                   <AnimatePresence mode="popLayout">
-                    {visible.map((p, i) => (
-                      <ProductCard key={p.id} product={p} index={i} />
-                    ))}
+                    {visible.map((p, i) => {
+                      const resolved = liveRatings[getProductKey(p)];
+                      const enrichedProduct: Product = resolved
+                        ? {
+                            ...p,
+                            rating:
+                              p.rating && p.rating > 0
+                                ? p.rating
+                                : resolved.rating,
+                            reviewCount:
+                              p.reviewCount && p.reviewCount > 0
+                                ? p.reviewCount
+                                : resolved.reviewCount,
+                          }
+                        : p;
+
+                      return (
+                        <ProductCard
+                          key={getProductKey(p)}
+                          product={enrichedProduct}
+                          index={i}
+                        />
+                      );
+                    })}
                   </AnimatePresence>
                 </motion.div>
                 {/* Load more / end — unchanged */}
@@ -1180,13 +1230,7 @@ export default function CollectionProductGrid({
                       >
                         ↓
                       </motion.span>
-                      <span
-                        className="font-cinzel text-[8px] tracking-widest px-2 py-0.5 rounded-full"
-                        // style={{
-                        //   background: "rgba(0,55,32,0.08)",
-                        //   color: "var(--rj-emerald)",
-                        // }}
-                      >
+                      <span className="font-cinzel text-[8px] tracking-widest px-2 py-0.5 rounded-full">
                         +{Math.min(PAGE_STEP, results.length - visibleCount)}{" "}
                         items
                       </span>
